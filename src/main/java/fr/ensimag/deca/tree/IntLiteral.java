@@ -11,8 +11,8 @@ import java.io.PrintStream;
 /**
  * Integer literal
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  */
 public class IntLiteral extends AbstractExpr {
     public int getValue() {

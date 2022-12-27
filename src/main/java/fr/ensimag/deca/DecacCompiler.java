@@ -33,8 +33,8 @@ import org.apache.log4j.Logger;
  * are used to simplify the code of the caller (e.g. call
  * compiler.addInstruction() instead of compiler.getProgram().addInstruction()).
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  */
 public class DecacCompiler {
     private static final Logger LOG = Logger.getLogger(DecacCompiler.class);

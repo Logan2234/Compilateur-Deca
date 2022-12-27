@@ -8,8 +8,8 @@ import org.apache.commons.lang.Validate;
 /**
  * Type defined by a class.
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  */
 public class ClassType extends Type {
     

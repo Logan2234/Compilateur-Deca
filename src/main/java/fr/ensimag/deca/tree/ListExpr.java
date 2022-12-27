@@ -10,8 +10,8 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 /**
  * List of expressions (eg list of parameters).
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  */
 public class ListExpr extends TreeList<AbstractExpr> {
 

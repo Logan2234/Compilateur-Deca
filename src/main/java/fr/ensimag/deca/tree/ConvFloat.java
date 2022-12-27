@@ -8,8 +8,8 @@ import fr.ensimag.deca.context.EnvironmentExp;
 /**
  * Conversion of an int into a float. Used for implicit conversions.
  * 
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  */
 public class ConvFloat extends AbstractUnaryExpr {
     public ConvFloat(AbstractExpr operand) {

@@ -14,8 +14,8 @@ import fr.ensimag.deca.tools.SymbolTable;
 
 /**
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  */
 public abstract class AbstractIdentifier extends AbstractLValue {
 

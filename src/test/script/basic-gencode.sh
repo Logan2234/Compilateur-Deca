@@ -1,7 +1,7 @@
 #! /bin/sh
 
-# Auteur : @AUTHOR@
-# Version initiale : @DATE@
+# Auteur : gl03
+# Version initiale : 01/01/2023
 
 # Encore un test simpliste. On compile un fichier (cond0.deca), on
 # lance ima dessus, et on compare le résultat avec la valeur attendue.

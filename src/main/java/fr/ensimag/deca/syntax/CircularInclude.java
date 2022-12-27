@@ -6,8 +6,8 @@ import org.antlr.v4.runtime.IntStream;
  * Exception raised when a chain of #include is circular, i.e. a file
  * includes a file which has already been included.
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  */
 public class CircularInclude extends DecaRecognitionException {
     private static final long serialVersionUID = -3517868082633812254L;

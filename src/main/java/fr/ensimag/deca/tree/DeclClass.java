@@ -9,8 +9,8 @@ import java.io.PrintStream;
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
  * 
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  */
 public class DeclClass extends AbstractDeclClass {
 

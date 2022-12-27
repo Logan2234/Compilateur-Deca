@@ -7,8 +7,8 @@ import org.apache.commons.lang.Validate;
 /**
  * Definition of a class.
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  */
 public class ClassDefinition extends TypeDefinition {
 

@@ -6,8 +6,8 @@ import fr.ensimag.deca.context.ContextualError;
 /**
  * Entry point for contextual verifications and code generation from outside the package.
  * 
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  *
  */
 public abstract class AbstractProgram extends Tree {

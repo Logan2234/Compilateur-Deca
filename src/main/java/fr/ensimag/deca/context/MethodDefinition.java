@@ -7,8 +7,8 @@ import org.apache.commons.lang.Validate;
 /**
  * Definition of a method
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl03
+ * @date 01/01/2023
  */
 public class MethodDefinition extends ExpDefinition {
 
