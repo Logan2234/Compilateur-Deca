@@ -10,3 +10,5 @@
 .settings
 docker/ima_sources
 .DS_Store
+.vscode
+docker/.devcontainer.json

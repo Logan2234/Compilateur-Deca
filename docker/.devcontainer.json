@@ -1,5 +1,8 @@
 {
-    "image" : "gitlab.ensimag.fr:5050/reigniep/dockergl",
+    "name" : "projet-gl",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
     "extensions": [
 		"ms-azuretools.vscode-docker",
 		"redhat.java",
