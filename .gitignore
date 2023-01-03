@@ -8,3 +8,5 @@
 .project
 .metadata
 .settings
+docker/ima_sources
+.DS_Store
