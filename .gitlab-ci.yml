@@ -25,11 +25,13 @@ stages:          # List of stages for jobs, and their order of execution
 basic-lexer-test-job:       # This job runs in the build stage, which runs first.
   stage: Etape A
   script:
+    - ls
     - ./src/test/script/basic-lex.sh
 
 basic-synt-test-job:   # This job runs in the test stage.
   stage: Etape A    # It only starts when the job in the build stage completes successfully.
   script:
+    - ls
     - ./src/test/script/basic-synt.sh
 
 basic-context-test-job:   # This job also runs in the test stage.
