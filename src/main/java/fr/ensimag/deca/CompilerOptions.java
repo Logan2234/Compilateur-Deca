@@ -41,6 +41,18 @@ public class CompilerOptions {
     private boolean printBanner = false;
     private List<File> sourceFiles = new ArrayList<File>();
 
+    // added to support compile options
+    private enum CompileMode {
+        Compile,
+        ParseOnly,
+        Verify,
+    }
+
+    private CompileMode compileMode = CompileMode.Compile;
+    private boolean runTestChecks = true;
+    private int registerUseNumber = 16;
+    private boolean displayWarnings = false;
+
     
     public void parseArgs(String[] args) throws CLIException {
         
@@ -55,9 +67,93 @@ public class CompilerOptions {
         // -r X (register) : limits the use of registers R0 to RX-1 (with 4<=X<=16)
         // -d (debug) : display debug trace. Can be repeated.
         // -P (parallel) compile all deca files in parallel.
+        // -w (warnings) (optional) : display warnings
 
-        // Note : -p and -v are incompatible. 
+        // Note : -p and -v are incompatible.
 
+        int arg_index = 0;
+        // start by parsing options :
+        while (arg_index < args.length) {
+            String current_arg = args[arg_index];
+            if (current_arg.startsWith("-")) {
+                // parse arg
+                switch (current_arg) {
+                    case "-b": {
+                        // -b an only be used as an alone option, so checks args length is 1
+                        if(args.length > 1) {
+                            throw new CLIException("L'option '-b' ne peux que être utilisé seule.");
+                        }
+                        printBanner = true;
+                        break;
+                    }
+                    case "-p": {
+                        // check there were no -v option
+                        switch(compileMode) {
+                            case Compile : {compileMode = CompileMode.Verify; break;}
+                            case ParseOnly : {/* ?? maybe throw don't repeat args exception ?*/ break;}
+                            case Verify : { throw new CLIException("L'option -p est incompatible avec l'opton -v.");}
+                        }
+                    }
+                    case "-v": {
+                        // check there were no -p option
+                        switch(compileMode) {
+                            case Compile : {compileMode = CompileMode.ParseOnly; break;}
+                            case ParseOnly : {throw new CLIException("L'option -v est incompatible avec l'opton -p.");}
+                            case Verify : { /* ?? maybe throw don't repeat args exception ?*/ break; }
+                        }
+                    }
+                    case "-n": {
+                        runTestChecks = false;
+                        break;
+                    }
+                    case "-r": {
+                        // try to read the register number
+                        try {
+                            int registerNumber = Integer.parseInt(current_arg.split(" ")[1]);
+                            if(registerNumber < 4 || registerNumber > 16) {
+                                throw new CLIException("le nombre de registre à utiliser (spécifié avec -r) doit être compris entre 4 et 16.");
+                            }
+                            registerUseNumber = registerNumber;
+                            break;
+                        }
+                        catch(NumberFormatException e) {
+                            throw new CLIException("L'option '-r' doit être suivie du nombre de registre à utiliser (compris entre 4 et 16).");
+                        }
+                    }
+                    case "-d": {
+                        // check if we are not already on max debug level
+                        if(debug < TRACE) {
+                            // increase debug level
+                            debug += 1;
+                            break;
+                        }
+                        else {
+                            throw new CLIException("Le niveau maximum de debug a été dépassé. L'option '-d' ne peut être donnée que " + TRACE + " fois.");
+                        }
+                    }
+                    case "-P": {
+                        parallel = true;
+                        break;
+                    }
+                    case "-w": {
+                        displayWarnings = true;
+                    }
+                }
+            }
+            else {
+                // finished options, now on parsing files
+                break;
+            }
+        }
+
+        // now let's read the files for the remaining arguments
+        if(!printBanner) {
+            // there are files to read !
+            for(int i = arg_index; i < args.length; i++) {
+                // read the file
+                sourceFiles.add(new File(args[i]));
+            }
+        }
 
         Logger logger = Logger.getRootLogger();
         // map command-line debug option to log4j's level.
