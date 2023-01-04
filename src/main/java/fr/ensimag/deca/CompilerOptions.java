@@ -43,7 +43,22 @@ public class CompilerOptions {
 
     
     public void parseArgs(String[] args) throws CLIException {
-        // A FAIRE : parcourir args pour positionner les options correctement.
+        
+        // parse each argument with the following rules: 
+
+        // [[-p | -v] [-n] [-r X] [-d]* [-P] [-w] <fichier deca>...] | [-b]
+        
+        // -b (banner) : display group name
+        // -p (parse) : only build the tree, and decompile it
+        // -v (verifiation) : only verify, do not output files
+        // -n (no check) : remove test on execution (1.11, 1.13)
+        // -r X (register) : limits the use of registers R0 to RX-1 (with 4<=X<=16)
+        // -d (debug) : display debug trace. Can be repeated.
+        // -P (parallel) compile all deca files in parallel.
+
+        // Note : -p and -v are incompatible. 
+
+
         Logger logger = Logger.getRootLogger();
         // map command-line debug option to log4j's level.
         switch (getDebug()) {
