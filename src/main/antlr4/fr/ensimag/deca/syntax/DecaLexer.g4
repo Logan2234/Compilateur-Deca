@@ -88,3 +88,4 @@ ASM: 'asm';
 fragment STRING_CAR: ~('"' | '\\' | EOL) ;
 STRING: '"' (STRING_CAR | '\\"' | '\\\\')*  '"';
 MULTI_LINE_STRING: '"' (STRING_CAR | EOL | '\\"' | '\\\\')*  '"';
+DUMMY_TOKEN: .;
