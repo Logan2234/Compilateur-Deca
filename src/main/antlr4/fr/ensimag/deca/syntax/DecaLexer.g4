@@ -57,7 +57,7 @@ fragment SIGN: ('+'
                )?;
 fragment EXP: ('E' | 'e') SIGN INT;
 fragment DEC: INT '.' INT;
-fragment FLOATDEC: (DEC | DEC EXP) ('F' | 'f' | '');
+fragment FLOATDEC: (DEC | DEC EXP) ('F' | 'f')?;
 fragment DIGITHEX : ('0'.. '9'
                      |'A' .. 'F'
                      |'a' .. 'f'
@@ -85,6 +85,7 @@ EXTENDS: 'extends';
 PROTECTED: 'protected';
 ASM: 'asm';
 
-fragment STRING_CAR: ~('"' | '\\' | EOL) ;
+fragment STRING_CAR: ~('"' | '\\' | '\n') ;
 STRING: '"' (STRING_CAR | '\\"' | '\\\\')*  '"';
 MULTI_LINE_STRING: '"' (STRING_CAR | EOL | '\\"' | '\\\\')*  '"';
+DUMMY_TOKEN: .;
