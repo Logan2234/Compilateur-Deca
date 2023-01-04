@@ -84,6 +84,10 @@ CLASS: 'class';
 EXTENDS: 'extends';
 PROTECTED: 'protected';
 ASM: 'asm';
+SPACE: ' ';
+TAB: '   ';
+RESET: '\r';
+
 
 fragment STRING_CAR: ~('"' | '\\' | '\n') ;
 STRING: '"' (STRING_CAR | '\\"' | '\\\\')*  '"';
