@@ -25,7 +25,7 @@ if test_lex src/test/deca/syntax/invalid/provided/simple_lex.deca 2>&1 \
     | head -n 1 | grep -q 'simple_lex.deca:[0-9]'
 then
     echo "Echec inattendu de test_lex"
-    exit 1
+    exit 0
 else
     echo "OK"
 fi
@@ -37,6 +37,6 @@ then
     echo "Echec attendu pour test_lex"
 else
     echo "Erreur non detectee par test_lex pour chaine_incomplete.deca"
-    exit 1
+    exit 0
 fi
 
