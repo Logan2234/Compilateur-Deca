@@ -11,7 +11,10 @@
 .metadata
 .settings
 
+######### Autre ###########
+
 docker/ima_sources
+.antlr/
 
 ########## Maven ########## 
 
