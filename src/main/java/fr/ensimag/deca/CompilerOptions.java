@@ -20,6 +20,9 @@ public class CompilerOptions {
     public static final int INFO  = 1;
     public static final int DEBUG = 2;
     public static final int TRACE = 3;
+    // goes up to 4 because defaults to "all" in logger level
+    public static final int MAX_DEBUG_MODE = 4;
+
     public int getDebug() {
         return debug;
     }
@@ -36,21 +39,36 @@ public class CompilerOptions {
         return Collections.unmodifiableList(sourceFiles);
     }
 
-    private int debug = 0;
-    private boolean parallel = false;
-    private boolean printBanner = false;
-    private List<File> sourceFiles = new ArrayList<File>();
+    public CompileMode getCompileMode() {
+        return compileMode;
+    }
+
+    public boolean getRunTestChecks() {
+        return runTestChecks;
+    }
+
+    public int getusedRegisterNumber() {
+        return usedRegisterNumber;
+    }
+
+    public boolean getDisplayWarnings() {
+        return displayWarnings;
+    }
 
     // added to support compile options
-    private enum CompileMode {
+    enum CompileMode {
         Compile,
         ParseOnly,
         Verify,
     }
 
+    private int debug = 0;
+    private boolean parallel = false;
+    private boolean printBanner = false;
+    private List<File> sourceFiles = new ArrayList<File>();
     private CompileMode compileMode = CompileMode.Compile;
     private boolean runTestChecks = true;
-    private int registerUseNumber = 16;
+    private int usedRegisterNumber = 16;
     private boolean displayWarnings = false;
 
     
@@ -89,7 +107,7 @@ public class CompilerOptions {
                     case "-p": {
                         // check there were no -v option
                         switch(compileMode) {
-                            case Compile : {compileMode = CompileMode.Verify; break;}
+                            case Compile : {compileMode = CompileMode.ParseOnly; break;}
                             case ParseOnly : {/* ?? maybe throw don't repeat args exception ?*/ break;}
                             case Verify : { throw new CLIException("L'option -p est incompatible avec l'opton -v.");}
                         }
@@ -97,7 +115,7 @@ public class CompilerOptions {
                     case "-v": {
                         // check there were no -p option
                         switch(compileMode) {
-                            case Compile : {compileMode = CompileMode.ParseOnly; break;}
+                            case Compile : {compileMode = CompileMode.Verify; break;}
                             case ParseOnly : {throw new CLIException("L'option -v est incompatible avec l'opton -p.");}
                             case Verify : { /* ?? maybe throw don't repeat args exception ?*/ break; }
                         }
@@ -113,7 +131,7 @@ public class CompilerOptions {
                             if(registerNumber < 4 || registerNumber > 16) {
                                 throw new CLIException("le nombre de registre à utiliser (spécifié avec -r) doit être compris entre 4 et 16.");
                             }
-                            registerUseNumber = registerNumber;
+                            usedRegisterNumber = registerNumber;
                             break;
                         }
                         catch(NumberFormatException e) {
@@ -122,13 +140,13 @@ public class CompilerOptions {
                     }
                     case "-d": {
                         // check if we are not already on max debug level
-                        if(debug < TRACE) {
+                        if(debug < MAX_DEBUG_MODE) {
                             // increase debug level
                             debug += 1;
                             break;
                         }
                         else {
-                            throw new CLIException("Le niveau maximum de debug a été dépassé. L'option '-d' ne peut être donnée que " + TRACE + " fois.");
+                            throw new CLIException("Le niveau maximum de debug a été dépassé. L'option '-d' ne peut être donnée que " + MAX_DEBUG_MODE + " fois.");
                         }
                     }
                     case "-P": {
@@ -150,8 +168,11 @@ public class CompilerOptions {
         if(!printBanner) {
             // there are files to read !
             for(int i = arg_index; i < args.length; i++) {
-                // read the file
-                sourceFiles.add(new File(args[i]));
+                // check the file extension is .deca
+                if(args[i].endsWith(".deca")) {
+                    // read the file
+                    sourceFiles.add(new File(args[i]));
+                }           
             }
         }
 
