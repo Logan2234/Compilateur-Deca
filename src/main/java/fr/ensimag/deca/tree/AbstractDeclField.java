@@ -31,5 +31,4 @@ public abstract class AbstractDeclField extends Tree {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
 
-    public abstract void decompileList(IndentPrintStream s);
 }

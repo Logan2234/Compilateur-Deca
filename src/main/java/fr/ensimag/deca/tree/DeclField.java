@@ -15,17 +15,18 @@ import org.apache.commons.lang.Validate;
  */
 public class DeclField extends AbstractDeclField {
 
-    //TODO Problem with decompile
+    private String visib;
     final private AbstractIdentifier type;
     final private AbstractIdentifier fieldName;
     final private AbstractInitialization initialization;
 
-    public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization) {
+    public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization, String visib) {
         Validate.notNull(type);
         Validate.notNull(fieldName);
         Validate.notNull(initialization);
         this.type = type;
         this.fieldName = fieldName;
+        this.visib = visib;
         this.initialization = initialization;
     }
 
@@ -36,8 +37,8 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    public void decompileList(IndentPrintStream s) {
-        decompile(s);
+    public void decompile(IndentPrintStream s) {
+        s.print(visib);
         s.print(' ');
         type.decompile(s);
         s.print(' ');
