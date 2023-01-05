@@ -5,6 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentType;
 
 /**
  * Arithmetic binary operations (+, -, /, ...)
@@ -21,6 +22,25 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Type typeLeft = this.getLeftOperand().getType();
+        Type typeRight = this.getRightOperand().getType();
+        if (typeLeft != compiler.environmentType.INT && typeLeft != compiler.environmentType.FLOAT){
+            Location loc = this.getLeftOperand().getLocation();
+            throw new ContextualError(
+                    loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
+                                + ": L'argument de gauche d'une opération athmétique doit être un int ou float",//
+                        loc);
+        }
+        if (typeRight != compiler.environmentType.INT && typeRight != compiler.environmentType.FLOAT){
+            Location loc = this.getRightOperand().getLocation();
+            throw new ContextualError(
+                    loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
+                                + ": L'argument de droite d'une opération athmétique doit être un int ou float",//
+                        loc);
+        }
+        if (typeLeft ==  compiler.environmentType.FLOAT || typeLeft == compiler.environmentType.FLOAT){
+            return compiler.environmentType.FLOAT;
+        }
+        return compiler.environmentType.INT;
     }
 }
