@@ -22,7 +22,7 @@ public abstract class AbstractPrint extends AbstractInst {
 
     private boolean printHex;
     private ListExpr arguments = new ListExpr();
-    
+
     abstract String getSuffix();
 
     public AbstractPrint(boolean printHex, ListExpr arguments) {
@@ -36,13 +36,18 @@ public abstract class AbstractPrint extends AbstractInst {
     }
 
     @Override
-    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass, Type returnType)
-            throws ContextualError {
-        for (AbstractExpr a : getArguments().getList()) {
-            a.verifyInst(compiler, localEnv, currentClass, returnType);
+    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
+            Type returnType) throws ContextualError {
+        for (AbstractExpr a : arguments.getList()) {
+            Type type = a.verifyExpr(compiler, localEnv, currentClass);
+            if (!type.isInt() && !type.isFloat() && !type.isString()) {
+                Location loc = a.getLocation();
+                throw new ContextualError(
+                        loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
+                                + ": Seuls les int, float, et string peuvent être passé en argument de print",//
+                        a.getLocation());
+            }
         }
-        // Before not yet implemented
     }
 
     @Override

@@ -128,13 +128,6 @@ public abstract class Tree {
     }
 
     /**
-     * Pretty-print the definition of the tree, if applicable
-     */
-    protected void prettyPrintDefinition(PrintStream s, String newPrefix) {
-        // Nothing by default
-    }
-
-    /**
      * Print the node information on a single line.
      *
      * Does not print the children (the recursive call is done by prettyPrint).

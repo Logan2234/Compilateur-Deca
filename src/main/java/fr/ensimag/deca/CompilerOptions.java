@@ -199,7 +199,6 @@ public class CompilerOptions {
             logger.info("Java assertions disabled");
         }
 
-        throw new UnsupportedOperationException("not yet implemented");
     }
 
     protected void displayUsage() {

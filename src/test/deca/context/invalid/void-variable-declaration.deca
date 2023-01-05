@@ -1,0 +1,10 @@
+// Description:
+//    Condition de la règle 3.17 non respectée 
+//
+// Resultats:
+//    Ligne 9: Une variable ne peut être de type void.
+//
+
+{
+    void x;
+}
