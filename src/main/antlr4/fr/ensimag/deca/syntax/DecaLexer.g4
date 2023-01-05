@@ -13,6 +13,16 @@ options {
 
 // Deca lexer rules.
 
+// Ignore spaces, tabs, newlines and whitespaces
+WS:   ( ' '
+         | '//' .*? '\n' 
+         | '/*' .*? '*/'
+         | '\t'
+         | '\r'
+         | '\n'
+      ) { skip(); // avoid producing a token 
+      };
+
 OBRACE: '{';
 CBRACE: '}';
    
@@ -33,9 +43,7 @@ COMMA: ',';
 EQUALS: '=';
 OPARENT: '(';
 CPARENT: ')';
-COMMENT: ('//' .*? '\n' 
-         |'/*' .*? '*/'
-         ) {skip();};
+
 RETURN: 'return';
 EQEQ: '=='; 
 NEQ: '!=';
@@ -84,9 +92,6 @@ CLASS: 'class';
 EXTENDS: 'extends';
 PROTECTED: 'protected';
 ASM: 'asm';
-SPACE: ' ';
-TAB: '\t';
-RESET: '\r';
 
 fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
 INCLUDE: '#include' (' ')* '"' FILENAME '"';
