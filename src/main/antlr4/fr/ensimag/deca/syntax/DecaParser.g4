@@ -117,7 +117,7 @@ inst returns[AbstractInst tree]
         }
     | PRINTLN OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
-            $tree = new Print(0,$list_expr.tree);
+            $tree = new Println(false,$list_expr.tree);
             setLocation($tree, $list_expr.start);
         }
     | PRINTX OPARENT list_expr CPARENT SEMI {
@@ -153,12 +153,12 @@ if_then_else returns[IfThenElse tree]
 
 list_expr returns[ListExpr tree]
 @init   {
-            $tree = new ListExp();
+            $tree = new ListExpr();
         }
     : (e1=expr {
         }
        (COMMA e2=expr {
-            $tree.add($expr.tree);
+            $tree.add($e2.tree);
         }
        )* )?
     ;
@@ -180,7 +180,7 @@ assign_expr returns[AbstractExpr tree]
         EQUALS e2=assign_expr {
             assert($e.tree != null);
             assert($e2.tree != null);
-            $tree = Equals($e.tree, $e2.tree);
+            $tree = new Equals($e.tree, $e2.tree);
             setLocation($tree, $e.start);
         }
       | /* epsilon */ {
@@ -224,13 +224,13 @@ eq_neq_expr returns[AbstractExpr tree]
     | e1=eq_neq_expr EQEQ e2=inequality_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
-            $tree = new Equal($e1.tree, $e2.tree);
+            $tree = new Equals($e1.tree, $e2.tree);
             setLocation($tree, $e1.start);
         }
     | e1=eq_neq_expr NEQ e2=inequality_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
-            $tree = new NotEqual($e1.tree, $e2.tree);
+            $tree = new NotEquals($e1.tree, $e2.tree);
             setLocation($tree, $e1.start);
         }
     ;
@@ -249,13 +249,13 @@ inequality_expr returns[AbstractExpr tree]
     | e1=inequality_expr GEQ e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
-            $tree = new GreeaterOrEqual($e1.tree, $e2.tree);
+            $tree = new GreaterOrEqual($e1.tree, $e2.tree);
             setLocation($tree, $e1.start);
         }
     | e1=inequality_expr GT e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
-            $tree = new Greate($e1.tree, $e2.tree);
+            $tree = new Greater($e1.tree, $e2.tree);
             setLocation($tree, $e1.start);
         }
     | e1=inequality_expr LT e2=sum_expr {
@@ -396,7 +396,7 @@ literal returns[AbstractExpr tree]
     | fd=FLOAT {
         }
     | STRING {
-            $tree = new String("Hello world!");
+            $tree = new StringLiteral("Hello world!");
         }
     | TRUE {
         }
@@ -416,8 +416,10 @@ ident returns[AbstractIdentifier tree]
 /****     Class related rules     ****/
 
 list_classes returns[ListDeclClass tree]
-    :
-      (c1=class_decl {
+    @init   {
+            $tree = new ListDeclClass();
+        }
+    :(c1=class_decl {
         }
       )*
     ;
