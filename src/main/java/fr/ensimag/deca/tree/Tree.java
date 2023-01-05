@@ -116,6 +116,7 @@ public abstract class Tree {
                 newPrefix = prefix + "|  ";
             }
         }
+        // prettyPrintDefinition(s, newPrefix);
         prettyPrintType(s, newPrefix);
         return newPrefix;
     }
@@ -125,6 +126,7 @@ public abstract class Tree {
      */
     protected void prettyPrintType(PrintStream s, String prefix) {
         // Nothing by default
+        // s.print("type=", )
     }
 
     /**
