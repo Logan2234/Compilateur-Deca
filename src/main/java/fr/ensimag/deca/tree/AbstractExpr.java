@@ -5,9 +5,18 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.IntType;
+import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Line;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
+import fr.ensimag.ima.pseudocode.instructions.WSTR;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -114,7 +123,24 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // depending on the of expr, print it with the correct ass instruction
+
+        if(type.isString()) {
+            // WSTR instruction
+            compiler.addInstruction(new WSTR(((StringType)type).getName().getName()));
+        }
+        else if(type.isInt()) {
+            // WINT R1
+            // load the int in R1
+            // compiler.addInstruction(new LOAD(((IntType)type).getName(), Register.getR(1)));
+            compiler.addInstruction(new WINT());
+        }
+        else if(type.isFloat()) {
+            // WFLOAT 
+            // load the float in R1
+            // compiler.addInstruction(new LOAD(((FloatType)type).getName(), Register.getR(1)));
+            compiler.addInstruction(new WFLOAT());
+        }
     }
 
     @Override
