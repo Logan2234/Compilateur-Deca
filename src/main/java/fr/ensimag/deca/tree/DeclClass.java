@@ -16,7 +16,16 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("class { ... A FAIRE ... }");
+        //TODO: Not finished yet
+        s.print("class ");
+        //? name
+        s.print(" extends ");
+        //? super
+        s.print(" {");
+        //? field
+        //? method
+        s.print("}");
+
     }
 
     @Override

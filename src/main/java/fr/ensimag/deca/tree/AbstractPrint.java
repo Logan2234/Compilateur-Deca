@@ -58,7 +58,13 @@ public abstract class AbstractPrint extends AbstractInst {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        throw new UnsupportedOperationException("not yet implemented");
+        s.print("print");
+        s.print(getSuffix());
+        if (printHex) {s.print("x");}
+        s.print("(");
+        arguments.decompile(s);
+        s.print(");");
+        //throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
