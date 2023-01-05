@@ -156,6 +156,7 @@ list_expr returns[ListExpr tree]
             $tree = new ListExpr();
         }
     : (e1=expr {
+            $tree.add($e1.tree);
         }
        (COMMA e2=expr {
             $tree.add($e2.tree);
