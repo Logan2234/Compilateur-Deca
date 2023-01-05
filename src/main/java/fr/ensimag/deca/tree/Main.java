@@ -27,11 +27,12 @@ public class Main extends AbstractMain {
     @Override
     protected void verifyMain(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify Main: start");
-        // A FAIRE: Appeler méthodes "verify*" de ListDeclVarSet et ListInst.
-        // Vous avez le droit de changer le profil fourni pour ces méthodes
-        // (mais ce n'est à priori pas nécessaire).
+
+        declVariables.verifyListDeclVariable(compiler, null, null);
+        insts.verifyListInst(compiler, null, null, null);
+        //! Verify if localEnv = null 
+        // Before not yet implemented
         LOG.debug("verify Main: end");
-        throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
