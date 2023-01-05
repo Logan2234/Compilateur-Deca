@@ -16,8 +16,7 @@ public class Main extends AbstractMain {
     
     private ListDeclVar declVariables;
     private ListInst insts;
-    public Main(ListDeclVar declVariables,
-            ListInst insts) {
+    public Main(ListDeclVar declVariables, ListInst insts) {
         Validate.notNull(declVariables);
         Validate.notNull(insts);
         this.declVariables = declVariables;
@@ -27,11 +26,9 @@ public class Main extends AbstractMain {
     @Override
     protected void verifyMain(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify Main: start");
-
-        declVariables.verifyListDeclVariable(compiler, null, null);
+        // A FAIRE: Appeler méthodes "verify*" de ListDeclVarSet et ListInst.
+        // declVariables.verifyListDeclVariable(compiler, null, null); // TODO: Remplacer les NULLS
         insts.verifyListInst(compiler, null, null, null);
-        //! Verify if localEnv = null 
-        // Before not yet implemented
         LOG.debug("verify Main: end");
     }
 
