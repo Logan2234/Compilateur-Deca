@@ -6,4 +6,7 @@
 //
 // Historique:
 //    cree le 01/01/2023
-{println("Hello, world!");}
+
+{
+        println("Hello, world!");
+}
