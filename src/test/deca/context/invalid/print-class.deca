@@ -1,0 +1,15 @@
+// Description:
+//    Condition de la règle 3.31 non respectée 
+//
+// Resultats:
+//    Ligne 10: Prinln ne peut prendre qu'un int ou float ou string
+//
+
+Class A{
+
+}
+
+{
+    A a = new A();
+    println(a);
+}
