@@ -85,9 +85,11 @@ EXTENDS: 'extends';
 PROTECTED: 'protected';
 ASM: 'asm';
 SPACE: ' ';
-TAB: '   ';
+TAB: '\t';
 RESET: '\r';
 
+fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
+INCLUDE: '#include' (' ')* '"' FILENAME '"';
 
 fragment STRING_CAR: ~('"' | '\\' | '\n') ;
 STRING: '"' (STRING_CAR | '\\"' | '\\\\')*  '"';
