@@ -1,0 +1,16 @@
+// Description:
+//    Condition de la règle 3.24 non respectée 
+//
+// Resultats:
+//    Ligne 9: Une variable ne peut être de type void.
+//
+
+class A{
+    void getX() {
+        return; // ?? Est-ce que c'est bien ça pour le return void ?
+    }
+}
+
+{
+    
+}
