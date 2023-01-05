@@ -11,7 +11,7 @@ files=$(find ./src/test/deca/context/valid -name "*.deca")
 
 for test in $files
 do
-    test_context "$test" > "${test%.deca}".lis 2>&1
+    test_context "$test" > "${test%.deca}".lis 2>&1 # TODO: Bien sûr ce script est à améliorer
 done
 
 # invalid tests
