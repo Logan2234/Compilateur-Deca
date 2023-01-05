@@ -30,7 +30,6 @@ public class Main extends AbstractMain {
         // declVariables.verifyListDeclVariable(compiler, null, null); // TODO: Remplacer les NULLS
         insts.verifyListInst(compiler, null, null, null);
         LOG.debug("verify Main: end");
-        throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override

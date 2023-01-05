@@ -1,0 +1,13 @@
+// Description:
+//    tests de programme syntaxiquement correct.
+//
+// Resultats:
+//    pas d'erreur
+//
+// Historique:
+//    cree le 04/01/2023
+#include "Math.decah"
+{
+    Math m = new Math();
+    println("cos(0.0) = ", m.cos(0.0));
+}
