@@ -109,7 +109,6 @@ list_inst returns[ListInst tree]
       )*
     ;
 
-// only one case implemented
 inst returns[AbstractInst tree]
     : e1=expr SEMI {
             assert($e1.tree != null);
@@ -386,8 +385,10 @@ primary_expr returns[AbstractExpr tree]
             assert($expr.tree != null);
         }
     | READINT OPARENT CPARENT {
+            $tree = new ReadInt();
         }
     | READFLOAT OPARENT CPARENT {
+            $tree = new ReadFloat();
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
@@ -417,7 +418,7 @@ literal returns[AbstractExpr tree]
         }
     | STRING {
             $tree = new StringLiteral($STRING.text.substring(1, $STRING.text.length() - 1));
-            System.out.println($tree.getLocation());
+            setLocation($tree, $STRING);
         }
     | TRUE {
         }
@@ -432,6 +433,8 @@ literal returns[AbstractExpr tree]
 // TODO
 ident returns[AbstractIdentifier tree]
     : IDENT {
+            $tree = new Identifier(new Symbol($IDENT.text));
+            setLocation($tree, $IDENT);
         }
     ;
 
