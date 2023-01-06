@@ -1,0 +1,12 @@
+// Description:
+//    Condition de la règle 3.58 non respectée 
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    1 >= "hello world";
+}
