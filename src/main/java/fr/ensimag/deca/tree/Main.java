@@ -28,7 +28,7 @@ public class Main extends AbstractMain {
         LOG.debug("verify Main: start");
         // A FAIRE: Appeler méthodes "verify*" de ListDeclVarSet et ListInst.
         // declVariables.verifyListDeclVariable(compiler, null, null); // TODO: Remplacer les NULLS
-        insts.verifyListInst(compiler, null, null, null);
+        insts.verifyListInst(compiler, null, null, compiler.environmentType.VOID);
         LOG.debug("verify Main: end");
     }
 
