@@ -1,12 +1,12 @@
 // Description:
-//    readFloat
+//    Test and op
 //
 // Resultats:
-//    
+//    //
 //
 // Historique:
 //    cree le 06/01/2023
 
 {
-    readFloat();
+    true && false;
 }

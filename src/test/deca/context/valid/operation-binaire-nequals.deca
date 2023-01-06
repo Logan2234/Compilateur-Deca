@@ -1,12 +1,12 @@
 // Description:
-//    readFloat
+//    Test du not equals op
 //
 // Resultats:
-//    
+//    //
 //
 // Historique:
 //    cree le 06/01/2023
 
 {
-    readFloat();
+    1 != 2;
 }

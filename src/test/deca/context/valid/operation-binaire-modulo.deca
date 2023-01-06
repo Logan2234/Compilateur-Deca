@@ -1,5 +1,5 @@
 // Description:
-//    literal boolean
+//    operation binaire modulo
 //
 // Resultats:
 //    
@@ -8,5 +8,5 @@
 //    cree le 06/01/2023
 
 {
-    true;
+    2%1;
 }

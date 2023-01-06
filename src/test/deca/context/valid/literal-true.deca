@@ -1,5 +1,5 @@
 // Description:
-//    readFloat
+//    literal boolean true
 //
 // Resultats:
 //    
@@ -8,5 +8,5 @@
 //    cree le 06/01/2023
 
 {
-    readFloat();
+    true;
 }
