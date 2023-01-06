@@ -1,0 +1,14 @@
+// Description:
+//    Declare un string 
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    string str = "Projet GL";
+}
+
+string str = a = b;

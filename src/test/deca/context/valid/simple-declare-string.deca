@@ -1,0 +1,12 @@
+// Description:
+//    Declare 1 string
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    string i;
+}

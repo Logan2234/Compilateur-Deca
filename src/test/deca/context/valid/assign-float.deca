@@ -1,0 +1,13 @@
+// Description:
+//    Assign un float indirectement
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    float i;
+    i = 2.0;
+}

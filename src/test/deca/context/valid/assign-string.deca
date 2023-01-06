@@ -1,0 +1,13 @@
+// Description:
+//    Assign un string indirectement
+//
+// Resultats:
+//    2
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    string i;
+    i = "hello world";
+}
