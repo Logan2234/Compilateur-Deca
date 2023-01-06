@@ -1,13 +1,12 @@
 // Description:
-//    Assign un entier
+//    cast int to void
 //
 // Resultats:
-//    //
+//    
 //
 // Historique:
 //    cree le 06/01/2023
 
 {
-    int i;
-    i = 2;
+    (void)(2);
 }

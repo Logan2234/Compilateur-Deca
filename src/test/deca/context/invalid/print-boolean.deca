@@ -2,7 +2,7 @@
 //    Condition de la règle 3.31 non respectée 
 //
 // Resultats:
-//    Ligne 10: Prinln ne peut prendre qu'un int ou float ou string
+//    Ligne 10: Print(ln) ne peut prendre qu'un int ou un float ou une string
 //
 
 {

@@ -1,5 +1,5 @@
 // Description:
-//    Assign un entier
+//    Assign un subtype
 //
 // Resultats:
 //    //
@@ -7,7 +7,15 @@
 // Historique:
 //    cree le 06/01/2023
 
+class A{
+
+}
+
+class B extends A{
+
+}
+
 {
-    int i;
-    i = 2;
+    A a;
+    a = new B;
 }

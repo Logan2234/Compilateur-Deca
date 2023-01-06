@@ -1,5 +1,5 @@
 // Description:
-//    Assign un entier
+//    Assign un float avec un int
 //
 // Resultats:
 //    //
@@ -8,6 +8,6 @@
 //    cree le 06/01/2023
 
 {
-    int i;
+    float i;
     i = 2;
 }
