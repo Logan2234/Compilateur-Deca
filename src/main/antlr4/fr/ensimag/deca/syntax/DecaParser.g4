@@ -398,7 +398,7 @@ literal returns[AbstractExpr tree]
     | fd=FLOAT {
         }
     | STRING {
-            $tree = new StringLiteral($STRING.text);
+            $tree = new StringLiteral($STRING.text.substring(1, $STRING.text.length() - 1));
         }
     | TRUE {
         }
