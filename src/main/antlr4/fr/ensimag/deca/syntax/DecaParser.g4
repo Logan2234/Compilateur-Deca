@@ -334,13 +334,13 @@ mult_expr returns[AbstractExpr tree]
 unary_expr returns[AbstractExpr tree]
     : op=MINUS e=unary_expr {
             assert($e.tree != null);
-            $tree = $e.tree;
-            // change sign of attribute
+            $tree = new UnaryMinus($e.tree);
+            setLocation($tree, $MINUS);
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
-            $tree = $e.tree;
-            // change attribute
+            $tree = new Not($e.tree);
+            setLocation($tree, $EXCLAM);
         }
     | select_expr {
             assert($select_expr.tree != null);
@@ -413,20 +413,44 @@ type returns[AbstractIdentifier tree]
 // only one case implemented
 literal returns[AbstractExpr tree]
     : INT {
-        }
+            try {
+                $tree = new IntLiteral(Integer.parseInt($INT.text));
+            } catch (NumberFormatException e) {
+                // The integer could not be parsed (it's probably too large).
+                // set $tree to null, and then fail with the semantic predicate
+                // {$tree != null}?. In decac, we'll have a more advanced error
+                // management.
+                $tree = null;
+            }
+        } {$tree != null}?
     | fd=FLOAT {
-        }
+        try {
+                $tree = new FloatLiteral(Integer.parseFloat($FLOAT.text));
+            } catch (NumberFormatException e) {
+                // The float could not be parsed (it's probably too large).
+                // set $tree to null, and then fail with the semantic predicate
+                // {$tree != null}?. In decac, we'll have a more advanced error
+                // management.
+                $tree = null;
+            }
+        } {$tree != null}?
     | STRING {
             $tree = new StringLiteral($STRING.text.substring(1, $STRING.text.length() - 1));
             setLocation($tree, $STRING);
         }
     | TRUE {
+            $tree = new BooleanLiteral(true);
+            setLocation($tree, $TRUE);
         }
     | FALSE {
+            $tree = new BooleanLiteral(false);
+            setLocation($tree, $FALSE);
         }
     | THIS {
+            // TODO
         }
     | NULL {
+            // TODO
         }
     ;
 
