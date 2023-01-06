@@ -85,7 +85,6 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
       )*
     ;
 
-// TODO fix Init + DeclVar
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
         }
@@ -138,12 +137,13 @@ inst returns[AbstractInst tree]
         }
     | if_then_else {
             assert($if_then_else.tree != null);
-            // TODO
+            $tree = $if_then_else.tree;
         }
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
-            // TODO
+            $tree = new While($condition.tree, $list_inst.tree);
+            setLocation($tree, $WHILE);
         }
     | RETURN expr SEMI {
             assert($expr.tree != null);
@@ -335,12 +335,12 @@ unary_expr returns[AbstractExpr tree]
     : op=MINUS e=unary_expr {
             assert($e.tree != null);
             $tree = new UnaryMinus($e.tree);
-            setLocation($tree, $MINUS);
+            setLocation($tree, $op);
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
             $tree = new Not($e.tree);
-            setLocation($tree, $EXCLAM);
+            setLocation($tree, $op);
         }
     | select_expr {
             assert($select_expr.tree != null);
@@ -425,7 +425,7 @@ literal returns[AbstractExpr tree]
         } {$tree != null}?
     | fd=FLOAT {
         try {
-                $tree = new FloatLiteral(Integer.parseFloat($FLOAT.text));
+                $tree = new FloatLiteral(Float.parseFloat($fd.text));
             } catch (NumberFormatException e) {
                 // The float could not be parsed (it's probably too large).
                 // set $tree to null, and then fail with the semantic predicate
