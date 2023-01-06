@@ -1,0 +1,13 @@
+// Description:
+//    tests de programme syntaxiquement correct.
+//
+// Resultats:
+//    pas d'erreur
+//
+// Historique:
+//    cree le 04/01/2023
+{
+    int x ;
+    x=readInt() ;
+    println(0.5*(x*x)) ;
+}

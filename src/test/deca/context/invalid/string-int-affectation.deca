@@ -1,0 +1,14 @@
+// Description:
+//    Affectation et typage (string - int)
+//
+// Resultats:
+//    Ligne 13: Affectation de types incompatibles.
+//
+
+{
+   int a;
+   string b;
+
+   // Doit etre refuse.
+   a = b;
+}

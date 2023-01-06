@@ -1,0 +1,18 @@
+// Description:
+//    Programme minimaliste utilisant println.
+//
+// Resultats:
+//    3
+//
+// Historique:
+//    cree le 05/01/2023
+
+{
+
+   int a = 1;
+   int b = 2;
+   
+   b = a + b;
+   print(b);
+
+}
