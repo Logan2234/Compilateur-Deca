@@ -1,0 +1,12 @@
+// Description:
+//    Test 3.3 fail avec divide
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    2/true;
+}
