@@ -18,26 +18,33 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
         Type typeLeft = this.getLeftOperand().getType();
         Type typeRight = this.getRightOperand().getType();
-        if (typeLeft != compiler.environmentType.INT && typeLeft != compiler.environmentType.FLOAT){
-            Location loc = this.getLeftOperand().getLocation();
-            throw new ContextualError(
-                    loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                                + ": L'argument de gauche d'une opération athmétique doit être un int ou float",//
-                        loc);
-        }
-        if (typeRight != compiler.environmentType.INT && typeRight != compiler.environmentType.FLOAT){
-            Location loc = this.getRightOperand().getLocation();
-            throw new ContextualError(
-                    loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                                + ": L'argument de droite d'une opération athmétique doit être un int ou float",//
-                        loc);
-        }
-        return compiler.environmentType.BOOLEAN;
-    }    
+        Location loc = this.getLocation();
 
+        if (typeLeft == compiler.environmentType.BOOLEAN) {
+            if (typeRight != compiler.environmentType.BOOLEAN) {
+                throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
+                        + ": L'opérande de droite d'une opération de comparaison avec un booléen doit être un booléen (règle 3.33)",
+                        loc);
+            }
+            return compiler.environmentType.BOOLEAN;
+        }
+
+        // TODO: Il manque le cas ou on veut comparer T1 et / ou T2 est null ou type_class(_)
+
+        if (typeLeft != compiler.environmentType.INT && typeLeft != compiler.environmentType.FLOAT)
+            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
+                    + ": L'opérande de gauche d'une opération de comparaison doit être un int ou float (règle 3.33)",
+                    loc);
+
+        if (typeRight != compiler.environmentType.INT && typeRight != compiler.environmentType.FLOAT)
+            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
+                    + ": L'opérande de droite d'une opération comparaison doit être un int ou float (règle 3.33)", loc);
+
+        return compiler.environmentType.BOOLEAN;
+    }
 
 }
