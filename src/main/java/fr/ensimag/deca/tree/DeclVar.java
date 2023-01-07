@@ -15,7 +15,6 @@ import org.apache.commons.lang.Validate;
  */
 public class DeclVar extends AbstractDeclVar {
 
-    
     final private AbstractIdentifier type;
     final private AbstractIdentifier varName;
     final private AbstractInitialization initialization;
@@ -30,30 +29,32 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    protected void verifyDeclVar(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+    protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
+        type.verifyType(compiler);
+        // TODO: Vérifier le caractère disjoint de la règle 3.17
+        if (type.getType() == compiler.environmentType.VOID)
+        throw new ContextualError("Une variable ne peut pas être de type void (règle 3.17)", getLocation());
+        initialization.verifyInitialization(compiler, type.getType(), localEnv, currentClass);
     }
 
-    
     @Override
     public void decompile(IndentPrintStream s) {
         type.decompile(s);
         s.print(' ');
         varName.decompile(s);
         initialization.decompile(s);
-        
+
         // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
-    protected
-    void iterChildren(TreeFunction f) {
+    protected void iterChildren(TreeFunction f) {
         type.iter(f);
         varName.iter(f);
         initialization.iter(f);
     }
-    
+
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);

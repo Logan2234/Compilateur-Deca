@@ -26,23 +26,25 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
 
         if (typeLeft == compiler.environmentType.BOOLEAN) {
             if (typeRight != compiler.environmentType.BOOLEAN) {
-                throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                        + ": L'opérande de droite d'une opération de comparaison avec un booléen doit être un booléen (règle 3.33)",
+                throw new ContextualError(
+                        "L'opérande de droite d'une opération de comparaison avec un booléen doit être un booléen (règle 3.33)",
                         loc);
             }
             return compiler.environmentType.BOOLEAN;
         }
 
-        // TODO: Il manque le cas ou on veut comparer T1 et / ou T2 est null ou type_class(_)
+        // TODO: Il manque le cas ou on veut comparer T1 et / ou T2 est null ou
+        // type_class(_)
 
         if (typeLeft != compiler.environmentType.INT && typeLeft != compiler.environmentType.FLOAT)
-            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                    + ": L'opérande de gauche d'une opération de comparaison doit être un int ou float (règle 3.33)",
-                    loc);
+            throw new ContextualError(
+                    "L'opérande de gauche d'une opération de comparaison doit être un int ou float (règle 3.33)", loc);
 
         if (typeRight != compiler.environmentType.INT && typeRight != compiler.environmentType.FLOAT)
-            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                    + ": L'opérande de droite d'une opération comparaison doit être un int ou float (règle 3.33)", loc);
+            throw new ContextualError(
+                    "L'opérande de droite d'une opération comparaison doit être un int ou float (règle 3.33)", loc);
+
+        this.setType(compiler.environmentType.BOOLEAN);
 
         return compiler.environmentType.BOOLEAN;
     }

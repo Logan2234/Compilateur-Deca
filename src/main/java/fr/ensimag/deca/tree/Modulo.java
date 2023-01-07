@@ -25,9 +25,7 @@ public class Modulo extends AbstractOpArith {
         Location loc = this.getLocation();
 
         if (typeLeft != compiler.environmentType.INT || typeRight != compiler.environmentType.INT)
-            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                    + ": Un modulo ne peut être fait qu'entre deux entiers (règle 3.33)",
-                    loc);
+            throw new ContextualError("Un modulo ne peut être fait qu'entre deux entiers (règle 3.33)", loc);
 
         return compiler.environmentType.INT;
     }

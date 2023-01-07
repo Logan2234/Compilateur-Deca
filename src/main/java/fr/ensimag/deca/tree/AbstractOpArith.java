@@ -26,18 +26,20 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         Location loc = this.getLocation();
 
         if (typeLeft != compiler.environmentType.INT && typeLeft != compiler.environmentType.FLOAT)
-            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                    + ": L'opérande de gauche d'une opération arithmétique doit être un int ou float (règle 3.33)",
-                    loc);
+            throw new ContextualError(
+                    "L'opérande de gauche d'une opération arithmétique doit être un int ou float (règle 3.33)", loc);
 
         if (typeRight != compiler.environmentType.INT && typeRight != compiler.environmentType.FLOAT)
-            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                    + ": L'opérande de droite d'une opération arithmétique doit être un int ou float (règle 3.33)",
-                    loc);
+            throw new ContextualError(
+                    "L'opérande de droite d'une opération arithmétique doit être un int ou float (règle 3.33)", loc);
 
-        if (typeLeft == compiler.environmentType.FLOAT || typeLeft == compiler.environmentType.FLOAT)
+        // Ajout du décor et renvoie du type
+        if (typeLeft == compiler.environmentType.FLOAT || typeLeft == compiler.environmentType.FLOAT) {
+            this.setType(compiler.environmentType.FLOAT);
             return compiler.environmentType.FLOAT;
+        }
 
+        this.setType(compiler.environmentType.INT);
         return compiler.environmentType.INT;
     }
 }

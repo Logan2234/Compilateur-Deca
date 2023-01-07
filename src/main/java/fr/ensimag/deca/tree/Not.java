@@ -24,8 +24,7 @@ public class Not extends AbstractUnaryExpr {
         Location loc = this.getLocation();
 
         if (type != compiler.environmentType.BOOLEAN)
-            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                    + ": Un not ne peut être fait qu'avec un booléen (règle 3.37)", loc);
+            throw new ContextualError("Un not ne peut être fait qu'avec un booléen (règle 3.37)", loc);
 
         return type;
     }

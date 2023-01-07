@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -25,7 +26,7 @@ import org.apache.log4j.Logger;
  * @date 01/01/2023
  */
 public class Identifier extends AbstractIdentifier {
-    
+
     @Override
     protected void checkDecoration() {
         if (getDefinition() == null) {
@@ -46,7 +47,7 @@ public class Identifier extends AbstractIdentifier {
      * when the cast fails.
      * 
      * @throws DecacInternalError
-     *             if the definition is not a class definition.
+     *                            if the definition is not a class definition.
      */
     @Override
     public ClassDefinition getClassDefinition() {
@@ -68,7 +69,7 @@ public class Identifier extends AbstractIdentifier {
      * when the cast fails.
      * 
      * @throws DecacInternalError
-     *             if the definition is not a method definition.
+     *                            if the definition is not a method definition.
      */
     @Override
     public MethodDefinition getMethodDefinition() {
@@ -90,7 +91,7 @@ public class Identifier extends AbstractIdentifier {
      * when the cast fails.
      * 
      * @throws DecacInternalError
-     *             if the definition is not a field definition.
+     *                            if the definition is not a field definition.
      */
     @Override
     public FieldDefinition getFieldDefinition() {
@@ -112,7 +113,7 @@ public class Identifier extends AbstractIdentifier {
      * when the cast fails.
      * 
      * @throws DecacInternalError
-     *             if the definition is not a field definition.
+     *                            if the definition is not a field definition.
      */
     @Override
     public VariableDefinition getVariableDefinition() {
@@ -127,13 +128,14 @@ public class Identifier extends AbstractIdentifier {
     }
 
     /**
-     * Like {@link #getDefinition()}, but works only if the definition is a ExpDefinition.
+     * Like {@link #getDefinition()}, but works only if the definition is a
+     * ExpDefinition.
      * 
      * This method essentially performs a cast, but throws an explicit exception
      * when the cast fails.
      * 
      * @throws DecacInternalError
-     *             if the definition is not a field definition.
+     *                            if the definition is not a field definition.
      */
     @Override
     public ExpDefinition getExpDefinition() {
@@ -165,30 +167,47 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        ExpDefinition def = localEnv.get(this.name);
-        Location loc = this.getLocation();
-        if (def == null){
-            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-            + ": L'identifier n'existe pas",
-            loc);        }// ! Pas sur du tout j'avoue
-        return def.getType();
-        //throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        // ExpDefinition def = localEnv.get(this.name);
+        // Location loc = this.getLocation();
+        // if (def == null) {
+        // throw new ContextualError("L'identifier n'existe pas", loc);
+        // } // ! Pas sur du tout j'avoue
+        
+        // Ajout du décor
+        // this.setDefinition(def);
+        
+        // return def.getType();
+
+
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
     /**
      * Implements non-terminal "type" of [SyntaxeContextuelle] in the 3 passes
+     * 
      * @param compiler contains "env_types" attribute
      */
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Type type;
+        TypeDefinition def = compiler.environmentType.defOfType(name);
+        Location loc = getLocation();
+        
+        try {
+            // Si le symbole n'est pas un type, on catch l'erreur pour envoyer une ContextualError
+            type = def.getType();
+        } catch (NullPointerException e) {
+            throw new ContextualError("Le type \"" + name + "\" n'existe pas (règle 0.2)", loc);
+        }
+        
+        // Ajout du décor
+        this.setDefinition(def);
+        return type;
     }
-    
-    
-    private Definition definition;
 
+    private Definition definition;
 
     @Override
     protected void iterChildren(TreeFunction f) {

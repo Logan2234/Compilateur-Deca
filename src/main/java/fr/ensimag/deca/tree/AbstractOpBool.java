@@ -23,13 +23,14 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
             throws ContextualError {
         Type typeLeft = this.getLeftOperand().getType();
         Type typeRight = this.getRightOperand().getType();
-
         if (typeLeft != compiler.environmentType.BOOLEAN && typeRight != compiler.environmentType.BOOLEAN) {
             Location loc = this.getLocation();
-            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                    + ": Une opération booléenne ne peut être faite qu'entre deux booléens (règle 3.33)", loc);
+            throw new ContextualError("Une opération booléenne ne peut être faite qu'entre deux booléens (règle 3.33)", loc);
         }
 
+        //Ajout du décor
+        this.setType(compiler.environmentType.BOOLEAN);
+        
         return compiler.environmentType.BOOLEAN;
     }
 

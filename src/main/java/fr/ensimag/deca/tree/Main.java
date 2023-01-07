@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -25,11 +26,12 @@ public class Main extends AbstractMain {
 
     @Override
     protected void verifyMain(DecacCompiler compiler) throws ContextualError {
-        LOG.debug("verify Main: start");
-        // A FAIRE: Appeler méthodes "verify*" de ListDeclVarSet et ListInst.
-        // declVariables.verifyListDeclVariable(compiler, null, null); // TODO: Remplacer les NULLS
-        insts.verifyListInst(compiler, null, null, compiler.environmentType.VOID);
-        LOG.debug("verify Main: end");
+        // LOG.debug("verify Main: start");
+        // Création d'un EnvironnementExp vide
+        EnvironmentExp localEnv = new EnvironmentExp(null);
+        declVariables.verifyListDeclVariable(compiler, localEnv, null); // TODO: Remplacer le NULL de localEnv
+        insts.verifyListInst(compiler, localEnv, null, compiler.environmentType.VOID);
+        // LOG.debug("verify Main: end");
     }
 
     @Override
