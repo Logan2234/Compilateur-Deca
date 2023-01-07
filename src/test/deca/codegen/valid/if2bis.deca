@@ -1,0 +1,18 @@
+// Description:
+//    Vérification basique avec un if et un OU avec true et false
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	boolean test1 = true;
+    boolean test2 = false;
+    if (test1 || test2) {
+        println(“ok”);
+    } else {
+        println("ko");
+    }
+}

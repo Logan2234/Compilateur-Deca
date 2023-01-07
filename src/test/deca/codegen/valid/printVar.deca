@@ -1,0 +1,14 @@
+// Description:
+//    Déclaration de variable et print de la variable avec une déclaration sur deux lignes
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	string i;
+	i="ok";
+	println(i);
+}
