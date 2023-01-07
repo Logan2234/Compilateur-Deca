@@ -1,0 +1,17 @@
+// Description:
+//    Vérification basique avec un if
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	boolean test = true;
+    if (test){
+        println(“ok”);
+    } else {
+        println("ko");
+    }
+}

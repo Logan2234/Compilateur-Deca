@@ -1,0 +1,15 @@
+// Description:
+//    Print d'une somme de deux variables, la somme étant réalisée dans le print
+//
+// Resultats:
+//    3
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	int x,y;
+	x=1;
+	y=2;
+	print(x+y);
+}

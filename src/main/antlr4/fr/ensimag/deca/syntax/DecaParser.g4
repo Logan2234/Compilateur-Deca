@@ -78,7 +78,7 @@ decl_var_set[ListDeclVar l]
 
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
-        $l.add($dv1.tree);
+            $l.add($dv1.tree);
         } (COMMA dv2=decl_var[$t] {
             $l.add($dv2.tree);
         }
@@ -92,9 +92,11 @@ decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
             $tree = new DeclVar($t,$i.tree,new NoInitialization());
         }
       (EQUALS e=expr {
+            assert($e.tree != null);
+            $tree = new DeclVar($t,$i.tree,new Initialization($e.tree));
         }
       )? {
-            $tree = new DeclVar($t,$i.tree,new Initialization($e.tree));
+                    
         }
     ;
 
@@ -406,6 +408,7 @@ primary_expr returns[AbstractExpr tree]
 type returns[AbstractIdentifier tree]
     : ident {
             assert($ident.tree != null);
+            $tree = $ident.tree;
         }
     ;
 
@@ -454,10 +457,11 @@ literal returns[AbstractExpr tree]
         }
     ;
 
-// TODO
 ident returns[AbstractIdentifier tree]
     : IDENT {
-            $tree = new Identifier(new Symbol($IDENT.text));
+            $tree = new Identifier(this.getDecacCompiler().createSymbol($IDENT.text));
+            //$tree = new Identifier(this.getDecacCompiler().symbolTable.create($IDENT.text));
+            // it seems to be equivalent but it is deeper in the class hierarchy
             setLocation($tree, $IDENT);
         }
     ;
