@@ -436,10 +436,7 @@ literal returns[AbstractExpr tree]
         } {$tree != null}?
     | STRING {
             $tree = new StringLiteral($STRING.text.substring(1, $STRING.text.length() - 1));
-<<<<<<< HEAD
-=======
             setLocation($tree, $STRING);
->>>>>>> feature/etape-A-DecaParser
         }
     | TRUE {
             $tree = new BooleanLiteral(true);
