@@ -18,11 +18,19 @@ public class Modulo extends AbstractOpArith {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        Type typeLeft = this.getLeftOperand().getType();
+        Type typeRight = this.getRightOperand().getType();
+        Location loc = this.getLocation();
 
+        if (typeLeft != compiler.environmentType.INT || typeRight != compiler.environmentType.INT)
+            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
+                    + ": Un modulo ne peut être fait qu'entre deux entiers (règle 3.33)",
+                    loc);
+
+        return compiler.environmentType.INT;
+    }
 
     @Override
     protected String getOperatorName() {
