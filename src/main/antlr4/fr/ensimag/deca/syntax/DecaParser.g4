@@ -85,7 +85,6 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
       )*
     ;
 
-// TODO fix Init + DeclVar
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
         }
@@ -109,7 +108,6 @@ list_inst returns[ListInst tree]
       )*
     ;
 
-// only one case implemented
 inst returns[AbstractInst tree]
     : e1=expr SEMI {
             assert($e1.tree != null);
@@ -139,12 +137,13 @@ inst returns[AbstractInst tree]
         }
     | if_then_else {
             assert($if_then_else.tree != null);
-            // TODO
+            $tree = $if_then_else.tree;
         }
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
-            // TODO
+            $tree = new While($condition.tree, $list_inst.tree);
+            setLocation($tree, $WHILE);
         }
     | RETURN expr SEMI {
             assert($expr.tree != null);
@@ -335,13 +334,13 @@ mult_expr returns[AbstractExpr tree]
 unary_expr returns[AbstractExpr tree]
     : op=MINUS e=unary_expr {
             assert($e.tree != null);
-            $tree = $e.tree;
-            // change sign of attribute
+            $tree = new UnaryMinus($e.tree);
+            setLocation($tree, $op);
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
-            $tree = $e.tree;
-            // change attribute
+            $tree = new Not($e.tree);
+            setLocation($tree, $op);
         }
     | select_expr {
             assert($select_expr.tree != null);
@@ -386,8 +385,10 @@ primary_expr returns[AbstractExpr tree]
             assert($expr.tree != null);
         }
     | READINT OPARENT CPARENT {
+            $tree = new ReadInt();
         }
     | READFLOAT OPARENT CPARENT {
+            $tree = new ReadFloat();
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
@@ -412,25 +413,52 @@ type returns[AbstractIdentifier tree]
 // only one case implemented
 literal returns[AbstractExpr tree]
     : INT {
-        }
+            try {
+                $tree = new IntLiteral(Integer.parseInt($INT.text));
+            } catch (NumberFormatException e) {
+                // The integer could not be parsed (it's probably too large).
+                // set $tree to null, and then fail with the semantic predicate
+                // {$tree != null}?. In decac, we'll have a more advanced error
+                // management.
+                $tree = null;
+            }
+        } {$tree != null}?
     | fd=FLOAT {
-        }
+        try {
+                $tree = new FloatLiteral(Float.parseFloat($fd.text));
+            } catch (NumberFormatException e) {
+                // The float could not be parsed (it's probably too large).
+                // set $tree to null, and then fail with the semantic predicate
+                // {$tree != null}?. In decac, we'll have a more advanced error
+                // management.
+                $tree = null;
+            }
+        } {$tree != null}?
     | STRING {
             $tree = new StringLiteral($STRING.text.substring(1, $STRING.text.length() - 1));
+            setLocation($tree, $STRING);
         }
     | TRUE {
+            $tree = new BooleanLiteral(true);
+            setLocation($tree, $TRUE);
         }
     | FALSE {
+            $tree = new BooleanLiteral(false);
+            setLocation($tree, $FALSE);
         }
     | THIS {
+            // TODO
         }
     | NULL {
+            // TODO
         }
     ;
 
 // TODO
 ident returns[AbstractIdentifier tree]
     : IDENT {
+            $tree = new Identifier(new Symbol($IDENT.text));
+            setLocation($tree, $IDENT);
         }
     ;
 

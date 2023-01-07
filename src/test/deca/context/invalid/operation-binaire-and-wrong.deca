@@ -1,8 +1,8 @@
 // Description:
-//    Test 3.3 fail avec and
+//    Test 3.33 fail avec and
 //
 // Resultats:
-//    //
+//    Ligne 11: And ne s'utilise qu'avec des booléens.
 //
 // Historique:
 //    cree le 06/01/2023
