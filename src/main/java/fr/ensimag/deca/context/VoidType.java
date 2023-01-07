@@ -22,7 +22,7 @@ public class VoidType extends Type {
 
     @Override
     public boolean sameType(Type otherType) {
-        return (((Object)otherType).getClass().getName() == "java.lang.Void");
+        return otherType.isVoid();
     }
 
 
