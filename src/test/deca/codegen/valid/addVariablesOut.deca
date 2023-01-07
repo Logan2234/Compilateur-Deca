@@ -1,0 +1,16 @@
+// Description:
+//    Addition de deux variables entières, puis print du résultat
+//
+// Resultats:
+//    3
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	int x,y;
+	x=1;
+	y=2;
+	x=x+y;
+	print(x);
+}

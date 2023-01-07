@@ -1,0 +1,15 @@
+// Description:
+//    Print d'une soustraction de deux variables, la soustraction étant réalisée dans le print
+//
+// Resultats:
+//    -1
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	int x,y;
+	x=1;
+	y=2;
+	print(x-y);
+}
