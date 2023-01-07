@@ -1,0 +1,6 @@
+// dclare a variable and print it 
+
+{
+    int i = 34;
+    println(i);
+}
