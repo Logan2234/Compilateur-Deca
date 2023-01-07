@@ -123,24 +123,7 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-        // depending on the of expr, print it with the correct ass instruction
-
-        if(type.isString()) {
-            // WSTR instruction
-            compiler.addInstruction(new WSTR(((StringType)type).getName().getName()));
-        }
-        else if(type.isInt()) {
-            // WINT R1
-            // load the int in R1
-            // compiler.addInstruction(new LOAD(((IntType)type).getName(), Register.getR(1)));
-            compiler.addInstruction(new WINT());
-        }
-        else if(type.isFloat()) {
-            // WFLOAT 
-            // load the float in R1
-            // compiler.addInstruction(new LOAD(((FloatType)type).getName(), Register.getR(1)));
-            compiler.addInstruction(new WFLOAT());
-        }
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
