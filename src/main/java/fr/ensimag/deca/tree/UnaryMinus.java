@@ -19,7 +19,16 @@ public class UnaryMinus extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        //throw new UnsupportedOperationException("not yet implemented");
+        Type type = this.getOperand().getType();
+        Location loc = this.getLocation();
+
+        if (type != compiler.environmentType.INT && type != compiler.environmentType.FLOAT)
+            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
+                    + ": Un UnaireMinus ne peut se faire qu'avec un int ou un float (règle 3.37)",
+                    loc);
+
+        return type;
     }
 
 
