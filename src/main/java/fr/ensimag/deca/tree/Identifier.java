@@ -167,7 +167,14 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        ExpDefinition def = localEnv.get(this.name);
+        Location loc = this.getLocation();
+        if (def == null){
+            throw new ContextualError(loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
+            + ": L'identifier n'existe pas",
+            loc);        }// ! Pas sur du tout j'avoue
+        return def.getType();
+        //throw new UnsupportedOperationException("not yet implemented");
     }
 
     /**
