@@ -90,10 +90,12 @@ decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
         }
     : i=ident {
             $tree = new DeclVar($t,$i.tree,new NoInitialization());
+            setLocation($tree, $i.start);
         }
       (EQUALS e=expr {
             assert($e.tree != null);
             $tree = new DeclVar($t,$i.tree,new Initialization($e.tree));
+            setLocation($tree, $i.start);
         }
       )? {
                     
@@ -156,13 +158,38 @@ inst returns[AbstractInst tree]
 // TODO
 if_then_else returns[IfThenElse tree]
 @init {
+    // variables to link the "else" instructions to the previous "if" statement
+    ListInst prevListInst;
+    ListInst currListInst;
+    IfThenElse tempTree;
 }
     : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
+            assert($condition.tree != null);
+            assert($li_if.tree != null);
+            // "if" with no instruction in its "else"
+            prevListInst = new ListInst();
+            $tree = new IfThenElse($condition.tree, $li_if.tree, prevListInst);
+            setLocation($tree, $if1);
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
+            assert($elsif_cond.tree != null);
+            assert($elsif_li.tree != null);
+            // "if" with no instruction in its "else"
+            currListInst = new ListInst();
+            tempTree = new IfThenElse($elsif_cond.tree, $elsif_li.tree, currListInst);
+            setLocation(tempTree, $elsif);
+            // the only instruction of the ListInst of the "else" of the previous "if" is the current IfThenElse
+            prevListInst.add(tempTree);
+            // update the linking variables
+            prevListInst = currListInst;
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
+            assert($li_else.tree != null);
+            for (AbstractInst t : $li_else.tree.getList()) {
+                prevListInst.add(t);
+            }
+            
         }
       )?
     ;
@@ -372,8 +399,6 @@ select_expr returns[AbstractExpr tree]
         )
     ;
 
-// TODO
-// only one case implemented
 primary_expr returns[AbstractExpr tree]
     : ident {
             assert($ident.tree != null);
@@ -382,29 +407,35 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
+            // TODO
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
+            $tree = $expr.tree;
         }
     | READINT OPARENT CPARENT {
             $tree = new ReadInt();
+            setLocation($tree,$READINT);
         }
     | READFLOAT OPARENT CPARENT {
             $tree = new ReadFloat();
+            setLocation($tree, $READFLOAT);
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
+            // TODO
         }
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
             assert($type.tree != null);
             assert($expr.tree != null);
+            // TODO
         }
     | literal {
             assert($literal.tree != null);
             $tree = $literal.tree;
         }
     ;
-// TODO
+
 type returns[AbstractIdentifier tree]
     : ident {
             assert($ident.tree != null);
@@ -412,12 +443,11 @@ type returns[AbstractIdentifier tree]
         }
     ;
 
-// TODO
-// only one case implemented
 literal returns[AbstractExpr tree]
     : INT {
             try {
                 $tree = new IntLiteral(Integer.parseInt($INT.text));
+                setLocation($tree, $INT);
             } catch (NumberFormatException e) {
                 // The integer could not be parsed (it's probably too large).
                 // set $tree to null, and then fail with the semantic predicate
@@ -429,6 +459,7 @@ literal returns[AbstractExpr tree]
     | fd=FLOAT {
         try {
                 $tree = new FloatLiteral(Float.parseFloat($fd.text));
+                setLocation($tree, $fd);
             } catch (NumberFormatException e) {
                 // The float could not be parsed (it's probably too large).
                 // set $tree to null, and then fail with the semantic predicate
