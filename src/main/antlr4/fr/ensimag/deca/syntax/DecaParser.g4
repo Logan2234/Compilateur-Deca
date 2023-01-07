@@ -417,7 +417,6 @@ literal returns[AbstractExpr tree]
         }
     | STRING {
             $tree = new StringLiteral($STRING.text.substring(1, $STRING.text.length() - 1));
-            System.out.println($tree.getLocation());
         }
     | TRUE {
         }
