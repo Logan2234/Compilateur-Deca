@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# This script executes test_lex on all <example-name>.deca files in src/test/syntax
+# This script executes test_lex on all <example-name>.deca files in src/test/syntax.
 # The outputs are saved in files named <example-name>-lex.lis to differentiate them
-# form the output files of the syntax test which is executed on the same files
+# from the output files of full-synt.sh which is executed on the same files.
 
 # A file named *_lexCorr.deca denotes an example that is syntaxically invalid but
-# lexically correct
+# lexically correct.
 
 # Change the current working directory to be in the project's directory
 # wherever the script is executed from
@@ -13,9 +13,8 @@ cd "$(dirname "$0")"/../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
-# valid tests
+#### valid tests ####
 files=$(find ./src/test/deca/syntax/valid -name "*.deca")
-
 
 for test in $files
 do
@@ -32,7 +31,8 @@ do
     fi
 done
 
-# invalid tests that may be lexically correct
+#### invalid tests ####
+# an invalid test (syntaxically) may be lexically correct
 # a file named *_lexCorr.deca is lexically correct
 files=$(find ./src/test/deca/syntax/invalid -name "*.deca")
 
