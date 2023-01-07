@@ -1,12 +1,12 @@
 // Description:
-//    Declare deux entiers
+//    déclare un float
 //
 // Resultats:
-//    2
+//    //
 //
 // Historique:
 //    cree le 06/01/2023
 
 {
-    int i;
+    float i;
 }

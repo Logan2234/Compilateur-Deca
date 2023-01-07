@@ -1,5 +1,5 @@
 // Description:
-//    Test 3.3 fail avec superieur egale
+//    Instance of
 //
 // Resultats:
 //    
@@ -8,5 +8,5 @@
 //    cree le 06/01/2023
 
 {
-    1 >= "hello world";
+    //TODO faire instanceof pour le cas avec classe
 }

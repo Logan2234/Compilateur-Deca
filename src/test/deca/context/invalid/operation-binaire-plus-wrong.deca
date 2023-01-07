@@ -1,8 +1,8 @@
 // Description:
-//    Test 3.3 fail avec plus 
+//    Test 3.33 fail avec plus 
 //
 // Resultats:
-//    
+//    Ligne 11: Plus ne s'utilise qu'avec des int ou des float.
 //
 // Historique:
 //    cree le 06/01/2023
