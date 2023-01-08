@@ -202,6 +202,7 @@ public class Identifier extends AbstractIdentifier {
         
         // Ajout du décor
         this.setDefinition(def);
+        this.setType(type);
         return type;
     }
 
