@@ -11,40 +11,43 @@ import org.apache.commons.lang.Validate;
 
 /**
  * @author Jorge
- * @date 05/01/2023
+ * @date 08/01/2023
  */
-public class DeclField extends AbstractDeclField {
+public class DeclMethod extends AbstractDeclMethod {
 
-    private String visib;
+    
     final private AbstractIdentifier type;
-    final private AbstractIdentifier fieldName;
-    final private AbstractInitialization initialization;
+    final private AbstractIdentifier methodName;
+    final private ListDeclParam params;
+    final private AbstractMethod body;
 
-    public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization, String visib) {
+    public DeclMethod(AbstractIdentifier type, AbstractIdentifier methodName, ListDeclParam params, AbstractMethod body) {
         Validate.notNull(type);
-        Validate.notNull(fieldName);
-        Validate.notNull(initialization);
+        Validate.notNull(methodName);
+        Validate.notNull(params);
+        Validate.notNull(body);
         this.type = type;
-        this.fieldName = fieldName;
-        this.visib = visib;
-        this.initialization = initialization;
+        this.methodName = methodName;
+        this.params = params;
+        this.body = body;
     }
 
     @Override
-    protected void verifyDeclField(DecacCompiler compiler,
+    protected void verifyDeclMethod(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
     }
 
+    
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(visib);
-        s.print(' ');
         type.decompile(s);
         s.print(' ');
-        fieldName.decompile(s);
-        initialization.decompile(s);
-        s.print(';');
+        methodName.decompile(s);
+        s.print("(");
+        params.decompile(s);
+        s.print(")");
+        body.decompile(s);
         
         // throw new UnsupportedOperationException("not yet implemented");
     }
@@ -53,14 +56,16 @@ public class DeclField extends AbstractDeclField {
     protected
     void iterChildren(TreeFunction f) {
         type.iter(f);
-        fieldName.iter(f);
-        initialization.iter(f);
+        methodName.iter(f);
+        params.iter(f);
+        body.iter(f);
     }
     
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);
-        fieldName.prettyPrint(s, prefix, false);
-        initialization.prettyPrint(s, prefix, true);
+        methodName.prettyPrint(s, prefix, false);
+        params.prettyPrint(s, prefix, false);
+        body.prettyPrint(s, prefix, true);
     }
 }

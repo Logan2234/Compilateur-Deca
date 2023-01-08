@@ -7,18 +7,20 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
- * List of fields.
+ * List of declarations (e.g. int x; float y,z).
  * 
  * @author Jorge
- * @date 05/01/2023
+ * @date 08/01/2023
  */
-public class ListDeclField extends TreeList<AbstractDeclField> {
+public class ListDeclParam extends TreeList<AbstractDeclParam> {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        for (AbstractDeclField i : getList()) {
+        for (AbstractDeclParam i : getList()) {
+            if (!(getList().get(0).equals(i))) // ? Not sure if we have param1,param2,param3 ... at the end
+                s.println(",");
+
             i.decompile(s);
-            s.println();
         }
         //throw new UnsupportedOperationException("Not yet implemented");
     }
@@ -35,7 +37,7 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
      * @param currentClass 
      *          corresponds to "class" attribute (null in the main bloc).
      */    
-    void verifyListDeclField(DecacCompiler compiler, EnvironmentExp localEnv,
+    void verifyListDeclParam(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
     }
 
