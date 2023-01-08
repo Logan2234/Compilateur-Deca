@@ -1,4 +1,4 @@
-package fr.ensimag.deca.context;
+package fr.ensimag.deca.codegen;
 
 import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;

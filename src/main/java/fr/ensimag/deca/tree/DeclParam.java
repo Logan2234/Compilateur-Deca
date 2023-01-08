@@ -11,41 +11,33 @@ import org.apache.commons.lang.Validate;
 
 /**
  * @author Jorge
- * @date 05/01/2023
+ * @date 08/01/2023
  */
-public class DeclField extends AbstractDeclField {
+public class DeclParam extends AbstractDeclParam {
 
-    private Visibility visib;
+    
     final private AbstractIdentifier type;
-    final private AbstractIdentifier fieldName;
-    final private AbstractInitialization initialization;
+    final private AbstractIdentifier paramName;
 
-    public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization, Visibility visib) {
+    public DeclParam(AbstractIdentifier type, AbstractIdentifier paramName) {
         Validate.notNull(type);
-        Validate.notNull(fieldName);
-        Validate.notNull(initialization);
-        Validate.notNull(visib);
+        Validate.notNull(paramName);
         this.type = type;
-        this.fieldName = fieldName;
-        this.visib = visib;
-        this.initialization = initialization;
+        this.paramName = paramName;
     }
 
     @Override
-    protected void verifyDeclField(DecacCompiler compiler,
+    protected void verifyDeclParam(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
     }
 
+    
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO s.print(visib);
-        s.print(' ');
         type.decompile(s);
         s.print(' ');
-        fieldName.decompile(s);
-        initialization.decompile(s);
-        s.print(';');
+        paramName.decompile(s);
         
         // throw new UnsupportedOperationException("not yet implemented");
     }
@@ -54,14 +46,12 @@ public class DeclField extends AbstractDeclField {
     protected
     void iterChildren(TreeFunction f) {
         type.iter(f);
-        fieldName.iter(f);
-        initialization.iter(f);
+        paramName.iter(f);
     }
     
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);
-        fieldName.prettyPrint(s, prefix, false);
-        initialization.prettyPrint(s, prefix, true);
+        paramName.prettyPrint(s, prefix, false);
     }
 }
