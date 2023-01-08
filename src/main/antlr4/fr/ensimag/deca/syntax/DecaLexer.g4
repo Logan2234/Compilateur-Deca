@@ -15,7 +15,8 @@ options {
 
 // Ignore spaces, tabs, newlines and whitespaces
 WS:   ( ' '
-         | '//' .*? '\n' 
+         | '//' .*? '\n'
+         | '//' .*? EOF
          | '/*' .*? '*/'
          | '\t'
          | '\r'
