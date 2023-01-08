@@ -7,26 +7,24 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
- * List of declarations (e.g. int x; float y,z).
+ * List of methods.
  * 
  * @author Jorge
- * @date 08/01/2023
+ * @date 05/01/2023
  */
-public class ListDeclParam extends TreeList<AbstractDeclParam> {
+public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        for (AbstractDeclParam i : getList()) {
-            if (!(getList().get(0).equals(i))) // ? Not sure if we have param1,param2,param3 ... at the end
-                s.println(",");
-
+        for (AbstractDeclMethod i : getList()) {
             i.decompile(s);
+            s.println();
         }
         //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     /**
-     * Implements non-terminal "list_decl_param" of [SyntaxeContextuelle] in pass 3
+     * Implements non-terminal "list_decl_method" of [SyntaxeContextuelle] in pass 3
      * @param compiler contains the "env_types" attribute
      * @param localEnv 
      *   its "parentEnvironment" corresponds to "env_exp_sup" attribute
@@ -37,7 +35,7 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
      * @param currentClass 
      *          corresponds to "class" attribute (null in the main bloc).
      */    
-    void verifyListDeclParam(DecacCompiler compiler, EnvironmentExp localEnv,
+    void verifyListDeclMethod(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
     }
 
