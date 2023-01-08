@@ -28,6 +28,7 @@ public class BooleanLiteral extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
+        // Ajout du décor
         this.setType(compiler.environmentType.BOOLEAN);
         return compiler.environmentType.BOOLEAN;
     }

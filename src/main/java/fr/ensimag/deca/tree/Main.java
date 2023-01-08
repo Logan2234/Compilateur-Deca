@@ -29,7 +29,7 @@ public class Main extends AbstractMain {
         // LOG.debug("verify Main: start");
         // Création d'un EnvironnementExp vide
         EnvironmentExp localEnv = new EnvironmentExp(null);
-        declVariables.verifyListDeclVariable(compiler, localEnv, null); // TODO: Remplacer le NULL de localEnv
+        declVariables.verifyListDeclVariable(compiler, localEnv, null);
         insts.verifyListInst(compiler, localEnv, null, compiler.environmentType.VOID);
         // LOG.debug("verify Main: end");
     }

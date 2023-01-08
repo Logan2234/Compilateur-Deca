@@ -41,7 +41,7 @@ public abstract class AbstractPrint extends AbstractInst {
         for (AbstractExpr a : arguments.getList()) {
             Type type = a.verifyExpr(compiler, localEnv, currentClass);
             if (!type.isInt() && !type.isFloat() && !type.isString()) {
-                throw new ContextualError("Seuls les int, float, et string peuvent être passé en argument de print",
+                throw new ContextualError("Seuls les int, float, et string peuvent être passés en argument de print",
                         a.getLocation());
             }
         }
