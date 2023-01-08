@@ -20,32 +20,32 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeLeft = this.getLeftOperand().getType();
-        Type typeRight = this.getRightOperand().getType();
+        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
         Location loc = this.getLocation();
 
-        if (typeLeft == compiler.environmentType.BOOLEAN) {
-            if (typeRight != compiler.environmentType.BOOLEAN) {
+        if (typeLeft.isBoolean()) {
+            if (!typeRight.isBoolean()) {
                 throw new ContextualError(
                         "L'opérande de droite d'une opération de comparaison avec un booléen doit être un booléen (règle 3.33)",
                         loc);
             }
-            return compiler.environmentType.BOOLEAN;
+            return typeLeft;
         }
 
         // TODO: Il manque le cas ou on veut comparer T1 et / ou T2 est null ou
         // type_class(_)
 
-        if (typeLeft != compiler.environmentType.INT && typeLeft != compiler.environmentType.FLOAT)
+        if (!typeLeft.isInt() && !typeLeft.isFloat())
             throw new ContextualError(
                     "L'opérande de gauche d'une opération de comparaison doit être un int ou float (règle 3.33)", loc);
 
-        if (typeRight != compiler.environmentType.INT && typeRight != compiler.environmentType.FLOAT)
+        if (!typeRight.isInt() && !typeRight.isFloat())
             throw new ContextualError(
                     "L'opérande de droite d'une opération comparaison doit être un int ou float (règle 3.33)", loc);
 
+        // Ajout du décor
         this.setType(compiler.environmentType.BOOLEAN);
-
         return compiler.environmentType.BOOLEAN;
     }
 

@@ -24,10 +24,12 @@ public class Modulo extends AbstractOpArith {
         Type typeRight = this.getRightOperand().getType();
         Location loc = this.getLocation();
 
-        if (typeLeft != compiler.environmentType.INT || typeRight != compiler.environmentType.INT)
+        if (!typeLeft.isInt() || !typeRight.isInt())
             throw new ContextualError("Un modulo ne peut être fait qu'entre deux entiers (règle 3.33)", loc);
-
-        return compiler.environmentType.INT;
+        
+        // Ajout du décor
+        this.setType(typeLeft);
+        return typeLeft;
     }
 
     @Override

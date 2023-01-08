@@ -32,10 +32,15 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         type.verifyType(compiler);
+        
         // TODO: Vérifier le caractère disjoint de la règle 3.17
-        if (type.getType() == compiler.environmentType.VOID)
-        throw new ContextualError("Une variable ne peut pas être de type void (règle 3.17)", getLocation());
+        
+        if (type.getType().isVoid())
+            throw new ContextualError("Une variable ne peut pas être de type void (règle 3.17)", getLocation());
+        
         initialization.verifyInitialization(compiler, type.getType(), localEnv, currentClass);
+        
+        // TODO: Mettre à jour localEnv
     }
 
     @Override

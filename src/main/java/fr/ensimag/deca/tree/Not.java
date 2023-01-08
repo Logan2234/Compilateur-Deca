@@ -20,12 +20,14 @@ public class Not extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type type = this.getOperand().getType();
+        Type type = this.getOperand().verifyExpr(compiler, localEnv, currentClass);
         Location loc = this.getLocation();
 
-        if (type != compiler.environmentType.BOOLEAN)
+        if (!type.isBoolean())
             throw new ContextualError("Un not ne peut être fait qu'avec un booléen (règle 3.37)", loc);
-
+        
+        // Ajout du décor
+        this.setType(type);
         return type;
     }
 

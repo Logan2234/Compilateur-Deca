@@ -19,7 +19,7 @@ public class Assign extends AbstractBinaryExpr {
     public AbstractLValue getLeftOperand() {
         // The cast succeeds by construction, as the leftOperand has been set
         // as an AbstractLValue by the constructor.
-        return (AbstractLValue)super.getLeftOperand();
+        return (AbstractLValue) super.getLeftOperand();
     }
 
     public Assign(AbstractLValue leftOperand, AbstractExpr rightOperand) {
@@ -27,11 +27,19 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        Type type = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type type2 = this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, type).getType();
+        
+        // Ajout du décor et renvoie du type
+        if (type.sameType(type2)){
+            this.setType(type);
+            return type;
+        }
+        // TODO: Tester le cas où type2 est une sous classe de type1
+        throw new ContextualError("Cette assignation n'est pas valide.", this.getLocation());
     }
-
 
     @Override
     protected String getOperatorName() {

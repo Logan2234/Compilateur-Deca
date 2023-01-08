@@ -21,25 +21,26 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeLeft = this.getLeftOperand().getType();
-        Type typeRight = this.getRightOperand().getType();
+        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
         Location loc = this.getLocation();
 
-        if (typeLeft != compiler.environmentType.INT && typeLeft != compiler.environmentType.FLOAT)
+        if (!typeLeft.isInt() && !typeLeft.isFloat())
             throw new ContextualError(
                     "L'opérande de gauche d'une opération arithmétique doit être un int ou float (règle 3.33)", loc);
 
-        if (typeRight != compiler.environmentType.INT && typeRight != compiler.environmentType.FLOAT)
+        if (!typeRight.isInt() && !typeRight.isFloat())
             throw new ContextualError(
                     "L'opérande de droite d'une opération arithmétique doit être un int ou float (règle 3.33)", loc);
 
         // Ajout du décor et renvoie du type
-        if (typeLeft == compiler.environmentType.FLOAT || typeLeft == compiler.environmentType.FLOAT) {
-            this.setType(compiler.environmentType.FLOAT);
-            return compiler.environmentType.FLOAT;
+        if (typeLeft.isFloat() || typeRight.isFloat()) {
+            this.setType(typeLeft);
+            return typeLeft;
         }
 
-        this.setType(compiler.environmentType.INT);
-        return compiler.environmentType.INT;
+        // Ajout du décor
+        this.setType(typeLeft);
+        return typeLeft;
     }
 }

@@ -21,17 +21,17 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeLeft = this.getLeftOperand().getType();
-        Type typeRight = this.getRightOperand().getType();
-        if (typeLeft != compiler.environmentType.BOOLEAN && typeRight != compiler.environmentType.BOOLEAN) {
+        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+        if (!typeLeft.isBoolean() || !typeRight.isBoolean()) {
             Location loc = this.getLocation();
-            throw new ContextualError("Une opération booléenne ne peut être faite qu'entre deux booléens (règle 3.33)", loc);
+            throw new ContextualError("Une opération booléenne ne peut être faite qu'entre deux booléens (règle 3.33)",
+                    loc);
         }
 
-        //Ajout du décor
-        this.setType(compiler.environmentType.BOOLEAN);
-        
-        return compiler.environmentType.BOOLEAN;
+        // Ajout du décor
+        this.setType(typeLeft);
+        return typeLeft;
     }
 
 }
