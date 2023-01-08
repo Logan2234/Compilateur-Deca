@@ -397,6 +397,7 @@ select_expr returns[AbstractExpr tree]
         }
         | /* epsilon */ {
             // we matched "e.i"
+            // TODO
         }
         )
     ;
@@ -508,57 +509,80 @@ list_classes returns[ListDeclClass tree]
             $tree = new ListDeclClass();
         }
     :(c1=class_decl {
+            $tree.add($c1.tree);
         }
       )*
     ;
 
-class_decl
+class_decl returns[AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
+            // TODO voir avec Jorge
+            //$tree = new DeclClass($ident.tree, $superclass.tree, $class_body.fields, $class_body.methods); 
+            // change the constructor of DeclClass to have as parameters a list of field and a list of ùethods
+            setLocation($tree, $CLASS);
         }
     ;
 
 class_extension returns[AbstractIdentifier tree]
     : EXTENDS ident {
+            $tree = $ident.tree;
         }
     | /* epsilon */ {
+            $tree = new Identifier(this.getDecacCompiler().createSymbol("Object"));
+            // the createSymbol methods add the Symbol to the table only if it is not already in it
         }
     ;
 
-class_body
-    : (m=decl_method {
+class_body returns[ListDeclField fields, ListDeclMethod methods] // ListDeclMethod to implement
+@init   {
+            $fields = new ListField();
+            $methods = new ListDeclMethod();
         }
-      | decl_field_set
+    : (m=decl_method {
+            $methods.add($decl_method.tree);
+        }
+      | f=decl_field_set[$fields]
       )*
     ;
 
-decl_field_set
-    : v=visibility t=type list_decl_field
-      SEMI
+decl_field_set[ListDeclField l]
+    : vis=visibility t=type list_decl_field[$l, $type.tree, $vis.v] SEMI
     ;
 
-visibility
+visibility returns[Visibility v]
     : /* epsilon */ {
+            v = Visibility.PUBLIC;
         }
     | PROTECTED {
+            v = Visibility.PROTECTED;
         }
     ;
 
-list_decl_field
-    : dv1=decl_field
-        (COMMA dv2=decl_field
+list_decl_field[ListDeclField l, AbstractIdentifier t, Visibility v]
+    : df1=decl_field[$t,$v] {
+            $l.add($df1.tree);
+        }
+        (COMMA df2=decl_field[$t,$v] {
+            $l.add($df2.tree);
+        }
       )*
     ;
 
-decl_field
+decl_field[AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
     : i=ident {
+            $tree = new DeclField($t,$i.tree, new NoInitialization(),$v);
+            setLocation($tree,$i.start);
         }
       (EQUALS e=expr {
+            assert($e.tree != null);
+            $tree = new DeclField($t,$i.tree, new Initialization($e.tree),$v);
+            setLocation($tree,$i.start);
         }
       )? {
         }
     ;
 
-decl_method
+decl_method returns[AbstractMethod tree]
 @init {
 }
     : type ident OPARENT params=list_params CPARENT (block {
