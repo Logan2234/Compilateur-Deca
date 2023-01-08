@@ -1,5 +1,5 @@
 // Description:
-//    operation unaire minus
+//    this
 //
 // Resultats:
 //    
@@ -8,5 +8,5 @@
 //    cree le 06/01/2023
 
 {
-    -2;
+    this;
 }

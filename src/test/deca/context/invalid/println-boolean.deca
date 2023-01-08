@@ -6,6 +6,5 @@
 //
 
 {
-    boolean x = false;
-    println(x);
+    println(false);
 }

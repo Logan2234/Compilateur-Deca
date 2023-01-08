@@ -1,12 +1,13 @@
 // Description:
-//    literal this
+//    operation unaire minus sur un int
 //
 // Resultats:
-//    
+//    //
+
 //
 // Historique:
 //    cree le 06/01/2023
 
 {
-    this;
+    -2;
 }

@@ -1,5 +1,5 @@
 // Description:
-//    Test 3.33 fail avec equals
+//    Test 3.33 fail avec equals avec un null et une string
 //
 // Resultats:
 //    Ligne 11: Equals ne s'utilise qu'avec des int, des float, des booléens ou des classes.
@@ -8,5 +8,5 @@
 //    cree le 06/01/2023
 
 {
-    1 == "hello world";
+    null == "hello world";
 }

@@ -5,7 +5,7 @@
 //    Ligne 14: println ne peut prendre qu'un int ou un float ou une string
 //
 
-Class A{
+class A{
 
 }
 

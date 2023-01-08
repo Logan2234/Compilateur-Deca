@@ -1,5 +1,5 @@
 // Description:
-//    opération unaire not
+//    operation unaire minus sur un float
 //
 // Resultats:
 //    //
@@ -8,5 +8,5 @@
 //    cree le 06/01/2023
 
 {
-    !false;
+    -2.0;
 }
