@@ -501,7 +501,6 @@ ident returns[AbstractIdentifier tree]
         }
     ;
 
-// TODO
 /****     Class related rules     ****/
 
 list_classes returns[ListDeclClass tree]
@@ -516,9 +515,7 @@ list_classes returns[ListDeclClass tree]
 
 class_decl returns[AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
-            // TODO voir avec Jorge
-            //$tree = new DeclClass($ident.tree, $superclass.tree, $class_body.fields, $class_body.methods); 
-            // change the constructor of DeclClass to have as parameters a list of field and a list of ùethods
+            $tree = new DeclClass($ident.tree, $superclass.tree, $class_body.fields, $class_body.methods); 
             setLocation($tree, $CLASS);
         }
     ;
@@ -528,14 +525,15 @@ class_extension returns[AbstractIdentifier tree]
             $tree = $ident.tree;
         }
     | /* epsilon */ {
-            $tree = new Identifier(this.getDecacCompiler().createSymbol("Object"));
+            $tree = new Identifier(this.getDecacCompiler().createSymbol("0"));
+            // 0 corresponds to the Object class cf. p.74
             // the createSymbol methods add the Symbol to the table only if it is not already in it
         }
     ;
 
 class_body returns[ListDeclField fields, ListDeclMethod methods] // ListDeclMethod to implement
 @init   {
-            $fields = new ListField();
+            $fields = new ListDeclField();
             $methods = new ListDeclMethod();
         }
     : (m=decl_method {
@@ -546,15 +544,15 @@ class_body returns[ListDeclField fields, ListDeclMethod methods] // ListDeclMeth
     ;
 
 decl_field_set[ListDeclField l]
-    : vis=visibility t=type list_decl_field[$l, $type.tree, $vis.v] SEMI
+    : visib=visibility t=type list_decl_field[$l, $type.tree, $visib.v] SEMI
     ;
 
 visibility returns[Visibility v]
     : /* epsilon */ {
-            v = Visibility.PUBLIC;
+            $v = Visibility.PUBLIC;
         }
     | PROTECTED {
-            v = Visibility.PROTECTED;
+            $v = Visibility.PROTECTED;
         }
     ;
 
@@ -582,24 +580,33 @@ decl_field[AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
         }
     ;
 
-decl_method returns[AbstractMethod tree]
-@init {
-}
+decl_method returns[AbstractDeclMethod tree]
     : type ident OPARENT params=list_params CPARENT (block {
+            MethodBody body = new MethodBody($block.decls, $block.insts);
+            $tree = new DeclMethod($type.tree, $ident.tree, $list_params.tree, body);
+            setLocation($tree,$type.start);
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
+            MethodAsmBody asmBody = new MethodAsmBody(new StringLiteral($code.text));
+            $tree = new DeclMethod($type.tree, $ident.tree, $list_params.tree, asmBody);
+            setLocation($tree,$type.start);
         }
       ) {
         }
     ;
 
-list_params
+list_params returns[ListDeclParam tree]
+@init {
+    $tree = new ListDeclParam();
+}
     : (p1=param {
+            $tree.add($p1.tree);
         } (COMMA p2=param {
+            $tree.add($p2.tree);
         }
       )*)?
     ;
-    
+
 multi_line_string returns[String text, Location location]
     : s=STRING {
             $text = $s.text;
@@ -611,7 +618,9 @@ multi_line_string returns[String text, Location location]
         }
     ;
 
-param
+param returns[AbstractDeclParam tree]
     : type ident {
+            $tree = new DeclParam($type.tree, $ident.tree);
+            setLocation($tree,$type.start);
         }
     ;
