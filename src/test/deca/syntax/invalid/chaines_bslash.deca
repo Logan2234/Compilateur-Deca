@@ -1,0 +1,14 @@
+// Description:
+//    test de programme avec \ dans chaine
+//    lexicalement incorrect
+//
+// Resultats:
+//    Ligne 12 : Erreur lexicale
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+"a\n\t/l\r
+bruh
+"

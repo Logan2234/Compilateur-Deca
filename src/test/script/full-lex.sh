@@ -22,7 +22,7 @@ do
     test_lex "$test" > "${test%.deca}"-lex.lis 2>&1
 
     # check if passed
-    if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:"
+    if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:\|WS"
     then
         echo "Error detected on a valid test $test"
         exit 1
@@ -44,7 +44,7 @@ do
     if [[ $test =~ .*\_lex.deca ]]
     then
         # the program is lexically correct
-        if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:"
+        if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:\|WS"
         then
             echo "Error detected on a valid test $test"
             exit 1
@@ -53,7 +53,7 @@ do
         fi
     else
         # the program is lexically incorrect
-        if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:"
+        if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:\|WS"
         then
             echo "Test passed $test"
         else

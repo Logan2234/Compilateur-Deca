@@ -1,0 +1,12 @@
+// Description:
+//    enchaînement faux de caractères spéciaux
+//
+// Resultats:
+//    Ligne 12 : Erreur lexicale.
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+// normal cases
+&&&
