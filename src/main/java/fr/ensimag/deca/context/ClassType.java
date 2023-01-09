@@ -53,14 +53,20 @@ public class ClassType extends Type {
 
     @Override
     public boolean sameType(Type otherType) {
-        return (((Object)otherType).getClass().getName() == "java.lang.Class");
+        return (otherType.isClass() && otherType.getClass().getName() == this.getClass().getName());
     }
 
     /**
      * Return true if potentialSuperClass is a superclass of this class.
      */
     public boolean isSubClassOf(ClassType potentialSuperClass) {
-        return(((Object)this).getClass().getSuperclass() == potentialSuperClass.getClass());
+        while (potentialSuperClass.getSuperclass() != 0){
+            if (((Object)this).getClass().getSuperclass() == potentialSuperClass.getClass()){
+                return true;
+            };
+            potentialSuperClass = potentialSuperClass.getSuperclass();
+        }
+        return false;
     }
 
 
