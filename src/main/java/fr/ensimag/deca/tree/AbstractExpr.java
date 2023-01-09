@@ -67,8 +67,7 @@ public abstract class AbstractExpr extends AbstractInst {
      *                     Definition of the class containing the expression
      *                     (corresponds to the "class" attribute)
      *                     is null in the main bloc.
-     * @return the Type of the expression
-     *         (corresponds to the "type" attribute)
+     * @return the Type of the expression (corresponds to the "type" attribute)
      */
     public abstract Type verifyExpr(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
@@ -96,7 +95,9 @@ public abstract class AbstractExpr extends AbstractInst {
             return this;
         }
 
-        throw new ContextualError("Une assignation entre un " + expectedType + " et un " + rtype + " n'est pas valide (règle 3.32)", this.getLocation());
+        throw new ContextualError(
+                "Une assignation entre un " + expectedType + " et un " + rtype + " n'est pas valide (règle 3.32)",
+                this.getLocation());
     }
 
     @Override
@@ -114,12 +115,14 @@ public abstract class AbstractExpr extends AbstractInst {
      *                     Environment in which the condition should be checked.
      * @param currentClass
      *                     Definition of the class containing the expression, or
-     *                     null in
-     *                     the main program.
+     *                     null in the main program.
      */
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        this.verifyExpr(compiler, localEnv, currentClass);
+        if (!this.getType().isBoolean()) {
+            throw new ContextualError("La condition n'est pas booléenne", this.getLocation())
+        }
     }
 
     /**
