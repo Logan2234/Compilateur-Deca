@@ -8,6 +8,6 @@
 //    cree le 07/01/2023
 
 {
-	int i = 42;
+	int i;
 	println(i);
 }
