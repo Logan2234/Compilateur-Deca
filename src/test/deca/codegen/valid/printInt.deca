@@ -1,0 +1,13 @@
+// Description:
+//    Print un int sans changer son type à string directement
+//
+// Resultats:
+//    42
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	int i = 42;
+	println(i);
+}

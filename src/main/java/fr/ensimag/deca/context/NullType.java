@@ -17,7 +17,7 @@ public class NullType extends Type {
 
     @Override
     public boolean sameType(Type otherType) {
-        return (((Object)otherType).getClass().getName() == "java.lang.NullPointerException");
+        return otherType.isNull();
     }
 
     @Override

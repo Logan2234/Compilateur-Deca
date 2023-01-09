@@ -78,24 +78,27 @@ decl_var_set[ListDeclVar l]
 
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
-        $l.add($dv1.tree);
+            $l.add($dv1.tree);
         } (COMMA dv2=decl_var[$t] {
             $l.add($dv2.tree);
         }
       )*
     ;
 
-// TODO fix Init + DeclVar
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
         }
     : i=ident {
             $tree = new DeclVar($t,$i.tree,new NoInitialization());
+            setLocation($tree, $i.start);
         }
       (EQUALS e=expr {
+            assert($e.tree != null);
+            $tree = new DeclVar($t,$i.tree,new Initialization($e.tree));
+            setLocation($tree, $i.start);
         }
       )? {
-            $tree = new DeclVar($t,$i.tree,new Initialization($e.tree));
+                    
         }
     ;
 
@@ -109,13 +112,14 @@ list_inst returns[ListInst tree]
       )*
     ;
 
-// only one case implemented
 inst returns[AbstractInst tree]
     : e1=expr SEMI {
             assert($e1.tree != null);
             $tree = $e1.tree;
         }
     | SEMI {
+            $tree = new NoOperation();
+            setLocation($tree, $SEMI);
         }
     | PRINT OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
@@ -139,12 +143,13 @@ inst returns[AbstractInst tree]
         }
     | if_then_else {
             assert($if_then_else.tree != null);
-            // TODO
+            $tree = $if_then_else.tree;
         }
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
-            // TODO
+            $tree = new While($condition.tree, $list_inst.tree);
+            setLocation($tree, $WHILE);
         }
     | RETURN expr SEMI {
             assert($expr.tree != null);
@@ -155,13 +160,38 @@ inst returns[AbstractInst tree]
 // TODO
 if_then_else returns[IfThenElse tree]
 @init {
+    // variables to link the "else" instructions to the previous "if" statement
+    ListInst prevListInst;
+    ListInst currListInst;
+    IfThenElse tempTree;
 }
     : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
+            assert($condition.tree != null);
+            assert($li_if.tree != null);
+            // "if" with no instruction in its "else"
+            prevListInst = new ListInst();
+            $tree = new IfThenElse($condition.tree, $li_if.tree, prevListInst);
+            setLocation($tree, $if1);
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
+            assert($elsif_cond.tree != null);
+            assert($elsif_li.tree != null);
+            // "if" with no instruction in its "else"
+            currListInst = new ListInst();
+            tempTree = new IfThenElse($elsif_cond.tree, $elsif_li.tree, currListInst);
+            setLocation(tempTree, $elsif);
+            // the only instruction of the ListInst of the "else" of the previous "if" is the current IfThenElse
+            prevListInst.add(tempTree);
+            // update the linking variables
+            prevListInst = currListInst;
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
+            assert($li_else.tree != null);
+            for (AbstractInst t : $li_else.tree.getList()) {
+                prevListInst.add(t);
+            }
+            
         }
       )?
     ;
@@ -335,13 +365,13 @@ mult_expr returns[AbstractExpr tree]
 unary_expr returns[AbstractExpr tree]
     : op=MINUS e=unary_expr {
             assert($e.tree != null);
-            $tree = $e.tree;
-            // change sign of attribute
+            $tree = new UnaryMinus($e.tree);
+            setLocation($tree, $op);
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
-            $tree = $e.tree;
-            // change attribute
+            $tree = new Not($e.tree);
+            setLocation($tree, $op);
         }
     | select_expr {
             assert($select_expr.tree != null);
@@ -367,12 +397,11 @@ select_expr returns[AbstractExpr tree]
         }
         | /* epsilon */ {
             // we matched "e.i"
+            // TODO
         }
         )
     ;
 
-// TODO
-// only one case implemented
 primary_expr returns[AbstractExpr tree]
     : ident {
             assert($ident.tree != null);
@@ -381,57 +410,94 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
+            // TODO
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
+            $tree = $expr.tree;
         }
     | READINT OPARENT CPARENT {
+            $tree = new ReadInt();
+            setLocation($tree,$READINT);
         }
     | READFLOAT OPARENT CPARENT {
+            $tree = new ReadFloat();
+            setLocation($tree, $READFLOAT);
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
+            // TODO
         }
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
             assert($type.tree != null);
             assert($expr.tree != null);
+            // TODO
         }
     | literal {
             assert($literal.tree != null);
             $tree = $literal.tree;
         }
     ;
-// TODO
+
 type returns[AbstractIdentifier tree]
     : ident {
             assert($ident.tree != null);
+            $tree = $ident.tree;
         }
     ;
 
-// TODO
-// only one case implemented
 literal returns[AbstractExpr tree]
     : INT {
-        }
+            try {
+                $tree = new IntLiteral(Integer.parseInt($INT.text));
+                setLocation($tree, $INT);
+            } catch (NumberFormatException e) {
+                // The integer could not be parsed (it's probably too large).
+                // set $tree to null, and then fail with the semantic predicate
+                // {$tree != null}?. In decac, we'll have a more advanced error
+                // management.
+                $tree = null;
+            }
+        } {$tree != null}?
     | fd=FLOAT {
-        }
+        try {
+                $tree = new FloatLiteral(Float.parseFloat($fd.text));
+                setLocation($tree, $fd);
+            } catch (NumberFormatException e) {
+                // The float could not be parsed (it's probably too large).
+                // set $tree to null, and then fail with the semantic predicate
+                // {$tree != null}?. In decac, we'll have a more advanced error
+                // management.
+                $tree = null;
+            }
+        } {$tree != null}?
     | STRING {
             $tree = new StringLiteral($STRING.text.substring(1, $STRING.text.length() - 1));
-            System.out.println($tree.getLocation());
+            setLocation($tree, $STRING);
         }
     | TRUE {
+            $tree = new BooleanLiteral(true);
+            setLocation($tree, $TRUE);
         }
     | FALSE {
+            $tree = new BooleanLiteral(false);
+            setLocation($tree, $FALSE);
         }
     | THIS {
+            // TODO
         }
     | NULL {
+            $tree = new Null();
+            setLocation($tree, $NULL);
         }
     ;
 
-// TODO
 ident returns[AbstractIdentifier tree]
     : IDENT {
+            $tree = new Identifier(this.getDecacCompiler().createSymbol($IDENT.text));
+            //$tree = new Identifier(this.getDecacCompiler().symbolTable.create($IDENT.text));
+            // it seems to be equivalent but it is deeper in the class hierarchy
+            setLocation($tree, $IDENT);
         }
     ;
 
@@ -443,57 +509,80 @@ list_classes returns[ListDeclClass tree]
             $tree = new ListDeclClass();
         }
     :(c1=class_decl {
+            $tree.add($c1.tree);
         }
       )*
     ;
 
-class_decl
+class_decl returns[AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
+            // TODO voir avec Jorge
+            //$tree = new DeclClass($ident.tree, $superclass.tree, $class_body.fields, $class_body.methods); 
+            // change the constructor of DeclClass to have as parameters a list of field and a list of ùethods
+            setLocation($tree, $CLASS);
         }
     ;
 
 class_extension returns[AbstractIdentifier tree]
     : EXTENDS ident {
+            $tree = $ident.tree;
         }
     | /* epsilon */ {
+            $tree = new Identifier(this.getDecacCompiler().createSymbol("Object"));
+            // the createSymbol methods add the Symbol to the table only if it is not already in it
         }
     ;
 
-class_body
-    : (m=decl_method {
+class_body returns[ListDeclField fields, ListDeclMethod methods] // ListDeclMethod to implement
+@init   {
+            $fields = new ListField();
+            $methods = new ListDeclMethod();
         }
-      | decl_field_set
+    : (m=decl_method {
+            $methods.add($decl_method.tree);
+        }
+      | f=decl_field_set[$fields]
       )*
     ;
 
-decl_field_set
-    : v=visibility t=type list_decl_field
-      SEMI
+decl_field_set[ListDeclField l]
+    : vis=visibility t=type list_decl_field[$l, $type.tree, $vis.v] SEMI
     ;
 
-visibility
+visibility returns[Visibility v]
     : /* epsilon */ {
+            v = Visibility.PUBLIC;
         }
     | PROTECTED {
+            v = Visibility.PROTECTED;
         }
     ;
 
-list_decl_field
-    : dv1=decl_field
-        (COMMA dv2=decl_field
+list_decl_field[ListDeclField l, AbstractIdentifier t, Visibility v]
+    : df1=decl_field[$t,$v] {
+            $l.add($df1.tree);
+        }
+        (COMMA df2=decl_field[$t,$v] {
+            $l.add($df2.tree);
+        }
       )*
     ;
 
-decl_field
+decl_field[AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
     : i=ident {
+            $tree = new DeclField($t,$i.tree, new NoInitialization(),$v);
+            setLocation($tree,$i.start);
         }
       (EQUALS e=expr {
+            assert($e.tree != null);
+            $tree = new DeclField($t,$i.tree, new Initialization($e.tree),$v);
+            setLocation($tree,$i.start);
         }
       )? {
         }
     ;
 
-decl_method
+decl_method returns[AbstractMethod tree]
 @init {
 }
     : type ident OPARENT params=list_params CPARENT (block {

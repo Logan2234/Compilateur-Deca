@@ -1,0 +1,17 @@
+// Description:
+//    While
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+        int x = 1;
+        while(x == 1){
+                println("OK");
+                x = x+1;
+        }
+        
+}

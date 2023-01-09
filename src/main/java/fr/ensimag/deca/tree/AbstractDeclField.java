@@ -10,7 +10,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 /**
  * Field declaration
  *
- * @author gl03
+ * @author Jorge
  * @date 05/01/2023
  */
 public abstract class AbstractDeclField extends Tree {

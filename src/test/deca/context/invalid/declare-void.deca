@@ -1,0 +1,12 @@
+// Description:
+//    Declare void variable
+//
+// Resultats:
+//    Ligne 11: On ne peut pas déclarer une variable de type void.
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    void i;
+}

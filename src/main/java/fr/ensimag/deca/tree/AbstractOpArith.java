@@ -5,7 +5,6 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.EnvironmentType;
 
 /**
  * Arithmetic binary operations (+, -, /, ...)
@@ -20,27 +19,28 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        Type typeLeft = this.getLeftOperand().getType();
-        Type typeRight = this.getRightOperand().getType();
-        if (typeLeft != compiler.environmentType.INT && typeLeft != compiler.environmentType.FLOAT){
-            Location loc = this.getLeftOperand().getLocation();
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+        Location loc = this.getLocation();
+
+        if (!typeLeft.isInt() && !typeLeft.isFloat())
             throw new ContextualError(
-                    loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                                + ": L'argument de gauche d'une opération athmétique doit être un int ou float",//
-                        loc);
-        }
-        if (typeRight != compiler.environmentType.INT && typeRight != compiler.environmentType.FLOAT){
-            Location loc = this.getRightOperand().getLocation();
+                    "L'opérande de gauche d'une opération arithmétique doit être un int ou float (règle 3.33)", loc);
+
+        if (!typeRight.isInt() && !typeRight.isFloat())
             throw new ContextualError(
-                    loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                                + ": L'argument de droite d'une opération athmétique doit être un int ou float",//
-                        loc);
-        }
-        if (typeLeft ==  compiler.environmentType.FLOAT || typeLeft == compiler.environmentType.FLOAT){
+                    "L'opérande de droite d'une opération arithmétique doit être un int ou float (règle 3.33)", loc);
+
+        // Ajout du décor et renvoie du type
+        if (typeLeft.isFloat() || typeRight.isFloat()) {
+            this.setType(compiler.environmentType.FLOAT);
             return compiler.environmentType.FLOAT;
         }
-        return compiler.environmentType.INT;
+
+        // Ajout du décor
+        this.setType(typeLeft);
+        return typeLeft;
     }
 }

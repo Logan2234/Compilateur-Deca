@@ -1,0 +1,12 @@
+// Description:
+//    Test 3.33 fail avec inférieur ou égal
+//
+// Resultats:
+//    Ligne 11: Inférieur ou égal ne s'utilise qu'avec des int ou des float.
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    "hello world" <= 1;
+}

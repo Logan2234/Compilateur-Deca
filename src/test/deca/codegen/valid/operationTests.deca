@@ -1,0 +1,25 @@
+// Description:
+//    Quelques tests arithmétiques pour vérifier que le compilateur calcul bien et qu'il y a une bonne gestion des priorités
+//
+// Resultats:
+//    3
+//    15
+//    -3
+//    -12
+//    5
+//    5
+//    -4
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	println(1 + 1 + 1);
+    println(3 + 4 * 3);
+    println(4 * (2 + 3));
+    println(- (4 - 1));
+    println(- 4 * 3);
+    println(4 + 2 / 2);
+    println(6 / 2 + 2);
+    println(---4);
+}

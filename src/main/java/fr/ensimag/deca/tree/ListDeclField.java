@@ -9,7 +9,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 /**
  * List of fields.
  * 
- * @author gl03
+ * @author Jorge
  * @date 05/01/2023
  */
 public class ListDeclField extends TreeList<AbstractDeclField> {

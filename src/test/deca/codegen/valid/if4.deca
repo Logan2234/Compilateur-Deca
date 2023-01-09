@@ -1,0 +1,18 @@
+// Description:
+//    Vérification basique avec un if et une somme dans le if
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	int test1 = 1;
+    int test2 = 1;
+    if (test1 < test2) {
+        println(“ko”);
+    } else {
+        println("ok");
+    }
+}

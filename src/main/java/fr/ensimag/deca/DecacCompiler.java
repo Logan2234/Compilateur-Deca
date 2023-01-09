@@ -122,7 +122,7 @@ public class DecacCompiler {
 
 
     /** The global environment for types (and the symbolTable) */
-    public final SymbolTable symbolTable = new SymbolTable(); // TODO: En parler au prof lol faut inverser les lignes tf
+    public final SymbolTable symbolTable = new SymbolTable();
     public final EnvironmentType environmentType = new EnvironmentType(this);
     
     public Symbol createSymbol(String name) {
@@ -137,8 +137,6 @@ public class DecacCompiler {
     public boolean compile() {
         String sourceFile = source.getAbsolutePath();
         String destFile = sourceFile.substring(0, sourceFile.length() - 4) + "ass";
-        // A FAIRE: calculer le nom du fichier .ass à partir du nom du
-        // A FAIRE: fichier .deca.
         PrintStream err = System.err;
         PrintStream out = System.out;
         LOG.debug("Compiling file " + sourceFile + " to assembly file " + destFile);

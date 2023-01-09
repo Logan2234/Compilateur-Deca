@@ -10,20 +10,21 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 /**
- * @author gl03
+ * @author Jorge
  * @date 05/01/2023
  */
 public class DeclField extends AbstractDeclField {
 
-    private String visib;
+    private Visibility visib;
     final private AbstractIdentifier type;
     final private AbstractIdentifier fieldName;
     final private AbstractInitialization initialization;
 
-    public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization, String visib) {
+    public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization, Visibility visib) {
         Validate.notNull(type);
         Validate.notNull(fieldName);
         Validate.notNull(initialization);
+        Validate.notNull(visib);
         this.type = type;
         this.fieldName = fieldName;
         this.visib = visib;
@@ -38,7 +39,7 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(visib);
+        // TODO s.print(visib);
         s.print(' ');
         type.decompile(s);
         s.print(' ');

@@ -1,0 +1,12 @@
+// Description:
+//    printx d'un nombre.
+//
+// Resultats:
+//    //TODO: Chercher le res
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+        printx(11.0);
+}

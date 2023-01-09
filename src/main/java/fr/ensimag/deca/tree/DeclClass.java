@@ -18,29 +18,28 @@ public class DeclClass extends AbstractDeclClass {
     final private AbstractIdentifier name;
     final private AbstractIdentifier superIdentifier;
     final private ListDeclField fields;
-    //TODO Method
+    final private ListDeclMethod methods;
 
-    public DeclClass(AbstractIdentifier name, AbstractIdentifier superIdentifier, ListDeclField fields) {
+    public DeclClass(AbstractIdentifier name, AbstractIdentifier superIdentifier, ListDeclField fields, ListDeclMethod methods) {
         Validate.notNull(name);
         Validate.notNull(superIdentifier);
         Validate.notNull(fields);
-        //TODO Method
+        Validate.notNull(methods);
         this.name = name;
         this.superIdentifier = superIdentifier;
         this.fields = fields;
-        //TODO Method
+        this.methods = methods;
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        //TODO: Not finished yet
         s.print("class ");
         name.decompile(s);
         s.print(" extends ");
         superIdentifier.decompile(s);
         s.print(" {");
         fields.decompile(s);
-        //? method
+        methods.decompile(s);
         s.print("}");
 
     }
