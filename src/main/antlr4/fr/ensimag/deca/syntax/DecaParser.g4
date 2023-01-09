@@ -160,9 +160,8 @@ inst returns[AbstractInst tree]
         }
     | RETURN expr SEMI {
             assert($expr.tree != null);
-            // TO VERIFY
-            // $tree = new Return($expr.tree);
-            // setLocation($tree, $RETURN);
+            $tree = new Return($expr.tree);
+            setLocation($tree, $RETURN);
         }
     ;
 
@@ -322,9 +321,8 @@ inequality_expr returns[AbstractExpr tree]
     | e1=inequality_expr INSTANCEOF type {
             assert($e1.tree != null);
             assert($type.tree != null);
-            // TO VERIFY
-            // $tree = new InstanceOf($e1.tree, $type.tree);
-            // setLocation($tree, $INSTANCEOF);
+            $tree = new InstanceOf($e1.tree, $type.tree);
+            setLocation($tree, $INSTANCEOF);
         }
     ;
 
@@ -398,21 +396,17 @@ select_expr returns[AbstractExpr tree]
     | e1=select_expr DOT i=ident {
             assert($e1.tree != null);
             assert($i.tree != null);
-            // TO VERIFY
-            // below
         }
         (o=OPARENT args=list_expr CPARENT {
             // we matched "e1.i(args)"
             assert($args.tree != null);
-            // TO VERIFY
-            // $tree = new MethodCall($e1.tree, $i.tree, $args.tree);
-            // setLocation($tree, $o);
+            $tree = new MethodCall($e1.tree, $i.tree, $args.tree);
+            setLocation($tree, $o);
         }
         | /* epsilon */ {
             // we matched "e.i"
-            // TO VERIFY
-            // $tree = new Selection($e1.tree, $i.tree);
-            // setLocation($tree, $DOT);
+            $tree = new Selection($e1.tree, $i.tree);
+            setLocation($tree, $DOT);
         }
         )
     ;
@@ -425,9 +419,8 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
-            // TO VERIFY
-            // $tree = new MethodCall(new This(true), $m.tree, $args.tree);
-            // setLocation($tree, $m.start);
+            $tree = new MethodCall(new This(true), $m.tree, $args.tree);
+            setLocation($tree, $m.start);
 
         }
     | OPARENT expr CPARENT {
@@ -444,16 +437,14 @@ primary_expr returns[AbstractExpr tree]
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
-            // TO VERIFY
-            // $tree = new New($ident.tree);
-            // setLocation($tree,$NEW);
+            $tree = new New($ident.tree);
+            setLocation($tree,$NEW);
         }
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
             assert($type.tree != null);
             assert($expr.tree != null);
-            // TO VERIFY
-            // $tree = new Cast($type.tree, $expr.tree);
-            // setLocation($tree,$cast);
+            $tree = new Cast($type.tree, $expr.tree);
+            setLocation($tree,$cast);
         }
     | literal {
             assert($literal.tree != null);
@@ -506,9 +497,8 @@ literal returns[AbstractExpr tree]
             setLocation($tree, $FALSE);
         }
     | THIS {
-            // TO VERIFY
-            // $tree = new This(false);
-            // setLocation($tree, $THIS);
+            $tree = new This(false);
+            setLocation($tree, $THIS);
         }
     | NULL {
             $tree = new Null();
