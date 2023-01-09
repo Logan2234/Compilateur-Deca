@@ -46,8 +46,6 @@ public class DeclField extends AbstractDeclField {
         fieldName.decompile(s);
         initialization.decompile(s);
         s.print(';');
-        
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override

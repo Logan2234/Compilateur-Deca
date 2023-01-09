@@ -20,7 +20,6 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
             i.decompile(s);
             s.println();
         }
-        // throw new UnsupportedOperationException("Not yet implemented");
     }
 
     /**

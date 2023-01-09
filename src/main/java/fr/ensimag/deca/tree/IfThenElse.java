@@ -52,8 +52,6 @@ public class IfThenElse extends AbstractInst {
         s.print("} else {");
         elseBranch.decompile(s);
         s.print("}");
-
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override

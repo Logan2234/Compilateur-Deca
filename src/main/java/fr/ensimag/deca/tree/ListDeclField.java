@@ -20,7 +20,6 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
             i.decompile(s);
             s.println();
         }
-        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     /**

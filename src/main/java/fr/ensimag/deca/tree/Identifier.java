@@ -172,9 +172,8 @@ public class Identifier extends AbstractIdentifier {
         ExpDefinition def = localEnv.get(this.name); // TODO: Utilisation de currentClass éventuelle
         Location loc = this.getLocation();
         
-        if (def == null){
-            throw new ContextualError("L'identifier n'existe pas", loc);
-        }
+        if (def == null)
+            throw new ContextualError("La variable " + name.getName() + " n'existe pas (règle 0.1)", loc);
         
         // Ajout du décor
         Type type = def.getType();
@@ -182,7 +181,6 @@ public class Identifier extends AbstractIdentifier {
         this.setType(type);
 
         return type;
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     /**

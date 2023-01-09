@@ -22,7 +22,6 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
 
             i.decompile(s);
         }
-        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     /**

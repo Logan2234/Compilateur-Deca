@@ -35,7 +35,6 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         type.verifyType(compiler);
-        // TODO: Vérifier le caractère disjoint de la règle 3.17
 
         Type type = this.type.getType();
         
@@ -49,7 +48,7 @@ public class DeclVar extends AbstractDeclVar {
             varName.setType(type);
         }
         catch (DoubleDefException e) {
-            throw new ContextualError("Ce nom de variable a déjà été attribué (règle 3.17)", this.getLocation());
+            throw new ContextualError("La variable \"" + this.varName.getName().getName() + "\" a déjà été déclarée (règle 3.17)", this.getLocation());
         }
         
         initialization.verifyInitialization(compiler, type, localEnv, currentClass);
@@ -61,8 +60,6 @@ public class DeclVar extends AbstractDeclVar {
         s.print(' ');
         varName.decompile(s);
         initialization.decompile(s);
-
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override

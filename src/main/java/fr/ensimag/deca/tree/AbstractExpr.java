@@ -98,7 +98,7 @@ public abstract class AbstractExpr extends AbstractInst {
         }
 
         throw new ContextualError(
-                "Une assignation entre un " + expectedType + " et un " + rtype + " n'est pas valide (règle 3.32)",
+            "Une assignation entre un " + expectedType + " et un " + rtype + " n'est pas valide (règle 3.32)",
                 this.getLocation());
     }
 
@@ -106,7 +106,6 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type returnType) throws ContextualError {
         verifyExpr(compiler, localEnv, currentClass);
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     /**
@@ -122,9 +121,8 @@ public abstract class AbstractExpr extends AbstractInst {
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         this.verifyExpr(compiler, localEnv, currentClass);
-        if (!this.getType().isBoolean()) {
-            throw new ContextualError("La condition n'est pas booléenne", this.getLocation());
-        }
+        if (!this.getType().isBoolean())
+            throw new ContextualError("La condition n'est pas booléenne (règle 3.29)", this.getLocation());
     }
 
     /**
