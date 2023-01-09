@@ -1,0 +1,13 @@
+// Description:
+//    Cast un int en un string
+//
+// Resultats:
+//    Ligne 12: On ne peut pas assign un string a un int
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    int i = 1;
+    (string)(i);
+}

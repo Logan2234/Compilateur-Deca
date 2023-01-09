@@ -2,12 +2,12 @@
 //    Condition de la règle 3.24 non respectée 
 //
 // Resultats:
-//    Ligne 9: Une variable ne peut être de type void.
+//    Ligne 10: On ne peut pas avoir un return si la fonction ne renvoie rien.
 //
 
 class A{
     void getX() {
-        return; // ?? Est-ce que c'est bien ça pour le return void ?
+        return (void)(0); // TODO: Est-ce que c'est bien ça pour le return void ?
     }
 }
 

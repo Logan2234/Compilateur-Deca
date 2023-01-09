@@ -1,0 +1,13 @@
+// Description:
+//    Cast un string en un int
+//
+// Resultats:
+//    Ligne 12: On ne peut pas assign un int a un string
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    string i = "Je ne suis pas un entier";
+    (int)(i);
+}

@@ -1,0 +1,13 @@
+// Description:
+//    Assign un string a un int
+//
+// Resultats:
+//    Ligne 12: On ne peut pas assign un string a un int
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    int i;
+    i = "Error Incoming";
+}

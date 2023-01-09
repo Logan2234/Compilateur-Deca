@@ -1,0 +1,12 @@
+// Description:
+//    Programme minimaliste utilisant print avec un entier.
+//
+// Resultats:
+//    2
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+        print(2);
+}

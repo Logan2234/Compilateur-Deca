@@ -1,0 +1,13 @@
+// Description:
+//    Assign un boolean indirectement
+//
+// Resultats:
+//    "ok"
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    boolean i;
+    i = true;
+}

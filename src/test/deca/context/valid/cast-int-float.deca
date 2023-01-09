@@ -1,0 +1,12 @@
+// Description:
+//    cast int to float
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    (float)(2);
+}

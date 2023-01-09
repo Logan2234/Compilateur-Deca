@@ -1,0 +1,12 @@
+// Description:
+//    inegalite superieur
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    1 instanceof 2; //TODO faire instance pour le cas avec classe
+}

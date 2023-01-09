@@ -2,7 +2,7 @@
 //    Condition de la règle 3.17 non respectée 
 //
 // Resultats:
-//    Ligne 9: Une variable ne peut être de type void.
+//    Ligne 9: Une variable ne peut pas être de type void.
 //
 
 {
