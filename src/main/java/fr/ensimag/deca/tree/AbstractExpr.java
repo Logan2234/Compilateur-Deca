@@ -5,13 +5,9 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
-import fr.ensimag.ima.pseudocode.instructions.WINT;
-import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -121,7 +117,7 @@ public abstract class AbstractExpr extends AbstractInst {
             throws ContextualError {
         this.verifyExpr(compiler, localEnv, currentClass);
         if (!this.getType().isBoolean()) {
-            throw new ContextualError("La condition n'est pas booléenne", this.getLocation())
+            throw new ContextualError("La condition n'est pas booléenne", this.getLocation());
         }
     }
 
