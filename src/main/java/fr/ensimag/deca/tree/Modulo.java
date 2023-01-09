@@ -25,7 +25,7 @@ public class Modulo extends AbstractOpArith {
         Location loc = this.getLocation();
 
         if (!typeLeft.isInt() || !typeRight.isInt())
-            throw new ContextualError("A modulo is only between 2 int (rule 3.33)", loc);
+            throw new ContextualError("A modulo can only be done between 2 int (rule 3.33)", loc);
         
         // Ajout du décor
         this.setType(typeLeft);
