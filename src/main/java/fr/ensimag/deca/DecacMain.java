@@ -28,7 +28,7 @@ public class DecacMain {
 
         if (options.getPrintBanner()) {
             System.out.println("\u001B[35m" + "================================================");
-            System.out.println("\033[0;1m\u001B[36m Equipe 1 - GL03:\033[0;0m");
+            System.out.println("\033[0;1m\u001B[36m Groupe 1 - GL03:\033[0;0m");
             System.out.println("\u001B[36m" + "     Nils DEPUILLE   : Chef de projet");
             System.out.println("\u001B[36m" + "     Virgile HENRY   : Code master");
             System.out.println("\u001B[36m" + "     Jorge LURI-VANO : Git master");
