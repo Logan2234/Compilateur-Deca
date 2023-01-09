@@ -35,8 +35,7 @@ public class Main extends AbstractMain {
     @Override
     protected void codeGenMain(DecacCompiler compiler) {
         // todo : var decarations. 
-        // ? Where to write var pointers ? where to see where they are declared ?
-        // ? compiler.addComment("Beginning of main variable declaration:");
+        compiler.addComment("Beginning of main variable declaration:");
         
         compiler.addComment("Beginning of main instructions:");
         insts.codeGenListInst(compiler);

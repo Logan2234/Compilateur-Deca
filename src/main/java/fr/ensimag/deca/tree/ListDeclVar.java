@@ -5,6 +5,8 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.Register;
 
 /**
  * List of declarations (e.g. int x; float y,z).
@@ -21,6 +23,30 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
             s.println();
         }
         //throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    /**
+     * This represents the size of the stack of declared variables.
+     * It get increased when declaring a new variable, and passed so that variable knows is address.
+     * The variables are stored at LB + var offset.
+     * It starts at one because it is said that at the start, LB = GB, and GB is before the first stack obect.
+     * That means that with one variable, it is at GB + 1 so the first variable will be pointing at LB+1.
+     */
+    private int varStackSize = 1;
+
+    /**
+     * Code generatio to declare all variables. 
+     * This also keep track of the number of variables, and assign to each of them a DAddr to keep track of where they are.
+     * @param compiler Where we write our instructions to.
+     */
+    public void codeGenDeclVar(DecacCompiler compiler) {
+        for(AbstractDeclVar i : getList()) {
+            // create the DAddr that references the variable
+            RegisterOffset register = new RegisterOffset(varStackSize, Register.LB);
+            i.codeGenDeclVar(compiler, register);
+            // increment the number of allocated variables
+            varStackSize++;
+        }
     }
 
     /**

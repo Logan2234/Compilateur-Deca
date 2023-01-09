@@ -9,6 +9,8 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+
 /**
  * @author gl03
  * @date 01/01/2023
@@ -33,6 +35,11 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
+    }
+
+    @Override
+    public void codeGenDeclVar(DecacCompiler compiler, RegisterOffset register) {
+        // store the register in the definition of the variable, then assign it with the initialization.
     }
 
     
