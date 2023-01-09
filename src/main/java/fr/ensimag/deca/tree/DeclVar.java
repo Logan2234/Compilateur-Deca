@@ -1,10 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.VariableDefinition;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -32,15 +35,24 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         type.verifyType(compiler);
-        
         // TODO: Vérifier le caractère disjoint de la règle 3.17
+
+        Type type = this.type.getType();
         
-        if (type.getType().isVoid())
-            throw new ContextualError("Une variable ne peut pas être de type void (règle 3.17)", getLocation());
+        if (type.isVoid())
+        throw new ContextualError("Une variable ne peut pas être de type void (règle 3.17)", this.getLocation());
         
-        initialization.verifyInitialization(compiler, type.getType(), localEnv, currentClass);
+        try {
+            ExpDefinition def = new VariableDefinition(type, getLocation());
+            localEnv.declare(this.varName.getName(), def);
+            varName.setDefinition(def);
+            varName.setType(type);
+        }
+        catch (DoubleDefException e) {
+            throw new ContextualError("Ce nom de variable a déjà été attribué (règle 3.17)", this.getLocation());
+        }
         
-        // TODO: Mettre à jour localEnv
+        initialization.verifyInitialization(compiler, type, localEnv, currentClass);
     }
 
     @Override
