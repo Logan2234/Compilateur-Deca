@@ -88,21 +88,20 @@ public abstract class AbstractExpr extends AbstractInst {
     public AbstractExpr verifyRValue(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type expectedType) throws ContextualError {
         Type rtype = this.verifyExpr(compiler, localEnv, currentClass);
-        
+
         // Ajout du décor et renvoie du type
-        if (rtype.sameType(expectedType) || (expectedType.isFloat() && rtype.isInt())){
+        if (rtype.sameType(expectedType) || (expectedType.isFloat() && rtype.isInt())) {
             this.setType(type);
-            // TODO: Gérer l'histoire du ConvFloat            
+            // TODO: Gérer l'histoire du ConvFloat
             return this;
         }
 
-        throw new ContextualError("Cette assignation n'est pas valide", this.getLocation());
+        throw new ContextualError("Une assignation entre un " + expectedType + " et un " + rtype + " n'est pas valide (règle 3.32)", this.getLocation());
     }
 
     @Override
-    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass, Type returnType)
-            throws ContextualError {
+    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
+            Type returnType) throws ContextualError {
         verifyExpr(compiler, localEnv, currentClass);
         // throw new UnsupportedOperationException("not yet implemented");
     }
