@@ -7,48 +7,52 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+
 import org.apache.commons.lang.Validate;
 
 /**
- * Declaration of a parameter
- * 
- * @author Jorge
- * @date 08/01/2023
+ * InstanceOf Statment
+ *
+ * @author Jorge Luri Vañó
+ * @date 09/01/2023
  */
-public class DeclParam extends AbstractDeclParam {
+public class InstanceOf extends AbstractExpr {
 
-    final private AbstractIdentifier type;
-    final private AbstractIdentifier paramName;
+    private final AbstractExpr e;
+    private final AbstractIdentifier type;
 
-    public DeclParam(AbstractIdentifier type, AbstractIdentifier paramName) {
+    public InstanceOf(AbstractExpr e, AbstractIdentifier type) {
+        Validate.notNull(e);
         Validate.notNull(type);
-        Validate.notNull(paramName);
+        this.e = e;
         this.type = type;
-        this.paramName = paramName;
     }
 
     @Override
-    protected void verifyDeclParam(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
+            ClassDefinition currentClass) throws ContextualError {
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
+        s.print("(");
+        e.decompile(s);
+        s.print(" instanceof ");
         type.decompile(s);
-        s.print(' ');
-        paramName.decompile(s);
+        s.print(")");
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
+        e.iter(f);
         type.iter(f);
-        paramName.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        type.prettyPrint(s, prefix, false);
-        paramName.prettyPrint(s, prefix, true);
+        e.prettyPrint(s, prefix, false);
+        type.prettyPrint(s, prefix, true);
     }
+
 }

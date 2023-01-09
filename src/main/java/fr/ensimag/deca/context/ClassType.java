@@ -62,6 +62,4 @@ public class ClassType extends Type {
     public boolean isSubClassOf(ClassType potentialSuperClass) {
         return(((Object)this).getClass().getSuperclass() == potentialSuperClass.getClass());
     }
-
-
 }

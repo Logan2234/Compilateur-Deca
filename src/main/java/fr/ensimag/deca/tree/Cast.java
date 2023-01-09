@@ -7,48 +7,52 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+
 import org.apache.commons.lang.Validate;
 
 /**
- * Declaration of a parameter
- * 
- * @author Jorge
- * @date 08/01/2023
+ * Cast Statment
+ *
+ * @author Jorge Luri Vañó
+ * @date 09/01/2023
  */
-public class DeclParam extends AbstractDeclParam {
+public class Cast extends AbstractExpr {
 
-    final private AbstractIdentifier type;
-    final private AbstractIdentifier paramName;
+    private final AbstractIdentifier type;
+    private final AbstractExpr e;
 
-    public DeclParam(AbstractIdentifier type, AbstractIdentifier paramName) {
+    public Cast(AbstractIdentifier type, AbstractExpr e) {
         Validate.notNull(type);
-        Validate.notNull(paramName);
+        Validate.notNull(e);
         this.type = type;
-        this.paramName = paramName;
+        this.e = e;
     }
 
     @Override
-    protected void verifyDeclParam(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
+            ClassDefinition currentClass) throws ContextualError {
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
+        s.print("(");
         type.decompile(s);
-        s.print(' ');
-        paramName.decompile(s);
+        s.print(") (");
+        e.decompile(s);
+        s.print(")");
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
         type.iter(f);
-        paramName.iter(f);
+        e.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);
-        paramName.prettyPrint(s, prefix, true);
+        e.prettyPrint(s, prefix, true);
     }
+
 }

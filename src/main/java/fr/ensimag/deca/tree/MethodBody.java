@@ -9,7 +9,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 /**
- * TODO Make description
+ * Method Body Statement
  *
  * @author gl03
  * @date 05/01/2023
@@ -51,12 +51,14 @@ public class MethodBody extends AbstractMethod {
         s.print("}");
     }
     
-    @Override //? Is it necessary ?
+    @Override 
     protected void iterChildren(TreeFunction f) {
-        //TODO
+        vars.iterChildren(f);
+        insts.iterChildren(f);
     }
     @Override //? Is it necessary ?
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        //TODO
+        vars.prettyPrintChildren(s, prefix);
+        insts.prettyPrintChildren(s, prefix);
     }
 }

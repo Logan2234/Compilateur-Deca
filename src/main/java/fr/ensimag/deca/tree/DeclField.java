@@ -10,6 +10,8 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 /**
+ * Declaration of a field
+ * 
  * @author Jorge
  * @date 05/01/2023
  */

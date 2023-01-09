@@ -13,6 +13,8 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 /**
+ * Declaration of a variable
+ * 
  * @author gl03
  * @date 01/01/2023
  */
