@@ -3,7 +3,7 @@
 //
 // Resultats:
 //    Erreur contextuelle
-//    Ligne 12: Une assignation entre un int et un string n'est pas valide (règle 3.32)
+//    Ligne 13 : Une assignation entre un int et un string n'est pas valide (règle 3.32)
 //
 // Historique:
 //    cree le 06/01/2023

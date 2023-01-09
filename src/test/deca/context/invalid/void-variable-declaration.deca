@@ -2,7 +2,8 @@
 //    Condition de la règle 3.17 non respectée 
 //
 // Resultats:
-//    Ligne 9: Une variable ne peut pas être de type void.
+//    Erreur contextuelle
+//    Ligne 10 : A variable can't be void (rule 3.17)
 //
 
 {
