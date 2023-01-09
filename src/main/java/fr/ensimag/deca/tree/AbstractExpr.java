@@ -85,10 +85,16 @@ public abstract class AbstractExpr extends AbstractInst {
         Type rtype = this.verifyExpr(compiler, localEnv, currentClass);
 
         // Ajout du décor et renvoie du type
-        if (rtype.sameType(expectedType) || (expectedType.isFloat() && rtype.isInt())) {
+        if (rtype.sameType(expectedType)) {
             this.setType(type);
-            // TODO: Gérer l'histoire du ConvFloat
             return this;
+        }
+
+        if (expectedType.isFloat() && rtype.isInt())
+        {
+            AbstractExpr convFloat = new ConvFloat(this);
+            convFloat.verifyExpr(compiler, localEnv, currentClass);
+            return convFloat;
         }
 
         throw new ContextualError(
