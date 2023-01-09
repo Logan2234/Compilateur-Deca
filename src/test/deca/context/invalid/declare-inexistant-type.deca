@@ -1,0 +1,12 @@
+// Description:
+//    Declare une variable au type inconnun
+//
+// Resultats:
+//    Ligne 11: Ce type n'existe pas
+//
+// Historique:
+//    cree le 09/01/2023
+
+{
+    typeInexistant i;
+}

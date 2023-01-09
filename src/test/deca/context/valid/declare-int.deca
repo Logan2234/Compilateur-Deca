@@ -1,0 +1,12 @@
+// Description:
+//    déclare et assigne un int 
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    int i = 2;
+}

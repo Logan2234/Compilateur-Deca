@@ -1,0 +1,12 @@
+// Description:
+//    print d'une string.
+//
+// Resultats:
+//    Hello, world!
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+        print("Hello, world!");
+}

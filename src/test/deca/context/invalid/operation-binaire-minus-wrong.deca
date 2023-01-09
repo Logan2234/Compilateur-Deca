@@ -1,0 +1,12 @@
+// Description:
+//    Test 3.33 fail avec minus 
+//
+// Resultats:
+//    Ligne 11: Minus ne s'utilise qu'avec des int ou des float.
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    1 - "hello world";
+}

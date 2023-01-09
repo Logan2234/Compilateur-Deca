@@ -1,0 +1,17 @@
+// Description:
+//    if
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+        if (true){
+                println("ok");
+        }
+        else{
+                println("ko");
+        }
+}

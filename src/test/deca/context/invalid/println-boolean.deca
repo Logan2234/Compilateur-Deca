@@ -1,0 +1,10 @@
+// Description:
+//    Condition de la règle 3.31 non respectée 
+//
+// Resultats:
+//    Ligne 10: println ne peut prendre qu'un int ou un float ou une string
+//
+
+{
+    println(false);
+}

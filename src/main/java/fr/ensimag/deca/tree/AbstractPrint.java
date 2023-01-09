@@ -41,10 +41,7 @@ public abstract class AbstractPrint extends AbstractInst {
         for (AbstractExpr a : arguments.getList()) {
             Type type = a.verifyExpr(compiler, localEnv, currentClass);
             if (!type.isInt() && !type.isFloat() && !type.isString()) {
-                Location loc = a.getLocation();
-                throw new ContextualError(
-                        loc.getFilename() + ":" + loc.getLine() + ":" + loc.getPositionInLine()
-                                + ": Seuls les int, float, et string peuvent être passé en argument de print",//
+                throw new ContextualError("Seuls les int, float, et string peuvent être passés en argument de print (règle 3.31)",
                         a.getLocation());
             }
         }
@@ -65,11 +62,12 @@ public abstract class AbstractPrint extends AbstractInst {
     public void decompile(IndentPrintStream s) {
         s.print("print");
         s.print(getSuffix());
-        if (printHex) {s.print("x");}
+        if (printHex) {
+            s.print("x");
+        }
         s.print("(");
         arguments.decompile(s);
         s.print(");");
-        //throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override

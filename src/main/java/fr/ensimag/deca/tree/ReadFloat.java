@@ -16,11 +16,11 @@ import java.io.PrintStream;
 public class ReadFloat extends AbstractReadExpr {
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        this.setType(compiler.environmentType.FLOAT);
+        return compiler.environmentType.FLOAT;
     }
-
 
     @Override
     public void decompile(IndentPrintStream s) {

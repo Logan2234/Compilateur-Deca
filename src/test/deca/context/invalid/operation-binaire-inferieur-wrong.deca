@@ -1,0 +1,12 @@
+// Description:
+//    Test 3.33 fail avec inférieur 
+//
+// Resultats:
+//    Ligne 11: Inférieur ne s'utilise qu'avec des int ou des float.
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    1 < "hello world";
+}

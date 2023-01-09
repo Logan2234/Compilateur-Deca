@@ -1,0 +1,12 @@
+// Description:
+//    opération unaire not
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    !false;
+}

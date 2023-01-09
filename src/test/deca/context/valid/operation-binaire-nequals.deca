@@ -1,0 +1,12 @@
+// Description:
+//    opération binaire not equals
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    1 != 2;
+}

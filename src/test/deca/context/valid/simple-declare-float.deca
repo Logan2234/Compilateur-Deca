@@ -1,0 +1,12 @@
+// Description:
+//    déclare un float
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    float i;
+}

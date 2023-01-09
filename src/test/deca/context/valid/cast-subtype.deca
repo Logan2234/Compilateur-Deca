@@ -1,0 +1,21 @@
+// Description:
+//    Cast un subtype
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 06/01/2023
+
+class A{
+
+}
+
+class B extends A{
+
+}
+
+{
+    B b;
+    (A)(b);
+}

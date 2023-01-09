@@ -30,7 +30,6 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         s.print(getOperatorName());
         getOperand().decompile(s);
         s.print(")");
-        //throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override

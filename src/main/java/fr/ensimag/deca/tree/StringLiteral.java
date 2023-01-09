@@ -5,7 +5,6 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
@@ -47,7 +46,6 @@ public class StringLiteral extends AbstractStringLiteral {
     @Override
     public void decompile(IndentPrintStream s) {
         s.print(getValue());
-        //throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override

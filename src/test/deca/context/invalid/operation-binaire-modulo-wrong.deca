@@ -1,0 +1,12 @@
+// Description:
+//    Test 3.33 fail avec modulo 
+//
+// Resultats:
+//    Ligne 11: Modulo ne se fait qu'avec des int.
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    1 % 1.0;
+}

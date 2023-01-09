@@ -1,0 +1,12 @@
+// Description:
+//    Test 3.37 fail avec not 
+//
+// Resultats:
+//    Ligne 11: Un not ne peut se faire qu'avec des booleens.
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    !"hello world";
+}

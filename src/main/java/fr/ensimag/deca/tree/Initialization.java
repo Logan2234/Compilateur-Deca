@@ -32,24 +32,19 @@ public class Initialization extends AbstractInitialization {
     }
 
     @Override
-    protected void verifyInitialization(DecacCompiler compiler, Type t,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void verifyInitialization(DecacCompiler compiler, Type t, EnvironmentExp localEnv,
+            ClassDefinition currentClass) throws ContextualError {
+        expression.verifyRValue(compiler, localEnv, currentClass, t);
     }
-
 
     @Override
     public void decompile(IndentPrintStream s) {
-
         s.print(" = ");
         expression.decompile(s);
-        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
-    protected
-    void iterChildren(TreeFunction f) {
+    protected void iterChildren(TreeFunction f) {
         expression.iter(f);
     }
 

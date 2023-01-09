@@ -1,0 +1,12 @@
+// Description:
+//    Test 3.37 fail avec minus 
+//
+// Resultats:
+//    Ligne 11: L'opération unaire minus ne peut se faire qu'avec des int ou des float.
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    -"hello world";
+}
