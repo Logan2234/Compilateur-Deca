@@ -99,7 +99,7 @@ public class CompilerOptions {
                     case "-b": {
                         // -b an only be used as an alone option, so checks args length is 1
                         if(args.length > 1) {
-                            throw new CLIException("L'option '-b' ne peux que être utilisé seule.");
+                            throw new CLIException("\u001B[31m/!\\ The option '-b' can only be used alone.\u001B[37m");
                         }
                         printBanner = true;
                         break;
@@ -157,6 +157,7 @@ public class CompilerOptions {
                         displayWarnings = true;
                     }
                 }
+                arg_index++;
             }
             else {
                 // finished options, now on parsing files
@@ -174,34 +175,49 @@ public class CompilerOptions {
                     sourceFiles.add(new File(args[i]));
                 }           
             }
+            
+            Logger logger = Logger.getRootLogger();
+            // map command-line debug option to log4j's level.
+            switch (getDebug()) {
+                case QUIET: break; // keep default
+                case INFO:
+                logger.setLevel(Level.INFO); break;
+                case DEBUG:
+                logger.setLevel(Level.DEBUG); break;
+                case TRACE:
+                logger.setLevel(Level.TRACE); break;
+                default:
+                logger.setLevel(Level.ALL); break;
+            }
+            logger.info("Application-wide trace level set to " + logger.getLevel());
+            
+            boolean assertsEnabled = false;
+            assert assertsEnabled = true; // Intentional side effect!!!
+            if (assertsEnabled) {
+                logger.info("Java assertions enabled");
+            } else {
+                logger.info("Java assertions disabled");
+            }
+            if (compileMode == CompileMode.Verify){}
         }
-
-        Logger logger = Logger.getRootLogger();
-        // map command-line debug option to log4j's level.
-        switch (getDebug()) {
-        case QUIET: break; // keep default
-        case INFO:
-            logger.setLevel(Level.INFO); break;
-        case DEBUG:
-            logger.setLevel(Level.DEBUG); break;
-        case TRACE:
-            logger.setLevel(Level.TRACE); break;
-        default:
-            logger.setLevel(Level.ALL); break;
-        }
-        logger.info("Application-wide trace level set to " + logger.getLevel());
-
-        boolean assertsEnabled = false;
-        assert assertsEnabled = true; // Intentional side effect!!!
-        if (assertsEnabled) {
-            logger.info("Java assertions enabled");
-        } else {
-            logger.info("Java assertions disabled");
-        }
-
+        
+        
     }
 
     protected void displayUsage() {
-        throw new UnsupportedOperationException("not yet implemented");
+        System.out.println();
+        System.out.println("Correct usage: decac [[-p | -v] [-n] [-r X] [-d]* [-P] [-w] <fichier deca>...] | [-b]");
+        System.out.println();
+        System.out.println("-b (banner) : display group name");
+        System.out.println("-p (parse) : only build the tree, and decompile it");
+        System.out.println("-v (verifiation) : only verify, do not output files");
+        System.out.println("-n (no check) : remove test on execution (1.11, 1.13)");
+        System.out.println("-r X (register) : limits the use of registers R0 to RX-1 (with 4<=X<=16)");
+        System.out.println("-d (debug) : display debug trace. Can be repeated.");
+        System.out.println("-P (parallel) compile all deca files in parallel.");
+        System.out.println("-w (warnings) (optional) : display warnings");
+        System.out.println();
+        System.out.println("Note : -p and -v are incompatible.");
+
     }
 }
