@@ -20,8 +20,8 @@ public class Modulo extends AbstractOpArith {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeLeft = this.getLeftOperand().getType();
-        Type typeRight = this.getRightOperand().getType();
+        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
         Location loc = this.getLocation();
 
         if (!typeLeft.isInt() || !typeRight.isInt())
