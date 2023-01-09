@@ -2,7 +2,8 @@
 //    Declare void variable
 //
 // Resultats:
-//    Ligne 11: On ne peut pas déclarer une variable de type void.
+//    Erreur contextuelle
+//    Ligne 12 : A variable can't be void (rule 3.17)
 //
 // Historique:
 //    cree le 06/01/2023

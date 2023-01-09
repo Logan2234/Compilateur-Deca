@@ -2,7 +2,8 @@
 //    Condition de la règle 3.31 non respectée 
 //
 // Resultats:
-//    Ligne 10: print ne peut prendre qu'un int ou un float ou une string
+//    Erreur contextuelle
+//    Ligne 10 : Arguments of a print can only be float, int or string (rules 3.31)
 //
 
 {
