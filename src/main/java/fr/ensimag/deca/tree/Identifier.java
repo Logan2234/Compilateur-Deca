@@ -173,7 +173,7 @@ public class Identifier extends AbstractIdentifier {
         Location loc = this.getLocation();
         
         if (def == null)
-            throw new ContextualError("La variable " + name.getName() + " n'existe pas (règle 0.1)", loc);
+            throw new ContextualError("The variable " + name.getName() + " doesn't exist (rule 0.1)", loc);
         
         // Ajout du décor
         Type type = def.getType();
@@ -198,7 +198,7 @@ public class Identifier extends AbstractIdentifier {
             // Si le symbole n'est pas un type, on catch l'erreur pour envoyer une ContextualError
             type = def.getType();
         } catch (NullPointerException e) {
-            throw new ContextualError("Le type \"" + name + "\" n'existe pas (règle 0.2)", loc);
+            throw new ContextualError("The type \"" + name + "\" doesn't exist (rule 0.2)", loc);
         }
 
         // Ajout du décor
