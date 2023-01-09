@@ -4,7 +4,7 @@
 # The outputs are saved in files named <example-name>-lex.lis to differentiate them
 # from the output files of full-synt.sh which is executed on the same files.
 
-# A file named *_lexCorr.deca denotes an example that is syntaxically invalid but
+# A file named *_lex.deca denotes an example that is syntaxically invalid but
 # lexically correct.
 
 # Change the current working directory to be in the project's directory
@@ -33,7 +33,7 @@ done
 
 #### invalid tests ####
 # an invalid test (syntaxically) may be lexically correct
-# a file named *_lexCorr.deca is lexically correct
+# a file named *_lex.deca is lexically correct
 files=$(find ./src/test/deca/syntax/invalid -name "*.deca")
 
 for test in $files
@@ -41,7 +41,7 @@ do
     # save the output
     test_lex "$test" > "${test%.deca}"-lex.lis 2>&1
 
-    if [[ $test =~ .*\_lexCorr.deca ]]
+    if [[ $test =~ .*\_lex.deca ]]
     then
         # the program is lexically correct
         if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:"
