@@ -35,8 +35,8 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
 
         // Ajout du décor et renvoie du type
         if (typeLeft.isFloat() || typeRight.isFloat()) {
-            this.setType(typeLeft);
-            return typeLeft;
+            this.setType(compiler.environmentType.FLOAT);
+            return compiler.environmentType.FLOAT;
         }
 
         // Ajout du décor
