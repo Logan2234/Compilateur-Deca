@@ -1,0 +1,11 @@
+// Description:
+//    Condition de la règle 3.17 non respectée 
+//
+// Resultats:
+//    Ligne 10: La variable "i" a déjà été déclarée (règle 3.17)
+//
+
+{
+    int i;
+    int i;    
+}
