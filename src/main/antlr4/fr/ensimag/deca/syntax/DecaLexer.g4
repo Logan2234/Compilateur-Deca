@@ -15,7 +15,8 @@ options {
 
 // Ignore spaces, tabs, newlines and whitespaces
 WS:   ( ' '
-         | '//' .*? '\n' 
+         | '//' .*? '\n'
+         | '//' .*? EOF
          | '/*' .*? '*/'
          | '\t'
          | '\r'
@@ -98,10 +99,16 @@ FLOAT : FLOATDEC | FLOATHEX;
 IDENT: (LETTER | '$' | '_')(LETTER | DIGIT | '$' | '_')*;
 
 fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
-INCLUDE: '#include' (' ')* '"' FILENAME '"';
+INCLUDE: ('#include' (' ')* '"' FILENAME '"')
+         {  String s = getText();
+            int startIndex = s.indexOf('"')-1;
+            int endIndex = s.length();
+            String file = s.substring(startIndex + 1, endIndex);
+            doInclude(file);
+         };
 
 fragment STRING_CAR: ~('"' | '\\' | '\n') ;
 STRING: '"' (STRING_CAR | '\\"' | '\\\\')*  '"';
 MULTI_LINE_STRING: '"' (STRING_CAR | EOL | '\\"' | '\\\\')*  '"';
 
-DUMMY_TOKEN: .;
+//DUMMY_TOKEN: .;

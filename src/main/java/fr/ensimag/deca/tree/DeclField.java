@@ -10,6 +10,8 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 /**
+ * Declaration of a field
+ * 
  * @author Jorge
  * @date 05/01/2023
  */
@@ -39,7 +41,7 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO s.print(visib);
+        s.print(visib.toString());
         s.print(' ');
         type.decompile(s);
         s.print(' ');

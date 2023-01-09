@@ -8,51 +8,51 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
+import org.apache.commons.lang.Validate;
+
 /**
- * Boolean literal
+ * InstanceOf Statment
  *
- * @author gl03
- * @date 01/01/2023
+ * @author Jorge Luri Vañó
+ * @date 09/01/2023
  */
-public class BooleanLiteral extends AbstractExpr {
+public class InstanceOf extends AbstractExpr {
 
-    private boolean value;
+    private final AbstractExpr e;
+    private final AbstractIdentifier type;
 
-    public BooleanLiteral(boolean value) {
-        this.value = value;
-    }
-
-    public boolean getValue() {
-        return value;
+    public InstanceOf(AbstractExpr e, AbstractIdentifier type) {
+        Validate.notNull(e);
+        Validate.notNull(type);
+        this.e = e;
+        this.type = type;
     }
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        // Ajout du décor
-        this.setType(compiler.environmentType.BOOLEAN);
-        return compiler.environmentType.BOOLEAN;
+        throw new UnsupportedOperationException("not yet implemented");
     }
-
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(Boolean.toString(value));
+        s.print("(");
+        e.decompile(s);
+        s.print(" instanceof ");
+        type.decompile(s);
+        s.print(")");
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // leaf node => nothing to do
+        e.iter(f);
+        type.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        // leaf node => nothing to do
-    }
-
-    @Override
-    String prettyPrintNode() {
-        return "BooleanLiteral (" + value + ")";
+        e.prettyPrint(s, prefix, false);
+        type.prettyPrint(s, prefix, true);
     }
 
 }

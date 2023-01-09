@@ -9,7 +9,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 /**
- * TODO Make description
+ * Method asm Body Statement
  *
  * @author gl03
  * @date 05/01/2023
@@ -42,12 +42,12 @@ public class MethodAsmBody extends AbstractMethod {
         code.decompile(s);
         s.print(");");
     }
-    @Override //? Is it necessary ?
+    @Override 
     protected void iterChildren(TreeFunction f) {
-        //TODO
+        code.iterChildren(f);
     }
     @Override //? Is it necessary ?
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        //TODO
+        code.prettyPrintChildren(s, prefix);
     }
 }

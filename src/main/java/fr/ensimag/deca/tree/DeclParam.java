@@ -10,6 +10,8 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 /**
+ * Declaration of a parameter
+ * 
  * @author Jorge
  * @date 08/01/2023
  */
@@ -52,6 +54,6 @@ public class DeclParam extends AbstractDeclParam {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);
-        paramName.prettyPrint(s, prefix, false);
+        paramName.prettyPrint(s, prefix, true);
     }
 }
