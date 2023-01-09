@@ -15,7 +15,8 @@ options {
 
 // Ignore spaces, tabs, newlines and whitespaces
 WS:   ( ' '
-         | '//' .*? '\n' 
+         | '//' .*? '\n'
+         | '//' .*? EOF
          | '/*' .*? '*/'
          | '\t'
          | '\r'
@@ -104,4 +105,4 @@ fragment STRING_CAR: ~('"' | '\\' | '\n') ;
 STRING: '"' (STRING_CAR | '\\"' | '\\\\')*  '"';
 MULTI_LINE_STRING: '"' (STRING_CAR | EOL | '\\"' | '\\\\')*  '"';
 
-DUMMY_TOKEN: .;
+//DUMMY_TOKEN: .;

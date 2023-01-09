@@ -39,7 +39,7 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO s.print(visib);
+        s.print(visib.toString());
         s.print(' ');
         type.decompile(s);
         s.print(' ');
