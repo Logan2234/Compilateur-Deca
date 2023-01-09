@@ -1,22 +1,28 @@
 #!/bin/bash
 
-# On se place dans le répertoire du projet (quel que soit le
-# répertoire d'où est lancé le script) :
+# This script executes test_lex on all <example-name>.deca files in src/test/syntax.
+# The outputs are saved in files named <example-name>-lex.lis to differentiate them
+# from the output files of full-synt.sh which is executed on the same files.
+
+# A file named *_lex.deca denotes an example that is syntaxically invalid but
+# lexically correct.
+
+# Change the current working directory to be in the project's directory
+# wherever the script is executed from
 cd "$(dirname "$0")"/../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
-# valid tests
+#### valid tests ####
 files=$(find ./src/test/deca/syntax/valid -name "*.deca")
-
 
 for test in $files
 do
     # save the output
-    test_lex "$test" > "${test%.deca}".lis 2>&1
+    test_lex "$test" > "${test%.deca}"-lex.lis 2>&1
 
     # check if passed
-    if cat "${test%.deca}".lis | grep -q "$test\|DUMMY_TOKEN:"
+    if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:"
     then
         echo "Error detected on a valid test $test"
         exit 1
@@ -25,19 +31,20 @@ do
     fi
 done
 
-# invalid tests that may be lexically correct
+#### invalid tests ####
+# an invalid test (syntaxically) may be lexically correct
 # a file named *_lex.deca is lexically correct
 files=$(find ./src/test/deca/syntax/invalid -name "*.deca")
 
 for test in $files
 do
     # save the output
-    test_lex "$test" > "${test%.deca}".lis 2>&1
+    test_lex "$test" > "${test%.deca}"-lex.lis 2>&1
 
     if [[ $test =~ .*\_lex.deca ]]
     then
         # the program is lexically correct
-        if cat "${test%.deca}".lis | grep -q "$test\|DUMMY_TOKEN:"
+        if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:"
         then
             echo "Error detected on a valid test $test"
             exit 1
@@ -46,7 +53,7 @@ do
         fi
     else
         # the program is lexically incorrect
-        if cat "${test%.deca}".lis | grep -q "$test\|DUMMY_TOKEN:"
+        if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:"
         then
             echo "Test passed $test"
         else

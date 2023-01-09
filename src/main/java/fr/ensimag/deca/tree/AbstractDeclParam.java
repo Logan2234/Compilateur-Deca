@@ -5,18 +5,17 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
- * Field declaration
+ * Param declaration
  *
  * @author Jorge
- * @date 05/01/2023
+ * @date 08/01/2023
  */
-public abstract class AbstractDeclField extends Tree {
+public abstract class AbstractDeclParam extends Tree {
     
     /**
-     * Implements non-terminal "decl_field" of [SyntaxeContextuelle] in pass 3
+     * Implements non-terminal "decl_param" of [SyntaxeContextuelle] in pass 3
      * @param compiler contains "env_types" attribute
      * @param localEnv 
      *   its "parentEnvironment" corresponds to the "env_exp_sup" attribute
@@ -27,8 +26,7 @@ public abstract class AbstractDeclField extends Tree {
      * @param currentClass 
      *          corresponds to the "class" attribute (null in the main bloc).
      */    
-    protected abstract void verifyDeclField(DecacCompiler compiler,
+    protected abstract void verifyDeclParam(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
-
 }

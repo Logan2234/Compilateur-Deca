@@ -1,0 +1,16 @@
+// Description:
+//    Test d'un while dans lequel on ne rentre pas
+//
+// Resultats:
+//    0
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	int x = 0;
+	while (x == 1){
+		x=x+1;
+    }
+	println(x);
+}

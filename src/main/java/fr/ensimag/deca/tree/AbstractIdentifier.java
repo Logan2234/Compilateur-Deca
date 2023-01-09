@@ -13,7 +13,8 @@ import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.SymbolTable;
 
 /**
- *
+ * Identifier Declaration
+ * 
  * @author gl03
  * @date 01/01/2023
  */
