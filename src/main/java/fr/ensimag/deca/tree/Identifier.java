@@ -169,17 +169,20 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        // ExpDefinition def = localEnv.get(this.name); // ? Utilisation de currentClass éventuelle
-        // Location loc = this.getLocation();
-        // if (def == null) {
-        //     throw new ContextualError("L'identifier n'existe pas", loc);
-        // } // ! Pas sur du tout j'avoue
+        ExpDefinition def = localEnv.get(this.name); // TODO: Utilisation de currentClass éventuelle
+        Location loc = this.getLocation();
+        
+        if (def == null){
+            throw new ContextualError("L'identifier n'existe pas", loc);
+        }
         
         // Ajout du décor
-        // this.setDefinition(def);
-        
-        // return def.getType();
-        throw new UnsupportedOperationException("not yet implemented");
+        Type type = def.getType();
+        this.setDefinition(def);
+        this.setType(type);
+
+        return type;
+        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     /**
@@ -199,7 +202,7 @@ public class Identifier extends AbstractIdentifier {
         } catch (NullPointerException e) {
             throw new ContextualError("Le type \"" + name + "\" n'existe pas (règle 0.2)", loc);
         }
-        
+
         // Ajout du décor
         this.setDefinition(def);
         this.setType(type);
