@@ -1,0 +1,18 @@
+// Description:
+//    tests de programme lexicalement correct.
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 09/01/2023
+//
+/* abcd */
+/* /* */
+/***/
+
+//abc
+    //abcd
+//
+// +-|%
+// \n \t \r

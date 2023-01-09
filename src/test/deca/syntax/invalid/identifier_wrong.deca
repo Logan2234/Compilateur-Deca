@@ -1,0 +1,12 @@
+// Description:
+//    test de programme avec identifiant commençant par un chiffre
+//    lexicalement correct.
+//
+// Resultats:
+//    Ligne 12 : Erreur lexicale
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+1WrongIdentifier
