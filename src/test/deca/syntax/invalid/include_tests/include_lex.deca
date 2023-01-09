@@ -1,5 +1,5 @@
 // Description:
-//    test de programme avec chaines
+//    test de programme avec includes
 //    lexicalement correct
 //
 // Resultats:
@@ -10,17 +10,8 @@
 //    cree le 09/01/2023
 //
 
-"chaine normale"
-"aabb//aabb"
-"/*egegeg*/"
-"aabb//aabb"
-"print asm"
-"rgrdg"
-"'"
-"\""
-"\\"
-"\\\""
-"\\
-\""
-"gggggg
-gggg"
+#include"Math.decah"
+#include  "Math.decah"
+#include    "Math.decah"
+#include    "test"
+#include  "123...._--"
