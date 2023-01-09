@@ -10,6 +10,8 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 /**
+ * Declaration of a parameter
+ * 
  * @author Jorge
  * @date 08/01/2023
  */
