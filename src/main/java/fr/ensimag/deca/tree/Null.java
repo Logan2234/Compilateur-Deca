@@ -9,21 +9,14 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
 /**
- * Boolean literal
+ * Integer literal
  *
- * @author gl03
- * @date 01/01/2023
+ * @author Jorge Luri Vañó
+ * @date 08/01/2023
  */
-public class BooleanLiteral extends AbstractExpr {
+public class Null extends AbstractExpr {
 
-    private boolean value;
-
-    public BooleanLiteral(boolean value) {
-        this.value = value;
-    }
-
-    public boolean getValue() {
-        return value;
+    public Null() {
     }
 
     @Override
@@ -34,8 +27,13 @@ public class BooleanLiteral extends AbstractExpr {
 
 
     @Override
+    String prettyPrintNode() {
+        return "null";
+    }
+
+    @Override
     public void decompile(IndentPrintStream s) {
-        s.print(Boolean.toString(value));
+        s.print("null");
     }
 
     @Override
@@ -46,11 +44,6 @@ public class BooleanLiteral extends AbstractExpr {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // leaf node => nothing to do
-    }
-
-    @Override
-    String prettyPrintNode() {
-        return "BooleanLiteral (" + value + ")";
     }
 
 }

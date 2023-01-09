@@ -6,7 +6,7 @@ import fr.ensimag.deca.context.ContextualError;
 /**
  * Entry point for contextual verifications and code generation from outside the package.
  * 
- * @author gl03
+ * @author Jorge
  * @date 05/01/2023
  *
  */

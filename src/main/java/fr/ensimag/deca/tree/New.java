@@ -8,22 +8,21 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
+import org.apache.commons.lang.Validate;
+
 /**
- * Boolean literal
+ * New statment
  *
- * @author gl03
- * @date 01/01/2023
+ * @author Jorge Luri Vañó
+ * @date 09/01/2023
  */
-public class BooleanLiteral extends AbstractExpr {
+public class New extends AbstractExpr {
 
-    private boolean value;
+    private final AbstractIdentifier classe; 
 
-    public BooleanLiteral(boolean value) {
-        this.value = value;
-    }
-
-    public boolean getValue() {
-        return value;
+    public New(AbstractIdentifier classe) {
+        Validate.notNull(classe);
+        this.classe = classe;
     }
 
     @Override
@@ -32,25 +31,21 @@ public class BooleanLiteral extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
-
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(Boolean.toString(value));
+        s.print("new");
+        classe.decompile(s);
+        s.print("()");
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // leaf node => nothing to do
+        classe.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        // leaf node => nothing to do
-    }
-
-    @Override
-    String prettyPrintNode() {
-        return "BooleanLiteral (" + value + ")";
+        classe.prettyPrint(s, prefix, true);
     }
 
 }

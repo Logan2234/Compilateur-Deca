@@ -2,11 +2,11 @@
 //    Programme minimaliste utilisant println.
 //
 // Resultats:
-//    Hello
+//    ok
 //
 // Historique:
 //    cree le 01/01/2023
-
+//
 {
         println("Hello");
 }

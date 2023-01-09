@@ -7,16 +7,16 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
- * List of fields.
+ * List of methods.
  * 
  * @author Jorge
  * @date 05/01/2023
  */
-public class ListDeclField extends TreeList<AbstractDeclField> {
+public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        for (AbstractDeclField i : getList()) {
+        for (AbstractDeclMethod i : getList()) {
             i.decompile(s);
             s.println();
         }
@@ -24,7 +24,7 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     }
 
     /**
-     * Implements non-terminal "list_decl_var" of [SyntaxeContextuelle] in pass 3
+     * Implements non-terminal "list_decl_method" of [SyntaxeContextuelle] in pass 3
      * @param compiler contains the "env_types" attribute
      * @param localEnv 
      *   its "parentEnvironment" corresponds to "env_exp_sup" attribute
@@ -35,7 +35,7 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
      * @param currentClass 
      *          corresponds to "class" attribute (null in the main bloc).
      */    
-    void verifyListDeclField(DecacCompiler compiler, EnvironmentExp localEnv,
+    void verifyListDeclMethod(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
     }
 

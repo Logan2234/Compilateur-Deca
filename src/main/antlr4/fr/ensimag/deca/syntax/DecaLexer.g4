@@ -15,7 +15,8 @@ options {
 
 // Ignore spaces, tabs, newlines and whitespaces
 WS:   ( ' '
-         | '//' .*? '\n' 
+         | '//' .*? '\n'
+         | '//' .*? EOF
          | '/*' .*? '*/'
          | '\t'
          | '\r'
@@ -23,36 +24,55 @@ WS:   ( ' '
       ) { skip(); // avoid producing a token 
       };
 
-OBRACE: '{';
-CBRACE: '}';
-   
-IF: 'if';
+// Mots réservés
+
+ASM: 'asm';
+CLASS: 'class';
+EXTENDS: 'extends';
 ELSE: 'else';
-WHILE: 'while';
-OR: '||';
-AND: '&&';
-TRUE: 'true';
 FALSE: 'false';
+IF: 'if';
+INSTANCEOF: 'instanceof';
+NEW: 'new';
+NULL: 'null';
+READINT: 'readInt';
+READFLOAT: 'readFloat';
 PRINT: 'print';
 PRINTLN: 'println';
-PRINTX: 'printx';
 PRINTLNX: 'printlnx';
-SEMI: ';';
-EOL: '\n';
-COMMA: ','; 
-EQUALS: '=';
-OPARENT: '(';
-CPARENT: ')';
-
+PRINTX: 'printx';
+PROTECTED: 'protected';
 RETURN: 'return';
-EQEQ: '=='; 
-NEQ: '!=';
-LEQ: '<=';
-GEQ: '>=';
+THIS: 'this';
+TRUE: 'true';
+WHILE: 'while';
+
+// Symboles spéciaux
+
 GT: '>';
 LT: '<';
-INSTANCEOF: 'instanceof'; 
-INT: DIGIT+;
+EQUALS: '=';
+PLUS: '+';
+MINUS: '-';
+TIMES: '*';
+SLASH: '/';
+PERCENT: '%';
+DOT: '.';
+COMMA: ','; 
+OPARENT: '(';
+CPARENT: ')';
+OBRACE: '{';
+CBRACE: '}';
+EXCLAM: '!';
+SEMI: ';';
+EQEQ: '=='; 
+NEQ: '!=';
+GEQ: '>=';
+LEQ: '<=';
+AND: '&&';
+OR: '||';
+
+EOL: '\n';
 
 fragment POSITIVE_DIGIT: '1' .. '9';
 fragment DIGIT : ('0'
@@ -72,31 +92,23 @@ fragment DIGITHEX : ('0'.. '9'
                      );
 fragment NUMHEX : DIGITHEX+;
 fragment FLOATHEX : ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN INT ('F' | 'f')?;
+
+INT: DIGIT+;
 FLOAT : FLOATDEC | FLOATHEX;
 
 IDENT: (LETTER | '$' | '_')(LETTER | DIGIT | '$' | '_')*;
 
-PLUS: '+';
-MINUS: '-';
-TIMES: '*';
-SLASH: '/';
-PERCENT: '%';
-EXCLAM: '!';
-DOT: '.';
-READINT: 'readInt';
-READFLOAT: 'readFloat';
-NEW: 'new';
-THIS: 'this';
-NULL: 'null';
-CLASS: 'class';
-EXTENDS: 'extends';
-PROTECTED: 'protected';
-ASM: 'asm';
-
 fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
-INCLUDE: '#include' (' ')* '"' FILENAME '"';
+INCLUDE: ('#include' (' ')* '"' FILENAME '"')
+         {  String s = getText();
+            int startIndex = s.indexOf('"')-1;
+            int endIndex = s.length();
+            String file = s.substring(startIndex + 1, endIndex);
+            doInclude(file);
+         };
 
 fragment STRING_CAR: ~('"' | '\\' | '\n') ;
 STRING: '"' (STRING_CAR | '\\"' | '\\\\')*  '"';
 MULTI_LINE_STRING: '"' (STRING_CAR | EOL | '\\"' | '\\\\')*  '"';
-DUMMY_TOKEN: .;
+
+//DUMMY_TOKEN: .;

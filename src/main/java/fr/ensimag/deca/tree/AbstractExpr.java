@@ -34,6 +34,13 @@ public abstract class AbstractExpr extends AbstractInst {
     boolean isImplicit() {
         return false;
     }
+    /* 
+     * Used by This class for telling if the This is implicit or not. 
+     * getImpl return false and it will be override by This class
+     * 
+     * @return false if the expression is not a This class and true if the expression is an implicit This
+     */
+    public boolean getImpl(){return false;}
 
     /**
      * Get the type decoration associated to this expression (i.e. the type computed by contextual verification).
