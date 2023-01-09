@@ -39,7 +39,7 @@ public class DeclVar extends AbstractDeclVar {
         Type type = this.type.getType();
         
         if (type.isVoid())
-        throw new ContextualError("Une variable ne peut pas être de type void (règle 3.17)", this.getLocation());
+        throw new ContextualError("A variable can't be void (rule 3.17)", this.getLocation());
         
         try {
             ExpDefinition def = new VariableDefinition(type, this.getLocation());
@@ -48,7 +48,7 @@ public class DeclVar extends AbstractDeclVar {
             varName.setType(type);
         }
         catch (DoubleDefException e) {
-            throw new ContextualError("La variable \"" + this.varName.getName().getName() + "\" a déjà été déclarée (règle 3.17)", this.getLocation());
+            throw new ContextualError("A variable \"" + this.varName.getName().getName() + "\" has already been declared (rule 3.17)", this.getLocation());
         }
         
         initialization.verifyInitialization(compiler, type, localEnv, currentClass);

@@ -23,7 +23,7 @@ public class UnaryMinus extends AbstractUnaryExpr {
         Location loc = this.getLocation();
 
         if (!type.isInt() && !type.isFloat())
-            throw new ContextualError("Un moins unaire ne peut se faire qu'avec un int ou un float (règle 3.37)", loc);
+            throw new ContextualError("A unary minus is only followed by an int or a float (rule 3.37)", loc);
 
         // Ajout du décor
         this.setType(type);

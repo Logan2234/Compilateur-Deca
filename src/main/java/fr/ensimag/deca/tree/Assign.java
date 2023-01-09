@@ -38,7 +38,7 @@ public class Assign extends AbstractBinaryExpr {
             return type;
         }
         // TODO: Tester le cas où type2 est une sous classe de type1
-        throw new ContextualError("Une assignation entre un " + type + " et un " + type2 + " n'est pas valide (règle 3.32)", this.getLocation());
+        throw new ContextualError("An assignation between a " + type + " and a " + type2 + " is not possible (rule 3.32)", this.getLocation());
     }
 
     @Override
