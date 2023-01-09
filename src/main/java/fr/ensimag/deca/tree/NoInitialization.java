@@ -6,6 +6,10 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.Register;
+
 import java.io.PrintStream;
 
 /**
@@ -43,6 +47,13 @@ public class NoInitialization extends AbstractInitialization {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // leaf node => nothing to do
+    }
+
+    @Override
+    public void codeGenInit(DecacCompiler compiler) {
+        // push a zero to the stack : LOAD #0 R0; PUSH R0;
+        compiler.addInstruction(new LOAD(0, Register.R0));
+        compiler.addInstruction(new PUSH(Register.R0));
     }
 
 }

@@ -60,6 +60,11 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     public void codeGenDeclVar(DecacCompiler compiler, RegisterOffset register) {
         // store the register in the definition of the variable, then assign it with the initialization.
+        type.getDefinition().setDAddr(register);
+        // store the variable at the address now, using a push as we are declaring all variables.
+        // if there is an init, compute the init and get the register in which it was given.
+
+        // if no init, lets push default values for each type.
     }
 
     

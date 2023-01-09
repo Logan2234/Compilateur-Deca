@@ -54,4 +54,9 @@ public class Initialization extends AbstractInitialization {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         expression.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    public void codeGenInit(DecacCompiler compiler) {
+        // call the code gen of the expression, and push it on the stack ?
+    }
 }
