@@ -38,6 +38,11 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
+    protected void codeGenPrint(DecacCompiler compiler) {
+        // put value in the R1 register and print it out with WINT
+    }
+
+    @Override
     public void decompile(IndentPrintStream s) {
         s.print(Integer.toString(value));
     }

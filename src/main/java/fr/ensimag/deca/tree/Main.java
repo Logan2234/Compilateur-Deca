@@ -27,14 +27,17 @@ public class Main extends AbstractMain {
     protected void verifyMain(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify Main: start");
         // A FAIRE: Appeler méthodes "verify*" de ListDeclVarSet et ListInst.
-        // declVariables.verifyListDeclVariable(compiler, null, null); // TODO: Remplacer les NULLS
+        // declVariables.verifyListDeclVariable(compiler, null, null); // todo : Remplacer les NULLS
         insts.verifyListInst(compiler, null, null, null);
         LOG.debug("verify Main: end");
     }
 
     @Override
     protected void codeGenMain(DecacCompiler compiler) {
-        // A FAIRE: traiter les déclarations de variables.
+        // todo : var decarations. 
+        // ? Where to write var pointers ? where to see where they are declared ?
+        // ? compiler.addComment("Beginning of main variable declaration:");
+        
         compiler.addComment("Beginning of main instructions:");
         insts.codeGenListInst(compiler);
     }

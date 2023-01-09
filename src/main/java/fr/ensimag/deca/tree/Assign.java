@@ -32,6 +32,12 @@ public class Assign extends AbstractBinaryExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    public void codeGenInst(DecacCompiler compiler) {
+        // set left operand to be equal to right operand
+        // so compute right operand in register, then save it in memory
+    }
+
 
     @Override
     protected String getOperatorName() {
