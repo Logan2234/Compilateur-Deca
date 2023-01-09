@@ -1,0 +1,11 @@
+// Description:
+//    utilisation de ' a la place de "
+//
+// Resultats:
+//    Ligne 11 : Erreur lexicale
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+#include 'Math.decah'
