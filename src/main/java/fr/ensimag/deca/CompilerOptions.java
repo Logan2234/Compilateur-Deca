@@ -98,7 +98,7 @@ public class CompilerOptions {
                     case "-b": {
                         // -b an only be used as an alone option, so checks args length is 1
                         if (args.length > 1) {
-                            throw new CLIException("\u001B[31m/!\\ The option '-b' can only be used alone.\u001B[37m");
+                            throw new CLIException("\u001B[31m/!\\ The option -b can only be used alone.\u001B[37m");
                         }
                         printBanner = true;
                         break;
@@ -114,9 +114,11 @@ public class CompilerOptions {
                                 /* ?? maybe throw don't repeat args exception ? */ break;
                             }
                             case Verify: {
-                                throw new CLIException("L'option -p est incompatible avec l'opton -v.");
+                                throw new CLIException(
+                                        "\u001B[31m/!\\ The option -p is not compatible with the -v option.\u001B[37m");
                             }
                         }
+                        break;
                     }
                     case "-v": {
                         // check there were no -p option
@@ -126,12 +128,14 @@ public class CompilerOptions {
                                 break;
                             }
                             case ParseOnly: {
-                                throw new CLIException("L'option -v est incompatible avec l'opton -p.");
+                                throw new CLIException(
+                                        "\u001B[31m/!\\ The option -v is not compatible with the -p option.\u001B[37m");
                             }
                             case Verify: {
                                 /* ?? maybe throw don't repeat args exception ? */ break;
                             }
                         }
+                        break;
                     }
                     case "-n": {
                         runTestChecks = false;
@@ -153,16 +157,8 @@ public class CompilerOptions {
                         }
                     }
                     case "-d": {
-                        // check if we are not already on max debug level
-                        if (debug < MAX_DEBUG_MODE) {
-                            // increase debug level
-                            debug += 1;
-                            break;
-                        } else {
-                            throw new CLIException(
-                                    "Le niveau maximum de debug a été dépassé. L'option '-d' ne peut être donnée que "
-                                            + MAX_DEBUG_MODE + " fois.");
-                        }
+                        debug++;
+                        break;
                     }
                     case "-P": {
                         parallel = true;
@@ -224,13 +220,13 @@ public class CompilerOptions {
         System.out.println();
         System.out.println("Correct usage: decac [[-p | -v] [-n] [-r X] [-d]* [-P] [-w] <fichier deca>...] | [-b]");
         System.out.println();
-        System.out.println("-b (banner) : display group name");
-        System.out.println("-p (parse) : only build the tree, and decompile it");
-        System.out.println("-v (verifiation) : only verify, do not output files");
-        System.out.println("-n (no check) : remove test on execution (1.11, 1.13)");
-        System.out.println("-r X (register) : limits the use of registers R0 to RX-1 (with 4<=X<=16)");
-        System.out.println("-d (debug) : display debug trace. Can be repeated.");
-        System.out.println("-P (parallel) compile all deca files in parallel.");
+        System.out.println("-b (banner)              : display group name");
+        System.out.println("-p (parse)               : only build the tree, and decompile it");
+        System.out.println("-v (verifiation)         : only verify, do not output files");
+        System.out.println("-n (no check)            : remove test on execution (1.11, 1.13)");
+        System.out.println("-r X (register)          : limits the use of registers R0 to RX-1 (with 4<=X<=16)");
+        System.out.println("-d (debug)               : display debug trace. Can be repeated.");
+        System.out.println("-P (parallel)            : compile all deca files in parallel.");
         System.out.println("-w (warnings) (optional) : display warnings");
         System.out.println();
         System.out.println("Note : -p and -v are incompatible.");
