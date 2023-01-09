@@ -43,7 +43,7 @@ public class DeclVar extends AbstractDeclVar {
         throw new ContextualError("Une variable ne peut pas être de type void (règle 3.17)", this.getLocation());
         
         try {
-            ExpDefinition def = new VariableDefinition(type, getLocation());
+            ExpDefinition def = new VariableDefinition(type, this.getLocation());
             localEnv.declare(this.varName.getName(), def);
             varName.setDefinition(def);
             varName.setType(type);
