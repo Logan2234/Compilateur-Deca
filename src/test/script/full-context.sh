@@ -23,7 +23,7 @@ clear
 
 echo -e "${GREENBOLD} \n============================= Testing valid tests =============================\n ${NOCOLOR}"
 
-files=$(find ./src/test/deca/context/valid -name "*.deca")
+files=$(find ./src/test/deca/context/valid -maxdepth 1 -name "*.deca")
 
 for test in $files
 do
@@ -40,7 +40,7 @@ done
 
 echo -e "${GREENBOLD} \n============================= Testing invalid tests =============================\n ${NOCOLOR}"
 
-files=$(find ./src/test/deca/context/invalid -name "*.deca")
+files=$(find ./src/test/deca/context/invalid -maxdepth 1 -name "*.deca")
 
 for test in $files
 do
