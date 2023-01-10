@@ -97,14 +97,20 @@ public abstract class AbstractExpr extends AbstractInst {
         Type rtype = this.verifyExpr(compiler, localEnv, currentClass);
 
         // Ajout du décor et renvoie du type
-        if (rtype.sameType(expectedType) || (expectedType.isFloat() && rtype.isInt())) {
+        if (rtype.sameType(expectedType)) {
             this.setType(type);
-            // TODO: Gérer l'histoire du ConvFloat
             return this;
         }
 
+        if (expectedType.isFloat() && rtype.isInt())
+        {
+            AbstractExpr convFloat = new ConvFloat(this);
+            convFloat.verifyExpr(compiler, localEnv, currentClass);
+            return convFloat;
+        }
+
         throw new ContextualError(
-                "Une assignation entre un " + expectedType + " et un " + rtype + " n'est pas valide (règle 3.32)",
+            "An assignation between a " + expectedType + " and a " + rtype + " is not possible (rule 3.32)",
                 this.getLocation());
     }
 
@@ -112,7 +118,6 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type returnType) throws ContextualError {
         verifyExpr(compiler, localEnv, currentClass);
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     /**
@@ -128,9 +133,8 @@ public abstract class AbstractExpr extends AbstractInst {
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         this.verifyExpr(compiler, localEnv, currentClass);
-        if (!this.getType().isBoolean()) {
-            throw new ContextualError("La condition n'est pas booléenne", this.getLocation());
-        }
+        if (!this.getType().isBoolean())
+            throw new ContextualError("The condition is not a boolean (rule 3.29)", this.getLocation());
     }
 
     /**

@@ -1,5 +1,5 @@
 // Description:
-//    déclare une string
+//    Assign un entier avec une somme
 //
 // Resultats:
 //    //
@@ -8,5 +8,5 @@
 //    cree le 06/01/2023
 
 {
-    string i;
+    int i = 2+5;
 }

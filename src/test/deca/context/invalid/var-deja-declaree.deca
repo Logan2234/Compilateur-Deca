@@ -1,0 +1,12 @@
+// Description:
+//    Condition de la règle 3.17 non respectée 
+//
+// Resultats:
+//    Erreur contextuelle
+//    Ligne 11 : A variable "i" has already been declared (rule 3.17)
+//
+
+{
+    int i;
+    int i;    
+}

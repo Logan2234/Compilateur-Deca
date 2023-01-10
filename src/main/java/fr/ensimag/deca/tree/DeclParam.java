@@ -17,7 +17,6 @@ import org.apache.commons.lang.Validate;
  */
 public class DeclParam extends AbstractDeclParam {
 
-    
     final private AbstractIdentifier type;
     final private AbstractIdentifier paramName;
 
@@ -34,23 +33,19 @@ public class DeclParam extends AbstractDeclParam {
             throws ContextualError {
     }
 
-    
     @Override
     public void decompile(IndentPrintStream s) {
         type.decompile(s);
         s.print(' ');
         paramName.decompile(s);
-        
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
-    protected
-    void iterChildren(TreeFunction f) {
+    protected void iterChildren(TreeFunction f) {
         type.iter(f);
         paramName.iter(f);
     }
-    
+
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);

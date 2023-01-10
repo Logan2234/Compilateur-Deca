@@ -88,8 +88,6 @@ public class IfThenElse extends AbstractInst {
         elseBranch.decompile(s);
         s.unindent();
         s.print("}");
-
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
