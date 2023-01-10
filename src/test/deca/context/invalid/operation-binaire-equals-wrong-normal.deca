@@ -2,7 +2,8 @@
 //    Test 3.33 fail avec equals avec deux types classiques
 //
 // Resultats:
-//    Ligne 11: Equals ne s'utilise qu'avec des int, des float, des booléens ou des classes.
+//    Erreur contextuelle
+//    Ligne 12 : The right operand of a comparaison operation has to be an int or a float (rule 3.33)
 //
 // Historique:
 //    cree le 06/01/2023

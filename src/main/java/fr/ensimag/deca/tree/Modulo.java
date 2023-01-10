@@ -20,12 +20,12 @@ public class Modulo extends AbstractOpArith {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeLeft = this.getLeftOperand().getType();
-        Type typeRight = this.getRightOperand().getType();
+        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
         Location loc = this.getLocation();
 
         if (!typeLeft.isInt() || !typeRight.isInt())
-            throw new ContextualError("Un modulo ne peut être fait qu'entre deux entiers (règle 3.33)", loc);
+            throw new ContextualError("A modulo can only be done between 2 int (rule 3.33)", loc);
         
         // Ajout du décor
         this.setType(typeLeft);

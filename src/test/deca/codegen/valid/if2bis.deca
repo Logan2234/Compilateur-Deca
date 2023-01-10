@@ -11,7 +11,7 @@
 	boolean test1 = true;
     boolean test2 = false;
     if (test1 || test2) {
-        println(“ok”);
+        println("ok");
     } else {
         println("ko");
     }

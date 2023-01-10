@@ -2,7 +2,8 @@
 //    Test 3.33 fail avec multiply 
 //
 // Resultats:
-//    Ligne 11: Multiply ne s'utilise qu'avec des int ou des float.
+//    Erreur contextuelle
+//    Ligne 12 : The left operand of an arithmetical operation has to be an int or a float (rule 3.33)
 //
 // Historique:
 //    cree le 06/01/2023

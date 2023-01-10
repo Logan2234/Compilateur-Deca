@@ -24,7 +24,7 @@ public class Not extends AbstractUnaryExpr {
         Location loc = this.getLocation();
 
         if (!type.isBoolean())
-            throw new ContextualError("Un not ne peut être fait qu'avec un booléen (règle 3.37)", loc);
+            throw new ContextualError("A not is only followed by a boolean (rule 3.37)", loc);
         
         // Ajout du décor
         this.setType(type);
