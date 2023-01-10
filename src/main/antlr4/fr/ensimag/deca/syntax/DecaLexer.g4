@@ -19,7 +19,9 @@ WS:   ( ' '
          | '\t'
          | '\r'
          | '\n'
-      ) { skip(); // avoid producing a token 
+      )
+      {
+         skip(); // avoid producing a token 
       };
 
 // Reserved words
@@ -93,8 +95,10 @@ IDENT: (LETTER | '$' | '_')(LETTER | DIGIT | '$' | '_')*;
 
 // Include
 fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
+
 INCLUDE: ('#include' (' ')* '"' FILENAME '"')
-         {  String s = getText();
+         {
+            String s = getText();
             int startIndex = s.indexOf('"')-1;
             int endIndex = s.length();
             String file = s.substring(startIndex + 1, endIndex);
@@ -102,7 +106,8 @@ INCLUDE: ('#include' (' ')* '"' FILENAME '"')
          };
 
 // String
-fragment STRING_CAR: ~('"' | '\\' | '\n') ;
+fragment STRING_CAR: ~('"' | '\\' | '\n');
+
 STRING: '"' (STRING_CAR | '\\"' | '\\\\')*  '"';
 MULTI_LINE_STRING: '"' (STRING_CAR | EOL | '\\"' | '\\\\')*  '"';
 
