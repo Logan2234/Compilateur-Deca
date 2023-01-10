@@ -38,7 +38,7 @@ public class UnaryMinus extends AbstractUnaryExpr {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler, GPRegister resulRegister) {
+    public void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister) {
         // put opposite of self in the register
         compiler.addInstruction(new OPP(resulRegister, resulRegister));
     }

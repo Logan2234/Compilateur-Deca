@@ -3,6 +3,8 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.DIV;
+import fr.ensimag.ima.pseudocode.instructions.QUO;
 
 /**
  *
@@ -22,6 +24,13 @@ public class Divide extends AbstractOpArith {
 
     @Override
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // depending on self type, float or int div
+        // todo : in both case, divide by zero error gen
+        if(getType().isInt()) {
+            compiler.addInstruction(new QUO(dval, register));
+        }
+        else if(getType().isFloat()) {
+            compiler.addInstruction(new DIV(dval, register));
+        }
     }
 }

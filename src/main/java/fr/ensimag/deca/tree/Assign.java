@@ -3,6 +3,9 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -55,12 +58,19 @@ public class Assign extends AbstractBinaryExpr {
         // put the result of the right value in a register
         GPRegister resultRegister = compiler.allocateRegister();
         if(resultRegister == null) {
-            // todo : free a register then restore it
+            // free r2 and use it
+            compiler.addInstruction(new PUSH(Register.getR(2)));
+            this.getRightOperand().codeGenExpr(compiler, Register.getR(2));
+            compiler.addInstruction(new STORE(Register.getR(2), getLeftOperand().getDefinition().getDAddr()));
+            // restore r2
+            compiler.addInstruction(new POP(Register.getR(2)));
         }
         else {
             // compute right expression in the register
             this.getRightOperand().codeGenExpr(compiler, resultRegister);
             compiler.addInstruction(new STORE(resultRegister, getLeftOperand().getDefinition().getDAddr()));
+            // free the alocated register
+            compiler.freeRegister(resultRegister);
         }
     }
 

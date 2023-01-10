@@ -1,6 +1,9 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.SNE;
+import fr.ensimag.ima.pseudocode.instructions.SUB;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -34,5 +37,13 @@ public class Not extends AbstractUnaryExpr {
     @Override
     protected String getOperatorName() {
         return "!";
+    }
+
+    @Override
+    public void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister) {
+        // result expression is a bool and have been put in the register.
+        // let's sub 1 and check neq
+        compiler.addInstruction(new SUB(resulRegister, resulRegister));
+        compiler.addInstruction(new SNE(resulRegister));
     }
 }
