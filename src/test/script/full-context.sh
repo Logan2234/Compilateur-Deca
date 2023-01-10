@@ -85,5 +85,5 @@ then
 else
     echo -e "\n${RED} Invalid test passed: "
     printf %2.2f $INVALID_PASSED_PERCENTAGE
-    echo "%\n"
+    echo -e "%\n\n"
 fi

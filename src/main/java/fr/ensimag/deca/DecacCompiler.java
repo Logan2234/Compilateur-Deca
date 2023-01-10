@@ -50,7 +50,11 @@ public class DecacCompiler {
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
         this.compilerOptions = compilerOptions;
-        availableRegisters = new boolean[compilerOptions.getUsedRegisterNumber() - 2];
+        if (compilerOptions != null) {
+            availableRegisters = new boolean[compilerOptions.getUsedRegisterNumber() - 2];
+        } else {
+            availableRegisters = new boolean[14];
+        }
         for (int i = 0; i < availableRegisters.length; i++) {
             availableRegisters[i] = true;
         }
@@ -136,13 +140,14 @@ public class DecacCompiler {
 
     /**
      * Get a available register.
+     * 
      * @return the register we can use. Can be null if none are.
      */
     public GPRegister allocateRegister() {
-        for(int i = 0; i < availableRegisters.length - 2; i++) {
-            if(availableRegisters[i + 2]) {
+        for (int i = 0; i < availableRegisters.length - 2; i++) {
+            if (availableRegisters[i + 2]) {
                 availableRegisters[i + 2] = false;
-                return GPRegister.getR(i+2);
+                return GPRegister.getR(i + 2);
             }
         }
         return null;
@@ -150,13 +155,12 @@ public class DecacCompiler {
 
     /**
      * Set the given register as not used anymore.
+     * 
      * @param register
      */
     public void freeRegister(GPRegister register) {
         availableRegisters[register.getNumber()] = true;
     }
-
-
 
     /** The global environment for types (and the symbolTable) */
     public final SymbolTable symbolTable = new SymbolTable();

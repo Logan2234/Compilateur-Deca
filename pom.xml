@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                            http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.ensimag</groupId>
     <artifactId>Deca</artifactId>
@@ -195,9 +195,9 @@
                         <configuration>
                             <executable>./src/test/script/basic-lex.sh</executable>
                             <!-- If we need to pass arguments :
-                                 <arguments>
-                                 <argument>...</argument>
-                                 </arguments>
+                                <arguments>
+                                <argument>...</argument>
+                                </arguments>
                             -->
                         </configuration>
                         <phase>test</phase>
@@ -263,6 +263,19 @@
                         <id>common-tests</id>
                         <configuration>
                             <executable>./src/test/script/common-tests.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>full-context</id>
+                        <configuration>
+                            <executable>./src/test/script/full-context.sh</executable>
+                        <arguments>
+                            <argument>--maven</argument>
+                        </arguments>
                         </configuration>
                         <phase>test</phase>
                         <goals>
@@ -449,7 +462,6 @@
                     <threshold>Exp</threshold>
                 </configuration>
             </plugin>
-      
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
