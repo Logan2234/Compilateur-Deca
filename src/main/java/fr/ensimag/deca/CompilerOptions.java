@@ -222,7 +222,7 @@ public class CompilerOptions {
         System.out.println();
         System.out.println("-b (banner)              : display group name");
         System.out.println("-p (parse)               : only build the tree, and decompile it");
-        System.out.println("-v (verifiation)         : only verify, do not output files");
+        System.out.println("-v (verification)        : only verify, do not output files");
         System.out.println("-n (no check)            : remove test on execution (1.11, 1.13)");
         System.out.println("-r X (register)          : limits the use of registers R0 to RX-1 (with 4<=X<=16)");
         System.out.println("-d (debug)               : display debug trace. Can be repeated.");
