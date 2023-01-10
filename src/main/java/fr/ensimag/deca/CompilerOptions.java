@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class CompilerOptions {
     public static final int QUIET = 0;
-    public static final int INFO  = 1;
+    public static final int INFO = 1;
     public static final int DEBUG = 2;
     public static final int TRACE = 3;
     // goes up to 4 because defaults to "all" in logger level
@@ -34,7 +34,7 @@ public class CompilerOptions {
     public boolean getPrintBanner() {
         return printBanner;
     }
-    
+
     public List<File> getSourceFiles() {
         return Collections.unmodifiableList(sourceFiles);
     }
@@ -71,13 +71,12 @@ public class CompilerOptions {
     private int usedRegisterNumber = 16;
     private boolean displayWarnings = false;
 
-    
     public void parseArgs(String[] args) throws CLIException {
-        
-        // parse each argument with the following rules: 
+
+        // parse each argument with the following rules:
 
         // [[-p | -v] [-n] [-r X] [-d]* [-P] [-w] <fichier deca>...] | [-b]
-        
+
         // -b (banner) : display group name
         // -p (parse) : only build the tree, and decompile it
         // -v (verifiation) : only verify, do not output files
@@ -98,27 +97,45 @@ public class CompilerOptions {
                 switch (current_arg) {
                     case "-b": {
                         // -b an only be used as an alone option, so checks args length is 1
-                        if(args.length > 1) {
-                            throw new CLIException("L'option '-b' ne peux que être utilisé seule.");
+                        if (args.length > 1) {
+                            throw new CLIException("\u001B[31m/!\\ The option -b can only be used alone.\u001B[37m");
                         }
                         printBanner = true;
                         break;
                     }
                     case "-p": {
                         // check there were no -v option
-                        switch(compileMode) {
-                            case Compile : {compileMode = CompileMode.ParseOnly; break;}
-                            case ParseOnly : {/* ?? maybe throw don't repeat args exception ?*/ break;}
-                            case Verify : { throw new CLIException("L'option -p est incompatible avec l'opton -v.");}
+                        switch (compileMode) {
+                            case Compile: {
+                                compileMode = CompileMode.ParseOnly;
+                                break;
+                            }
+                            case ParseOnly: {
+                                /* ?? maybe throw don't repeat args exception ? */ break;
+                            }
+                            case Verify: {
+                                throw new CLIException(
+                                        "\u001B[31m/!\\ The option -p is not compatible with the -v option.\u001B[37m");
+                            }
                         }
+                        break;
                     }
                     case "-v": {
                         // check there were no -p option
-                        switch(compileMode) {
-                            case Compile : {compileMode = CompileMode.Verify; break;}
-                            case ParseOnly : {throw new CLIException("L'option -v est incompatible avec l'opton -p.");}
-                            case Verify : { /* ?? maybe throw don't repeat args exception ?*/ break; }
+                        switch (compileMode) {
+                            case Compile: {
+                                compileMode = CompileMode.Verify;
+                                break;
+                            }
+                            case ParseOnly: {
+                                throw new CLIException(
+                                        "\u001B[31m/!\\ The option -v is not compatible with the -p option.\u001B[37m");
+                            }
+                            case Verify: {
+                                /* ?? maybe throw don't repeat args exception ? */ break;
+                            }
                         }
+                        break;
                     }
                     case "-n": {
                         runTestChecks = false;
@@ -128,26 +145,20 @@ public class CompilerOptions {
                         // try to read the register number
                         try {
                             int registerNumber = Integer.parseInt(current_arg.split(" ")[1]);
-                            if(registerNumber < 4 || registerNumber > 16) {
-                                throw new CLIException("le nombre de registre à utiliser (spécifié avec -r) doit être compris entre 4 et 16.");
+                            if (registerNumber < 4 || registerNumber > 16) {
+                                throw new CLIException(
+                                        "le nombre de registre à utiliser (spécifié avec -r) doit être compris entre 4 et 16.");
                             }
                             usedRegisterNumber = registerNumber;
                             break;
-                        }
-                        catch(NumberFormatException e) {
-                            throw new CLIException("L'option '-r' doit être suivie du nombre de registre à utiliser (compris entre 4 et 16).");
+                        } catch (NumberFormatException e) {
+                            throw new CLIException(
+                                    "L'option '-r' doit être suivie du nombre de registre à utiliser (compris entre 4 et 16).");
                         }
                     }
                     case "-d": {
-                        // check if we are not already on max debug level
-                        if(debug < MAX_DEBUG_MODE) {
-                            // increase debug level
-                            debug += 1;
-                            break;
-                        }
-                        else {
-                            throw new CLIException("Le niveau maximum de debug a été dépassé. L'option '-d' ne peut être donnée que " + MAX_DEBUG_MODE + " fois.");
-                        }
+                        debug++;
+                        break;
                     }
                     case "-P": {
                         parallel = true;
@@ -157,51 +168,68 @@ public class CompilerOptions {
                         displayWarnings = true;
                     }
                 }
-            }
-            else {
+                arg_index++;
+            } else {
                 // finished options, now on parsing files
                 break;
             }
         }
 
         // now let's read the files for the remaining arguments
-        if(!printBanner) {
+        if (!printBanner) {
             // there are files to read !
-            for(int i = arg_index; i < args.length; i++) {
+            for (int i = arg_index; i < args.length; i++) {
                 // check the file extension is .deca
-                if(args[i].endsWith(".deca")) {
+                if (args[i].endsWith(".deca")) {
                     // read the file
                     sourceFiles.add(new File(args[i]));
-                }           
+                }
+            }
+
+            Logger logger = Logger.getRootLogger();
+            // map command-line debug option to log4j's level.
+            switch (getDebug()) {
+                case QUIET:
+                    break; // keep default
+                case INFO:
+                    logger.setLevel(Level.INFO);
+                    break;
+                case DEBUG:
+                    logger.setLevel(Level.DEBUG);
+                    break;
+                case TRACE:
+                    logger.setLevel(Level.TRACE);
+                    break;
+                default:
+                    logger.setLevel(Level.ALL);
+                    break;
+            }
+            logger.info("Application-wide trace level set to " + logger.getLevel());
+
+            boolean assertsEnabled = false;
+            assert assertsEnabled = true; // Intentional side effect!!!
+            if (assertsEnabled) {
+                logger.info("Java assertions enabled");
+            } else {
+                logger.info("Java assertions disabled");
             }
         }
-
-        Logger logger = Logger.getRootLogger();
-        // map command-line debug option to log4j's level.
-        switch (getDebug()) {
-        case QUIET: break; // keep default
-        case INFO:
-            logger.setLevel(Level.INFO); break;
-        case DEBUG:
-            logger.setLevel(Level.DEBUG); break;
-        case TRACE:
-            logger.setLevel(Level.TRACE); break;
-        default:
-            logger.setLevel(Level.ALL); break;
-        }
-        logger.info("Application-wide trace level set to " + logger.getLevel());
-
-        boolean assertsEnabled = false;
-        assert assertsEnabled = true; // Intentional side effect!!!
-        if (assertsEnabled) {
-            logger.info("Java assertions enabled");
-        } else {
-            logger.info("Java assertions disabled");
-        }
-
     }
 
     protected void displayUsage() {
-        throw new UnsupportedOperationException("not yet implemented");
+        System.out.println();
+        System.out.println("Correct usage: decac [[-p | -v] [-n] [-r X] [-d]* [-P] [-w] <fichier deca>...] | [-b]");
+        System.out.println();
+        System.out.println("-b (banner)              : display group name");
+        System.out.println("-p (parse)               : only build the tree, and decompile it");
+        System.out.println("-v (verifiation)         : only verify, do not output files");
+        System.out.println("-n (no check)            : remove test on execution (1.11, 1.13)");
+        System.out.println("-r X (register)          : limits the use of registers R0 to RX-1 (with 4<=X<=16)");
+        System.out.println("-d (debug)               : display debug trace. Can be repeated.");
+        System.out.println("-P (parallel)            : compile all deca files in parallel.");
+        System.out.println("-w (warnings) (optional) : display warnings");
+        System.out.println();
+        System.out.println("Note : -p and -v are incompatible.");
+
     }
 }

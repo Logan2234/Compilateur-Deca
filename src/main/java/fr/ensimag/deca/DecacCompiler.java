@@ -1,5 +1,6 @@
 package fr.ensimag.deca;
 
+import fr.ensimag.deca.CompilerOptions.CompileMode;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
@@ -40,7 +41,7 @@ import org.apache.log4j.Logger;
  */
 public class DecacCompiler {
     private static final Logger LOG = Logger.getLogger(DecacCompiler.class);
-    
+
     /**
      * Portable newline character.
      */
@@ -73,7 +74,7 @@ public class DecacCompiler {
 
     /**
      * @see
-     * fr.ensimag.ima.pseudocode.IMAProgram#add(fr.ensimag.ima.pseudocode.AbstractLine)
+     *      fr.ensimag.ima.pseudocode.IMAProgram#add(fr.ensimag.ima.pseudocode.AbstractLine)
      */
     public void add(AbstractLine line) {
         program.add(line);
@@ -88,7 +89,7 @@ public class DecacCompiler {
 
     /**
      * @see
-     * fr.ensimag.ima.pseudocode.IMAProgram#addLabel(fr.ensimag.ima.pseudocode.Label)
+     *      fr.ensimag.ima.pseudocode.IMAProgram#addLabel(fr.ensimag.ima.pseudocode.Label)
      */
     public void addLabel(Label label) {
         program.addLabel(label);
@@ -96,7 +97,7 @@ public class DecacCompiler {
 
     /**
      * @see
-     * fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction)
+     *      fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction)
      */
     public void addInstruction(Instruction instruction) {
         program.addInstruction(instruction);
@@ -104,21 +105,21 @@ public class DecacCompiler {
 
     /**
      * @see
-     * fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction,
-     * java.lang.String)
+     *      fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction,
+     *      java.lang.String)
      */
     public void addInstruction(Instruction instruction, String comment) {
         program.addInstruction(instruction, comment);
     }
-    
+
     /**
-     * @see 
-     * fr.ensimag.ima.pseudocode.IMAProgram#display()
+     * @see
+     *      fr.ensimag.ima.pseudocode.IMAProgram#display()
      */
     public String displayIMAProgram() {
         return program.display();
     }
-    
+
     private final CompilerOptions compilerOptions;
     private final File source;
     /**
@@ -160,7 +161,7 @@ public class DecacCompiler {
     /** The global environment for types (and the symbolTable) */
     public final SymbolTable symbolTable = new SymbolTable();
     public final EnvironmentType environmentType = new EnvironmentType(this);
-    
+
     public Symbol createSymbol(String name) {
         return symbolTable.create(name);
     }
@@ -172,7 +173,15 @@ public class DecacCompiler {
      */
     public boolean compile() {
         String sourceFile = source.getAbsolutePath();
+<<<<<<< HEAD
         String destFile = sourceFile.substring(0, sourceFile.length() - 4) + "ass";
+=======
+        String destFile;
+        if (compilerOptions.getCompileMode() == CompileMode.ParseOnly)
+            destFile = sourceFile.substring(0, sourceFile.length() - 5) + "-decompiled.deca";
+        else
+            destFile = sourceFile.substring(0, sourceFile.length() - 4) + "ass";
+>>>>>>> origin/develop
         PrintStream err = System.err;
         PrintStream out = System.out;
         LOG.debug("Compiling file " + sourceFile + " to assembly file " + destFile);
@@ -206,14 +215,13 @@ public class DecacCompiler {
      * verification and code generation).
      *
      * @param sourceName name of the source (deca) file
-     * @param destName name of the destination (assembly) file
-     * @param out stream to use for standard output (output of decac -p)
-     * @param err stream to use to display compilation errors
+     * @param destName   name of the destination (assembly) file
+     * @param out        stream to use for standard output (output of decac -p)
+     * @param err        stream to use to display compilation errors
      *
      * @return true on error
      */
-    private boolean doCompile(String sourceName, String destName,
-            PrintStream out, PrintStream err)
+    private boolean doCompile(String sourceName, String destName, PrintStream out, PrintStream err)
             throws DecacFatalError, LocationException {
         AbstractProgram prog = doLexingAndParsing(sourceName, err);
 
@@ -221,29 +229,40 @@ public class DecacCompiler {
             LOG.info("Parsing failed");
             return true;
         }
-        assert(prog.checkAllLocations());
 
+        if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
+            assert (prog.checkAllLocations());
 
-        prog.verifyProgram(this);
-        assert(prog.checkAllDecorations());
-
-        addComment("start main program");
-        prog.codeGenProgram(this);
-        addComment("end main program");
-        LOG.debug("Generated assembly code:" + nl + program.display());
-        LOG.info("Output file assembly file is: " + destName);
-
-        FileOutputStream fstream = null;
-        try {
-            fstream = new FileOutputStream(destName);
-        } catch (FileNotFoundException e) {
-            throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
+            prog.verifyProgram(this);
+            assert (prog.checkAllDecorations());
         }
 
-        LOG.info("Writing assembler file ...");
-
-        program.display(new PrintStream(fstream));
-        LOG.info("Compilation of " + sourceName + " successful.");
+        if (compilerOptions.getCompileMode() != CompileMode.Verify) {
+            if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
+                addComment("start main program");
+                prog.codeGenProgram(this);
+                addComment("end main program");
+                LOG.debug("Generated assembly code:" + nl + program.display());
+                LOG.info("Output file assembly file is: " + destName);
+            }
+            
+            FileOutputStream fstream = null;
+            try {
+                fstream = new FileOutputStream(destName);
+            } catch (FileNotFoundException e) {
+                throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
+            }
+            
+            if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
+                LOG.info("Writing deca file ...");
+                prog.decompile(new PrintStream(fstream));
+                LOG.info("Decompilation of " + sourceName + " successful.");
+            } else {
+                LOG.info("Writing assembler file ...");
+                program.display(new PrintStream(fstream));
+                LOG.info("Compilation of " + sourceName + " successful.");
+            }
+        }
         return false;
     }
 
@@ -252,13 +271,13 @@ public class DecacCompiler {
      * syntax tree.
      *
      * @param sourceName Name of the file to parse
-     * @param err Stream to send error messages to
+     * @param err        Stream to send error messages to
      * @return the abstract syntax tree
-     * @throws DecacFatalError When an error prevented opening the source file
+     * @throws DecacFatalError    When an error prevented opening the source file
      * @throws DecacInternalError When an inconsistency was detected in the
-     * compiler.
-     * @throws LocationException When a compilation error (incorrect program)
-     * occurs.
+     *                            compiler.
+     * @throws LocationException  When a compilation error (incorrect program)
+     *                            occurs.
      */
     protected AbstractProgram doLexingAndParsing(String sourceName, PrintStream err)
             throws DecacFatalError, DecacInternalError {
