@@ -1,0 +1,13 @@
+// Description:
+//    Test 3.33 fail avec equals avec deux types classiques
+//
+// Resultats:
+//    Erreur contextuelle
+//    Ligne 12 : The right operand of a comparaison operation has to be an int or a float (rule 3.33)
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    1 == "hello world";
+}

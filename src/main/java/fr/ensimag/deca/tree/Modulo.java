@@ -18,11 +18,19 @@ public class Modulo extends AbstractOpArith {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+        Location loc = this.getLocation();
 
+        if (!typeLeft.isInt() || !typeRight.isInt())
+            throw new ContextualError("A modulo can only be done between 2 int (rule 3.33)", loc);
+        
+        // Ajout du décor
+        this.setType(typeLeft);
+        return typeLeft;
+    }
 
     @Override
     protected String getOperatorName() {

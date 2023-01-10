@@ -1,0 +1,11 @@
+// Description:
+//    Cast with void T1
+//
+// Resultats:
+//    Ligne 10: On ne peut pas cast une élément de type void
+// Historique:
+//    cree le 06/01/2023
+
+{
+    (int)((void)(1));
+}

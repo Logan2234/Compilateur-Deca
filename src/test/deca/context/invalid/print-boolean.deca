@@ -2,10 +2,10 @@
 //    Condition de la règle 3.31 non respectée 
 //
 // Resultats:
-//    Ligne 10: Prinln ne peut prendre qu'un int ou float ou string
+//    Erreur contextuelle
+//    Ligne 10 : Arguments of a print can only be float, int or string (rules 3.31)
 //
 
 {
-    boolean x = false;
-    println(x);
+    print(false);
 }

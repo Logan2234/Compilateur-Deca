@@ -17,11 +17,18 @@ public class UnaryMinus extends AbstractUnaryExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        Type type = this.getOperand().verifyExpr(compiler, localEnv, currentClass);
+        Location loc = this.getLocation();
 
+        if (!type.isInt() && !type.isFloat())
+            throw new ContextualError("A unary minus is only followed by an int or a float (rule 3.37)", loc);
+
+        // Ajout du décor
+        this.setType(type);
+        return type;
+    }
 
     @Override
     protected String getOperatorName() {

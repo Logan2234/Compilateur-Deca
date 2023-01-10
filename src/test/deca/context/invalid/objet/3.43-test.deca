@@ -3,7 +3,7 @@
 //
 // Resultats:
 //    
-//
+//    13:8: An assignation between a int and a string is not possible (rule 3.32)
 
 {
     // TODO

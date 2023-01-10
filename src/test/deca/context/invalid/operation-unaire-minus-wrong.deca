@@ -1,0 +1,13 @@
+// Description:
+//    Test 3.37 fail avec minus 
+//
+// Resultats:
+//    Erreur contextuelle
+//    Ligne 12 : A unary minus is only followed by an int or a float (rule 3.37)
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    -"hello world";
+}

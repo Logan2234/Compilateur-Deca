@@ -2,14 +2,14 @@
 //    Condition de la règle 3.31 non respectée 
 //
 // Resultats:
-//    Ligne 10: Prinln ne peut prendre qu'un int ou float ou string
+//    Ligne 14: print ne peut prendre qu'un int ou un float ou une string
 //
 
-Class A{
+class A{
 
 }
 
 {
     A a = new A();
-    println(a);
+    print(a);
 }

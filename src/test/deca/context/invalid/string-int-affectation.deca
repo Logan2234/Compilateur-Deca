@@ -2,7 +2,8 @@
 //    Affectation et typage (string - int)
 //
 // Resultats:
-//    Ligne 13: Affectation de types incompatibles.
+//    Erreur contextuelle
+//    Ligne 11 : The type "string" doesn't exist (rule 0.2)
 //
 
 {

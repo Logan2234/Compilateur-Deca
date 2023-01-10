@@ -1,0 +1,11 @@
+// Description:
+//    Condition de la règle 3.31 non respectée 
+//
+// Resultats:
+//    Erreur contextuelle
+//    Ligne 10 : Arguments of a print can only be float, int or string (rules 3.31)
+//
+
+{
+    println(false);
+}

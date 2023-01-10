@@ -17,13 +17,13 @@ import org.apache.commons.lang.Validate;
  */
 public class DeclMethod extends AbstractDeclMethod {
 
-    
     final private AbstractIdentifier type;
     final private AbstractIdentifier methodName;
     final private ListDeclParam params;
     final private AbstractMethod body;
 
-    public DeclMethod(AbstractIdentifier type, AbstractIdentifier methodName, ListDeclParam params, AbstractMethod body) {
+    public DeclMethod(AbstractIdentifier type, AbstractIdentifier methodName, ListDeclParam params,
+            AbstractMethod body) {
         Validate.notNull(type);
         Validate.notNull(methodName);
         Validate.notNull(params);
@@ -40,7 +40,6 @@ public class DeclMethod extends AbstractDeclMethod {
             throws ContextualError {
     }
 
-    
     @Override
     public void decompile(IndentPrintStream s) {
         type.decompile(s);
@@ -50,19 +49,16 @@ public class DeclMethod extends AbstractDeclMethod {
         params.decompile(s);
         s.print(")");
         body.decompile(s);
-        
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
-    protected
-    void iterChildren(TreeFunction f) {
+    protected void iterChildren(TreeFunction f) {
         type.iter(f);
         methodName.iter(f);
         params.iter(f);
         body.iter(f);
     }
-    
+
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);

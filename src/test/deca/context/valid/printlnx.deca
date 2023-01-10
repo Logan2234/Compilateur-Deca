@@ -1,0 +1,12 @@
+// Description:
+//    printlnx d'un nombre.
+//
+// Resultats:
+//    // TODO: Chercher le résultat.
+//
+// Historique:
+//    cree le 09/01/2023
+
+{
+    printlnx(11.0);
+}

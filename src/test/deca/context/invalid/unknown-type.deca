@@ -1,0 +1,13 @@
+// Description:
+//    Declare une variable au type inconnun
+//
+// Resultats:
+//    Erreur contextuelle
+//    Ligne 12 : The type "typeInexistant" doesn't exist (rule 0.2)
+//
+// Historique:
+//    cree le 09/01/2023
+
+{
+    typeInexistant i;
+}

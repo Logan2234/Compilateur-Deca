@@ -24,7 +24,7 @@ WS:   ( ' '
       ) { skip(); // avoid producing a token 
       };
 
-// Mots réservés
+// Reserved tokens
 
 ASM: 'asm';
 CLASS: 'class';
@@ -47,7 +47,7 @@ THIS: 'this';
 TRUE: 'true';
 WHILE: 'while';
 
-// Symboles spéciaux
+// Special symbols
 
 GT: '>';
 LT: '<';
