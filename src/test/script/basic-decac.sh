@@ -25,3 +25,5 @@ fi
 echo "Pas de probleme detecte avec decac -b."
 
 # ... et ainsi de suite.
+
+# TODO: En écrire pour toutes les options possible
