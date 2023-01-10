@@ -11,7 +11,7 @@
 	boolean test1 = false;
     boolean test2 = true;
     if (test1 && test2) {
-        println(“ko”);
+        println("ok");
     } else {
         println("ok");
     }
