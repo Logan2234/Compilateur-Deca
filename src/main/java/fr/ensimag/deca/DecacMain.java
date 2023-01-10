@@ -31,7 +31,7 @@ public class DecacMain {
             System.out.println("\033[0;1m\u001B[36m Groupe 1 - GL03:\033[0;0m");
             System.out.println("\u001B[36m" + "     Nils DEPUILLE   : Chef de projet");
             System.out.println("\u001B[36m" + "     Virgile HENRY   : Code master");
-            System.out.println("\u001B[36m" + "     Jorge LURI-VANO : Git master");
+            System.out.println("\u001B[36m" + "     Jorge LURI VAÑÓ : Git master & DRH");
             System.out.println("\u001B[36m" + "     Vianney VOUTERS : Secrétaire Général");
             System.out.println("\u001B[36m" + "     Logan WILLEM    : Test master");
             System.out.println("\u001B[35m" + "================================================");
