@@ -17,6 +17,7 @@ options {
    Set<String> includesSet = new HashSet<String>();
 }
 
+
 // Ignore spaces, tabs, newlines, whitespaces and comments
 WS:   ( ' '
          | '//' .*? '\n'
@@ -30,29 +31,7 @@ WS:   ( ' '
          skip(); // avoid producing a token 
       };
 
-// Reserved words
-ASM: 'asm';
-CLASS: 'class';
-EXTENDS: 'extends';
-ELSE: 'else';
-FALSE: 'false';
-IF: 'if';
-INSTANCEOF: 'instanceof';
-NEW: 'new';
-NULL: 'null';
-READINT: 'readInt';
-READFLOAT: 'readFloat';
-PRINT: 'print';
-PRINTLN: 'println';
-PRINTLNX: 'printlnx';
-PRINTX: 'printx';
-PROTECTED: 'protected';
-RETURN: 'return';
-THIS: 'this';
-TRUE: 'true';
-WHILE: 'while';
-
-// Symboles spéciaux
+// Special symbols
 GT: '>';
 LT: '<';
 EQUALS: '=';
@@ -77,23 +56,43 @@ AND: '&&';
 OR: '||';
 EOL: '\n';
 
-// Integer
+// Reserved words
+ASM: 'asm';
+CLASS: 'class';
+EXTENDS: 'extends';
+ELSE: 'else';
+FALSE: 'false';
+IF: 'if';
+INSTANCEOF: 'instanceof';
+NEW: 'new';
+NULL: 'null';
+READINT: 'readInt';
+READFLOAT: 'readFloat';
+PRINT: 'print';
+PRINTLN: 'println';
+PRINTLNX: 'printlnx';
+PRINTX: 'printx';
+PROTECTED: 'protected';
+RETURN: 'return';
+THIS: 'this';
+TRUE: 'true';
+WHILE: 'while';
+
+// Numbers
 fragment POSITIVE_DIGIT: '1' .. '9';
 fragment DIGIT :  ('0' | POSITIVE_DIGIT);
 fragment LETTER : ('a' .. 'z'|'A' .. 'Z');
 
-INT: ('0' | POSITIVE_DIGIT DIGIT*);
-
-// Float
 fragment NUM:  DIGIT+;
-fragment SIGN: ('+'|'-')?;
+fragment SIGN: ('+'|'-');
 fragment EXP:  ('E' | 'e') SIGN NUM;
 fragment DEC:  NUM '.' NUM;
 fragment FLOATDEC:   (DEC | DEC EXP) ('F' | 'f')?;
 fragment DIGITHEX:   ('0'.. '9'|'A' .. 'F'|'a' .. 'f');
 fragment NUMHEX:     DIGITHEX+;
-fragment FLOATHEX:   ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN NUM ('F' | 'f')?;
+fragment FLOATHEX:   ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN? NUM ('F' | 'f')?;
 
+INT: ('0' | POSITIVE_DIGIT DIGIT*);
 FLOAT: FLOATDEC | FLOATHEX;
 
 // Identifier
@@ -113,6 +112,8 @@ INCLUDE: ('#include' (' ')* '"' FILENAME '"')
                doInclude(file);
             }
          };
+
+
 
 // String
 fragment STRING_CAR: ~('"' | '\\' | '\n');

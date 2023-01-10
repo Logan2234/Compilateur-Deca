@@ -24,3 +24,6 @@ $123456789
 abcABC
 a1$
 admin123
+
+// should produce an INT + an IDENT token
+12identifier

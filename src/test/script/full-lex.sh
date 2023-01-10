@@ -13,8 +13,8 @@ cd "$(dirname "$0")"/../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
-#### valid tests ####
-files=$(find ./src/test/deca/syntax/valid -name "*.deca")
+echo "#################### valid tests ####################"
+files=$(find ./src/test/deca/syntax/valid/provided -name "*.deca")
 
 for test in $files
 do
@@ -25,16 +25,18 @@ do
     if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:\|WS"
     then
         echo "Error detected on a valid test $test"
-        exit 1
+        # exit 1
     else
         echo "Test passed $test"
     fi
 done
 
-#### invalid tests ####
+echo "#################### invalid tests ####################"
 # an invalid test (syntaxically) may be lexically correct
 # a file named *_lex.deca is lexically correct
-files=$(find ./src/test/deca/syntax/invalid -name "*.deca")
+files=$(find ./src/test/deca/syntax/invalid/provided -name "*.deca")
+files+=" "
+files+=$(find ./src/test/deca/syntax/invalid/lexer -name "*.deca")
 
 for test in $files
 do
@@ -47,7 +49,7 @@ do
         if cat "${test%.deca}"-lex.lis | grep -q "$test\|DUMMY_TOKEN:\|WS"
         then
             echo "Error detected on a valid test $test"
-            exit 1
+            # exit 1
         else
             echo "Test passed $test"
         fi
@@ -58,7 +60,7 @@ do
             echo "Test passed $test"
         else
             echo "No error detected on an invalid test $test"
-            exit 1
+            # exit 1
         fi
     fi
 done

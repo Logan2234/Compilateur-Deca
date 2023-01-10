@@ -10,8 +10,10 @@ cd "$(dirname "$0")"/../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
-#### valid tests ####
-files=$(find ./src/test/deca/syntax/valid -name "*.deca")
+echo "#################### valid tests ####################"
+files=$(find ./src/test/deca/syntax/valid/provided -name "*.deca")
+files+=" "
+files+=$(find ./src/test/deca/syntax/valid/synt -name "*.deca")
 
 for test in $files
 do
@@ -28,8 +30,12 @@ do
     fi
 done
 
-#### invalid tests ####
-files=$(find ./src/test/deca/syntax/invalid -name "*.deca")
+echo "#################### invalid tests ####################"
+# an invalid test (syntaxically) may be lexically correct
+# a file named *_lex.deca is lexically correct
+files=$(find ./src/test/deca/syntax/invalid/provided -name "*.deca")
+files+=" "
+files+=$(find ./src/test/deca/syntax/invalid/synt -name "*.deca")
 
 for test in $files
 do
