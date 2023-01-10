@@ -54,7 +54,7 @@ public class While extends AbstractInst {
         Label blockLabel = new Label(label + ".while");
         Label endLabel = new Label(label + ".end");
         // the if expression returns a bool. write it down in R1,
-        // then add 0 to R1 to trigger flags : if EQ, then the expression was false : branch to else block
+        // then add 0 to R1 to trigger flags : if EQ, then the expression was false : branch to end block
         compiler.addLabel(blockLabel);
         condition.codeGenExpr(compiler, Register.R1);
         compiler.addInstruction(new ADD(new ImmediateInteger(0), Register.R1));
