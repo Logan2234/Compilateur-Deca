@@ -24,7 +24,7 @@ do
     if cat "${test%.deca}"-synt.lis | grep -q "$test\|java:"
     then
         echo "Error detected on a valid test $test"
-        # exit 1
+        exit 1
     else
         echo "Test passed $test"
     fi
@@ -48,6 +48,6 @@ do
         echo "Test passed $test"
     else
         echo "No error detected on an invalid test $test"
-        # exit 1
+        exit 1
     fi
 done
