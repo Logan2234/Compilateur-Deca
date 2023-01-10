@@ -19,9 +19,7 @@ cd "$(dirname "$0")"/../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
-clear
-
-echo -e "${GREENBOLD} \n============================= Testing valid tests =============================\n ${NOCOLOR}"
+echo -e "${GREENBOLD} \n============================= Testing context on valid tests =============================\n ${NOCOLOR}"
 
 files=$(find ./src/test/deca/context/valid -maxdepth 1 -name "*.deca")
 
@@ -31,14 +29,18 @@ do
         ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
     if cat "${test%.deca}".lis | grep -q "Exception in thread"
     then
-        echo -e "${REDBOLD}Error detected on a valid test: ${RED}$test${NOCOLOR}"
+        echo -e "${REDBOLD}Error detected on a valid test ($VALID_PASSED/$NB_VALID_TESTS): ${RED}$test${NOCOLOR}"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
     else
-        echo -e "${GREENBOLD}Test passed: ${GREEN}$test${NOCOLOR}"
         ((VALID_PASSED = VALID_PASSED + 1))
+        echo -e "${GREENBOLD}Test passed ($VALID_PASSED/$NB_VALID_TESTS): ${GREEN}$test${NOCOLOR}"
     fi
 done
 
-echo -e "${GREENBOLD} \n============================= Testing invalid tests =============================\n ${NOCOLOR}"
+echo -e "${GREENBOLD} \n============================= Testing context on invalid tests =============================\n ${NOCOLOR}"
 
 files=$(find ./src/test/deca/context/invalid -maxdepth 1 -name "*.deca")
 
@@ -48,10 +50,14 @@ do
     test_context "$test" > "${test%.deca}".lis 2>&1
     if cat "${test%.deca}".lis | grep -q "$test:*:*"
     then
-        echo -e "${GREENBOLD}Test passed: ${GREEN}$test${NOCOLOR}"
         ((INVALID_PASSED = INVALID_PASSED + 1))
+        echo -e "${GREENBOLD}Test passed ($INVALID_PASSED/$NB_INVALID_TESTS): ${GREEN}$test${NOCOLOR}"
     else
-        echo -e "${REDBOLD}Error not detected on an invalid test: ${RED}$test${NOCOLOR}"
+        echo -e "${REDBOLD}Error not detected on an invalid test ($INVALID_PASSED/$NB_INVALID_TESTS): ${RED}$test${NOCOLOR}"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
     fi
 done
 
@@ -79,5 +85,5 @@ then
 else
     echo -e "\n${RED} Invalid test passed: "
     printf %2.2f $INVALID_PASSED_PERCENTAGE
-    echo "%"
+    echo "%\n"
 fi

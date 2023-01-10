@@ -174,10 +174,7 @@ public class DecacCompiler {
     public boolean compile() {
         String sourceFile = source.getAbsolutePath();
         String destFile;
-        if (compilerOptions.getCompileMode() == CompileMode.ParseOnly)
-            destFile = sourceFile.substring(0, sourceFile.length() - 5) + "-decompiled.deca";
-        else
-            destFile = sourceFile.substring(0, sourceFile.length() - 4) + "ass";
+        destFile = sourceFile.substring(0, sourceFile.length() - 4) + "ass";
         PrintStream err = System.err;
         PrintStream out = System.out;
         LOG.debug("Compiling file " + sourceFile + " to assembly file " + destFile);
@@ -241,19 +238,18 @@ public class DecacCompiler {
                 LOG.debug("Generated assembly code:" + nl + program.display());
                 LOG.info("Output file assembly file is: " + destName);
             }
-            
-            FileOutputStream fstream = null;
-            try {
-                fstream = new FileOutputStream(destName);
-            } catch (FileNotFoundException e) {
-                throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
-            }
-            
+
             if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
                 LOG.info("Writing deca file ...");
-                prog.decompile(new PrintStream(fstream));
+                prog.decompile(out);
                 LOG.info("Decompilation of " + sourceName + " successful.");
             } else {
+                FileOutputStream fstream = null;
+                try {
+                    fstream = new FileOutputStream(destName);
+                } catch (FileNotFoundException e) {
+                    throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
+                }
                 LOG.info("Writing assembler file ...");
                 program.display(new PrintStream(fstream));
                 LOG.info("Compilation of " + sourceName + " successful.");
