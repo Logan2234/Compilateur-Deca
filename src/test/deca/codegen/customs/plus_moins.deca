@@ -1,0 +1,24 @@
+// Created by Virgile, 10/01/2022
+// fun program to test !
+{
+    println("choisis un nombre entre zéro et 100, dit moi si c'est plus ou moins !");
+    int inf = 0;
+    int sup = 100;
+    int result = -1;
+    while(result != 2) {
+        int guess = (inf + sup) / 2;
+        println("est-ce que c'est :");
+        println(guess);
+        while(result != 0 && result != 1 && result != 2) {
+            println("0 -> moins, 1 -> plus, 2 -> c'est ça");
+            result = readInt();
+        }
+        if(result == 0) {
+            sup = guess;
+        }
+        else if(result == 1) {
+            inf = guess;
+        }
+    }
+    println("j'ai trouvé !");
+}

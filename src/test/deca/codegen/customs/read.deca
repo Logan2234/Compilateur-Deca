@@ -1,0 +1,6 @@
+// Created by Virgile, 10/01/2022
+// test print functions.
+{
+    int i = readInt();
+    print(i);
+}

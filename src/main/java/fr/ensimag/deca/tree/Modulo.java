@@ -44,6 +44,6 @@ public class Modulo extends AbstractOpArith {
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dVal) {
         // mod op
         compiler.addInstruction(new REM(dVal, register));
-        }
+    }
 
 }
