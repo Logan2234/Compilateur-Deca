@@ -173,15 +173,11 @@ public class DecacCompiler {
      */
     public boolean compile() {
         String sourceFile = source.getAbsolutePath();
-<<<<<<< HEAD
-        String destFile = sourceFile.substring(0, sourceFile.length() - 4) + "ass";
-=======
         String destFile;
         if (compilerOptions.getCompileMode() == CompileMode.ParseOnly)
             destFile = sourceFile.substring(0, sourceFile.length() - 5) + "-decompiled.deca";
         else
             destFile = sourceFile.substring(0, sourceFile.length() - 4) + "ass";
->>>>>>> origin/develop
         PrintStream err = System.err;
         PrintStream out = System.out;
         LOG.debug("Compiling file " + sourceFile + " to assembly file " + destFile);
