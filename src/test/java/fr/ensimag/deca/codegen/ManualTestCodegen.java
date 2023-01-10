@@ -37,6 +37,5 @@ public class ManualTestCodegen {
             e.display(System.err);
             System.exit(1);
         }
-        prog.prettyPrint(System.out);
     }
 }
