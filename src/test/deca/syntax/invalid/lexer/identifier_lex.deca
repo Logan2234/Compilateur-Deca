@@ -24,6 +24,3 @@ $123456789
 abcABC
 a1$
 admin123
-
-// the lexer should find the INT 12 and the identifier ident
-12ident 

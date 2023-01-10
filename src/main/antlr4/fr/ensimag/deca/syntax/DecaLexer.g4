@@ -8,7 +8,13 @@ options {
    superClass = AbstractDecaLexer;
 }
 
+@header  {
+   import java.util.Set;
+   import java.util.HashSet;
+}
+
 @members {
+   Set<String> includesSet = new HashSet<String>();
 }
 
 // Ignore spaces, tabs, newlines, whitespaces and comments
@@ -73,10 +79,10 @@ EOL: '\n';
 
 // Integer
 fragment POSITIVE_DIGIT: '1' .. '9';
-fragment DIGIT :  ('0' |POSITIVE_DIGIT);
+fragment DIGIT :  ('0' | POSITIVE_DIGIT);
 fragment LETTER : ('a' .. 'z'|'A' .. 'Z');
 
-INT: '0' + POSITIVE_DIGIT DIGIT*;
+INT: ('0' | POSITIVE_DIGIT DIGIT*);
 
 // Float
 fragment NUM:  DIGIT+;
@@ -102,7 +108,10 @@ INCLUDE: ('#include' (' ')* '"' FILENAME '"')
             int startIndex = s.indexOf('"')-1;
             int endIndex = s.length();
             String file = s.substring(startIndex + 1, endIndex);
-            doInclude(file);
+            if (!includesSet.contains(file)) {
+               includesSet.add(file);
+               doInclude(file);
+            }
          };
 
 // String
