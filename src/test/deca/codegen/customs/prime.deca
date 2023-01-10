@@ -1,0 +1,21 @@
+// Created by Virgile, 10/01/2022
+// inneficient prime display (no remainer yet T.T).
+{
+    int i = 2;
+    int j;
+    boolean prime;
+    while(i < 1000) {
+        j = 2;
+        prime = true;
+        while(j < i) {
+            if(i % j == 0) {
+                prime = false;
+            }
+            j = j + 1;
+        }
+        if(prime) {
+            println(i);
+        }
+        i = i + 1;
+    }
+}

@@ -1,0 +1,32 @@
+// Created by Virgile, 11/01/2022
+// boolean operator test.
+{
+    boolean a = true || true;
+    boolean b = true || false;
+    boolean c = false || true;
+    boolean d = false || false;
+    if(a) {
+        println("True");
+    }
+    else {
+        println("False");
+    }
+    if(b) {
+        println("True");
+    }
+    else {
+        println("False");
+    }
+    if(c) {
+        println("True");
+    }
+    else {
+        println("False");
+    }
+    if(d) {
+        println("True");
+    }
+    else {
+        println("False");
+    }
+}

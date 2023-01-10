@@ -1,0 +1,9 @@
+// Created by Virgile, 10/01/2022
+// test while functions.
+{
+    int x = 0;
+    while(x == 0) {
+        println(x);
+        x = x + 1;
+    }
+}

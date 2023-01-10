@@ -11,11 +11,7 @@
 	boolean test1 = false;
     boolean test2 = true;
     if (test1 && test2) {
-<<<<<<< HEAD
-        println("ko");
-=======
         println("ok");
->>>>>>> origin/develop
     } else {
         println("ok");
     }

@@ -1,6 +1,6 @@
 // Created by Virgile, 10/01/2022
 // test assignments.
 {
-    float a = 0;
+    float a = 0.2;
     print(a);
 }

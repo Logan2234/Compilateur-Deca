@@ -1,0 +1,18 @@
+// Created by Virgile, 11/01/2022
+// test if functions.
+{
+    int i = 0;
+    int j = 0;
+    if(i != j) {
+        println("ko");
+    }
+    else {
+        println("ok");
+    }
+    if(i == j) {
+        println("ok");
+    }
+    else {
+        println("ko");
+    }
+}
