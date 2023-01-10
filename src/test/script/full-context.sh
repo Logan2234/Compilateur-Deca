@@ -27,7 +27,7 @@ for test in $files
 do
     test_context "$test" > "${test%.deca}".lis 2>&1
         ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
-    if cat "${test%.deca}".lis | grep -q "Exception in thread"
+    if cat "${test%.deca}".lis | grep -q "${test}\|Exception in thread"
     then
         echo -e "${REDBOLD}Error detected on a valid test ($VALID_PASSED/$NB_VALID_TESTS): ${RED}$test${NOCOLOR}"
         if [[ $1 == "--maven" ]];
