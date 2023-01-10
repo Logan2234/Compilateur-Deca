@@ -23,73 +23,73 @@
     </calendar>
   </calendars>
   <tasks>
-    <task id="1" name="Sprint 1: Hello World" note="" work="259200" start="20230103T000000Z" end="20230106T120000Z" work-start="20230103T090000Z" percent-complete="85" priority="0" type="normal" scheduling="fixed-work">
-      <task id="2" name="A. Analyse sujet + code" note="" work="21600" duration="21600" start="20230104T110000Z" end="20230104T183000Z" work-start="20230104T110000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+    <task id="1" name="Sprint 1: Hello World" note="" work="381600" start="20230103T000000Z" end="20230106T193000Z" work-start="20230103T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="2" name="A. Analyse sujet + code" note="" work="18000" duration="18000" start="20230104T110000Z" end="20230104T173000Z" work-start="20230104T110000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="20" type="FS"/>
         </predecessors>
       </task>
-      <task id="3" name="A. Scripts tests lexer" note="" work="3600" duration="3600" start="20230104T183000Z" end="20230104T193000Z" work-start="20230104T183000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="3" name="A. Scripts tests lexer" note="" work="14400" duration="14400" start="20230104T173000Z" end="20230105T110000Z" work-start="20230104T173000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="2" type="FS"/>
         </predecessors>
       </task>
-      <task id="4" name="A. Scripts tests parser" note="" work="3600" duration="3600" start="20230104T193000Z" end="20230105T100000Z" work-start="20230105T090000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="4" name="A. Scripts tests parser" note="" work="14400" duration="14400" start="20230105T110000Z" end="20230105T163000Z" work-start="20230105T110000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="3" type="FS"/>
         </predecessors>
       </task>
-      <task id="5" name="A. Parser" note="" work="28800" duration="28800" start="20230105T100000Z" end="20230105T193000Z" work-start="20230105T100000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="5" name="A. Parser" note="" work="43200" duration="43200" start="20230105T163000Z" end="20230106T193000Z" work-start="20230105T163000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="4" type="FS"/>
         </predecessors>
       </task>
-      <task id="6" name="A. Lexer" note="" work="3600" duration="3600" start="20230104T183000Z" end="20230104T193000Z" work-start="20230104T183000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="6" name="A. Lexer" note="" work="18000" duration="18000" start="20230104T173000Z" end="20230105T120000Z" work-start="20230104T173000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="2" type="FS"/>
         </predecessors>
       </task>
-      <task id="7" name="A. D&#xE9;compilation" note="" work="32400" duration="32400" start="20230104T193000Z" end="20230105T193000Z" work-start="20230105T090000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="7" name="A. Scripts tests d&#xE9;compilation" note="" work="10800" duration="10800" start="20230105T120000Z" end="20230105T163000Z" work-start="20230105T120000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="6" type="FS"/>
         </predecessors>
       </task>
-      <task id="8" name="A. Scripts tests d&#xE9;compilation" note="" work="10800" duration="10800" start="20230105T193000Z" end="20230106T120000Z" work-start="20230106T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="8" name="A. D&#xE9;compilation" note="" work="43200" duration="43200" start="20230105T163000Z" end="20230106T193000Z" work-start="20230105T163000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="7" type="FS"/>
         </predecessors>
       </task>
-      <task id="9" name="B. Analyse du sujet" note="" work="39600" duration="39600" start="20230104T110000Z" end="20230105T143000Z" work-start="20230104T110000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="9" name="B. Analyse du sujet" note="" work="28800" duration="28800" start="20230104T110000Z" end="20230105T100000Z" work-start="20230104T110000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="20" type="FS"/>
         </predecessors>
       </task>
-      <task id="10" name="B. Base de tests" note="" work="7200" duration="7200" start="20230105T143000Z" end="20230105T163000Z" work-start="20230105T143000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="10" name="B. Base de tests" note="" work="18000" duration="18000" start="20230105T100000Z" end="20230105T163000Z" work-start="20230105T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="9" type="FS"/>
         </predecessors>
       </task>
-      <task id="11" name="B. V&#xE9;rification contextuelle" note="" work="7200" duration="7200" start="20230105T163000Z" end="20230105T183000Z" work-start="20230105T163000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="11" name="B. V&#xE9;rification contextuelle" note="" work="32400" duration="32400" start="20230105T163000Z" end="20230106T163000Z" work-start="20230105T163000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="10" type="FS"/>
         </predecessors>
       </task>
-      <task id="12" name="B. D&#xE9;coration de l'arbre" note="" work="3600" duration="3600" start="20230105T183000Z" end="20230105T193000Z" work-start="20230105T183000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="12" name="B. D&#xE9;coration de l'arbre" note="" work="10800" duration="10800" start="20230106T163000Z" end="20230106T193000Z" work-start="20230106T163000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="11" type="FS"/>
         </predecessors>
       </task>
-      <task id="13" name="C. Analyse sujet + code" note="" work="43200" duration="43200" start="20230104T110000Z" end="20230105T153000Z" work-start="20230104T110000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="13" name="C. Analyse sujet + code" note="" work="28800" duration="28800" start="20230104T110000Z" end="20230105T100000Z" work-start="20230104T110000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="20" type="FS"/>
         </predecessors>
       </task>
-      <task id="14" name="C. Parser CLI" note="" work="7200" duration="7200" start="20230105T153000Z" end="20230105T173000Z" work-start="20230105T153000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="14" name="C. Parser CLI" note="" work="28800" duration="28800" start="20230105T100000Z" end="20230105T193000Z" work-start="20230105T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="13" type="FS"/>
         </predecessors>
       </task>
-      <task id="15" name="C. Code assembleur" note="" work="7200" duration="7200" start="20230105T173000Z" end="20230105T193000Z" work-start="20230105T173000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="15" name="C. Code assembleur" note="" work="32400" duration="32400" start="20230105T193000Z" end="20230106T193000Z" work-start="20230106T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="14" type="FS"/>
         </predecessors>
@@ -116,17 +116,17 @@
         </predecessors>
       </task>
     </task>
-    <task id="21" name="Sprint 2: Sans objet" note="" work="226800" start="20230106T120000Z" end="20230114T160000Z" work-start="20230106T120000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="21" name="Sprint 2: Sans objet" note="" work="194400" start="20230106T193000Z" end="20230113T183000Z" work-start="20230107T140000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <predecessors>
         <predecessor id="1" predecessor-id="1" type="FS"/>
       </predecessors>
-      <task id="22" name="..." note="" work="226800" duration="226800" start="20230106T120000Z" end="20230114T160000Z" work-start="20230106T120000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration"/>
+      <task id="22" name="..." note="" work="194400" duration="194400" start="20230106T193000Z" end="20230113T183000Z" work-start="20230107T140000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration"/>
     </task>
-    <task id="23" name="Sprint 3: Avec objet" note="" work="226800" start="20230114T160000Z" end="20230122T190000Z" work-start="20230114T160000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="23" name="Sprint 3: Avec objet" note="" work="226800" start="20230113T183000Z" end="20230122T160000Z" work-start="20230113T183000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <predecessors>
         <predecessor id="1" predecessor-id="21" type="FS"/>
       </predecessors>
-      <task id="24" name="..." note="" work="226800" duration="226800" start="20230114T160000Z" end="20230122T190000Z" work-start="20230114T160000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration"/>
+      <task id="24" name="..." note="" work="226800" duration="226800" start="20230113T183000Z" end="20230122T160000Z" work-start="20230113T183000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration"/>
     </task>
     <task id="25" name="Rendu version interm&#xE9;diaire" note="" work="0" start="20230116T000000Z" end="20230116T000000Z" work-start="20230116T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20230116T000000Z"/>
@@ -161,8 +161,8 @@
     <allocation task-id="16" resource-id="1" units="20"/>
     <allocation task-id="1" resource-id="1" units="100"/>
     <allocation task-id="23" resource-id="1" units="100"/>
-    <allocation task-id="8" resource-id="1" units="100"/>
     <allocation task-id="7" resource-id="1" units="100"/>
+    <allocation task-id="8" resource-id="1" units="100"/>
     <allocation task-id="6" resource-id="1" units="100"/>
     <allocation task-id="21" resource-id="1" units="100"/>
     <allocation task-id="20" resource-id="2" units="20"/>
