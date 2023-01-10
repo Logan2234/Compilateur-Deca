@@ -6,6 +6,12 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -57,6 +63,26 @@ public class FloatLiteral extends AbstractExpr {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // leaf node => nothing to do
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
+        // load ourselves in the given register, or on the stack
+        if(resultRegister != null) {
+            compiler.addInstruction(new LOAD(value, resultRegister));
+        }
+        else {
+            // put it in R1 then on the stack
+            compiler.addInstruction(new LOAD(value, Register.R1));
+            compiler.addInstruction(new PUSH(Register.R1));
+        }
+    }
+
+    @Override
+    protected void codeGenPrint(DecacCompiler compiler) {
+        // load ourselves in R1, then print it with WFLOAT
+        compiler.addInstruction(new LOAD(value, Register.R1));
+        compiler.addInstruction(new WFLOAT());
     }
 
 }

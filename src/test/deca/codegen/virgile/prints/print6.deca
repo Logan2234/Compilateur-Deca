@@ -1,0 +1,5 @@
+// Created by Virgile, 10/01/2022
+// test print functions.
+{
+    print(1 + 4);
+}

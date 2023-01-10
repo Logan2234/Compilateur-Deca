@@ -1,0 +1,6 @@
+// Created by Virgile, 10/01/2022
+// test operations.
+{
+    int a = 3 * 4 + 2 % 3;
+    println(a);
+}

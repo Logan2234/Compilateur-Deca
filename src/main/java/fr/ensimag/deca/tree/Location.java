@@ -59,4 +59,13 @@ public class Location implements Serializable {
         this.filename = filename;
     }
 
+    /**
+     * Used to write a unique label.
+     * (for example, in if conditions)
+     * @return A unique string through the compilation pipeline that can be used as a label.
+     */
+    public String toLabel() {
+        return filename.substring(filename.lastIndexOf("/") + 1) + "." + line + "." + positionInLine;
+    }
+
 }

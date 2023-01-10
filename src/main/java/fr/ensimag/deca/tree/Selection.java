@@ -4,6 +4,7 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
@@ -62,5 +63,11 @@ public class Selection extends AbstractLValue {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         obj.prettyPrint(s, prefix, false);
         field.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    public Definition getDefinition() {
+        // ? pas trop sur de moi la dessus
+        return field.getDefinition();
     }
 }

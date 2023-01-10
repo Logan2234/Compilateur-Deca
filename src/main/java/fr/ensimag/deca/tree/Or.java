@@ -1,5 +1,8 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
 
 /**
  *
@@ -15,6 +18,11 @@ public class Or extends AbstractOpBool {
     @Override
     protected String getOperatorName() {
         return "||";
+    }
+
+    @Override
+    public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
 

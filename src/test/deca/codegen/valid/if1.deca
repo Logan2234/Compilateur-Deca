@@ -10,7 +10,7 @@
 {
 	boolean test = true;
     if (test){
-        println(“ok”);
+        println("ok");
     } else {
         println("ko");
     }

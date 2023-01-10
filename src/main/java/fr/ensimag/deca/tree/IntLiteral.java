@@ -6,6 +6,12 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
+
 import java.io.PrintStream;
 
 /**
@@ -41,6 +47,8 @@ public class IntLiteral extends AbstractExpr {
     @Override
     protected void codeGenPrint(DecacCompiler compiler) {
         // put value in the R1 register and print it out with WINT
+        compiler.addInstruction(new LOAD(value, Register.R1));
+        compiler.addInstruction(new WINT());
     }
 
     @Override
@@ -56,6 +64,20 @@ public class IntLiteral extends AbstractExpr {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // leaf node => nothing to do
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
+        // check if result register is not null
+        if(resultRegister != null) {
+            // put the value in the given register
+            compiler.addInstruction(new LOAD(value, resultRegister));
+        }
+        else {
+            // by convention, put the result on the stack.
+            compiler.addInstruction(new LOAD(value, Register.R0));
+            compiler.addInstruction(new PUSH(Register.R0));
+        }
     }
 
 }

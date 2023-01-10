@@ -1,6 +1,9 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -46,4 +49,23 @@ public class Assign extends AbstractBinaryExpr {
         return "=";
     }
 
+    @Override
+    public void codeGenExpr(DecacCompiler compiler, GPRegister _r) {
+        // put the right value in the left value !
+        // put the result of the right value in a register
+        GPRegister resultRegister = compiler.allocateRegister();
+        if(resultRegister == null) {
+            // todo : free a register then restore it
+        }
+        else {
+            // compute right expression in the register
+            this.getRightOperand().codeGenExpr(compiler, resultRegister);
+            compiler.addInstruction(new STORE(resultRegister, getLeftOperand().getDefinition().getDAddr()));
+        }
+    }
+
+    @Override
+    public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
+        throw new UnsupportedOperationException("This should never be called.");
+    }
 }

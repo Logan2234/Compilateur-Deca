@@ -47,7 +47,7 @@ public class CompilerOptions {
         return runTestChecks;
     }
 
-    public int getusedRegisterNumber() {
+    public int getUsedRegisterNumber() {
         return usedRegisterNumber;
     }
 

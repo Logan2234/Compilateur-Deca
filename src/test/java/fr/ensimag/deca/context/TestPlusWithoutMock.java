@@ -5,6 +5,8 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.Plus;
 import fr.ensimag.deca.tree.TreeFunction;
+import fr.ensimag.ima.pseudocode.GPRegister;
+
 import java.io.PrintStream;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,6 +52,11 @@ public class TestPlusWithoutMock {
 
         @Override
         protected void iterChildren(TreeFunction f) {
+            throw new UnsupportedOperationException("Should not be called.");
+        }
+
+        @Override
+        public void codeGenExpr(DecacCompiler compiler, GPRegister register) {
             throw new UnsupportedOperationException("Should not be called.");
         }
 

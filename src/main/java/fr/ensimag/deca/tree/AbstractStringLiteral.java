@@ -1,5 +1,8 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
+
 /**
  *
  * @author gl03
@@ -8,5 +11,10 @@ package fr.ensimag.deca.tree;
 public abstract class AbstractStringLiteral extends AbstractExpr {
 
     public abstract String getValue();
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
     
 }

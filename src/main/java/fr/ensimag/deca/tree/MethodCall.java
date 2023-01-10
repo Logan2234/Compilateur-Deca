@@ -6,6 +6,8 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+
 import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
@@ -61,6 +63,11 @@ public class MethodCall extends AbstractExpr {
         if (!(obj.equals(null))) {obj.prettyPrint(s, prefix, false);}
         meth.prettyPrint(s, prefix, false);
         params.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
 }

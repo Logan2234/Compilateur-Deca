@@ -8,9 +8,14 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
+import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
+
 
 /**
  * Expression, i.e. anything that has a value.
@@ -134,13 +139,28 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // we can safely assume this is only called if the result is an integer or float, with context check
+        // so compute ourself in R1, then depending on our type display it !
+        codeGenExpr(compiler, Register.R1);
+        if(type.isInt()) {
+            compiler.addInstruction(new WINT());
+        } else if(type.isFloat()) {
+            compiler.addInstruction(new WFLOAT());
+        }
     }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+        codeGenExpr(compiler, null);
     }
+
+    /**
+     * Generate code for the expression. The result is put in the result register.
+     * if the result register is null, the result is on the stack.
+     * @param compiler Where we write instructions.
+     * @param resultRegister The register to put the result of the instruction.
+     */
+    protected abstract void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister);
 
     @Override
     protected void decompileInst(IndentPrintStream s) {

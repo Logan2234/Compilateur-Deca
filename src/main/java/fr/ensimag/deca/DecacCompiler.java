@@ -12,6 +12,8 @@ import fr.ensimag.ima.pseudocode.AbstractLine;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Instruction;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.GPRegister;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -47,6 +49,10 @@ public class DecacCompiler {
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
         this.compilerOptions = compilerOptions;
+        availableRegisters = new boolean[compilerOptions.getUsedRegisterNumber() - 2];
+        for (int i = 0; i < availableRegisters.length; i++) {
+            availableRegisters[i] = true;
+        }
         this.source = source;
     }
 
@@ -119,6 +125,36 @@ public class DecacCompiler {
      * The main program. Every instruction generated will eventually end up here.
      */
     private final IMAProgram program = new IMAProgram();
+
+    /**
+     * All the available registers.
+     * When generating code, we can ask what registers are used by previous calls.
+     * If null is returned, we can then save a register and restore it.
+     */
+    private boolean[] availableRegisters;
+
+    /**
+     * Get a available register.
+     * @return the register we can use. Can be null if none are.
+     */
+    public GPRegister allocateRegister() {
+        for(int i = 0; i < availableRegisters.length - 2; i++) {
+            if(availableRegisters[i + 2]) {
+                availableRegisters[i + 2] = false;
+                return GPRegister.getR(i+2);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Set the given register as not used anymore.
+     * @param register
+     */
+    public void freeRegister(GPRegister register) {
+        availableRegisters[register.getNumber()] = true;
+    }
+
 
 
     /** The global environment for types (and the symbolTable) */

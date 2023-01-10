@@ -34,3 +34,4 @@ else
     echo "$resultat"
     exit 1
 fi
+    

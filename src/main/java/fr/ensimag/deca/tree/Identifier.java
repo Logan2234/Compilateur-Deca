@@ -15,6 +15,13 @@ import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -239,6 +246,37 @@ public class Identifier extends AbstractIdentifier {
             s.print("definition: ");
             s.print(d);
             s.println();
+        }
+    }
+
+    @Override
+    public void codeGenPrint(DecacCompiler compiler) {
+        if(definition.getType().isInt()) {
+            // print identifier as an int : 
+            // load addr in R1
+            compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
+            // print it
+            compiler.addInstruction(new WINT());
+        } else if(definition.getType().isFloat()) {
+            // print identifier as an float : 
+            // load addr in R1
+            compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
+            // print it
+            compiler.addInstruction(new WFLOAT());
+        }
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
+        if(resultRegister == null) {
+            // put self value on the stack
+            // load self on R1, then push R1
+            compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
+            compiler.addInstruction(new PUSH(Register.R1));
+        }
+        else {
+            // put self value in the result register
+            compiler.addInstruction(new LOAD(definition.getDAddr(), resultRegister));
         }
     }
 

@@ -6,6 +6,8 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+
 import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
@@ -53,6 +55,11 @@ public class InstanceOf extends AbstractExpr {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         e.prettyPrint(s, prefix, false);
         type.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
 }

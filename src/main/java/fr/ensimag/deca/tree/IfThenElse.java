@@ -6,6 +6,13 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.ADD;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -40,7 +47,32 @@ public class IfThenElse extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // we need something like : 
+        // if not condition, jump to else block
+        // if block
+        //      [...]
+        //      jump to end
+        // else block
+        //      [...]
+        // end
+        
+        // need a unique label for our name.
+        String label = "IF." + getLocation().toLabel();
+        Label elseLabel = new Label(label + ".else");
+        Label endLabel = new Label(label + ".end");
+        // the if expression returns a bool. write it down in R1,
+        // then add 0 to R1 to trigger flags : if EQ, then the expression was false : branch to else block
+        condition.codeGenExpr(compiler, Register.R1);
+        compiler.addInstruction(new ADD(new ImmediateInteger(0), Register.R1));
+        // branch to else flag if EQ, then if block
+        compiler.addInstruction(new BEQ(elseLabel));
+        thenBranch.codeGenListInst(compiler);
+        compiler.addInstruction(new BRA(endLabel));
+        // else flag to branch to, and else block
+        compiler.addLabel(elseLabel);
+        elseBranch.codeGenListInst(compiler);
+        // end label
+        compiler.addLabel(endLabel);
     }
 
     @Override
@@ -73,4 +105,5 @@ public class IfThenElse extends AbstractInst {
         thenBranch.prettyPrint(s, prefix, false);
         elseBranch.prettyPrint(s, prefix, true);
     }
+
 }
