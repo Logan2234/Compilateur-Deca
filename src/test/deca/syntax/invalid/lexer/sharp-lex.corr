@@ -1,2 +1,1 @@
-INFO  fr.ensimag.deca.syntax.DecacErrorListner.syntaxError(DecacErrorListner.java:50) - no token, no LocationException => using input.getSourceName(): line=12
 ./src/test/deca/syntax/invalid/lexer/sharp.deca:12:0: token recognition error at: '#w'
