@@ -65,6 +65,7 @@ VALID_PASSED_PERCENTAGE=`echo "$VALID_PASSED / $NB_VALID_TESTS * 100" | bc -l`
 INVALID_PASSED_PERCENTAGE=`echo "$INVALID_PASSED / $NB_INVALID_TESTS * 100" | bc -l`
 
 TEMP=`echo "$VALID_PASSED_PERCENTAGE > 0.5" | bc -l`
+
 if ((TEMP));
 then
     echo -e "\n${GREEN} Valid test passed: "
