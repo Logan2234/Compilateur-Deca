@@ -1,9 +1,9 @@
 // Description:
-//    test de programme avec \ dans chaine
+//    chaine avec \
 //    lexicalement incorrect
 //
 // Resultats:
-//    Ligne 13 : Erreur lexicale
+//    Ligne 12 : token recognition error at: '"a\n'
 //
 // Historique:
 //    cree le 09/01/2023

@@ -43,7 +43,7 @@ do
     test_synt "$test" > "${test%.deca}"-synt.lis 2>&1
 
     # check if passed
-    if cat "${test%.deca}"-synt.lis | grep -q "$test\|java:"
+    if cat "${test%.deca}"-synt.lis | grep -q "$test\|java:\|mismatched"
     then
         echo "Test passed $test"
     else

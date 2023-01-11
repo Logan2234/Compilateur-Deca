@@ -1,0 +1,15 @@
+// Description:
+//    instruction avant declaration
+//    syntaxiquement incorrect
+//
+// Resultats:
+//    Ligne 14 : no viable alternative at input 'x'
+//
+// Historique:
+//    cree le 11/01/2023
+//
+
+{
+    print(3);
+    int x = 4;
+}
