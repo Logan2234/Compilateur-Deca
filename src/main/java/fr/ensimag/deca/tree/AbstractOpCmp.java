@@ -44,6 +44,19 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
             throw new ContextualError(
                     "The right operand of a comparaison operation has to be an int or a float (rule 3.33)", loc);
 
+        ConvFloat convFloat;
+        if (typeLeft.isFloat() && typeRight.isInt()){
+            convFloat = new ConvFloat(this.getLeftOperand());
+            this.setRightOperand(convFloat);
+            convFloat.setType(compiler.environmentType.FLOAT);
+        }
+        
+        else if (typeLeft.isInt() && typeRight.isFloat()){
+            convFloat = new ConvFloat(this.getLeftOperand());
+            this.setLeftOperand(convFloat);
+            convFloat.setType(compiler.environmentType.FLOAT);    
+        }
+
         // Ajout du décor
         this.setType(compiler.environmentType.BOOLEAN);
         return compiler.environmentType.BOOLEAN;
