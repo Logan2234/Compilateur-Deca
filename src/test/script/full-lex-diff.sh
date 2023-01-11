@@ -19,13 +19,19 @@ cd "$(dirname "$0")"/../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
+BRED='\033[1;31m'
 RED='\033[0;31m'
+BGREEN='\033[1;32m'
 GREEN='\033[0;32m'
 BWHITE='\033[1;37m'
 
-echo -e "${BWHITE}#################### diff tests ####################"
-echo -e "${BWHITE}compares the output with <test>.corr that contains a verified output
-"
+# Stat var
+NB_TESTS=0
+NB_PASSED=0
+
+echo -e "${BWHITE}############################## Lexer tests ##############################"
+echo -e "${BWHITE}compares the output with <test>.corr that contains a verified output\n"
+
 files=$(find ./src/test/deca/syntax/valid/provided -name "*.deca")
 files+=" "
 files+=$(find ./src/test/deca/syntax/invalid/provided -name "*.deca")
@@ -34,6 +40,7 @@ files+=$(find ./src/test/deca/syntax/invalid/lexer -name "*.deca")
 
 for test in $files
 do
+    ((NB_TESTS = NB_TESTS + 1))
     # save the output
     test_lex "$test" > "${test%.deca}"-lex.lis 2>&1
 
@@ -43,9 +50,28 @@ do
 
     if [ "$diff" = "" ]
     then
-        echo -e "${GREEN}Pass: $test"
+        ((NB_PASSED = NB_PASSED + 1))
+        echo -e "${BGREEN}Passed ($NB_PASSED/$NB_TESTS): ${GREEN}$test"
     else
-        echo -e "${RED}Fail: $test"
+        echo -e "${BRED}Failed: ${RED}$test"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
     fi
-
 done
+
+VALID_PASSED_PERCENTAGE=`echo "$NB_PASSED / $NB_TESTS * 100" | bc -l`
+
+TEMP=`echo "$VALID_PASSED_PERCENTAGE > 0.5" | bc -l`
+
+if ((TEMP));
+then
+    echo -e "\n${GREEN} Valid test passed: "
+    printf %2.2f $VALID_PASSED_PERCENTAGE
+    echo "%"
+else
+    echo -e "\n${RED} Valid test passed: "
+    printf %2.2f $VALID_PASSED_PERCENTAGE
+    echo "%"
+fi
