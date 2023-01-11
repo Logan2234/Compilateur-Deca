@@ -14,7 +14,7 @@ import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.Or;
 
 /**
- * Test for the Plus node using mockito, using @Mock and @Before annotations.
+ * Test for the Or node using mockito, using @Mock and @Before annotations.
  *
  * @author Ensimag
  * @date 01/01/2023
