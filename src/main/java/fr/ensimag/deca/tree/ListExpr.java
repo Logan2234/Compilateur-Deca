@@ -20,7 +20,7 @@ public class ListExpr extends TreeList<AbstractExpr> {
     public void decompile(IndentPrintStream s) {
         for (AbstractExpr i : getList()) {
             if (!(getList().get(0).equals(i))) // ? Not sure if we have param1,param2,param3 ... at the end
-                s.println(", ");
+                s.print(", ");
 
             i.decompile(s);
         }
