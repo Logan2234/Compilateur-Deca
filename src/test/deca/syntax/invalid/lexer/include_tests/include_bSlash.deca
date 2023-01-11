@@ -2,7 +2,7 @@
 //    utilisation de \ dans le nom de fichier a include
 //
 // Resultats:
-//    Ligne 11 : Erreur lexicale
+//    Ligne 11 : token recognition error at: '#include "\'
 //
 // Historique:
 //    cree le 09/01/2023

@@ -2,7 +2,7 @@
 //    le package est introuvable
 //
 // Resultats:
-//    Ligne 11 : Erreur lexicale
+//    Ligne 11 : file_not_existing: include file not found
 //
 // Historique:
 //    cree le 09/01/2023
