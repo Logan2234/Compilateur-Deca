@@ -1,0 +1,11 @@
+// Description:
+//    # ne peut etre utilise qu'avec #include
+//
+// Resultats:
+//    Ligne 11 : Erreur lexicale.
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+#wrong
