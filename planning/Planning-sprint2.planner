@@ -111,61 +111,61 @@
         </predecessors>
       </task>
     </task>
-    <task id="20" name="Sprint 2: Sans objet" note="" work="385200" start="20230105T193000Z" end="20230111T193000Z" work-start="20230106T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="20" name="Sprint 2: Sans objet" note="" work="414000" start="20230105T193000Z" end="20230112T163000Z" work-start="20230106T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <predecessors>
         <predecessor id="1" predecessor-id="1" type="FS"/>
       </predecessors>
-      <task id="21" name="A. Base de tests" note="" work="32400" duration="32400" start="20230107T160000Z" end="20230109T100000Z" work-start="20230107T160000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="21" name="A. Base de tests" note="" work="32400" duration="32400" start="20230107T160000Z" end="20230109T100000Z" work-start="20230107T160000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="35" type="FS"/>
         </predecessors>
       </task>
-      <task id="22" name="A. Parser" note="" work="32400" duration="32400" start="20230109T100000Z" end="20230110T100000Z" work-start="20230109T100000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="22" name="A. Parser" note="" work="32400" duration="32400" start="20230109T100000Z" end="20230110T100000Z" work-start="20230109T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="21" type="FS"/>
         </predecessors>
       </task>
-      <task id="23" name="A. Decompile" note="" work="32400" duration="32400" start="20230109T100000Z" end="20230110T100000Z" work-start="20230109T100000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="23" name="A. Decompile" note="" work="32400" duration="32400" start="20230109T100000Z" end="20230110T100000Z" work-start="20230109T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="21" type="FS"/>
         </predecessors>
       </task>
-      <task id="24" name="B. Analyse sujet" note="" work="18000" duration="18000" start="20230107T160000Z" end="20230108T160000Z" work-start="20230107T160000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="24" name="B. Analyse sujet" note="" work="32400" duration="32400" start="20230107T160000Z" end="20230109T100000Z" work-start="20230107T160000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="35" type="FS"/>
         </predecessors>
       </task>
-      <task id="25" name="B. Base de tests" note="" work="25200" duration="25200" start="20230108T160000Z" end="20230109T143000Z" work-start="20230108T160000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="25" name="B. Base de tests" note="" work="25200" duration="25200" start="20230109T100000Z" end="20230109T183000Z" work-start="20230109T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="24" type="FS"/>
         </predecessors>
       </task>
-      <task id="26" name="B. Am&#xE9;lioration scripts tests" note="" work="14400" duration="14400" start="20230109T143000Z" end="20230109T183000Z" work-start="20230109T143000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="26" name="B. Am&#xE9;lioration scripts tests" note="" work="14400" duration="14400" start="20230109T183000Z" end="20230110T120000Z" work-start="20230109T183000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="25" type="FS"/>
         </predecessors>
       </task>
-      <task id="27" name="B. EnvironnementType" note="" work="3600" duration="3600" start="20230109T183000Z" end="20230109T193000Z" work-start="20230109T183000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="27" name="B. EnvironnementType" note="" work="10800" duration="10800" start="20230110T120000Z" end="20230110T163000Z" work-start="20230110T120000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="26" type="FS"/>
         </predecessors>
       </task>
-      <task id="28" name="B. Passe 3" note="" work="32400" duration="32400" start="20230109T193000Z" end="20230110T193000Z" work-start="20230110T090000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="28" name="B. Passe 3" note="" work="64800" duration="64800" start="20230110T163000Z" end="20230112T163000Z" work-start="20230110T163000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="27" type="FS"/>
         </predecessors>
       </task>
-      <task id="29" name="C. Analyse sujet" note="" work="46800" duration="46800" start="20230107T160000Z" end="20230109T153000Z" work-start="20230107T160000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="29" name="C. Analyse sujet" note="" work="32400" duration="32400" start="20230107T160000Z" end="20230109T100000Z" work-start="20230107T160000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="35" type="FS"/>
         </predecessors>
       </task>
-      <task id="30" name="C. Base + script de tests" note="" work="14400" duration="14400" start="20230109T153000Z" end="20230109T193000Z" work-start="20230109T153000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="30" name="C. Base + script de tests" note="" work="32400" duration="32400" start="20230109T100000Z" end="20230110T100000Z" work-start="20230109T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="29" type="FS"/>
         </predecessors>
       </task>
-      <task id="31" name="C. Code assembleur" note="" work="32400" duration="32400" start="20230109T193000Z" end="20230110T193000Z" work-start="20230110T090000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="31" name="C. Code assembleur" note="" work="64800" duration="64800" start="20230110T100000Z" end="20230112T100000Z" work-start="20230110T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="30" type="FS"/>
         </predecessors>
@@ -176,47 +176,36 @@
           <predecessor id="1" predecessor-id="32" type="FS"/>
         </predecessors>
       </task>
-      <task id="34" name="G. Sp&#xE9;cification extension" note="" work="14400" duration="14400" start="20230106T143000Z" end="20230106T183000Z" work-start="20230106T143000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="34" name="G. Sp&#xE9;cification extension" note="" work="14400" duration="14400" start="20230106T143000Z" end="20230106T183000Z" work-start="20230106T143000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="33" type="FS"/>
         </predecessors>
       </task>
-      <task id="35" name="G. Gestion des risques" note="" work="10800" duration="10800" start="20230106T183000Z" end="20230107T160000Z" work-start="20230106T183000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="35" name="G. Gestion des risques" note="" work="10800" duration="10800" start="20230106T183000Z" end="20230107T160000Z" work-start="20230106T183000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="34" type="FS"/>
         </predecessors>
       </task>
-      <task id="36" name="G. Pr&#xE9;paration suivi 2" note="" work="28800" duration="28800" start="20230110T100000Z" end="20230110T193000Z" work-start="20230110T100000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration">
-        <predecessors>
-          <predecessor id="1" predecessor-id="23" type="FS"/>
-          <predecessor id="1" predecessor-id="22" type="FS"/>
-        </predecessors>
-      </task>
-      <task id="37" name="G. Cl&#xF4;ture de sprint" note="" work="32400" duration="32400" start="20230110T193000Z" end="20230111T193000Z" work-start="20230111T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
-        <predecessors>
-          <predecessor id="1" predecessor-id="36" type="FS"/>
-        </predecessors>
-      </task>
     </task>
-    <task id="38" name="Sprint 3: Avec objet" note="" work="226800" start="20230111T193000Z" end="20230119T183000Z" work-start="20230112T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="36" name="Sprint 3: Avec objet" note="" work="226800" start="20230112T163000Z" end="20230120T153000Z" work-start="20230112T163000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <predecessors>
         <predecessor id="1" predecessor-id="20" type="FS"/>
       </predecessors>
-      <task id="39" name="..." note="" work="226800" duration="226800" start="20230111T193000Z" end="20230119T183000Z" work-start="20230112T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration"/>
+      <task id="37" name="..." note="" work="226800" duration="226800" start="20230112T163000Z" end="20230120T153000Z" work-start="20230112T163000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration"/>
     </task>
-    <task id="40" name="Rendu version interm&#xE9;diaire" note="" work="0" start="20230116T000000Z" end="20230116T000000Z" work-start="20230116T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="38" name="Rendu version interm&#xE9;diaire" note="" work="0" start="20230116T000000Z" end="20230116T000000Z" work-start="20230116T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20230116T000000Z"/>
     </task>
-    <task id="41" name="Rendu Final" note="" work="0" start="20230123T000000Z" end="20230123T000000Z" work-start="20230123T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="39" name="Rendu Final" note="" work="0" start="20230123T000000Z" end="20230123T000000Z" work-start="20230123T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20230123T000000Z"/>
     </task>
-    <task id="42" name="Rendu documentation" note="" work="0" start="20230123T000000Z" end="20230123T000000Z" work-start="20230123T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="40" name="Rendu documentation" note="" work="0" start="20230123T000000Z" end="20230123T000000Z" work-start="20230123T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20230123T000000Z"/>
     </task>
-    <task id="43" name="Rendu Bilan" note="" work="0" start="20230125T000000Z" end="20230125T000000Z" work-start="20230125T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="41" name="Rendu Bilan" note="" work="0" start="20230125T000000Z" end="20230125T000000Z" work-start="20230125T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20230125T000000Z"/>
     </task>
-    <task id="44" name="Soutenance" note="" work="0" start="20230126T000000Z" end="20230126T000000Z" work-start="20230126T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="42" name="Soutenance" note="" work="0" start="20230126T000000Z" end="20230126T000000Z" work-start="20230126T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20230126T000000Z"/>
     </task>
   </tasks>
@@ -229,8 +218,6 @@
     <resource id="5" name="Vianney" short-name="VV" type="1" units="0" email="" note="" std-rate="0"/>
   </resources>
   <allocations>
-    <allocation task-id="36" resource-id="1" units="50"/>
-    <allocation task-id="37" resource-id="1" units="20"/>
     <allocation task-id="35" resource-id="1" units="20"/>
     <allocation task-id="34" resource-id="1" units="20"/>
     <allocation task-id="33" resource-id="1" units="20"/>
@@ -245,7 +232,6 @@
     <allocation task-id="15" resource-id="1" units="20"/>
     <allocation task-id="7" resource-id="1" units="100"/>
     <allocation task-id="6" resource-id="1" units="100"/>
-    <allocation task-id="37" resource-id="2" units="20"/>
     <allocation task-id="35" resource-id="2" units="20"/>
     <allocation task-id="34" resource-id="2" units="20"/>
     <allocation task-id="33" resource-id="2" units="20"/>
@@ -264,7 +250,6 @@
     <allocation task-id="10" resource-id="2" units="50"/>
     <allocation task-id="9" resource-id="2" units="50"/>
     <allocation task-id="8" resource-id="2" units="50"/>
-    <allocation task-id="37" resource-id="3" units="20"/>
     <allocation task-id="35" resource-id="3" units="20"/>
     <allocation task-id="34" resource-id="3" units="20"/>
     <allocation task-id="33" resource-id="3" units="20"/>
@@ -283,7 +268,6 @@
     <allocation task-id="10" resource-id="3" units="50"/>
     <allocation task-id="9" resource-id="3" units="50"/>
     <allocation task-id="8" resource-id="3" units="50"/>
-    <allocation task-id="37" resource-id="4" units="20"/>
     <allocation task-id="35" resource-id="4" units="20"/>
     <allocation task-id="34" resource-id="4" units="20"/>
     <allocation task-id="33" resource-id="4" units="20"/>
@@ -299,8 +283,6 @@
     <allocation task-id="14" resource-id="4" units="100"/>
     <allocation task-id="13" resource-id="4" units="100"/>
     <allocation task-id="12" resource-id="4" units="100"/>
-    <allocation task-id="36" resource-id="5" units="50"/>
-    <allocation task-id="37" resource-id="5" units="20"/>
     <allocation task-id="35" resource-id="5" units="20"/>
     <allocation task-id="34" resource-id="5" units="20"/>
     <allocation task-id="33" resource-id="5" units="20"/>
