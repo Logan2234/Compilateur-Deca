@@ -290,9 +290,29 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>full-codegen</id>
+                        <configuration>
+                            <executable>./src/test/script/full-codegen.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>full-codegen-temp</id>
                         <configuration>
                             <executable>./src/test/script/full-codegen-temp.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>full-decompile</id>
+                        <configuration>
+                            <executable>./src/test/script/full-decompile.sh</executable>
                         </configuration>
                         <phase>test</phase>
                         <goals>
