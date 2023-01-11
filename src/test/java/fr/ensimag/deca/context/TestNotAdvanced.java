@@ -3,6 +3,7 @@ package fr.ensimag.deca.context;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.ConvFloat;
+import fr.ensimag.deca.tree.Not;
 import fr.ensimag.deca.tree.Plus;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +18,7 @@ import org.mockito.MockitoAnnotations;
  * @author Ensimag
  * @date 01/01/2023
  */
-public class TestPlusAdvanced {
+public class TestNotAdvanced {
 
     final Type BOOLEAN = new BooleanType(null);
 
@@ -30,13 +31,13 @@ public class TestPlusAdvanced {
     public void setup() throws ContextualError {
         MockitoAnnotations.initMocks(this);
         compiler = new DecacCompiler(null, null);
-        when(bolleanexpr.verifyExpr(compiler, null, null)).thenReturn(BOOLEAN);
+        when(booleanexpr.verifyExpr(compiler, null, null)).thenReturn(BOOLEAN);
 
     }
 
     @Test
     public void testBoolean() throws ContextualError {
-        Plus t = new Not(booleanexpr);
+        Not t = new Not(booleanexpr);
         // check the result
         assertTrue(t.verifyExpr(compiler, null, null).isBoolean());
         // check that the mocks have been called properly.

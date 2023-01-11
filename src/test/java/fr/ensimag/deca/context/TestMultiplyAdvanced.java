@@ -3,6 +3,7 @@ package fr.ensimag.deca.context;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.ConvFloat;
+import fr.ensimag.deca.tree.Multiply;
 import fr.ensimag.deca.tree.Plus;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +18,7 @@ import org.mockito.MockitoAnnotations;
  * @author Ensimag
  * @date 01/01/2023
  */
-public class TestPlusAdvanced {
+public class TestMultiplyAdvanced {
 
     final Type INT = new IntType(null);
     final Type FLOAT = new FloatType(null);
@@ -45,7 +46,7 @@ public class TestPlusAdvanced {
 
     @Test
     public void testIntInt() throws ContextualError {
-        Plus t = new Multiply(intexpr1, intexpr2);
+        Multiply t = new Multiply(intexpr1, intexpr2);
         // check the result
         assertTrue(t.verifyExpr(compiler, null, null).isInt());
         // check that the mocks have been called properly.
@@ -55,7 +56,7 @@ public class TestPlusAdvanced {
 
     @Test
     public void testIntFloat() throws ContextualError {
-        Plus t = new Multiply(intexpr1, floatexpr1);
+        Multiply t = new Multiply(intexpr1, floatexpr1);
         // check the result
         assertTrue(t.verifyExpr(compiler, null, null).isFloat());
         // ConvFloat should have been inserted on the right side
@@ -68,7 +69,7 @@ public class TestPlusAdvanced {
 
     @Test
     public void testFloatInt() throws ContextualError {
-        Plus t = new Multiply(floatexpr1, intexpr1);
+        Multiply t = new Multiply(floatexpr1, intexpr1);
         // check the result
         assertTrue(t.verifyExpr(compiler, null, null).isFloat());
         // ConvFloat should have been inserted on the right side
