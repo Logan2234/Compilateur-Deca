@@ -81,9 +81,9 @@ if ((TEMP));
 then
     echo -e "\n${GREEN} Invalid test passed: "
     printf %2.2f $INVALID_PASSED_PERCENTAGE
-    echo "%"
+    echo -e "%\n"
 else
     echo -e "\n${RED} Invalid test passed: "
     printf %2.2f $INVALID_PASSED_PERCENTAGE
-    echo -e "%\n\n"
+    echo -e "%\n"
 fi
