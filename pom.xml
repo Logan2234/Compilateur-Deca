@@ -270,6 +270,36 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>full-lex</id>
+                        <configuration>
+                            <executable>./src/test/script/full-lex.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>full-synt</id>
+                        <configuration>
+                            <executable>./src/test/script/full-synt.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>full-codegen-temp</id>
+                        <configuration>
+                            <executable>./src/test/script/full-codegen-temp.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>full-context</id>
                         <configuration>
                             <executable>./src/test/script/full-context.sh</executable>
