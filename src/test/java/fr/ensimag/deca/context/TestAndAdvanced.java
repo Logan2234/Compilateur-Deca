@@ -2,9 +2,7 @@ package fr.ensimag.deca.context;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.AbstractExpr;
-import fr.ensimag.deca.tree.ConvFloat;
-import fr.ensimag.deca.tree.Multiply;
-import fr.ensimag.deca.tree.Plus;
+import fr.ensimag.deca.tree.And;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
