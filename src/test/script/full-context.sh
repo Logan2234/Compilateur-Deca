@@ -69,11 +69,11 @@ TEMP=`echo "$VALID_PASSED_PERCENTAGE > 0.5" | bc -l`
 if ((TEMP));
 then
     echo -e "\n${GREEN} Valid test passed: "
-    printf %2.2f $VALID_PASSED_PERCENTAGE
+    printf %2.0f $VALID_PASSED_PERCENTAGE
     echo "%"
 else
     echo -e "\n${RED} Valid test passed: "
-    printf %2.2f $VALID_PASSED_PERCENTAGE
+    printf %2.0f $VALID_PASSED_PERCENTAGE
     echo "%"
 fi
 
@@ -81,10 +81,10 @@ TEMP=`echo "$INVALID_PASSED_PERCENTAGE > 0.5" | bc -l`
 if ((TEMP));
 then
     echo -e "\n${GREEN} Invalid test passed: "
-    printf %2.2f $INVALID_PASSED_PERCENTAGE
+    printf %2.0f $INVALID_PASSED_PERCENTAGE
     echo -e "%\n"
 else
     echo -e "\n${RED} Invalid test passed: "
-    printf %2.2f $INVALID_PASSED_PERCENTAGE
+    printf %2.0f $INVALID_PASSED_PERCENTAGE
     echo -e "%\n"
 fi

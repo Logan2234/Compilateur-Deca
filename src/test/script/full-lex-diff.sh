@@ -51,9 +51,9 @@ do
     if [ "$diff" = "" ]
     then
         ((NB_PASSED = NB_PASSED + 1))
-        echo -e "${BGREEN}Passed ($NB_PASSED/$NB_TESTS): ${GREEN}$test"
+        echo -e "${BGREEN}Test passed ($NB_PASSED/$NB_TESTS): ${GREEN}$test"
     else
-        echo -e "${BRED}Failed: ${RED}$test"
+        echo -e "${BRED}Test failed ($NB_PASSED/$NB_TESTS): ${RED}$test"
         if [[ $1 == "--maven" ]];
         then
             exit 1
@@ -68,10 +68,10 @@ TEMP=`echo "$VALID_PASSED_PERCENTAGE > 0.5" | bc -l`
 if ((TEMP));
 then
     echo -e "\n${GREEN} Valid test passed: "
-    printf %2.2f $VALID_PASSED_PERCENTAGE
+    printf %2.0f $VALID_PASSED_PERCENTAGE
     echo "%"
 else
     echo -e "\n${RED} Valid test passed: "
-    printf %2.2f $VALID_PASSED_PERCENTAGE
+    printf %2.0f $VALID_PASSED_PERCENTAGE
     echo "%"
 fi
