@@ -286,6 +286,9 @@
                         <id>full-synt</id>
                         <configuration>
                             <executable>./src/test/script/full-synt.sh</executable>
+                            <arguments>
+                                <argument>--maven</argument>
+                            </arguments>
                         </configuration>
                         <phase>test</phase>
                         <goals>

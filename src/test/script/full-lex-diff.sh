@@ -29,7 +29,7 @@ BWHITE='\033[1;37m'
 NB_TESTS=0
 NB_PASSED=0
 
-echo -e "${BWHITE}############################## Lexer tests ##############################"
+echo -e "${BWHITE}\n============================= Lexer tests ============================="
 echo -e "${BWHITE}compares the output with <test>.corr that contains a verified output\n"
 
 files=$(find ./src/test/deca/syntax/valid/provided -name "*.deca")

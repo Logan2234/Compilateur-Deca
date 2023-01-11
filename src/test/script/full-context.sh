@@ -6,6 +6,7 @@ REDBOLD='\033[0;31;1m'
 GREENBOLD='\033[0;32;1m'
 GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
+BWHITE='\033[1;37m'
 
 # Stat var
 NB_VALID_TESTS=0
@@ -19,14 +20,14 @@ cd "$(dirname "$0")"/../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
-echo -e "${GREENBOLD} \n============================= Testing context on valid tests =============================\n ${NOCOLOR}"
+echo -e "${BWHITE} \n============================= Context valid tests =============================\n"
 
 files=$(find ./src/test/deca/context/valid -maxdepth 1 -name "*.deca")
 
 for test in $files
 do
+    ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
     test_context "$test" > "${test%.deca}".lis 2>&1
-        ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
     if cat "${test%.deca}".lis | grep -q "${test}\|Exception in thread"
     then
         echo -e "${REDBOLD}Error detected on a valid test ($VALID_PASSED/$NB_VALID_TESTS): ${RED}$test${NOCOLOR}"
@@ -40,7 +41,7 @@ do
     fi
 done
 
-echo -e "${GREENBOLD} \n============================= Testing context on invalid tests =============================\n ${NOCOLOR}"
+echo -e "${BWHITE} \n============================= Context invalid tests =============================\n"
 
 files=$(find ./src/test/deca/context/invalid -maxdepth 1 -name "*.deca")
 
