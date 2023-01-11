@@ -1,5 +1,5 @@
 // Description:
-//    test de programme avec int and float
+//    int and float
 //    lexicalement correct mais les tokens peuvent etre differents de
 //    INT et FLOAT dans les cas particuliers dans la fin de l'exemple
 //

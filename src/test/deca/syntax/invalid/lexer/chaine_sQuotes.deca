@@ -2,7 +2,7 @@
 //    les chaines de caracteres utilisent des " et non des '
 //
 // Resultats:
-//    Ligne 11 : Erreur lexicale.
+//    Ligne 11 : token recognition error at: '''
 //
 // Historique:
 //    cree le 09/01/2023

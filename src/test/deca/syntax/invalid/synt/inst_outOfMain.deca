@@ -1,0 +1,12 @@
+// Description:
+//    include dans le main
+//    syntaxiquement incorrect
+//
+// Resultats:
+//    Ligne 12 : no viable alternative at input 'int'
+//
+// Historique:
+//    cree le 11/01/2023
+//
+
+int x = 5;
