@@ -296,9 +296,25 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>full-context</id>
+                        <configuration>
+                            <executable>./src/test/script/full-context.sh</executable>
+                        <arguments>
+                            <argument>--maven</argument>
+                        </arguments>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>full-codegen</id>
                         <configuration>
                             <executable>./src/test/script/full-codegen.sh</executable>
+                            <arguments>
+                                <argument>--maven</argument>
+                            </arguments>
                         </configuration>
                         <phase>test</phase>
                         <goals>
@@ -319,19 +335,6 @@
                         <id>full-decompile</id>
                         <configuration>
                             <executable>./src/test/script/full-decompile.sh</executable>
-                        </configuration>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>full-context</id>
-                        <configuration>
-                            <executable>./src/test/script/full-context.sh</executable>
-                        <arguments>
-                            <argument>--maven</argument>
-                        </arguments>
                         </configuration>
                         <phase>test</phase>
                         <goals>

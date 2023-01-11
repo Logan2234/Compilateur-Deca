@@ -1,15 +1,15 @@
 // Description:
-//    Test d'un while dans lequel on ne rentre pas
+//    Réalisation d'un while avec une addition à chaque itération
 //
 // Resultats:
-//    0
+//    21
 //
 // Historique:
 //    cree le 07/01/2023
 
 {
 	int x = 0;
-	while (x == 1){
+	while (x<= 20){
 		x=x+1;
     }
 	println(x);
