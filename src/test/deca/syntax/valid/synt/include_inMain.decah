@@ -1,2 +1,2 @@
 // file needed to test #include "test.decah"
-print("test imported");
+print("Imported");
