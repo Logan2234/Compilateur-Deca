@@ -1,2 +1,2 @@
-INFO  fr.ensimag.deca.syntax.DecacErrorListner.syntaxError(DecacErrorListner.java:50) - no token, no LocationException => using input.getSourceName(): line=10
-./src/test/deca/syntax/invalid/provided/chaine_incomplete.deca:10:0: token recognition error at: '"chaine pas finie\n'
+INFO  fr.ensimag.deca.syntax.DecacErrorListner.syntaxError(DecacErrorListner.java:50) - no token, no LocationException => using input.getSourceName(): line=11
+./src/test/deca/syntax/invalid/provided/chaine_incomplete.deca:11:0: token recognition error at: '"chaine pas finie\n'
