@@ -34,6 +34,7 @@ class X extends B {
 {
     string test = "main";
     A a = new A();
+    B b = (B)(a);
     a.setX(3);
     a.setX(true);
     if (a instanceof X) {}
