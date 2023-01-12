@@ -45,6 +45,44 @@ do
     fi
 done
 
+# Check readInt decompile
+decac -p ./src/test/deca/codegen/interactive/readInt.deca > ./src/test/deca/codegen/interactive/readInt_p.deca
+decac ./src/test/deca/codegen/interactive/readInt.deca
+decac ./src/test/deca/codegen/interactive/readInt_p.deca
+
+diff=$(diff ./src/test/deca/codegen/interactive/readInt.ass ./src/test/deca/codegen/interactive/readInt_p.ass)
+
+# check if passed
+if [ "$diff" = "" ] 
+then
+    echo -e "${GREENBOLD}Test passed: ${NOCOLOR}codegen/interactive/readInt.deca ${GREEN}decompiled version gives the same assembly file"
+else
+    echo -e "${REDBOLD}Test failed: ${NOCOLOR}codegen/interactive/readInt.deca ${RED}decompiled version does not give the same assembly file"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+# Check readFloat decompile
+decac -p ./src/test/deca/codegen/interactive/readFloat.deca > ./src/test/deca/codegen/interactive/readFloat_p.deca
+decac ./src/test/deca/codegen/interactive/readFloat.deca
+decac ./src/test/deca/codegen/interactive/readFloat_p.deca
+
+diff=$(diff ./src/test/deca/codegen/interactive/readFloat.ass ./src/test/deca/codegen/interactive/readFloat_p.ass)
+
+# check if passed
+if [ "$diff" = "" ] 
+then
+    echo -e "${GREENBOLD}Test passed: ${NOCOLOR}codegen/interactive/readFloat.deca ${GREEN}decompiled version gives the same assembly file"
+else
+    echo -e "${REDBOLD}Test failed: ${NOCOLOR}codegen/interactive/readFloat.deca ${RED}decompiled version does not give the same assembly file"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
 decac -p -v > ./src/test/script/options-scripts/option-p.tmp 2> ./src/test/script/options-scripts/option-p.tmp
 
 if [ "$?" -ne 0 ]
@@ -60,7 +98,9 @@ fi
 
 # Cleaning process
 
-rm -r ./src/test/deca/codegen/valid/*_p.deca;
-rm -r ./src/test/deca/codegen/valid/*.res;
-rm -r ./src/test/deca/codegen/valid/*.ass;
+rm ./src/test/deca/codegen/valid/*_p.deca;
+rm ./src/test/deca/codegen/valid/*.res;
+rm ./src/test/deca/codegen/valid/*.ass;
+rm ./src/test/deca/codegen/interactive/*_p.deca;
+rm ./src/test/deca/codegen/interactive/*.ass;
 rm ./src/test/script/options-scripts/option-p.tmp

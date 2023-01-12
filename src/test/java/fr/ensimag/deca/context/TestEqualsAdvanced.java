@@ -46,8 +46,8 @@ public class TestEqualsAdvanced {
         when(intexpr2.verifyExpr(compiler, null, null)).thenReturn(INT);
         when(floatexpr1.verifyExpr(compiler, null, null)).thenReturn(FLOAT);
         when(floatexpr2.verifyExpr(compiler, null, null)).thenReturn(FLOAT);
-        when(booleanexpr1.verifyExpr(compiler, null, null)).thenReturn(FLOAT);
-        when(booleanexpr2.verifyExpr(compiler, null, null)).thenReturn(FLOAT);
+        when(booleanexpr1.verifyExpr(compiler, null, null)).thenReturn(BOOLEAN);
+        when(booleanexpr2.verifyExpr(compiler, null, null)).thenReturn(BOOLEAN);
     }
 
     @Test
@@ -97,5 +97,31 @@ public class TestEqualsAdvanced {
         // check that the mocks have been called properly.
         verify(booleanexpr1).verifyExpr(compiler, null, null);
         verify(booleanexpr2).verifyExpr(compiler, null, null);
+    }
+
+    @Test
+    public void testBooleanInt() throws ContextualError {
+        Equals t = new Equals(booleanexpr1, intexpr1);
+        // check the result
+        assertThrows(ContextualError.class, ()->{t.verifyExpr(compiler, null, null);});
+        // ConvFloat should have been inserted on the right side
+        assertFalse(t.getRightOperand() instanceof ConvFloat);
+        assertFalse(t.getLeftOperand() instanceof ConvFloat);
+        // check that the mocks have been called properly.
+        verify(booleanexpr1).verifyExpr(compiler, null, null);
+        verify(intexpr1).verifyExpr(compiler, null, null);
+    }
+
+    @Test
+    public void testBooleanFloat() throws ContextualError {
+        Equals t = new Equals(booleanexpr1, floatexpr1);
+        // check the result
+        assertThrows(ContextualError.class, ()->{t.verifyExpr(compiler, null, null);});
+        // ConvFloat should have been inserted on the right side
+        assertFalse(t.getRightOperand() instanceof ConvFloat);
+        assertFalse(t.getLeftOperand() instanceof ConvFloat);
+        // check that the mocks have been called properly.
+        verify(booleanexpr1).verifyExpr(compiler, null, null);
+        verify(floatexpr1).verifyExpr(compiler, null, null);
     }
 }

@@ -51,8 +51,8 @@ public class Program extends AbstractProgram {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        getClasses().decompile(s);
-        getMain().decompile(s);
+        classes.decompile(s);
+        main.decompile(s);
     }
     
     @Override
