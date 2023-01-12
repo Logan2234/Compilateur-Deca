@@ -2,8 +2,8 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.instructions.SNE;
-import fr.ensimag.ima.pseudocode.instructions.SUB;
+import fr.ensimag.ima.pseudocode.instructions.ADD;
+import fr.ensimag.ima.pseudocode.instructions.SEQ;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -42,8 +42,8 @@ public class Not extends AbstractUnaryExpr {
     @Override
     public void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister) {
         // result expression is a bool and have been put in the register.
-        // let's sub 1 and check neq
-        compiler.addInstruction(new SUB(resulRegister, resulRegister));
-        compiler.addInstruction(new SNE(resulRegister));
+        // let's add 0 and check eq ? if 1, than the result was 0 : 0 + 0 = 0, therefore previous was 0
+        compiler.addInstruction(new ADD(resulRegister, resulRegister));
+        compiler.addInstruction(new SEQ(resulRegister));
     }
 }
