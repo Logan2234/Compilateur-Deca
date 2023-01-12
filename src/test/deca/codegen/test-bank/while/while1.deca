@@ -1,5 +1,21 @@
-// Created by Virgile, 10/01/2022
-// test while functions.
+// Description : 
+//      Test des boucles
+//
+// Resultats :
+//      0
+//      1
+//      2
+//      3
+//      4
+//      5
+//      6
+//      7
+//      8
+//      9
+// 
+// Historique :
+//      créé le 10/01/23
+
 {
     int i = 0;
     while(i < 10) {

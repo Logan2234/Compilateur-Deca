@@ -11,6 +11,9 @@ RED='\033[0;31m'
 GREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
+# start by cleanup
+./$wd/clean.sh
+
 for test in $files
 do
     total=$(($total+1))

@@ -1,5 +1,15 @@
-// Created by Virgile, 11/01/2022
-// boolean operator test.
+// Description : 
+//      Déclare des booléens avec des expressions or et les affiche
+//
+// Resultats :
+//      True
+//      True
+//      True
+//      False
+// 
+// Historique :
+//      créé le 10/01/23
+
 {
     boolean a = true || true;
     boolean b = true || false;

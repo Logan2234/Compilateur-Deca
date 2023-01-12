@@ -1,6 +1,0 @@
-// Created by Virgile, 10/01/2022
-// test assignments.
-{
-    float a = 0 + 0.3;
-    print(a);
-}

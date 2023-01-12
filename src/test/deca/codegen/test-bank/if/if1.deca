@@ -1,5 +1,12 @@
-// Created by Virgile, 11/01/2022
-// test if functions.
+// Description : 
+//      Test conditionnel sur des entiers 
+//
+// Resultats :
+//      ok
+// 
+// Historique :
+//      créé le 10/01/23
+
 {
     int i = 0;
     int j = 1;
