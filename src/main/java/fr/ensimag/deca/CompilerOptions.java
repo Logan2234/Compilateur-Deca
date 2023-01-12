@@ -227,6 +227,5 @@ public class CompilerOptions {
         System.out.println("-w (warnings) (optional) : display warnings");
         System.out.println();
         System.out.println("Note : -p and -v are incompatible.");
-
     }
 }
