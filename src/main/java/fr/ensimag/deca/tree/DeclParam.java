@@ -1,10 +1,12 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -31,6 +33,16 @@ public class DeclParam extends AbstractDeclParam {
     protected void verifyDeclParam(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
+        Type type = this.type.getType();
+        try {
+            ParamDefinition def = new ParamDefinition(type, this.getLocation());
+            localEnv.declare(this.paramName.getName(), def);
+            paramName.setDefinition(def);
+            paramName.setType(type);
+        }
+        catch (DoubleDefException e) {
+            throw new ContextualError("The field \"" + this.paramName.getName().getName() + "\" has already been declared (rule 3.17)", this.getLocation());
+        }
     }
 
     @Override

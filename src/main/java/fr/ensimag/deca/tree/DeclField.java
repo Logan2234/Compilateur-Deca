@@ -49,7 +49,7 @@ public class DeclField extends AbstractDeclField {
         catch (DoubleDefException e) {
             throw new ContextualError("The field \"" + this.fieldName.getName().getName() + "\" has already been declared (rule 3.17)", this.getLocation());
         }
-        initialization.verifyInitialization(compiler, type, localEnv, currentClass);
+        
     }
 
     @Override
