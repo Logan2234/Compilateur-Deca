@@ -3,8 +3,14 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.ADD;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.REM;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.runtimeErrors.RemByZeroErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -44,6 +50,12 @@ public class Modulo extends AbstractOpArith {
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dVal) {
         // mod op
         compiler.addInstruction(new REM(dVal, register));
+        if(compiler.getCompilerOptions().getRunTestChecks()) {
+            // add runtime division by zero check
+            RemByZeroErr error = new RemByZeroErr();
+            compiler.useRuntimeError(error);
+            compiler.addInstruction(new BOV(error.getErrorLabel()));
+        }
     }
 
 }

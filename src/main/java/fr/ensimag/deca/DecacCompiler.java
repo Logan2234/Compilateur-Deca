@@ -1,6 +1,7 @@
 package fr.ensimag.deca;
 
 import fr.ensimag.deca.CompilerOptions.CompileMode;
+import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
@@ -13,6 +14,7 @@ import fr.ensimag.ima.pseudocode.AbstractLine;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Instruction;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Line;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.File;
@@ -20,6 +22,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.log4j.Logger;
@@ -58,6 +64,8 @@ public class DecacCompiler {
         for (int i = 0; i < availableRegisters.length; i++) {
             availableRegisters[i] = true;
         }
+        this.usedErrors = new HashMap<>();
+        this.stackUsedSizes = new ArrayList<Integer>();
         this.source = source;
     }
 
@@ -118,6 +126,14 @@ public class DecacCompiler {
 
     /**
      * @see
+     *      fr.ensimag.ima.pseudocode.IMAProgram#addFirst(fr.ensimag.ima.pseudocode.Line)
+     */
+    public void addInstructionFirst(Instruction instruction) {
+        program.addFirst(new Line(instruction));
+    }
+
+    /**
+     * @see
      *      fr.ensimag.ima.pseudocode.IMAProgram#display()
      */
     public String displayIMAProgram() {
@@ -137,6 +153,12 @@ public class DecacCompiler {
      * If null is returned, we can then save a register and restore it.
      */
     private boolean[] availableRegisters;
+    /**
+     * Stores the max reached stack size for each context (code block).
+     * We have one default context when the program starts, and more context with methods calls.
+     * Here, a block, or context, is for main program, ot methods, or classes initialization. 
+     */
+    private List<Integer> stackUsedSizes;
 
     /**
      * Get a available register.
@@ -160,6 +182,61 @@ public class DecacCompiler {
      */
     public void freeRegister(GPRegister register) {
         availableRegisters[register.getNumber()] = true;
+    }
+
+    /**
+     * Creates a new code context block.
+     */
+    public void newCodeContext() {
+        stackUsedSizes.add(0);
+    }
+
+    /**
+     * Increase the size of the use stack of the block 
+     * @param increment how much we want to increment the stack
+     */
+    public void increaseContextUsedStack(int increment) {
+        if(stackUsedSizes.size() == 0) {
+            throw new RuntimeException("No current context to incrment !");
+        }
+        else {
+            int value = stackUsedSizes.get(stackUsedSizes.size() - 1) + increment;
+            stackUsedSizes.set(stackUsedSizes.size() - 1, value);
+        }
+    }
+
+    /**
+     * Increase the size of the use stack of the block by 1.
+     */
+    public void incrementContextUsedStack() {
+        increaseContextUsedStack(1);
+    }
+
+    /**
+     * finish the current context.
+     * @return the value of the max stack size of that context.
+     */
+    public int endCodeContext() {
+        return stackUsedSizes.remove(stackUsedSizes.size() - 1);
+    }
+
+    /**
+     * The errors the assembly program can throw at runtime.
+     */
+    public HashMap<Integer, AbstractRuntimeErr> usedErrors;
+
+    /**
+     * Add an error to the used errors. They will then be generated at the end of the assembly code.
+     */
+    public void useRuntimeError(AbstractRuntimeErr error) {
+        // check we are not using that error already
+        if(!usedErrors.containsKey(error.errorId())) {
+            usedErrors.put(error.errorId(), error);
+        }
+    }
+
+    public HashMap<Integer, AbstractRuntimeErr> getAllErrors() {
+        return usedErrors;
     }
 
     /** The global environment for types (and the symbolTable) */

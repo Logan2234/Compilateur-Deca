@@ -63,11 +63,13 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
             if(register != null) {
                 getOperand().codeGenExpr(compiler, resultRegister);
                 codeGenUnExpr(compiler, resultRegister);
+                compiler.incrementContextUsedStack();
                 compiler.addInstruction(new PUSH(register));
                 compiler.freeRegister(register);
             }
             else {
                 // save R2
+                compiler.incrementContextUsedStack();
                 compiler.addInstruction(new PUSH(Register.getR(2)));
                 getOperand().codeGenExpr(compiler, Register.getR(2));
                 codeGenUnExpr(compiler, Register.getR(2));
@@ -76,6 +78,7 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
                 // restore r2
                 compiler.addInstruction(new POP(Register.getR(2)));
                 // load the result on the stack
+                compiler.incrementContextUsedStack();
                 compiler.addInstruction(new PUSH(Register.R1));
             }
         }

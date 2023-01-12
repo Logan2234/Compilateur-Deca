@@ -1,8 +1,10 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Line;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -38,15 +40,25 @@ public class Program extends AbstractProgram {
         // classes.verifyListClassBody(compiler); // TODO: Manque les deux autres passes (passe 1 et 2)
         main.verifyMain(compiler);
         // LOG.debug("verify program: end");
+
     }
 
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
         // TODO : generate method tables for classes
-        // ? is this enough for code gen without objects ?
+        // stack overflow management
+        compiler.newCodeContext();
         compiler.addComment("Main program");
         main.codeGenMain(compiler);
         compiler.addInstruction(new HALT());
+        // stack overflow mangement
+        compiler.addInstructionFirst(new TSTO(compiler.endCodeContext()));
+        // generate the errors
+        compiler.addComment("Error management");
+        for(AbstractRuntimeErr error : compiler.getAllErrors().values()) {
+            compiler.addLabel(error.getErrorLabel());
+            error.codeGenErr(compiler);
+        }
     }
 
     @Override

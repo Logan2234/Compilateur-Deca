@@ -59,6 +59,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         boolean needRegisterSpace = leftRegister == null;
         if(needRegisterSpace) {
             // save on the stack R2
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.getR(2)));
             leftRegister = Register.getR(2);
         }
@@ -85,6 +86,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         }
         // if the original register is null, load the result on the stack
         if(register == null) {
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(leftRegister));
         }
         // might want to free the allocated register

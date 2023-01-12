@@ -42,7 +42,7 @@ public class ReadInt extends AbstractReadExpr {
     @Override
     protected void codeGenRead(DecacCompiler compiler) {
         compiler.addInstruction(new RINT());
-        // todo : manage overflow
+        
     }
 
 }
