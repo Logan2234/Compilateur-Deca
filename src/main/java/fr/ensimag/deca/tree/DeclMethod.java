@@ -1,10 +1,12 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -38,6 +40,18 @@ public class DeclMethod extends AbstractDeclMethod {
     protected void verifyDeclMethod(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
+        Type type = this.type.getType();
+        try {
+            MethodDefinition def = new MethodDefinition(type, this.getLocation(), null, 0);
+            localEnv.declare(this.methodName.getName(), def);
+            methodName.setDefinition(def);
+            methodName.setType(type);
+        }
+        catch (DoubleDefException e) {
+            throw new ContextualError("The method \"" + methodName.getName().getName() + "\" has already been declared (rule 3.17)", this.getLocation());
+        }
+        params.verifyListDeclParam(compiler, localEnv, currentClass);
+        body.verifyMethod(compiler, localEnv, currentClass, type);
     }
 
     @Override
