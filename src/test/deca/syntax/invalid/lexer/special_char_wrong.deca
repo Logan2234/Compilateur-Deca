@@ -1,8 +1,9 @@
 // Description:
 //    enchaînement faux de caractères spéciaux
+//    lexicallement incorrect
 //
 // Resultats:
-//    Ligne 12 : Erreur lexicale.
+//    Ligne 13 : token recognition error at: '&'
 //
 // Historique:
 //    cree le 09/01/2023

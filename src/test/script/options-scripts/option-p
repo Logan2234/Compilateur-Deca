@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# Colors:
+RED='\033[0;31m'
+REDBOLD='\033[0;31;1m'
+GREENBOLD='\033[0;32;1m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+BWHITE='\033[1;37m'
+
+# This script executes test_codegen on all <example-name>.deca files in src/test/codegen.
+# The outputs are saved in files named <example-name>-codegen.lis to differentiate them
+# from the output files of full-lex.sh which is executed on the same files.
+
+# Change the current working directory to be in the project's directory
+# wherever the script is executed from
+cd "$(dirname "$0")"/../../../.. || exit 1
+
+PATH=./src/test/script/launchers:"$PATH"
+
+files=$(find ./src/test/deca/codegen/valid -maxdepth 1 -name "*.deca")
+
+NB_VALID_TESTS=0
+VALID_PASSED=0
+
+echo -e "${BWHITE}============================= -p option =============================\n"
+
+for test in $files
+do
+    ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
+    decac -p "$test" > "${test%.deca}"_p.deca
+    decac "$test" > "${test%.deca}".ass ; ima "${test%.deca}".ass > "${test%.deca}".res
+    decac "${test%.deca}"_p.deca ; ima "${test%.deca}"_p.ass > "${test%.deca}"_p.res
+    
+    diff=$(diff "${test%.deca}".res "${test%.deca}"_p.res)
+
+    # check if passed
+    if [ "$diff" = "" ] 
+    then
+        ((VALID_PASSED = VALID_PASSED + 1))
+        echo -e "$GREENBOLD Test passed ($VALID_PASSED/$NB_VALID_TESTS): $GREEN$test"
+    else
+        echo -e "$REDBOLD Test failed ($VALID_PASSED/$NB_VALID_TESTS): $RED$test"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
+    fi
+done
+
+VALID_PASSED_PERCENTAGE=`echo "$VALID_PASSED / $NB_VALID_TESTS * 100" | bc -l`
+
+TEMP=`echo "$VALID_PASSED_PERCENTAGE > 0.5" | bc -l`
+
+if ((TEMP));
+then
+    echo -e "\n${GREEN} Valid test passed: "
+    printf %2.0f $VALID_PASSED_PERCENTAGE
+    echo "%"
+else
+    echo -e "\n${RED} Valid test passed: "
+    printf %2.0f $VALID_PASSED_PERCENTAGE
+    echo "%"
+fi
+
+# Cleaning process
+
+rm -r ./src/test/deca/codegen/valid/*_p.deca;
+rm -r ./src/test/deca/codegen/valid/*.res;
+rm -r ./src/test/deca/codegen/valid/*.ass;

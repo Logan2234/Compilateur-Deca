@@ -1,9 +1,9 @@
 // Description:
-//    test de programme lexicalement correct.
+//    caracteres speciaux
 //
 // Resultats:
 //    Ligne 13 : Erreur de syntaxe.
-//    test_lex ne doit pas donner d'erreur.
+//    test_lex ne doit pas donner d'erreur
 //
 // Historique:
 //    cree le 09/01/2023

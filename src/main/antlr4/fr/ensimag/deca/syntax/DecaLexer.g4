@@ -14,7 +14,6 @@ options {
 }
 
 @members {
-   Set<String> includesSet = new HashSet<String>();
 }
 
 
@@ -107,10 +106,7 @@ INCLUDE: ('#include' (' ')* '"' FILENAME '"')
             int startIndex = s.indexOf('"')-1;
             int endIndex = s.length();
             String file = s.substring(startIndex + 1, endIndex);
-            if (!includesSet.contains(file)) {
-               includesSet.add(file);
-               doInclude(file);
-            }
+            doInclude(file);
          };
 
 

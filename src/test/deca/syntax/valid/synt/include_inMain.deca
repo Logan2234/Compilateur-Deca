@@ -1,0 +1,14 @@
+// Description:
+//    include dans le main
+//    syntaxiquement incorrect
+//
+// Resultats:
+//    Ligne 13 : mismatched input 'class' expecting {...}
+//
+// Historique:
+//    cree le 11/01/2023
+//
+
+{
+    #include "include_inMain.decah"
+}
