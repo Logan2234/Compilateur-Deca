@@ -32,7 +32,13 @@ public class This extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Location loc = this.getLocation();
+        if (currentClass.getType().getName().getName()=="Object"){
+            throw new ContextualError("Object class doesn't have parameter",loc);
+        }
+        this.setType(currentClass.getType());
+        return currentClass.getType();
+        //throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
