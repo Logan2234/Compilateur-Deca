@@ -322,19 +322,12 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>full-codegen-temp</id>
+                        <id>compiler-options</id>
                         <configuration>
-                            <executable>./src/test/script/full-codegen-temp.sh</executable>
-                        </configuration>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>full-decompile</id>
-                        <configuration>
-                            <executable>./src/test/script/full-decompile.sh</executable>
+                            <executable>./src/test/script/compiler-options.sh</executable>
+                            <arguments>
+                                <argument>--maven</argument>
+                            </arguments>
                         </configuration>
                         <phase>test</phase>
                         <goals>

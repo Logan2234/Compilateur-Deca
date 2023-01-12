@@ -38,18 +38,16 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        type.verifyType(compiler);
-
-        Type type = this.type.getType();
+        
+        Type type = this.type.verifyType(compiler);
         
         if (type.isVoid())
-        throw new ContextualError("A variable can't be void (rule 3.17)", this.getLocation());
+            throw new ContextualError("A variable can't be void (rule 3.17)", this.getLocation());
         
         try {
             ExpDefinition def = new VariableDefinition(type, this.getLocation());
             localEnv.declare(this.varName.getName(), def);
-            varName.setDefinition(def);
-            varName.setType(type);
+            varName.verifyExpr(compiler, localEnv, currentClass);
         }
         catch (DoubleDefException e) {
             throw new ContextualError("A variable \"" + this.varName.getName().getName() + "\" has already been declared (rule 3.17)", this.getLocation());

@@ -18,9 +18,22 @@ decac -b > ./src/test/script/options-scripts/option-b.tmp
 
 if cat ./src/test/script/options-scripts/option-b.tmp | grep -q "."
 then
-    echo -e "$GREENBOLD Test passed: $GREEN Option -b successfully implemented\n"
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -b prints the banner"
 else 
-    echo -e "$REDBOLD Test failed: $RED Option -b not implemented\n"
+    echo -e "${REDBOLD}Test failed:$RED Option -b not implemented"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+decac -b -v > ./src/test/script/options-scripts/option-b.tmp 2> ./src/test/script/options-scripts/option-b.tmp
+
+if [ "$?" -ne 0 ]
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -b with another option returns an error\n"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -b not implemented correctly\n"
     if [[ $1 == "--maven" ]];
     then
         exit 1
