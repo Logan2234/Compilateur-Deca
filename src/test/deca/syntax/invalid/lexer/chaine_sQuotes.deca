@@ -1,0 +1,11 @@
+// Description:
+//    les chaines de caracteres utilisent des " et non des '
+//
+// Resultats:
+//    Ligne 11 : Erreur lexicale.
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+'chaine fausse'
