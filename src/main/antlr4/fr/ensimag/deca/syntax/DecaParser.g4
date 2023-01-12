@@ -95,13 +95,17 @@ decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {   assert($t != null);
         }
     : i=ident {
-            assert($i.tree != null); 
-            $tree = new DeclVar($t,$i.tree,new NoInitialization());
+            assert($i.tree != null);
+            AbstractInitialization noInit = new NoInitialization();
+            setLocation(noInit,$i.start);
+            $tree = new DeclVar($t,$i.tree,noInit);
             setLocation($tree, $i.start);
         }
       (EQUALS e=expr {
             assert($e.tree != null);
-            $tree = new DeclVar($t,$i.tree,new Initialization($e.tree));
+            AbstractInitialization init = new Initialization($e.tree);
+            setLocation(init,$EQUALS);
+            $tree = new DeclVar($t,$i.tree,init);
             setLocation($tree, $i.start);
         }
       )? {
@@ -599,12 +603,16 @@ decl_field[AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
         }
     : i=ident {
             assert($i.tree != null);
-            $tree = new DeclField($t,$i.tree, new NoInitialization(),$v);
+            NoInitialization noInit = new NoInitialization();
+            setLocation(noInit,$i.start);
+            $tree = new DeclField($t,$i.tree,noInit,$v);
             setLocation($tree,$i.start);
         }
       (EQUALS e=expr {
             assert($e.tree != null);
-            $tree = new DeclField($t,$i.tree, new Initialization($e.tree),$v);
+            Initialization init = new Initialization($e.tree);
+            setLocation(init,$EQUALS);
+            $tree = new DeclField($t,$i.tree,init,$v);
             setLocation($tree,$i.start);
         }
       )? {
@@ -618,7 +626,7 @@ decl_method returns[AbstractDeclMethod tree]
             assert($params.tree != null);
             assert($block.decls != null);
             assert($block.insts != null);
-            MethodBody body = new MethodBody($block.decls, $block.insts);
+            AbstractMethod body = new MethodBody($block.decls, $block.insts);
             $tree = new DeclMethod($type.tree, $ident.tree, $list_params.tree, body);
             setLocation($tree,$type.start);
         }
@@ -627,7 +635,7 @@ decl_method returns[AbstractDeclMethod tree]
             assert($ident.tree != null);
             assert($params.tree != null);
             assert($code.text != null);
-            MethodAsmBody asmBody = new MethodAsmBody(new StringLiteral($code.text));
+            AbstractMethod asmBody = new MethodAsmBody(new StringLiteral($code.text));
             $tree = new DeclMethod($type.tree, $ident.tree, $list_params.tree, asmBody);
             setLocation($tree,$type.start);
         }

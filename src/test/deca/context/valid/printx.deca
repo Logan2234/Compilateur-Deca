@@ -2,11 +2,11 @@
 //    printx d'un nombre.
 //
 // Resultats:
-//    //TODO: Chercher le res
+//    1.10000e+01
 //
 // Historique:
 //    cree le 06/01/2023
 
 {
-        printx(11.0);
+        printx(11.0, 1, "Hello!");
 }

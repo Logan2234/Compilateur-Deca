@@ -1,0 +1,12 @@
+// Description:
+//    operation binaire equals
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    1 == 1.0;
+}

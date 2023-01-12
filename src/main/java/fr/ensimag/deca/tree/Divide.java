@@ -1,5 +1,19 @@
 package fr.ensimag.deca.tree;
 
+import javax.swing.plaf.synth.Region;
+
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.runtimeErrors.DivByZeroErr;
+import fr.ensimag.deca.codegen.runtimeErrors.OpOverflowErr;
+import fr.ensimag.ima.pseudocode.DVal;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.ADD;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.DIV;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.QUO;
 
 /**
  *
@@ -17,4 +31,29 @@ public class Divide extends AbstractOpArith {
         return "/";
     }
 
+    @Override
+    public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
+        
+        if(getType().isInt()) {
+            compiler.addInstruction(new QUO(dval, register));
+            // depending on self type, float or int div
+            if(compiler.getCompilerOptions().getRunTestChecks()) {
+                // add runtime division by zero check
+                DivByZeroErr error = new DivByZeroErr();
+                compiler.useRuntimeError(error);
+                compiler.addInstruction(new BOV(error.getErrorLabel()));
+            }
+        }
+        else if(getType().isFloat()) {
+            compiler.addInstruction(new DIV(dval, register));
+            // depending on self type, float or int div
+            if(compiler.getCompilerOptions().getRunTestChecks()) {
+                // add runtime division by zero check
+                OpOverflowErr error = new OpOverflowErr();
+                compiler.useRuntimeError(error);
+                compiler.addInstruction(new BOV(error.getErrorLabel()));
+            }
+        }
+
+    }
 }

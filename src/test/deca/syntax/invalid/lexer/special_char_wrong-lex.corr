@@ -1,0 +1,2 @@
+AND: [@0,222:223='&&',<22>,13:0]
+./src/test/deca/syntax/invalid/lexer/special_char_wrong.deca:13:2: token recognition error at: '&'

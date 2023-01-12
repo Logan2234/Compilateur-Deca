@@ -1,0 +1,13 @@
+// Description : 
+//      Déclare un entier et l'affiche.
+//
+// Resultats :
+//      0
+// 
+// Historique :
+//      créé le 10/01/23
+
+{
+    int a = 0;
+    print(a);
+}

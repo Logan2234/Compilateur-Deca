@@ -1,0 +1,16 @@
+// Description:
+//    test de programme avec includes
+//    lexicalement correct
+//
+// Resultats:
+//    Ligne 13 : Erreur de syntaxe.
+//    les tokens ne sont pas les bons
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+#include"Math.decah"#include  "Math.decah"
+#include    "Math.decah"
+#include    "test.decah"
+#include  "123...._--.decah"

@@ -1,0 +1,42 @@
+// Description:
+//    int and float
+//    lexicalement correct mais les tokens peuvent etre differents de
+//    INT et FLOAT dans les cas particuliers dans la fin de l'exemple
+//
+// Resultats:
+//    Ligne 14 : Erreur de syntaxe.
+//    test_lex ne doit pas donner d'erreur.
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+0
+1234
+123.5e+4
+543.5E-12f
+63423.0F
+0xABCDE.FP-1
+0Xabcdef0123456789.5EDp+5f
+0X1.2P1
+
+// It lacks a '.' to be a float
+// Should produce multiple tokens
++123
+-123
+0x1p1
+
+// The power has to be a decimal number to be a float
+// Should produce multiple tokens
+0x1.0pA
+
+// It lacks a p
+// Should produce multiple tokens
+0x1.0
+
+// Should produce multiple INT 0 tokens
+0000
+
+// In hexa, digits go up to F
+// Should produce multiple tokens
+0xG.0p1

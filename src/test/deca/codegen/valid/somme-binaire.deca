@@ -1,5 +1,5 @@
 // Description:
-//    Programme minimaliste utilisant println.
+//    Programme minimaliste utilisant print.
 //
 // Resultats:
 //    3
@@ -8,11 +8,10 @@
 //    cree le 05/01/2023
 
 {
-
    int a = 1;
    int b = 2;
-   
-   b = a + b;
-   print(b);
 
+   b = a + b;
+
+   print(b);
 }

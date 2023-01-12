@@ -1,0 +1,21 @@
+// Description : 
+//      Test des boucles
+//
+// Resultats :
+//      10
+//      8
+//      6
+//      4
+//      2
+//      0
+// 
+// Historique :
+//      créé le 10/01/23
+
+{
+    int i = 10;
+    while(i >= 0) {
+        println(i);
+        i = i - 2;
+    }
+}

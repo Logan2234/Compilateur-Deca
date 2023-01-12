@@ -8,5 +8,5 @@
 //    cree le 06/01/2023
 
 {
-        print("Hello, world!");
+        print("Hello, world!", "Bye!");
 }

@@ -1,0 +1,39 @@
+// Description:
+//    mots reserves
+//
+// Resultats:
+//    Ligne 13 : Erreur de syntaxe.
+//    test_lex ne doit pas donner d'erreur.
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+// normal cases
+asm
+class
+extends
+else
+false
+if
+instanceof
+new
+null
+readInt
+readFloat
+print
+println
+printlnx
+printx
+protected
+return
+this
+true
+while
+
+// strange cases
+asm asm
+asmasm
+asm+asm
+elselse
+els else

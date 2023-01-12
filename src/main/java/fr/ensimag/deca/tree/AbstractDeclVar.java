@@ -6,6 +6,8 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+
 /**
  * Variable declaration
  *
@@ -29,4 +31,11 @@ public abstract class AbstractDeclVar extends Tree {
     protected abstract void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
+
+    /**
+     * Non terminal code gen. 
+     * @param compiler where we write instructions to generate assembly code.
+     * @param offset The register offset, so a DAddr, where the variable will be registered.
+     */
+    public abstract void codeGenDeclVar(DecacCompiler compiler, RegisterOffset register);
 }

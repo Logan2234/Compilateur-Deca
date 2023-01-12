@@ -1,0 +1,13 @@
+// Description : 
+//      Déclare un entier avec une expression et l'affiche.
+//
+// Resultats :
+//      3
+// 
+// Historique :
+//      créé le 10/01/23
+
+{
+    int a = 1 + 2;
+    print(a);
+}

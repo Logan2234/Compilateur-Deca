@@ -2,7 +2,8 @@
 //    tests de programme incorrect lexicalement (chaine non terminee)
 //
 // Resultats:
-//    ligne 10 : Erreur, chaine non terminee (sur fin de fichier)
+//    ligne 11 : Erreur, chaine non terminee (sur fin de fichier)
+//    token recognition error at: '"chaine pas finie\n'
 //
 // Historique:
 //    cree le 01/01/2023

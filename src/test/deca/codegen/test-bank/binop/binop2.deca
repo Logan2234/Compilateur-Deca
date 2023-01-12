@@ -1,0 +1,42 @@
+// Description : 
+//      Déclare des booléens avec des expressions or et les affiche
+//
+// Resultats :
+//      True
+//      True
+//      True
+//      False
+// 
+// Historique :
+//      créé le 10/01/23
+
+{
+    boolean a = true || true;
+    boolean b = true || false;
+    boolean c = false || true;
+    boolean d = false || false;
+    if(a) {
+        println("True");
+    }
+    else {
+        println("False");
+    }
+    if(b) {
+        println("True");
+    }
+    else {
+        println("False");
+    }
+    if(c) {
+        println("True");
+    }
+    else {
+        println("False");
+    }
+    if(d) {
+        println("True");
+    }
+    else {
+        println("False");
+    }
+}

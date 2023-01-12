@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# Colors:
+RED='\033[0;31m'
+REDBOLD='\033[0;31;1m'
+GREENBOLD='\033[0;32;1m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+BWHITE='\033[1;37m'
+
+# This script executes test_codegen on all <example-name>.deca files in src/test/codegen.
+# The outputs are saved in files named <example-name>-codegen.lis to differentiate them
+# from the output files of full-lex.sh which is executed on the same files.
+
+# Change the current working directory to be in the project's directory
+# wherever the script is executed from
+cd "$(dirname "$0")"/../../../.. || exit 1
+
+PATH=./src/test/script/launchers:"$PATH"
+
+files=$(find ./src/test/deca/codegen/valid -maxdepth 1 -name "*.deca")
+
+
+echo -e "${BWHITE}============================= -p option =============================\n"
+
+for test in $files
+do
+    ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
+    decac -p "$test" > "${test%.deca}"_p.deca
+    decac "$test" > "${test%.deca}".ass ; ima "${test%.deca}".ass > "${test%.deca}".res
+    decac "${test%.deca}"_p.deca ; ima "${test%.deca}"_p.ass > "${test%.deca}"_p.res
+    
+    diff=$(diff "${test%.deca}".res "${test%.deca}"_p.res)
+
+    # check if passed
+    if [ "$diff" = "" ] 
+    then
+        echo -e "${GREENBOLD}Test passed: $NOCOLOR${test/.\/src\/test\/deca\//} ${GREEN}parsed and decompiled gives the same result after execution"
+    else
+        echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca\//} ${RED}decompiled version does not return the same result after execution"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
+    fi
+done
+
+# Check readInt decompile
+decac -p ./src/test/deca/codegen/interactive/readInt.deca > ./src/test/deca/codegen/interactive/readInt_p.deca
+decac ./src/test/deca/codegen/interactive/readInt.deca
+decac ./src/test/deca/codegen/interactive/readInt_p.deca
+
+diff=$(diff ./src/test/deca/codegen/interactive/readInt.ass ./src/test/deca/codegen/interactive/readInt_p.ass)
+
+# check if passed
+if [ "$diff" = "" ] 
+then
+    echo -e "${GREENBOLD}Test passed: ${NOCOLOR}codegen/interactive/readInt.deca ${GREEN}decompiled version gives the same assembly file"
+else
+    echo -e "${REDBOLD}Test failed: ${NOCOLOR}codegen/interactive/readInt.deca ${RED}decompiled version does not give the same assembly file"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+# Check readFloat decompile
+decac -p ./src/test/deca/codegen/interactive/readFloat.deca > ./src/test/deca/codegen/interactive/readFloat_p.deca
+decac ./src/test/deca/codegen/interactive/readFloat.deca
+decac ./src/test/deca/codegen/interactive/readFloat_p.deca
+
+diff=$(diff ./src/test/deca/codegen/interactive/readFloat.ass ./src/test/deca/codegen/interactive/readFloat_p.ass)
+
+# check if passed
+if [ "$diff" = "" ] 
+then
+    echo -e "${GREENBOLD}Test passed: ${NOCOLOR}codegen/interactive/readFloat.deca ${GREEN}decompiled version gives the same assembly file"
+else
+    echo -e "${REDBOLD}Test failed: ${NOCOLOR}codegen/interactive/readFloat.deca ${RED}decompiled version does not give the same assembly file"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+decac -p -v > ./src/test/script/options-scripts/option-p.tmp 2> ./src/test/script/options-scripts/option-p.tmp
+
+if [ "$?" -ne 0 ]
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -p -v returns an error"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -p not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+# Cleaning process
+
+rm ./src/test/deca/codegen/valid/*_p.deca;
+rm ./src/test/deca/codegen/valid/*.res;
+rm ./src/test/deca/codegen/valid/*.ass;
+rm ./src/test/deca/codegen/interactive/*_p.deca;
+rm ./src/test/deca/codegen/interactive/*.ass;
+rm ./src/test/script/options-scripts/option-p.tmp

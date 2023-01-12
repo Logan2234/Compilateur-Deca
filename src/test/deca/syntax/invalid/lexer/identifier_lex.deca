@@ -1,0 +1,29 @@
+// Description:
+//    identifers
+//    lexicalement correct
+//
+// Resultats:
+//    Ligne 13 : Erreur de syntaxe.
+//    test_lex ne doit pas donner d'erreur.
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+int
+class
+void
+float
+string
+blabla
+int int
+int x
+____
+$$$$
+$123456789
+abcABC
+a1$
+admin123
+
+// should produce an INT + an IDENT token
+12identifier

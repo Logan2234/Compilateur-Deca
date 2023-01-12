@@ -1,0 +1,13 @@
+// Description : 
+//      Déclare un flottant et l'affiche.
+//
+// Resultats :
+//      2.00000et-1
+// 
+// Historique :
+//      créé le 10/01/23
+
+{
+    float a = 0.2;
+    print(a);
+}

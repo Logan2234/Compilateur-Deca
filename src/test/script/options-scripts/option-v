@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Colors:
+RED='\033[0;31m'
+REDBOLD='\033[0;31;1m'
+GREENBOLD='\033[0;32;1m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+BWHITE='\033[1;37m'
+
+# On se place dans le répertoire du projet (quel que soit le
+# répertoire d'où est lancé le script) :
+cd "$(dirname "$0")"/../../../../ || exit 1
+
+PATH=./src/test/script/launchers:"$PATH"
+
+echo -e "${BWHITE}\n============================= -v option =============================\n"
+
+files=$(find ./src/test/deca/context/valid -maxdepth 1 -name "*.deca")
+
+for test in $files
+do
+    decac -v "$test" > "${test%.deca}".lis 2>&1
+    if cat "${test%.deca}".lis | grep -q "."
+    then
+        echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca/}${RED} returns an error even though the test is valid"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
+    else
+        echo -e "${GREENBOLD}Test passed: $NOCOLOR${test/.\/src\/test\/deca\//} ${GREEN}returns nothing"
+    fi
+done
+
+files=$(find ./src/test/deca/context/invalid -maxdepth 1 -name "*.deca")
+
+for test in $files
+do
+    decac -v "$test" > "${test%.deca}".lis 2>&1
+    if cat "${test%.deca}".lis | grep -q "$test:*:*"
+    then
+        echo -e "${GREENBOLD}Test passed: $NOCOLOR${test/.\/src\/test\/deca\//}${GREEN} returns a correct error"
+    else
+        echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca\//}${RED} does not return a correct error even though the test in invalid"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
+    fi
+done
+
+decac -v -p > ./src/test/script/options-scripts/option-v.tmp 2> ./src/test/script/options-scripts/option-v.tmp
+
+if [ "$?" -ne 0 ]
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -v -p returns an error"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -v not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+rm -r ./src/test/deca/context/*/*.lis
+rm ./src/test/script/options-scripts/option-v.tmp

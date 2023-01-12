@@ -6,6 +6,8 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.instructions.RFLOAT;
+
 import java.io.PrintStream;
 
 /**
@@ -35,6 +37,12 @@ public class ReadFloat extends AbstractReadExpr {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // leaf node => nothing to do
+    }
+
+    @Override
+    protected void codeGenRead(DecacCompiler compiler) {
+        compiler.addInstruction(new RFLOAT());
+        // todo : manage overflow
     }
 
 }

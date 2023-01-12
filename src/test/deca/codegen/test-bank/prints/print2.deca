@@ -1,0 +1,13 @@
+// Description : 
+//      Test de l'affichage
+//
+// Resultats :
+//      Hello, world!
+// 
+// Historique :
+//      créé le 10/01/23
+
+{
+    print("Hello, ");
+    print("world!");
+}

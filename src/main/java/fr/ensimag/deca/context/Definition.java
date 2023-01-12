@@ -1,6 +1,7 @@
 package fr.ensimag.deca.context;
 
 import fr.ensimag.deca.tree.Location;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 /**
  * Definition of an identifier.
@@ -79,5 +80,26 @@ public abstract class Definition {
     }
 
     public abstract boolean isExpression();
+
+    /**
+     * where the variable was declared in the assembly code.
+     */
+    private RegisterOffset dAddr;
+
+    /**
+     * Get the DAddr of the varaible declaration.
+     * @return the DAddr in the assembly code of the var.
+     */
+    public RegisterOffset getDAddr() {
+        return dAddr;
+    }
+
+    /**
+     * Set the DAddr of the varaible declaration.
+     * @param dAddr The DAddr in the assembly code of the var. 
+     */
+    public void setDAddr(RegisterOffset dAddr) {
+        this.dAddr = dAddr;
+    }
 
 }

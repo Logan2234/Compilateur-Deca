@@ -1,0 +1,15 @@
+// Description:
+//    include a la fin
+//    syntaxiquement incorrect
+//
+// Resultats:
+//    Ligne 15 : mismatched input 'class' expecting {...}
+//
+// Historique:
+//    cree le 11/01/2023
+//
+
+{
+    int x = 4;
+}
+#include "Math.decah"

@@ -1,0 +1,16 @@
+// Description : 
+//      Test d'opérations sur des entiers
+//
+// Resultats :
+//      3
+// 
+// Historique :
+//      créé le 10/01/23
+
+{
+    int a = 0;
+    int b = 1;
+    int c = 2;
+    int d = a + b + c;
+    print(d);
+}

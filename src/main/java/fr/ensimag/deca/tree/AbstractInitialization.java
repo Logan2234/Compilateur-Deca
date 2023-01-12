@@ -26,4 +26,11 @@ public abstract class AbstractInitialization extends Tree {
             Type t, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
 
+    /**
+     * Code generation for the initialization.
+     * This must writes the value of the initialization on the stack using PUSH.
+     * @param compiler Where we write the code.
+     */
+    public abstract void codeGenInit(DecacCompiler compiler);
+
 }

@@ -1,0 +1,15 @@
+// Description : 
+//      Test des boucles
+//
+// Resultats :
+// 
+// Historique :
+//      créé le 10/01/23
+
+{
+    int i = 2;
+    int j =  12;
+    while(i > 0 && (j-4) < 2) {
+        println("should not enter while");
+    }
+}

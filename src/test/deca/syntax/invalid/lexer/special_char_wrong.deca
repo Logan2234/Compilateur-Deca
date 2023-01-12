@@ -1,0 +1,13 @@
+// Description:
+//    enchaînement faux de caractères spéciaux
+//    lexicallement incorrect
+//
+// Resultats:
+//    Ligne 13 : token recognition error at: '&'
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+// normal cases
+&&&

@@ -1,0 +1,14 @@
+// Description : 
+//      Déclare un flottant avec une expression et l'affiche.
+//
+// Resultats :
+//      1.50000e+00
+// 
+// Historique :
+//      créé le 10/01/23
+
+
+{
+    float a = 1 + 0.5;
+    print(a);
+}

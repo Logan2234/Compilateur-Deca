@@ -1,0 +1,1 @@
+./src/test/deca/syntax/invalid/lexer/chaines_bslash.deca:12:0: token recognition error at: '"a\n'

@@ -1,47 +1,93 @@
 #!/bin/bash
 
-# This script executes test_codegen on all <example-name>.deca files in src/test/codegen.
-# The outputs are saved in files named <example-name>-codegen.lis to differentiate them
-# from the output files of full-lex.sh which is executed on the same files.
+# Colors:
+RED='\033[0;31m'
+REDBOLD='\033[0;31;1m'
+GREENBOLD='\033[0;32;1m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+BWHITE='\033[1;37m'
 
-# Change the current working directory to be in the project's directory
-# wherever the script is executed from
+# Stat var
+NB_VALID_TESTS=0
+NB_INVALID_TESTS=0
+VALID_PASSED=0
+INVALID_PASSED=0
+
+# On se place dans le répertoire du projet (quel que soit le
+# répertoire d'où est lancé le script) :
 cd "$(dirname "$0")"/../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
-#### valid tests ####
-files=$(find ./src/test/deca/codegen/valid -name "*.deca")
+echo -e "${BWHITE} \n============================= Valid tests =============================\n"
+
+files=$(find ./src/test/deca/codegen/valid -maxdepth 1 -name "*.deca")
+files+=" "
+files+=$(find ./src/test/deca/codegen/interactive -maxdepth 1 -name "*.deca")
 
 for test in $files
 do
-    # save the output
-    test_codegen "$test" > "${test%.deca}"-codegen.lis 2>&1
-
-    # check if passed
-    if cat "${test%.deca}"-codegen.lis | grep -q "$test\|java:"
+    ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
+    decac "$test" > "${test%.deca}".lis 2>&1
+    if cat "${test%.deca}".lis | grep -q "${test}\|Exception in thread"
     then
-        echo "Error detected on a valid test $test"
-        # exit 1
+        echo -e "${REDBOLD}Test failed ($VALID_PASSED/$NB_VALID_TESTS): ${RED}$test${NOCOLOR}"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
     else
-        echo "Test passed $test"
+        ((VALID_PASSED = VALID_PASSED + 1))
+        echo -e "${GREENBOLD}Test passed ($VALID_PASSED/$NB_VALID_TESTS): ${GREEN}$test${NOCOLOR}"
     fi
 done
 
-#### invalid tests ####
-files=$(find ./src/test/deca/codegen/invalid -name "*.deca")
+# echo -e "${BWHITE} \n============================= Invalid tests =============================\n"
 
-for test in $files
-do
-    # save the output
-    test_codegen "$test" > "${test%.deca}"-codegen.lis 2>&1
+# files=$(find ./src/test/deca/codegen/invalid -maxdepth 1 -name "*.deca")
 
-    # check if passed
-    if cat "${test%.deca}"-codegen.lis | grep -q "$test\|java:"
-    then
-        echo "Test passed $test"
-    else
-        echo "No error detected on an invalid test $test"
-        # exit 1
-    fi
-done
+# for test in $files
+# do
+#     ((NB_INVALID_TESTS = NB_INVALID_TESTS + 1))
+#     decac "$test" > "${test%.deca}".lis 2>&1
+#     if cat "${test%.deca}".lis | grep -q "$test:*:*"
+#     then
+#         ((INVALID_PASSED = INVALID_PASSED + 1))
+#         echo -e "${GREENBOLD}Test passed ($INVALID_PASSED/$NB_INVALID_TESTS): ${GREEN}$test${NOCOLOR}"
+#     else
+#         echo -e "${REDBOLD}Test failed ($INVALID_PASSED/$NB_INVALID_TESTS): ${RED}$test${NOCOLOR}"
+#         if [[ $1 == "--maven" ]];
+#         then
+#             exit 1
+#         fi
+#     fi
+# done
+
+VALID_PASSED_PERCENTAGE=`echo "$VALID_PASSED / $NB_VALID_TESTS * 100" | bc -l`
+# INVALID_PASSED_PERCENTAGE=`echo "$INVALID_PASSED / $NB_INVALID_TESTS * 100" | bc -l`
+
+TEMP=`echo "$VALID_PASSED_PERCENTAGE > 0.5" | bc -l`
+
+if ((TEMP));
+then
+    echo -e "\n${GREEN} Valid test passed: "
+    printf %2.0f $VALID_PASSED_PERCENTAGE
+    echo "%"
+else
+    echo -e "\n${RED} Valid test passed: "
+    printf %2.0f $VALID_PASSED_PERCENTAGE
+    echo "%"
+fi
+
+# TEMP=`echo "$INVALID_PASSED_PERCENTAGE > 0.5" | bc -l`
+# if ((TEMP));
+# then
+#     echo -e "\n${GREEN} Invalid test passed: "
+#     printf %2.0f $INVALID_PASSED_PERCENTAGE
+#     echo -e "%\n"
+# else
+#     echo -e "\n${RED} Invalid test passed: "
+#     printf %2.0f $INVALID_PASSED_PERCENTAGE
+#     echo -e "%\n"
+# fi

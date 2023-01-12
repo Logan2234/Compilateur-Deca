@@ -1,0 +1,12 @@
+// Description : 
+//      Test de l'affichage
+//
+// Resultats :
+//      1
+// 
+// Historique :
+//      créé le 10/01/23
+
+{
+    print(1);
+}

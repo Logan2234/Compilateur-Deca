@@ -1,0 +1,12 @@
+// Description:
+//    # ne peut etre utilise qu'avec #include
+//    lexicalement incorrect
+//
+// Resultats:
+//    Ligne 12 : token recognition error at: '#w'
+//
+// Historique:
+//    cree le 09/01/2023
+//
+
+#wrong
