@@ -26,38 +26,18 @@ else
     option-b
 fi
 
+if [[ $1 == "--maven" ]];
+then
+    option-p --maven
+else
+    option-p
+fi
 
-# files=$(find ./src/test/deca/codegen/valid -maxdepth 1 -name "*.deca")
-# files+=$(find ./src/test/deca/context/valid -maxdepth 1 -name "*.deca")
+if [[ $1 == "--maven" ]];
+then
+    option-v --maven
+else
+    option-v
+fi
 
-# for test in $files
-# do
-    
-# done
-
-# VALID_PASSED_PERCENTAGE=`echo "$NB_PASSED / $NB_TESTS * 100" | bc -l`
-
-# TEMP=`echo "$VALID_PASSED_PERCENTAGE > 0.5" | bc -l`
-
-# if ((TEMP));
-# then
-#     echo -e "\n${GREEN} Valid test passed: "
-#     printf %2.0f $VALID_PASSED_PERCENTAGE
-#     echo "%"
-# else
-#     echo -e "\n${RED} Valid test passed: "
-#     printf %2.0f $VALID_PASSED_PERCENTAGE
-#     echo "%"
-# fi
-
-# TEMP=`echo "$INVALID_PASSED_PERCENTAGE > 0.5" | bc -l`
-# if ((TEMP));
-# then
-#     echo -e "\n${GREEN} Invalid test passed: "
-#     printf %2.0f $INVALID_PASSED_PERCENTAGE
-#     echo -e "%\n"
-# else
-#     echo -e "\n${RED} Invalid test passed: "
-#     printf %2.0f $INVALID_PASSED_PERCENTAGE
-#     echo -e "%\n"
-# fi
+# TODO: Supprimer les fichiers inutiles .lis etc

@@ -12,11 +12,11 @@ BWHITE='\033[1;37m'
 # répertoire d'où est lancé le script) :
 cd "$(dirname "$0")"/../../../.. || exit 1
 
-echo -e "${BWHITE} \n============================= -b option =============================\n"
+echo -e "${BWHITE}\n============================= -b option =============================\n"
 
-decac -b > ./src/test/script/options-scripts/option-b.lis
+decac -b > ./src/test/script/options-scripts/option-b.tmp
 
-if cat ./src/test/script/options-scripts/option-b.lis | grep -q "."
+if cat ./src/test/script/options-scripts/option-b.tmp | grep -q "."
 then
     echo -e "$GREENBOLD Test passed: $GREEN Option -b successfully implemented\n"
 else 
@@ -26,3 +26,5 @@ else
         exit 1
     fi
 fi
+
+rm ./src/test/script/options-scripts/option-b.tmp
