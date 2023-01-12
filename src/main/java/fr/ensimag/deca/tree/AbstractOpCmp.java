@@ -30,6 +30,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
                         "The right operand of a boolean operation has to be a boolean (rule 3.33)",
                         loc);
             }
+            this.setType(typeLeft);
             return typeLeft;
         }
 
