@@ -28,7 +28,13 @@ public class New extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Location loc = this.getLocation();
+        
+        if (!this.classe.verifyType(compiler).isClass()){
+            throw new ContextualError("New is only for classes", loc);
+        }
+        this.setType(this.getType());
+        return this.getType();
     }
 
     @Override
