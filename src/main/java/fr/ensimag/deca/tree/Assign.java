@@ -57,6 +57,7 @@ public class Assign extends AbstractBinaryExpr {
         GPRegister resultRegister = compiler.allocateRegister();
         if(resultRegister == null) {
             // free r2 and use it
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.getR(2)));
             this.getRightOperand().codeGenExpr(compiler, Register.getR(2));
             compiler.addInstruction(new STORE(Register.getR(2), getLeftOperand().getDefinition().getDAddr()));

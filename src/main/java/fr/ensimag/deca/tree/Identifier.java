@@ -270,6 +270,7 @@ public class Identifier extends AbstractIdentifier {
             // put self value on the stack
             // load self on R1, then push R1
             compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
         }
         else {

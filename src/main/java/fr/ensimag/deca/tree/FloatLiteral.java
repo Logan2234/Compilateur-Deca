@@ -74,6 +74,7 @@ public class FloatLiteral extends AbstractExpr {
         else {
             // put it in R1 then on the stack
             compiler.addInstruction(new LOAD(value, Register.R1));
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
         }
     }

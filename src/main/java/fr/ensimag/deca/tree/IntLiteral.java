@@ -76,6 +76,7 @@ public class IntLiteral extends AbstractExpr {
         else {
             // by convention, put the result on the stack.
             compiler.addInstruction(new LOAD(value, Register.R0));
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R0));
         }
     }

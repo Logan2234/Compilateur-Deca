@@ -5,15 +5,13 @@
 //      ok
 // 
 // Historique :
-//      créé le 10/01/23
+//      créé le 12/01/23
 
 {
-    int i = 0;
-    int j = 1;
-    if(i == j) {
-        println("ko");
+    if (!(false==true)){
+        println("ok");
     }
     else {
-        println("ok");
+    	println("ko");
     }
 }
