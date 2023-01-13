@@ -43,10 +43,8 @@ public class Cast extends AbstractExpr {
         }
 
         // Ajout du décor
-        this.setType(typeExp);
-
+        this.setType(typeT);
         return typeT;
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     /**

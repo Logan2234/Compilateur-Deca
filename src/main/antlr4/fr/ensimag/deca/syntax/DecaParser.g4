@@ -551,6 +551,7 @@ class_extension returns[AbstractIdentifier tree]
     | /* epsilon */ {
             $tree = new Identifier(this.getDecacCompiler().createSymbol("Object"));
             // the createSymbol methods add the Symbol to the table only if it is not already in it
+            $tree.setLocation(Location.BUILTIN);
         }
     ;
 

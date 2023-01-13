@@ -38,7 +38,7 @@ public class This extends AbstractExpr {
         }
 
         this.setType(currentClass.getType());
-        return currentClass.getType();
+        return compiler.environmentType.BOOLEAN;
         // throw new UnsupportedOperationException("not yet implemented");
     }
 
