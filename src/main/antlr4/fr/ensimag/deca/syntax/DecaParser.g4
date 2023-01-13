@@ -423,7 +423,8 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
-            $tree = new MethodCall(new This(true), $m.tree, $args.tree);
+            This this = new This(true);
+            $tree = new MethodCall(this, $m.tree, $args.tree);
             setLocation($tree, $m.start);
 
         }
@@ -635,9 +636,11 @@ decl_method returns[AbstractDeclMethod tree]
             assert($ident.tree != null);
             assert($params.tree != null);
             assert($code.text != null);
-            AbstractMethod asmBody = new MethodAsmBody(new StringLiteral($code.text));
+            StringLiteral codeAsm = new StringLiteral($code.text);
+            setLocation(codeAsm,$code.start);
+            AbstractMethod asmBody = new MethodAsmBody(codeAsm);
             $tree = new DeclMethod($type.tree, $ident.tree, $list_params.tree, asmBody);
-            setLocation($tree,$type.start);
+            setLocation($tree,$ASM);
         }
       ) {
         }
