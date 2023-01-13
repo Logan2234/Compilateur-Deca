@@ -289,62 +289,12 @@
                             <arguments>
                                 <argument>--maven</argument>
                             </arguments>
-<<<<<<< HEAD
-=======
                         </configuration>
                         <phase>test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>full-context</id>
-                        <configuration>
-                            <executable>./src/test/script/full-context.sh</executable>
-                        <arguments>
-                            <argument>--maven</argument>
-                        </arguments>
-                        </configuration>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>full-codegen</id>
-                        <configuration>
-                            <executable>./src/test/script/full-codegen.sh</executable>
-                            <arguments>
-                                <argument>--maven</argument>
-                            </arguments>
-                        </configuration>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>full-codegen-temp</id>
-                        <configuration>
-                            <executable>./src/test/script/full-codegen-temp.sh</executable>
-                        </configuration>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>full-decompile</id>
-                        <configuration>
-                            <executable>./src/test/script/full-decompile.sh</executable>
->>>>>>> df4c9caf2ca48ee93ff2417b45741b74d609724b
-                        </configuration>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-<<<<<<< HEAD
                     <execution>
                         <id>full-context</id>
                         <configuration>
@@ -384,8 +334,6 @@
                             <goal>exec</goal>
                         </goals>
                     </execution>
-=======
->>>>>>> df4c9caf2ca48ee93ff2417b45741b74d609724b
                 </executions>
             </plugin>
 
