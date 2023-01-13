@@ -144,7 +144,7 @@ public class CompilerOptions {
                     case "-r": {
                         // try to read the register number
                         try {
-                            int registerNumber = Integer.parseInt(current_arg.split(" ")[1]);
+                            int registerNumber = Integer.parseInt(args[arg_index + 1]);
                             if (registerNumber < 4 || registerNumber > 16) {
                                 throw new CLIException(
                                         "le nombre de registre à utiliser (spécifié avec -r) doit être compris entre 4 et 16.");

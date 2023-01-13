@@ -74,6 +74,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         codeGenBinExp(compiler, leftRegister, rightRegister == null ? new RegisterOffset(-1, Register.SP) : rightRegister);
         if(rightRegister == null) {
             // remove the value from the stack (we don't actually care were we put the result, it have been used already)
+            compiler.increaseContextUsedStack(-1);
             compiler.addInstruction(new POP(Register.R0));
         }
         else {
@@ -82,6 +83,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         }
         // restore R2 !
         if(needRegisterSpace) {
+            compiler.increaseContextUsedStack(-1);
             compiler.addInstruction(new POP(Register.getR(2)));
         }
         // if the original register is null, load the result on the stack

@@ -50,7 +50,7 @@ public abstract class AbstractPrint extends AbstractInst {
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
         for (AbstractExpr a : getArguments().getList()) {
-            a.codeGenPrint(compiler);
+            a.codeGenPrint(compiler, getPrintHex());
         }
     }
 
@@ -62,7 +62,7 @@ public abstract class AbstractPrint extends AbstractInst {
     public void decompile(IndentPrintStream s) {
         s.print("print");
         s.print(getSuffix());
-        if (printHex) {
+        if (getPrintHex()) {
             s.print("x");
         }
         s.print("(");

@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
@@ -141,14 +142,19 @@ public abstract class AbstractExpr extends AbstractInst {
      *
      * @param compiler
      */
-    protected void codeGenPrint(DecacCompiler compiler) {
+    protected void codeGenPrint(DecacCompiler compiler, boolean hex) {
         // we can safely assume this is only called if the result is an integer or float, with context check
         // so compute ourself in R1, then depending on our type display it !
         codeGenExpr(compiler, Register.R1);
         if(type.isInt()) {
             compiler.addInstruction(new WINT());
         } else if(type.isFloat()) {
-            compiler.addInstruction(new WFLOAT());
+            if(hex) {
+                compiler.addInstruction(new WFLOATX());
+            }
+            else {
+                compiler.addInstruction(new WFLOAT());
+            }
         }
     }
 

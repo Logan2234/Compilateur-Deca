@@ -72,6 +72,7 @@ public class Initialization extends AbstractInitialization {
             expression.codeGenExpr(compiler, Register.getR(2));
             // save the result on the stack, and restore R2
             compiler.addInstruction(new LOAD(Register.getR(2), Register.R1));
+            compiler.increaseContextUsedStack(-1);
             compiler.addInstruction(new POP(Register.getR(2)));
             // no stack size increment here, because we poped right before it
             compiler.addInstruction(new PUSH(Register.R1));
