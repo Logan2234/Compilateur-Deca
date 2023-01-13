@@ -270,9 +270,12 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>full-lex</id>
+                        <id>full-lex-diff</id>
                         <configuration>
-                            <executable>./src/test/script/full-lex.sh</executable>
+                            <executable>./src/test/script/full-lex-diff.sh</executable>
+                            <arguments>
+                                <argument>--maven</argument>
+                            </arguments>
                         </configuration>
                         <phase>test</phase>
                         <goals>
@@ -283,36 +286,9 @@
                         <id>full-synt</id>
                         <configuration>
                             <executable>./src/test/script/full-synt.sh</executable>
-                        </configuration>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>full-codegen</id>
-                        <configuration>
-                            <executable>./src/test/script/full-codegen.sh</executable>
-                        </configuration>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>full-codegen-temp</id>
-                        <configuration>
-                            <executable>./src/test/script/full-codegen-temp.sh</executable>
-                        </configuration>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>full-decompile</id>
-                        <configuration>
-                            <executable>./src/test/script/full-decompile.sh</executable>
+                            <arguments>
+                                <argument>--maven</argument>
+                            </arguments>
                         </configuration>
                         <phase>test</phase>
                         <goals>
@@ -326,6 +302,32 @@
                         <arguments>
                             <argument>--maven</argument>
                         </arguments>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>full-codegen</id>
+                        <configuration>
+                            <executable>./src/test/script/full-codegen.sh</executable>
+                            <arguments>
+                                <argument>--maven</argument>
+                            </arguments>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>compiler-options</id>
+                        <configuration>
+                            <executable>./src/test/script/compiler-options.sh</executable>
+                            <arguments>
+                                <argument>--maven</argument>
+                            </arguments>
                         </configuration>
                         <phase>test</phase>
                         <goals>
