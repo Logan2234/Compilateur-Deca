@@ -287,4 +287,18 @@ public abstract class Tree {
             return "";
         }
     }
+
+    protected Boolean isLiteral() {
+        return false;
+    }
+
+    /**
+     * Optimize the decorated tree.
+     * 
+     * @param prog
+     */
+
+    public void optimizeProgram(DecacCompiler compiler){
+
+    }
 }

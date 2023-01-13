@@ -323,6 +323,9 @@ public class DecacCompiler {
         }
 
         if (compilerOptions.getCompileMode() != CompileMode.Verify) {
+            if (compilerOptions.getOptimize()){
+                prog.optimizeProgram(this);
+            }
             if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
                 addComment("start main program");
                 prog.codeGenProgram(this);
