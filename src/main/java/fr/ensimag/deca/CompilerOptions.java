@@ -55,6 +55,10 @@ public class CompilerOptions {
         return displayWarnings;
     }
 
+    public boolean getOptimize() {
+        return optimize;
+    }
+
     // added to support compile options
     enum CompileMode {
         Compile,
@@ -70,6 +74,7 @@ public class CompilerOptions {
     private boolean runTestChecks = true;
     private int usedRegisterNumber = 16;
     private boolean displayWarnings = false;
+    private boolean optimize = false;
 
     public void parseArgs(String[] args) throws CLIException {
 
@@ -85,6 +90,7 @@ public class CompilerOptions {
         // -d (debug) : display debug trace. Can be repeated.
         // -P (parallel) compile all deca files in parallel.
         // -w (warnings) (optional) : display warnings
+        // -o (optimize) : optimize the code
 
         // Note : -p and -v are incompatible.
 
@@ -167,6 +173,10 @@ public class CompilerOptions {
                     case "-w": {
                         displayWarnings = true;
                     }
+
+                    case "-o": {
+                        optimize = true;
+                    }
                 }
                 arg_index++;
             } else {
@@ -228,6 +238,7 @@ public class CompilerOptions {
         System.out.println("-d (debug)               : display debug trace. Can be repeated.");
         System.out.println("-P (parallel)            : compile all deca files in parallel.");
         System.out.println("-w (warnings) (optional) : display warnings");
+        System.out.println("-o (optimize)            : optimize the code");
         System.out.println();
         System.out.println("Note : -p and -v are incompatible.");
 
