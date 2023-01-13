@@ -43,4 +43,21 @@ public class UnaryMinus extends AbstractUnaryExpr {
         compiler.addInstruction(new OPP(resulRegister, resulRegister));
     }
 
+    @Override
+    public AbstractExpr skipCalculs(){
+        AbstractExpr operand = this.getOperand();
+        if (!(operand.isLiteral())){
+            operand = operand.skipCalculs();
+            this.setOperand(operand);
+        }
+        if (operand.isLiteral()){
+            if (operand.getType().isInt())
+                return new IntLiteral((((IntLiteral) operand).getValue()) * (-1));
+            
+            if (operand.getType().isFloat())
+                return new FloatLiteral((((FloatLiteral) operand).getValue()) * (-1));
+        }
+        return this;
+    }
+
 }

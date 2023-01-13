@@ -63,10 +63,12 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         AbstractExpr right = getRightOperand();
         if (!(left.isLiteral())){
             left = left.skipCalculs();
+            this.setLeftOperand(left);
         }
 
         if (!(right.isLiteral())){
             right = right.skipCalculs();
+            this.setRightOperand(right);
         }
 
         if (left.isLiteral() && right.isLiteral()){
