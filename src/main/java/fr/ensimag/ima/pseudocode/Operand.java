@@ -9,4 +9,20 @@ package fr.ensimag.ima.pseudocode;
 public abstract class Operand {
     @Override
     public abstract String toString();
+
+    public boolean isIntImmediate() {
+        return false;
+    }
+
+    public ImmediateInteger asIntImmediate() {
+        return null;
+    }
+
+    public boolean isGpRegister() {
+        return false;
+    }
+
+    public GPRegister asGpRegister() {
+        return null;
+    }
 }

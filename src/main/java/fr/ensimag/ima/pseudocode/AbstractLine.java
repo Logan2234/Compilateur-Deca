@@ -10,4 +10,12 @@ import java.io.PrintStream;
  */
 public abstract class AbstractLine {
     abstract void display(PrintStream s);
+
+    public boolean isInstruction() {
+        return false;
+    }
+
+    public Instruction asInstruction() {
+        return null;
+    }
 }

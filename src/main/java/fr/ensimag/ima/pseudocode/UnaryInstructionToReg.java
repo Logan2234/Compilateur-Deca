@@ -11,4 +11,9 @@ public class UnaryInstructionToReg extends UnaryInstruction {
         super(op);
     }
 
+    @Override
+    public boolean alterRegister(int regNum) {
+        return getOperand().asGpRegister().getNumber() == regNum;
+    }
+
 }

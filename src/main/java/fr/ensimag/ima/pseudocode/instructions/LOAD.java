@@ -24,4 +24,14 @@ public class LOAD extends BinaryInstructionDValToReg {
         this(new ImmediateFloat(f), r);
     }
 
+    @Override
+    public boolean isLOAD() {
+        return true;
+    }
+
+    @Override
+    public LOAD asLOAD() {
+        return this;
+    }
+
 }

@@ -19,4 +19,9 @@ public class BSR extends UnaryInstruction {
         super(new LabelOperand(target));
     }
 
+    @Override
+    public boolean alterRegister(int regNum) {
+        return false;
+    }
+
 }

@@ -34,4 +34,12 @@ public class BinaryInstruction extends Instruction {
         this.operand1 = op1;
         this.operand2 = op2;
     }
+
+    @Override
+    public boolean alterRegister(int regNum) {
+        if(operand2.isGpRegister()) {
+            return operand2.asGpRegister().getNumber() == regNum;
+        }
+        return false; // should not be called
+    }
 }

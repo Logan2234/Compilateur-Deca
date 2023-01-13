@@ -11,4 +11,9 @@ public class PUSH extends UnaryInstruction {
     public PUSH(Register op1) {
         super(op1);
     }
+
+    @Override
+    public boolean alterRegister(int regNum) {
+        return false;
+    }
 }

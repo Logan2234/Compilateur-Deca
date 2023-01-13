@@ -15,4 +15,9 @@ public class TSTO extends UnaryInstructionImmInt {
     public TSTO(int i) {
         super(i);
     }
+
+    @Override
+    public boolean alterRegister(int regNum) {
+        return false;
+    }
 }

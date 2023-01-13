@@ -30,7 +30,5 @@ public class And extends AbstractOpBool {
         // sum both bool as int and shift the result, should be 1
         compiler.addInstruction(new ADD(dval, register));
         compiler.addInstruction(new SHR(register));
-        compiler.addInstruction(new SUB(new ImmediateInteger(1), register));
-        compiler.addInstruction(new SEQ(register));
     }
 }

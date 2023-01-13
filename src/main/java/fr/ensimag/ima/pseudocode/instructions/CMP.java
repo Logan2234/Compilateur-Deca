@@ -20,4 +20,9 @@ public class CMP extends BinaryInstructionDValToReg {
         this(new ImmediateInteger(val), op2);
     }
 
+    @Override
+    public boolean alterRegister(int _regNum) {
+        return false;
+    }
+
 }
