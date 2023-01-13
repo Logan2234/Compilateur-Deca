@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
 import fr.ensimag.ima.pseudocode.instructions.SEQ;
 import fr.ensimag.deca.DecacCompiler;
@@ -43,7 +44,7 @@ public class Not extends AbstractUnaryExpr {
     public void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister) {
         // result expression is a bool and have been put in the register.
         // let's add 0 and check eq ? if 1, than the result was 0 : 0 + 0 = 0, therefore previous was 0
-        compiler.addInstruction(new ADD(resulRegister, resulRegister));
+        compiler.addInstruction(new ADD(new ImmediateInteger(0), resulRegister));
         compiler.addInstruction(new SEQ(resulRegister));
     }
 }

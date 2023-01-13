@@ -23,14 +23,18 @@ public class AssemblyOptimizer {
      * @param program The IMA program to optimize.
      */
     public static void Optimize(IMAProgram program) {
-        // replace known values
-        while(OptReplaceImm(program)) { }
-        // write read simplifications
-        while(OptRemoveUselessWrites(program)) { }
-        // optimize conditions with immediates
-        while(OptCond(program)) { }
-        // finally, replace loads by subs
-        while(OptLoadSub(program)) { }
+        boolean keepOptimizing = true;
+        while(keepOptimizing) {
+            keepOptimizing = false;
+            // replace known values
+            while(OptReplaceImm(program)) { keepOptimizing = true; }
+            // write read simplifications
+            while(OptRemoveUselessWrites(program)) { keepOptimizing = true; }
+            // optimize conditions with immediates
+            while(OptCond(program)) { keepOptimizing = true; }
+            // finally, replace loads by subs
+            while(OptLoadSub(program)) { keepOptimizing = true; }
+        }
     }
 
     private static boolean OptReplaceImm(IMAProgram program) {
