@@ -31,36 +31,41 @@ public class Cast extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
         Location loc = this.getLocation();
         Type typeExp = this.e.verifyExpr(compiler, localEnv, currentClass);
         Type typeT = this.type.verifyType(compiler);
-        if (typeExp.isVoid() || (!assign_compatible(localEnv, typeExp, typeT) && !assign_compatible(localEnv, typeT, typeExp))){
+        
+        if (typeExp.isVoid()
+                || (!assign_compatible(localEnv, typeExp, typeT) && !assign_compatible(localEnv, typeT, typeExp))) {
             throw new ContextualError("Cast impossible", loc);
         }
+
         // Ajout du décor
         this.setType(typeExp);
 
         return typeT;
-        //throw new UnsupportedOperationException("not yet implemented");
+        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     /**
- * Check if the two types are compatible for the cast
- * @param localEnv the local environment
- * @param typeExp the type of the expression to cast
- * @param typeT the type of the expected cast
- * @return true if the two types are compatible, false if not
- * 
- * @author Nils Depuille
- * @date 12/01/2023
- */
+     * Check if the two types are compatible for the cast
+     * 
+     * @param localEnv the local environment
+     * @param typeExp  the type of the expression to cast
+     * @param typeT    the type of the expected cast
+     * @return true if the two types are compatible, false if not
+     * 
+     * @author Nils Depuille
+     * @date 12/01/2023
+     */
     public Boolean assign_compatible(EnvironmentExp localEnv, Type type1, Type type2) {
-        if (type1.isFloat() && type2.isInt()){
+        if (type1.isFloat() && type2.isInt()) {
             return true;
         }
-        if(type2.getClass().isAssignableFrom(type1.getClass())){//TODO je dois savoir si t2 est une sous classe de T1 pour le localEnv
+        if (type2.getClass().isAssignableFrom(type1.getClass())) {// TODO je dois savoir si t2 est une sous classe de T1
+                                                                  // pour le localEnv
             return true;
         }
         return false;

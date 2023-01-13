@@ -31,12 +31,12 @@ public class New extends AbstractExpr {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
         Location loc = this.getLocation();
-        
-        if (!this.classe.verifyType(compiler).isClass())
+        Type type = this.classe.verifyType(compiler);
+        if (!type.isClass())
             throw new ContextualError("New is only for classes", loc);
 
-        this.setType(this.getType());
-        return this.getType();
+        this.setType(type);
+        return type;
     }
 
     @Override

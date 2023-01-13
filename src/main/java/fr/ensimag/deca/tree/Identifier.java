@@ -176,12 +176,13 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        ExpDefinition def = localEnv.get(this.name); // TODO: Utilisation de currentClass éventuelle
+        // ! Peut etre pas Definition
+        Definition def = localEnv.get(this.name); // TODO: Utilisation de currentClass éventuelle 
         Location loc = this.getLocation();
-        
+
         if (def == null)
             throw new ContextualError("The variable " + name.getName() + " doesn't exist (rule 0.1)", loc);
-        
+
         // Ajout du décor
         Type type = def.getType();
         this.setDefinition(def);
@@ -200,9 +201,10 @@ public class Identifier extends AbstractIdentifier {
         Type type;
         TypeDefinition def = compiler.environmentType.defOfType(name);
         Location loc = getLocation();
-        
+
         try {
-            // Si le symbole n'est pas un type, on catch l'erreur pour envoyer une ContextualError
+            // Si le symbole n'est pas un type, on catch l'erreur pour envoyer une
+            // ContextualError
             type = def.getType();
         } catch (NullPointerException e) {
             throw new ContextualError("The type \"" + name + "\" doesn't exist (rule 0.2)", loc);
@@ -249,14 +251,14 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     public void codeGenPrint(DecacCompiler compiler) {
-        if(definition.getType().isInt()) {
-            // print identifier as an int : 
+        if (definition.getType().isInt()) {
+            // print identifier as an int :
             // load addr in R1
             compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
             // print it
             compiler.addInstruction(new WINT());
-        } else if(definition.getType().isFloat()) {
-            // print identifier as an float : 
+        } else if (definition.getType().isFloat()) {
+            // print identifier as an float :
             // load addr in R1
             compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
             // print it
@@ -266,14 +268,13 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        if(resultRegister == null) {
+        if (resultRegister == null) {
             // put self value on the stack
             // load self on R1, then push R1
             compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
             compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
-        }
-        else {
+        } else {
             // put self value in the result register
             compiler.addInstruction(new LOAD(definition.getDAddr(), resultRegister));
         }
