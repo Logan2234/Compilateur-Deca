@@ -24,4 +24,11 @@ public class BSR extends UnaryInstruction {
         return false;
     }
 
+    @Override
+    public boolean usesRegister(int regNum) {
+        if(getOperand().isGpRegister()) {
+            return getOperand().asGpRegister().getNumber() == regNum;
+        }
+        return false;
+    }
 }

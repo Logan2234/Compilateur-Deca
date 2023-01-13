@@ -93,4 +93,8 @@ public class IMAProgram {
         newLine.setComment(comment);
         lines.set(at, newLine);
     }
+
+    public void removeLine(int at) {
+        lines.remove(at);
+    }
 }

@@ -18,6 +18,14 @@ public abstract class Operand {
         return null;
     }
 
+    public boolean isFloatImmediate() {
+        return false;
+    }
+
+    public ImmediateFloat asFloatImmediate() {
+        return null;
+    }
+
     public boolean isGpRegister() {
         return false;
     }

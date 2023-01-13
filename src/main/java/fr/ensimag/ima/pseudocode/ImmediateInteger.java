@@ -32,4 +32,5 @@ public class ImmediateInteger extends DVal {
     public ImmediateInteger asIntImmediate() {
         return this;
     }
+
 }

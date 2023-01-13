@@ -20,6 +20,14 @@ public class BinaryInstruction extends Instruction {
         return operand2;
     }
 
+    protected void setOperand1(Operand operand) {
+        operand1 = operand;
+    }
+
+    protected void setOperand2(Operand operand) {
+        operand2 = operand;
+    }
+
     @Override
     void displayOperands(PrintStream s) {
         s.print(" ");
@@ -41,5 +49,20 @@ public class BinaryInstruction extends Instruction {
             return operand2.asGpRegister().getNumber() == regNum;
         }
         return false; // should not be called
+    }
+
+    @Override
+    public boolean usesRegister(int regNum) {
+        if(operand1.isGpRegister()) {
+            if(operand1.asGpRegister().getNumber() == regNum) {
+                return true;
+            }
+        }
+        if(operand2.isGpRegister()) {
+            if(operand2.asGpRegister().getNumber() == regNum) {
+                return true;
+            }
+        }
+        return false;
     }
 }

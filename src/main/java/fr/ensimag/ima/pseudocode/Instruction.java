@@ -28,7 +28,17 @@ public abstract class Instruction {
         return null;
     }
 
+    public boolean isDvalToReg() {
+        return false;
+    }
+
+    public BinaryInstructionDValToReg asDvalToReg() {
+        return null;
+    }
+
     public abstract boolean alterRegister(int regNum);
+
+    public abstract boolean usesRegister(int regNum);
 
 
 }

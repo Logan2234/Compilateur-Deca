@@ -18,4 +18,9 @@ public class PEA extends UnaryInstruction {
         return false;
     }
 
+    @Override
+    public boolean usesRegister(int regNum) {
+        return false;
+    }
+
 }

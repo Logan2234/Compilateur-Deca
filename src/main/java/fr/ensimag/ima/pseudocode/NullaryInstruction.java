@@ -18,4 +18,9 @@ public abstract class NullaryInstruction extends Instruction {
     public boolean alterRegister(int regNum) {
         return false;
     }
+
+    @Override
+    public boolean usesRegister(int regNum) {
+        return false;
+    }
 }

@@ -23,4 +23,9 @@ public class SUBSP extends UnaryInstructionImmInt {
         return false;
     }
 
+    @Override
+    public boolean usesRegister(int regNum) {
+        return false;
+    }
+
 }

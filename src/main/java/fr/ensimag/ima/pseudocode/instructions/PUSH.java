@@ -16,4 +16,12 @@ public class PUSH extends UnaryInstruction {
     public boolean alterRegister(int regNum) {
         return false;
     }
+
+    @Override
+    public boolean usesRegister(int regNum) {
+        if(getOperand().isGpRegister()) {
+            return getOperand().asGpRegister().getNumber() == regNum;
+        }
+        return false;
+    }
 }
