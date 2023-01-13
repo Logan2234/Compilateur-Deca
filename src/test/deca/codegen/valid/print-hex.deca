@@ -1,0 +1,12 @@
+// Description:
+//    Test du printx
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 13/01/2023
+
+{
+    printx(0.3);
+}
