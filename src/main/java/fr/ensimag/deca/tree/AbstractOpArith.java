@@ -85,10 +85,39 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
                 } else {
                     throw new UnsupportedOperationException("Unsupported operation: " + getOperatorName()); // cette ligne ne devrait jamais être appelée
                 } 
+                return new IntLiteral(newValue);
             }
 
             if (getType().isFloat()){
+                float newValue;
+                float leftValue;
+                float rightValue;
+                if (left.getType().isInt()){
+                    leftValue = (float) ((IntLiteral) (left)).getValue();
+                } else {
+                    leftValue = ((FloatLiteral) (left)).getValue();
+                }
 
+                if (right.getType().isInt()){
+                    rightValue = (float) ((IntLiteral) (right)).getValue();
+                } else {
+                    rightValue = ((FloatLiteral) (right)).getValue();
+                }
+                
+                if (getOperatorName().equals("+")){
+                    newValue = leftValue + rightValue;
+                } else if (getOperatorName().equals("-")){
+                    newValue = leftValue - rightValue;
+                } else if (getOperatorName().equals("*")){
+                    newValue = leftValue * rightValue;
+                } else if (getOperatorName().equals("/")){
+                    newValue = leftValue / rightValue;
+                } else if (getOperatorName().equals("%")){
+                    newValue = leftValue % rightValue;
+                } else {
+                    throw new UnsupportedOperationException("Unsupported operation: " + getOperatorName()); // cette ligne ne devrait jamais être appelée
+                } 
+                return new FloatLiteral(newValue);
             }
         }
         return this;
