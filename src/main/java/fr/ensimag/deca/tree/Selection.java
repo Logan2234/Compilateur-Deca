@@ -70,4 +70,10 @@ public class Selection extends AbstractLValue {
         // ? pas trop sur de moi la dessus
         return field.getDefinition();
     }
+
+    @Override
+    protected void spotUsedVar() {
+        this.obj.spotUsedVar();
+        this.field.spotUsedVar();
+    }
 }

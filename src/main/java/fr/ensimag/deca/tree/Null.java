@@ -53,4 +53,8 @@ public class Null extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    protected void spotUsedVar() {
+        // do nothing
+    }
 }

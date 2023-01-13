@@ -55,4 +55,9 @@ public class Return extends AbstractInst {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         e.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    protected void spotUsedVar() {
+        this.e.spotUsedVar();
+    }
 }

@@ -61,4 +61,10 @@ public class MethodBody extends AbstractMethod {
         vars.prettyPrintChildren(s, prefix);
         insts.prettyPrintChildren(s, prefix);
     }
+
+    @Override
+    protected void spotUsedVar() {
+        this.vars.spotUsedVar();
+        this.insts.spotUsedVar();
+    }
 }

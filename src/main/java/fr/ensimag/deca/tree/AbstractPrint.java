@@ -80,4 +80,8 @@ public abstract class AbstractPrint extends AbstractInst {
         arguments.prettyPrint(s, prefix, true);
     }
 
+    @Override
+    protected void spotUsedVar() {
+        this.arguments.spotUsedVar();
+    }
 }

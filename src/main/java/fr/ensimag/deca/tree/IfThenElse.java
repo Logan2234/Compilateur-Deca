@@ -104,4 +104,11 @@ public class IfThenElse extends AbstractInst {
         elseBranch.prettyPrint(s, prefix, true);
     }
 
+    @Override
+    protected void spotUsedVar() {
+        this.condition.spotUsedVar();
+        this.thenBranch.spotUsedVar();
+        this.elseBranch.spotUsedVar();
+    }
+
 }

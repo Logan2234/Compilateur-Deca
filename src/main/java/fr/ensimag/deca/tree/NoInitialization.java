@@ -57,4 +57,8 @@ public class NoInitialization extends AbstractInitialization {
         compiler.addInstruction(new PUSH(Register.R0));
     }
 
+    @Override
+    protected void spotUsedVar() {
+        // do nothing
+    }
 }

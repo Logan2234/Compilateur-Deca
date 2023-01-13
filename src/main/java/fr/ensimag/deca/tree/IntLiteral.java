@@ -86,4 +86,8 @@ public class IntLiteral extends AbstractExpr {
         return true;
     }
 
+    @Override
+    protected void spotUsedVar() {
+        // do nothing
+    }
 }

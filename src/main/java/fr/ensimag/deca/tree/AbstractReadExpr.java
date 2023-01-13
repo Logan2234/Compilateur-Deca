@@ -42,6 +42,9 @@ public abstract class AbstractReadExpr extends AbstractExpr {
      * @param compiler Where we write the instructions to.
      */
     protected abstract void codeGenRead(DecacCompiler compiler);
-
-
+    
+    @Override
+    protected void spotUsedVar() {
+        // do nothing
+    }
 }

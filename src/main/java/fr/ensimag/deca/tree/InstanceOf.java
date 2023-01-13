@@ -62,4 +62,10 @@ public class InstanceOf extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    protected void spotUsedVar() {
+        this.e.spotUsedVar();
+        // We don't spotUsedVar on the class type.
+        // If the class is not used elsewhere then the expression will be evaluated to false.
+    }
 }

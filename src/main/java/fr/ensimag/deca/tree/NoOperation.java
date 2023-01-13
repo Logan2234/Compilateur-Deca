@@ -41,4 +41,8 @@ public class NoOperation extends AbstractInst {
         // leaf node => nothing to do
     }
 
+    @Override
+    protected void spotUsedVar() {
+        // do nothing
+    }
 }
