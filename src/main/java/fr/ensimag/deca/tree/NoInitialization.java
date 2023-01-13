@@ -53,6 +53,7 @@ public class NoInitialization extends AbstractInitialization {
     public void codeGenInit(DecacCompiler compiler) {
         // push a zero to the stack : LOAD #0 R0; PUSH R0;
         compiler.addInstruction(new LOAD(0, Register.R0));
+        compiler.incrementContextUsedStack();
         compiler.addInstruction(new PUSH(Register.R0));
     }
 

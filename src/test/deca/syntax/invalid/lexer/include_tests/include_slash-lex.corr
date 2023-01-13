@@ -1,2 +1,1 @@
-INFO  fr.ensimag.deca.syntax.DecacErrorListner.syntaxError(DecacErrorListner.java:50) - no token, no LocationException => using input.getSourceName(): line=11
 ./src/test/deca/syntax/invalid/lexer/include_tests/include_slash.deca:11:0: token recognition error at: '#include "/'

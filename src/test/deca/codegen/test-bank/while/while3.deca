@@ -1,9 +1,0 @@
-// Created by Virgile, 10/01/2022
-// test while functions.
-{
-    int i = 2;
-    int j =  12;
-    while(i > 0 && (j-4) < 2) {
-        println("should not enter while");
-    }
-}

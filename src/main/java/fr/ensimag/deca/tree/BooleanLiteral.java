@@ -48,6 +48,7 @@ public class BooleanLiteral extends AbstractExpr {
         else {
             // push it on the stack
             compiler.addInstruction(new LOAD(value ? 1 : 0, Register.R1));
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
         }
     }

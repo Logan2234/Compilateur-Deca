@@ -30,6 +30,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
                         "The right operand of a boolean operation has to be a boolean (rule 3.33)",
                         loc);
             }
+            this.setType(typeLeft);
             return typeLeft;
         }
 
@@ -43,6 +44,19 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
         if (!typeRight.isInt() && !typeRight.isFloat())
             throw new ContextualError(
                     "The right operand of a comparaison operation has to be an int or a float (rule 3.33)", loc);
+
+        ConvFloat convFloat;
+        if (typeLeft.isFloat() && typeRight.isInt()){
+            convFloat = new ConvFloat(this.getLeftOperand());
+            this.setRightOperand(convFloat);
+            convFloat.setType(compiler.environmentType.FLOAT);
+        }
+        
+        else if (typeLeft.isInt() && typeRight.isFloat()){
+            convFloat = new ConvFloat(this.getLeftOperand());
+            this.setLeftOperand(convFloat);
+            convFloat.setType(compiler.environmentType.FLOAT);    
+        }
 
         // Ajout du décor
         this.setType(compiler.environmentType.BOOLEAN);

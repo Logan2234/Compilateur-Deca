@@ -45,7 +45,7 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
+    protected void codeGenPrint(DecacCompiler compiler, boolean hex) {
         // put value in the R1 register and print it out with WINT
         compiler.addInstruction(new LOAD(value, Register.R1));
         compiler.addInstruction(new WINT());
@@ -76,6 +76,7 @@ public class IntLiteral extends AbstractExpr {
         else {
             // by convention, put the result on the stack.
             compiler.addInstruction(new LOAD(value, Register.R0));
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R0));
         }
     }

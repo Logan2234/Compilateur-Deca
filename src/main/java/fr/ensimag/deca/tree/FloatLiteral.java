@@ -11,6 +11,7 @@ import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -74,15 +75,21 @@ public class FloatLiteral extends AbstractExpr {
         else {
             // put it in R1 then on the stack
             compiler.addInstruction(new LOAD(value, Register.R1));
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
         }
     }
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
+    protected void codeGenPrint(DecacCompiler compiler, boolean hex) {
         // load ourselves in R1, then print it with WFLOAT
         compiler.addInstruction(new LOAD(value, Register.R1));
-        compiler.addInstruction(new WFLOAT());
+        if(hex) {
+            compiler.addInstruction(new WFLOATX());
+        }
+        else {
+            compiler.addInstruction(new WFLOAT());
+        }
     }
 
 }

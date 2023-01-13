@@ -1,9 +1,0 @@
-// Created by Virgile, 11/01/2022
-// test while functions.
-{
-    int i = 10;
-    while(i >= 0) {
-        println(i);
-        i = i - 2;
-    }
-}
