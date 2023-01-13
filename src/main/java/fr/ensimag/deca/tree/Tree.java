@@ -287,4 +287,28 @@ public abstract class Tree {
             return "";
         }
     }
+
+    protected Boolean isLiteral() {
+        return false;
+    }
+
+    /**
+     * Optimize the decorated tree.
+     * 
+     * @param prog
+     */
+
+    public void optimizeTree(){
+        dumpCalcs();
+    }
+
+    /**
+     * Calculate the dump operations of the tree that can be skipped on the compiled program
+     * 
+     * @param compiler
+     */
+    public void dumpCalcs(){
+        // This fonction must be overriden by the classes that need it
+    }
+    
 }

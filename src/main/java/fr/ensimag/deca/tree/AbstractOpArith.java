@@ -1,6 +1,9 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+
+import java.beans.Expression;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -52,5 +55,42 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         // Ajout du décor
         this.setType(typeLeft);
         return typeLeft;
+    }
+
+    @Override
+    public AbstractExpr skipCalculs(){
+        AbstractExpr left = getLeftOperand();
+        AbstractExpr right = getRightOperand();
+        if (!(left.isLiteral())){
+            left = left.skipCalculs();
+        }
+
+        if (!(right.isLiteral())){
+            right = right.skipCalculs();
+        }
+
+        if (left.isLiteral() && right.isLiteral()){
+            if (getType().isInt()){
+                int newValue;
+                if (getOperatorName().equals("+")){
+                    newValue = ((IntLiteral) (left)).getValue() + ((IntLiteral) (left)).getValue();
+                } else if (getOperatorName().equals("-")){
+                    newValue = ((IntLiteral) (left)).getValue() - ((IntLiteral) (left)).getValue();
+                } else if (getOperatorName().equals("*")){
+                    newValue = ((IntLiteral) (left)).getValue() * ((IntLiteral) (left)).getValue();
+                } else if (getOperatorName().equals("/")){
+                    newValue = ((IntLiteral) (left)).getValue() / ((IntLiteral) (left)).getValue();
+                } else if (getOperatorName().equals("%")){
+                    newValue = ((IntLiteral) (left)).getValue() % ((IntLiteral) (left)).getValue();
+                } else {
+                    throw new UnsupportedOperationException("Unsupported operation: " + getOperatorName()); // cette ligne ne devrait jamais être appelée
+                } 
+            }
+
+            if (getType().isFloat()){
+
+            }
+        }
+        return this;
     }
 }

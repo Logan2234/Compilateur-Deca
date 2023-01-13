@@ -188,4 +188,13 @@ public abstract class AbstractExpr extends AbstractInst {
             s.println();
         }
     }
+
+    /**
+     * Calculate the value of the expression for export just an Int, a String or a Float
+     * 
+     * @return The old expression or a new expression with the calculus being skipped
+     */
+    public AbstractExpr skipCalculs(){
+        return this;
+    }
 }
