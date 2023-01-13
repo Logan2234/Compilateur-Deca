@@ -26,7 +26,7 @@ public abstract class AbstractDeclParam extends Tree {
      * @param currentClass 
      *          corresponds to the "class" attribute (null in the main bloc).
      */    
-    protected abstract void verifyDeclParam(DecacCompiler compiler,
+    protected abstract Type verifyDeclParam(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
 }

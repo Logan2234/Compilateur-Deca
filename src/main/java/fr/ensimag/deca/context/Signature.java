@@ -24,4 +24,15 @@ public class Signature {
         return args.size();
     }
 
+    public boolean sameSignature(Signature s) {
+        if (this.size() != s.size())
+            return false;
+        for (int i = 0; i < args.size(); i++) {
+            if (!this.paramNumber(i).sameType(s.paramNumber(i)))
+                return false;
+        }
+        return true;
+    }
+    //TODO: Fonction de comparaison des signatures
+
 }

@@ -1,0 +1,13 @@
+// Description:
+//    Déclare une classe avec un mot déjà réservé
+//
+// Resultats:
+//    Erreur contextuelle   
+//    Ligne 15: "int" is already a type/class (rule 1.3)
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A extends int {
+
+}

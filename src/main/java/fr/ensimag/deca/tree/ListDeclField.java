@@ -23,23 +23,45 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     }
 
     /**
-     * Implements non-terminal "list_decl_var" of [SyntaxeContextuelle] in pass 3
-     * @param compiler contains the "env_types" attribute
-     * @param localEnv 
-     *   its "parentEnvironment" corresponds to "env_exp_sup" attribute
-     *   in precondition, its "current" dictionary corresponds to 
-     *      the "env_exp" attribute
-     *   in postcondition, its "current" dictionary corresponds to 
-     *      the "env_exp_r" attribute
-     * @param currentClass 
-     *          corresponds to "class" attribute (null in the main bloc).
-     */    
-    void verifyListDeclField(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
+     * Implements non-terminal "list_decl_var" of [SyntaxeContextuelle] in pass 2
+     * 
+     * @param compiler     contains the "env_types" attribute
+     * @param localEnv
+     *                     its "parentEnvironment" corresponds to "env_exp_sup"
+     *                     attribute
+     *                     in precondition, its "current" dictionary corresponds to
+     *                     the "env_exp" attribute
+     *                     in postcondition, its "current" dictionary corresponds to
+     *                     the "env_exp_r" attribute
+     * @param currentClass
+     *                     corresponds to "class" attribute (null in the main bloc).
+     */
+    void verifyListDeclField(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
         for (AbstractDeclField i : getList()) {
             i.verifyDeclField(compiler, localEnv, currentClass);
-        }       
+        }
     }
 
+    /**
+     * Implements non-terminal "list_decl_var" of [SyntaxeContextuelle] in pass 3
+     * 
+     * @param compiler     contains the "env_types" attribute
+     * @param localEnv
+     *                     its "parentEnvironment" corresponds to "env_exp_sup"
+     *                     attribute
+     *                     in precondition, its "current" dictionary corresponds to
+     *                     the "env_exp" attribute
+     *                     in postcondition, its "current" dictionary corresponds to
+     *                     the "env_exp_r" attribute
+     * @param currentClass
+     *                     corresponds to "class" attribute (null in the main bloc).
+     */
+    void verifyListInitField(DecacCompiler compiler, EnvironmentExp localEnv,
+            ClassDefinition currentClass) throws ContextualError {
+        for (AbstractDeclField i : getList()) {
+            i.verifyInitField(compiler, localEnv, currentClass);
+        }
+    }
 
 }
