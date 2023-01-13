@@ -17,7 +17,7 @@ import org.apache.commons.lang.Validate;
  */
 public class Return extends AbstractInst {
     
-    private final AbstractExpr e;
+    private AbstractExpr e;
 
     public Return(AbstractExpr e) {
         Validate.notNull(e);
@@ -54,5 +54,10 @@ public class Return extends AbstractInst {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         e.prettyPrint(s, prefix, true);
+    }
+
+    @Override 
+    public void dumpCalcs(){
+        e = e.skipCalculs();
     }
 }
