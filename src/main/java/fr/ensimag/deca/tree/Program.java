@@ -37,7 +37,9 @@ public class Program extends AbstractProgram {
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         // LOG.debug("verify program: start");
-        // classes.verifyListClassBody(compiler); // TODO: Manque les deux autres passes (passe 1 et 2)
+        classes.verifyListClass(compiler);
+        classes.verifyListClassMembers(compiler);
+        // classes.verifyListClassBody(compiler);
         main.verifyMain(compiler);
         // LOG.debug("verify program: end");
 
@@ -66,8 +68,8 @@ public class Program extends AbstractProgram {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        getClasses().decompile(s);
-        getMain().decompile(s);
+        classes.decompile(s);
+        main.decompile(s);
     }
     
     @Override

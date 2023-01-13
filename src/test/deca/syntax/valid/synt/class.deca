@@ -11,11 +11,12 @@ class A extends B {
     protected int x;
     void setX(int a) {
         this.x = a;
-        return a;
+        return x;
     }
     protected int y;
     void setY(int a) {
-        this.y = a;
+        y = a;
+        setX(a);
     }
     int methodAsm(int x, boolean y)
         asm("

@@ -1,0 +1,85 @@
+#!/bin/bash
+
+# Colors:
+RED='\033[0;31m'
+REDBOLD='\033[0;31;1m'
+GREENBOLD='\033[0;32;1m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+BWHITE='\033[1;37m'
+
+# On se place dans le répertoire du projet (quel que soit le
+# répertoire d'où est lancé le script) :
+cd "$(dirname "$0")"/../../../../ || exit 1
+
+PATH=./src/test/script/launchers:"$PATH"
+
+echo -e "${BWHITE}\n============================= -d option =============================\n"
+
+test="./src/test/deca/codegen/valid/operationTests.deca"
+
+decac $test > ./src/test/script/options-scripts/option-without-d.tmp 2> /dev/null
+
+if cat ./src/test/script/options-scripts/option-without-d.tmp | grep -q "."
+then
+    echo -e "${REDBOLD}Test failed:$RED decac -d not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+else 
+    echo -e "${GREENBOLD}Test passed:$GREEN decac does not show log info"
+fi
+
+decac -d $test > ./src/test/script/options-scripts/option-d.tmp 2> /dev/null
+if cat ./src/test/script/options-scripts/option-d.tmp | grep -q "Application-wide trace level set to INFO"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac shows INFO info"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -d not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+decac -d -d $test > ./src/test/script/options-scripts/option-d-d.tmp 2> /dev/null
+
+if cat ./src/test/script/options-scripts/option-d-d.tmp | grep -q "Application-wide trace level set to DEBUG"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac shows DEBUG info"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -d -d not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+decac -d -d -d $test > ./src/test/script/options-scripts/option-d-d-d.tmp 2> /dev/null
+
+if cat ./src/test/script/options-scripts/option-d-d-d.tmp | grep -q "Application-wide trace level set to TRACE"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac shows TRACE info"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -d -d -d not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+decac -d -d -d -d $test > ./src/test/script/options-scripts/option-d-d-d-d.tmp 2> /dev/null
+
+if cat ./src/test/script/options-scripts/option-d-d-d-d.tmp | grep -q "Application-wide trace level set to ALL"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac shows ALL info"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -d -d -d -d not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+rm ./src/test/script/options-scripts/*-d.tmp

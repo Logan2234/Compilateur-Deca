@@ -38,13 +38,14 @@ public class DecacMain {
         }
 
         if (options.getSourceFiles().isEmpty()) {
-            if (!options.getPrintBanner())
+            if (!options.getPrintBanner()) {
+                System.err.println("\u001B[31m/!\\ There is no file to compile.\u001B[37m");
                 options.displayUsage();
-            // throw new UnsupportedOperationException("decac without argument not yet
-            // implemented");
+                System.exit(1);
+            }
         }
 
-        if (options.getParallel()) {
+        else if (options.getParallel()) {
             // A FAIRE : instancier DecacCompiler pour chaque fichier à
             // compiler, et lancer l'exécution des méthodes compile() de chaque
             // instance en parallèle. Il est conseillé d'utiliser
