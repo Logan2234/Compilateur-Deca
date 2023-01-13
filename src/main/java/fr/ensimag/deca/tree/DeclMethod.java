@@ -66,4 +66,10 @@ public class DeclMethod extends AbstractDeclMethod {
         params.prettyPrint(s, prefix, false);
         body.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    protected void spotUsedVar() {
+        // do nothing
+        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    }
 }

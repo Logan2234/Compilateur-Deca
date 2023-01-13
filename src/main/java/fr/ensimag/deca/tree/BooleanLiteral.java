@@ -77,4 +77,9 @@ public class BooleanLiteral extends AbstractExpr {
     protected Boolean isLiteral() {
         return true;
     }
+
+    @Override
+    protected void spotUsedVar() {
+        // do nothing
+    }
 }

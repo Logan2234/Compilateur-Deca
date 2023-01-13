@@ -127,5 +127,11 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         leftOperand.prettyPrint(s, prefix, false);
         rightOperand.prettyPrint(s, prefix, true);
     }
+    
+    @Override
+    protected void spotUsedVar() {
+        this.leftOperand.spotUsedVar();
+        this.rightOperand.spotUsedVar();
+    }
 
 }

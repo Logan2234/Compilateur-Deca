@@ -80,4 +80,10 @@ public class Program extends AbstractProgram {
         classes.prettyPrint(s, prefix, false);
         main.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    protected void spotUsedVar() {
+        main.spotUsedVar();
+        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    }
 }

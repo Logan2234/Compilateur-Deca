@@ -64,4 +64,10 @@ public class DeclField extends AbstractDeclField {
         fieldName.prettyPrint(s, prefix, false);
         initialization.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    protected void spotUsedVar() {
+        // do nothing
+        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    }
 }

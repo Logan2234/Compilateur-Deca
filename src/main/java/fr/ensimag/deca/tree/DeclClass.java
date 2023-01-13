@@ -80,4 +80,9 @@ public class DeclClass extends AbstractDeclClass {
         //throw new UnsupportedOperationException("Not yet supported");
     }
 
+    @Override
+    protected void spotUsedVar() {
+        // do nothing
+        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    }
 }

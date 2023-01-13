@@ -102,4 +102,31 @@ public abstract class Definition {
         this.dAddr = dAddr;
     }
 
+    /**
+     * If the variable is used in the main program
+     */
+    boolean used = false;
+
+    /**
+     * Get the used attribute
+     * @return the used attribute
+     */
+    public boolean getUsed() {
+        return this.used;
+    }
+
+    /**
+     * Reset the used attribute back to false
+     */
+    public void resetUsed() {
+        this.used = false;
+    }
+
+    /*
+     * Set the used attribute to true
+     */
+    public void setUsed() {
+        this.used = true;
+    }
+
 }

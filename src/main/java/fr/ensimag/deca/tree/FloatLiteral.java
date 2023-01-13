@@ -97,4 +97,8 @@ public class FloatLiteral extends AbstractExpr {
         return true;
     }
 
+    @Override
+    protected void spotUsedVar() {
+        // do nothing
+    }
 }

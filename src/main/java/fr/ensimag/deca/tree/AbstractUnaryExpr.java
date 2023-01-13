@@ -94,5 +94,10 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
      *                      this register.
      */
     public abstract void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister);
+    
+    @Override
+    protected void spotUsedVar() {
+        this.operand.spotUsedVar();
+    }
 
 }

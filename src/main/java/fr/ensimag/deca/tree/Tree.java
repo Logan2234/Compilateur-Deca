@@ -299,6 +299,7 @@ public abstract class Tree {
      */
 
     public void optimizeTree(){
+        removeUnusedVar();
         dumpCalcs();
     }
 
@@ -310,5 +311,29 @@ public abstract class Tree {
     public void dumpCalcs(){
         // This fonction must be overriden by the classes that need it
     }
+
+    /**
+     * Remove all unused variables from the tree
+     * 
+     * @param compiler
+     */
+    public void removeUnusedVar(){
+        spotUsedVar();
+        //removeUnspottedVar();
+    }
+
+    /**
+     * Set to true the "used" attribute of definitions of used variables
+     * 
+     * @param compiler
+     */
+    protected abstract void spotUsedVar();
+
+    /**
+     * Remove from the tree the variables, classes and methodes that are unused
+     * 
+     * @param compiler
+     */
+    //protected abstract void removeUnspottedVar();
     
 }
