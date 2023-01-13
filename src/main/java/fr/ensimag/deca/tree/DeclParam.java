@@ -30,22 +30,26 @@ public class DeclParam extends AbstractDeclParam {
     }
 
     @Override
-    protected Type verifyDeclParam(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
+    protected Type verifyDeclParam(DecacCompiler compiler) throws ContextualError {
         Type type = this.type.verifyType(compiler);
-        if (type.isVoid()){
+        if (type.isVoid()) {
             throw new ContextualError("The parameter type can't be void (rule 2.9)", getLocation());
         }
         return type;
-        // try {
-        //     ParamDefinition def = new ParamDefinition(type, this.getLocation());
-        //     localEnv.declare(this.paramName.getName(), def);
-        //     paramName.verifyExpr(compiler, localEnv, currentClass);
-        // } catch (DoubleDefException e) {
-        //     throw new ContextualError(
-        //             "The parameter \"" + this.paramName.getName().getName() + "\" has already been declared (rule )",
-        //             this.getLocation());
-        // }
+    }
+
+    @Override
+    protected void verifyParam(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        try {
+            ParamDefinition def = new ParamDefinition(this.type.getType(), this.getLocation());
+            localEnv.declare(this.paramName.getName(), def);
+            paramName.verifyExpr(compiler, localEnv, currentClass);
+        } catch (DoubleDefException e) {
+            throw new ContextualError(
+                    "The parameter \"" + this.paramName.getName().getName() + "\" has already been declared (rule )",
+                    this.getLocation());
+        }
     }
 
     @Override

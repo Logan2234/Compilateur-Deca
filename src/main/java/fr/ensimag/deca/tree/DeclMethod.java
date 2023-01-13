@@ -43,7 +43,7 @@ public class DeclMethod extends AbstractDeclMethod {
             throws ContextualError {
         Type type = this.type.verifyType(compiler);
         
-        Signature signature = params.verifyListDeclParam(compiler, localEnv, currentClass);
+        Signature signature = params.verifyListDeclParam(compiler);
         
         MethodDefinition methodeDef = new MethodDefinition(type, this.getLocation(), signature, currentClass.getNumberOfMethods());
         currentClass.incNumberOfMethods();
@@ -72,11 +72,10 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
-    protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp locaEnv, ClassDefinition currentClass)
+    protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        // params.verifyListDeclParam(compiler, localEnv, currentClass); // ! pas
-        // localEnv mais un autre qu'on doit construire
-        // body.verifyMethod(compiler, localEnv, currentClass, type);
+        params.verifyListParam(compiler, localEnv, currentClass);
+        body.verifyMethod(compiler, localEnv, currentClass, this.type.getType());
     }
 
     @Override

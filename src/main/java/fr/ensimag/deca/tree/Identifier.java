@@ -182,7 +182,7 @@ public class Identifier extends AbstractIdentifier {
 
         if (def == null)
             throw new ContextualError("The variable " + name.getName() + " doesn't exist (rule 0.1)", loc);
-
+            
         // Ajout du décor
         Type type = def.getType();
         this.setDefinition(def);
