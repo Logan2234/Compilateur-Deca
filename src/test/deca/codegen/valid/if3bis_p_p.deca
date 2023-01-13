@@ -1,0 +1,9 @@
+{
+	boolean test1 = false;
+	boolean test2 = true;
+	if ((test1 && test2)){
+		println("ok");
+	} else {
+		println("ok");
+	}
+}
