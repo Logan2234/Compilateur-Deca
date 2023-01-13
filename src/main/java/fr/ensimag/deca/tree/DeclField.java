@@ -24,7 +24,8 @@ public class DeclField extends AbstractDeclField {
     final private AbstractIdentifier fieldName;
     final private AbstractInitialization initialization;
 
-    public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization, Visibility visib) {
+    public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization,
+            Visibility visib) {
         Validate.notNull(type);
         Validate.notNull(fieldName);
         Validate.notNull(initialization);
@@ -36,20 +37,22 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    protected void verifyDeclField(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+    protected void verifyDeclField(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Type type = this.type.getType();
         try {
-            FieldDefinition def = new FieldDefinition(type, this.getLocation(), visib, currentClass, 0);
+            FieldDefinition def = new FieldDefinition(type, this.getLocation(), visib, currentClass,
+                    currentClass.getNumberOfFields());
+            currentClass.incNumberOfFields();
             localEnv.declare(this.fieldName.getName(), def);
-            fieldName.setDefinition(def);
-            fieldName.setType(type);
-        }
-        catch (DoubleDefException e) {
-            throw new ContextualError("The field \"" + this.fieldName.getName().getName() + "\" has already been declared (rule 3.17)", this.getLocation());
-        }
-        
+            fieldName.verifyExpr(compiler, localEnv, currentClass);
+        } catch (DoubleDefException e) {
+            throw new ContextualError(
+                "The field \"" + this.fieldName.getName().getName() + "\" has already been declared (rule )",
+                this.getLocation());
+            }
+            
+        initialization.verifyInitialization(compiler, type, localEnv, currentClass);
     }
 
     @Override
@@ -64,13 +67,12 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    protected
-    void iterChildren(TreeFunction f) {
+    protected void iterChildren(TreeFunction f) {
         type.iter(f);
         fieldName.iter(f);
         initialization.iter(f);
     }
-    
+
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);

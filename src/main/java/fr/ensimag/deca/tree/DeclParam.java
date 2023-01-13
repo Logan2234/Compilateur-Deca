@@ -37,11 +37,11 @@ public class DeclParam extends AbstractDeclParam {
         try {
             ParamDefinition def = new ParamDefinition(type, this.getLocation());
             localEnv.declare(this.paramName.getName(), def);
-            paramName.setDefinition(def);
-            paramName.setType(type);
-        }
-        catch (DoubleDefException e) {
-            throw new ContextualError("The field \"" + this.paramName.getName().getName() + "\" has already been declared (rule 3.17)", this.getLocation());
+            paramName.verifyExpr(compiler, localEnv, currentClass);
+        } catch (DoubleDefException e) {
+            throw new ContextualError(
+                    "The parameter \"" + this.paramName.getName().getName() + "\" has already been declared (rule)",
+                    this.getLocation());
         }
     }
 

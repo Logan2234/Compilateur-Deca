@@ -32,9 +32,9 @@ public class New extends AbstractExpr {
             ClassDefinition currentClass) throws ContextualError {
         Location loc = this.getLocation();
         
-        if (!this.classe.verifyType(compiler).isClass()){
+        if (!this.classe.verifyType(compiler).isClass())
             throw new ContextualError("New is only for classes", loc);
-        }
+
         this.setType(this.getType());
         return this.getType();
     }

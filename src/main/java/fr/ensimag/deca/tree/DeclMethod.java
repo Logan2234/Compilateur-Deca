@@ -37,20 +37,22 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
-    protected void verifyDeclMethod(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+    protected void verifyDeclMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Type type = this.type.getType();
         try {
-            MethodDefinition def = new MethodDefinition(type, this.getLocation(), null, 0);
+            MethodDefinition def = new MethodDefinition(type, this.getLocation(), null,
+                    currentClass.getNumberOfMethods());
+            currentClass.incNumberOfMethods();
             localEnv.declare(this.methodName.getName(), def);
-            methodName.setDefinition(def);
-            methodName.setType(type);
+            methodName.verifyExpr(compiler, localEnv, currentClass);
+        } catch (DoubleDefException e) {
+            throw new ContextualError(
+                    "The method \"" + methodName.getName().getName() + "\" has already been declared (rule)",
+                    this.getLocation());
         }
-        catch (DoubleDefException e) {
-            throw new ContextualError("The method \"" + methodName.getName().getName() + "\" has already been declared (rule 3.17)", this.getLocation());
-        }
-        params.verifyListDeclParam(compiler, localEnv, currentClass);
+
+        params.verifyListDeclParam(compiler, localEnv, currentClass); // ! pas localEnv mais un autre qu'on doit construire
         body.verifyMethod(compiler, localEnv, currentClass, type);
     }
 
