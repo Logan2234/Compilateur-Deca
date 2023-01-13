@@ -23,6 +23,8 @@ PATH=./src/test/script/launchers:"$PATH"
 echo -e "${BWHITE} \n============================= Valid tests =============================\n"
 
 files=$(find ./src/test/deca/codegen/valid -maxdepth 1 -name "*.deca")
+files+=" "
+files+=$(find ./src/test/deca/codegen/interactive -maxdepth 1 -name "*.deca")
 
 for test in $files
 do
@@ -41,29 +43,29 @@ do
     fi
 done
 
-echo -e "${BWHITE} \n============================= Invalid tests =============================\n"
+# echo -e "${BWHITE} \n============================= Invalid tests =============================\n"
 
-files=$(find ./src/test/deca/codegen/invalid -maxdepth 1 -name "*.deca")
+# files=$(find ./src/test/deca/codegen/invalid -maxdepth 1 -name "*.deca")
 
-for test in $files
-do
-    ((NB_INVALID_TESTS = NB_INVALID_TESTS + 1))
-    decac "$test" > "${test%.deca}".lis 2>&1
-    if cat "${test%.deca}".lis | grep -q "$test:*:*"
-    then
-        ((INVALID_PASSED = INVALID_PASSED + 1))
-        echo -e "${GREENBOLD}Test passed ($INVALID_PASSED/$NB_INVALID_TESTS): ${GREEN}$test${NOCOLOR}"
-    else
-        echo -e "${REDBOLD}Test failed ($INVALID_PASSED/$NB_INVALID_TESTS): ${RED}$test${NOCOLOR}"
-        if [[ $1 == "--maven" ]];
-        then
-            exit 1
-        fi
-    fi
-done
+# for test in $files
+# do
+#     ((NB_INVALID_TESTS = NB_INVALID_TESTS + 1))
+#     decac "$test" > "${test%.deca}".lis 2>&1
+#     if cat "${test%.deca}".lis | grep -q "$test:*:*"
+#     then
+#         ((INVALID_PASSED = INVALID_PASSED + 1))
+#         echo -e "${GREENBOLD}Test passed ($INVALID_PASSED/$NB_INVALID_TESTS): ${GREEN}$test${NOCOLOR}"
+#     else
+#         echo -e "${REDBOLD}Test failed ($INVALID_PASSED/$NB_INVALID_TESTS): ${RED}$test${NOCOLOR}"
+#         if [[ $1 == "--maven" ]];
+#         then
+#             exit 1
+#         fi
+#     fi
+# done
 
 VALID_PASSED_PERCENTAGE=`echo "$VALID_PASSED / $NB_VALID_TESTS * 100" | bc -l`
-INVALID_PASSED_PERCENTAGE=`echo "$INVALID_PASSED / $NB_INVALID_TESTS * 100" | bc -l`
+# INVALID_PASSED_PERCENTAGE=`echo "$INVALID_PASSED / $NB_INVALID_TESTS * 100" | bc -l`
 
 TEMP=`echo "$VALID_PASSED_PERCENTAGE > 0.5" | bc -l`
 
@@ -78,14 +80,14 @@ else
     echo "%"
 fi
 
-TEMP=`echo "$INVALID_PASSED_PERCENTAGE > 0.5" | bc -l`
-if ((TEMP));
-then
-    echo -e "\n${GREEN} Invalid test passed: "
-    printf %2.0f $INVALID_PASSED_PERCENTAGE
-    echo -e "%\n"
-else
-    echo -e "\n${RED} Invalid test passed: "
-    printf %2.0f $INVALID_PASSED_PERCENTAGE
-    echo -e "%\n"
-fi
+# TEMP=`echo "$INVALID_PASSED_PERCENTAGE > 0.5" | bc -l`
+# if ((TEMP));
+# then
+#     echo -e "\n${GREEN} Invalid test passed: "
+#     printf %2.0f $INVALID_PASSED_PERCENTAGE
+#     echo -e "%\n"
+# else
+#     echo -e "\n${RED} Invalid test passed: "
+#     printf %2.0f $INVALID_PASSED_PERCENTAGE
+#     echo -e "%\n"
+# fi

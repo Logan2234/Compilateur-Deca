@@ -1,12 +1,13 @@
 // Description:
-//    print d'un int.
+//    NoOperation
 //
 // Resultats:
-//    2
+//    //
 //
 // Historique:
 //    cree le 06/01/2023
 
 {
-        print(2, 3);
+    int i = 0;
+    ;
 }
