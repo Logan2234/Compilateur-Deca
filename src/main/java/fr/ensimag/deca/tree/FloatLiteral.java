@@ -92,4 +92,9 @@ public class FloatLiteral extends AbstractExpr {
         }
     }
 
+    @Override
+    protected Boolean isLiteral() {
+        return true;
+    }
+
 }

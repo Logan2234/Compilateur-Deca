@@ -25,4 +25,11 @@ public class ListExpr extends TreeList<AbstractExpr> {
             i.decompile(s);
         }
     }
+
+    @Override 
+    public void dumpCalcs(){
+        for (int i = 0; i < getList().size(); i++) {
+            this.set(i, getList().get(i).skipCalculs());
+        }
+    }
 }

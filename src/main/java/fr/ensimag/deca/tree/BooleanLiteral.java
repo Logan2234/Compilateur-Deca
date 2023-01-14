@@ -73,4 +73,8 @@ public class BooleanLiteral extends AbstractExpr {
         return "BooleanLiteral (" + value + ")";
     }
 
+    @Override
+    protected Boolean isLiteral() {
+        return true;
+    }
 }

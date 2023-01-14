@@ -63,4 +63,69 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
         return compiler.environmentType.BOOLEAN;
     }
 
+    @Override
+    public AbstractExpr skipCalculs(){
+        AbstractExpr left = getLeftOperand();
+        AbstractExpr right = getRightOperand();
+        if (!(left.isLiteral())){
+            left = left.skipCalculs();
+            this.setLeftOperand(left);
+        }
+
+        if (!(right.isLiteral())){
+            right = right.skipCalculs();
+            this.setRightOperand(right);
+        }
+
+        if (left.isLiteral() && right.isLiteral()){
+
+            if (left.getType().isBoolean()){
+                boolean newValue = false; // This might be changed later
+                if (getOperatorName().equals("==")){
+                    newValue = ((BooleanLiteral) left).getValue() == ((BooleanLiteral) right).getValue();
+                } else if (getOperatorName().equals("!=")){
+                    newValue = ((BooleanLiteral) left).getValue() != ((BooleanLiteral) right).getValue();
+                }
+                return new BooleanLiteral(newValue);
+            }
+
+            if (left.getType().isInt()){
+                boolean newValue;
+                if (getOperatorName().equals("<")){
+                    newValue = ((IntLiteral) left).getValue() < ((IntLiteral) right).getValue();
+                } else if (getOperatorName().equals("<=")){
+                    newValue = ((IntLiteral) left).getValue() <= ((IntLiteral) right).getValue();
+                } else if (getOperatorName().equals(">")){
+                    newValue = ((IntLiteral) left).getValue() > ((IntLiteral) right).getValue();
+                } else if (getOperatorName().equals(">=")){
+                    newValue = ((IntLiteral) left).getValue() >= ((IntLiteral) right).getValue();
+                } else if (getOperatorName().equals("!=")){
+                    newValue = ((IntLiteral) left).getValue() != ((IntLiteral) right).getValue();
+                } else {
+                    newValue = ((IntLiteral) left).getValue() == ((IntLiteral) right).getValue();
+                }
+                return new BooleanLiteral(newValue);
+            }
+
+            if (left.getType().isFloat()){
+                boolean newValue;
+                if (getOperatorName().equals("<")){
+                    newValue = ((FloatLiteral) left).getValue() < ((FloatLiteral) right).getValue();
+                } else if (getOperatorName().equals("<=")){
+                    newValue = ((FloatLiteral) left).getValue() <= ((FloatLiteral) right).getValue();
+                } else if (getOperatorName().equals(">")){
+                    newValue = ((FloatLiteral) left).getValue() > ((FloatLiteral) right).getValue();
+                } else if (getOperatorName().equals(">=")){
+                    newValue = ((FloatLiteral) left).getValue() >= ((FloatLiteral) right).getValue();
+                } else if (getOperatorName().equals("!=")){
+                    newValue = ((FloatLiteral) left).getValue() != ((FloatLiteral) right).getValue();
+                } else {
+                    newValue = ((FloatLiteral) left).getValue() == ((FloatLiteral) right).getValue();
+                }
+                return new BooleanLiteral(newValue);
+            }
+        }
+        return this;
+    }
+
 }

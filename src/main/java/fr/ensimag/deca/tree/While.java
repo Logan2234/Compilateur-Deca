@@ -98,4 +98,9 @@ public class While extends AbstractInst {
         body.prettyPrint(s, prefix, true);
     }
 
+
+    @Override 
+    public void dumpCalcs(){
+        condition = condition.skipCalculs();
+    }
 }

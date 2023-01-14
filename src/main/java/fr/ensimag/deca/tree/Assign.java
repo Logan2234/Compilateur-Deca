@@ -78,4 +78,9 @@ public class Assign extends AbstractBinaryExpr {
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
         throw new UnsupportedOperationException("This should never be called.");
     }
+
+    @Override 
+    public void dumpCalcs(){
+        setRightOperand(getRightOperand().skipCalculs());
+    }
 }
