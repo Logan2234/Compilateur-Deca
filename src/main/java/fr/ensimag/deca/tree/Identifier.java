@@ -176,8 +176,7 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        // ! Peut etre pas Definition
-        Definition def = localEnv.get(this.name); // TODO: Utilisation de currentClass éventuelle 
+        Definition def = localEnv.get(this.name);
         Location loc = this.getLocation();
 
         if (def == null)

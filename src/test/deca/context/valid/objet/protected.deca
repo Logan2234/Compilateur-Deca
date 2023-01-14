@@ -1,0 +1,19 @@
+// Description:
+//    Déclare une méthode ???
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 14/01/2023
+
+class A{
+    protected int x = 3;
+}
+
+class B{
+    A a = new A();
+    int instruction(){
+        return a.x;
+    }
+}

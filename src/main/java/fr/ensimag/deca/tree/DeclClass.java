@@ -54,9 +54,9 @@ public class DeclClass extends AbstractDeclClass {
         Definition def = compiler.environmentType.defOfType(name.getName());
         
         if (def != null)
-        throw new ContextualError("\"" + name.getName().getName() + "\" is already a type/class (rule 1.3)", this.getLocation());
+            throw new ContextualError("\"" + name.getName().getName() + "\" is already a type/class (rule 1.3)", this.getLocation());
         if (!this.superIdentifier.verifyType(compiler).isClass())
-        throw new ContextualError("\"" + superIdentifier.getName().getName() +"\" is not a class (rule 1.3)",
+            throw new ContextualError("\"" + superIdentifier.getName().getName() +"\" is not a class (rule 1.3)",
         this.getLocation());
         
         ClassType classType = new ClassType(name.getName(), this.getLocation(), ((ClassType)superIdentifier.getType()).getDefinition());
@@ -79,7 +79,7 @@ public class DeclClass extends AbstractDeclClass {
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
         ClassDefinition def = this.name.getClassDefinition();
         fields.verifyListInitField(compiler, def.getMembers(), def);
-        methods.verifyBodyListDeclMethod(compiler, def.getMembers(), def);
+        methods.verifyListDeclMethodBody(compiler, def.getMembers(), def);
     }
 
     @Override

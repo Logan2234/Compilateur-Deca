@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -101,11 +102,22 @@ public abstract class AbstractExpr extends AbstractInst {
             return this;
         }
 
-        if (expectedType.isFloat() && rtype.isInt())
+        if (expectedType.isFloat() && rtype.isInt()) // TODO: assignCompatible pour factoriser
         {
             AbstractExpr convFloat = new ConvFloat(this);
             convFloat.verifyExpr(compiler, localEnv, currentClass);
             return convFloat;
+        }
+
+        try {
+            ClassType expectedClassType = expectedType.asClassType("Not a class type", getLocation());
+            ClassType RClassType = rtype.asClassType("Not a class type", getLocation());
+            if (RClassType.isSubClassOf(expectedClassType)){
+                this.setType(rtype);
+                return this;
+            }
+        } catch (ContextualError e) {
+
         }
 
         throw new ContextualError(

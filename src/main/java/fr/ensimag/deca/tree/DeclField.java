@@ -42,9 +42,8 @@ public class DeclField extends AbstractDeclField {
             throws ContextualError {
         Type type = this.type.verifyType(compiler);
         
-        if (type.isVoid()){
+        if (type.isVoid())
             throw new ContextualError("The field type can't be void (rule 2.5)", getLocation());
-        }
 
         // Si le nom existe déjà dans une classe parente
         ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(this.fieldName.getName());
@@ -60,7 +59,7 @@ public class DeclField extends AbstractDeclField {
             fieldName.verifyExpr(compiler, localEnv, currentClass);
         } catch (DoubleDefException e) {
             throw new ContextualError(
-                "The field \"" + this.fieldName.getName().getName() + "\" has already been declared (rule )",
+                "The field \"" + this.fieldName.getName().getName() + "\" has already been declared (rule 2.4)",
                 this.getLocation());
             }
     }
@@ -68,7 +67,7 @@ public class DeclField extends AbstractDeclField {
     @Override
     protected void verifyInitField(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        // initialization.verifyInitialization(compiler, type, localEnv, currentClass);
+        initialization.verifyInitialization(compiler, type.getType(), localEnv, currentClass);
     }
 
     @Override

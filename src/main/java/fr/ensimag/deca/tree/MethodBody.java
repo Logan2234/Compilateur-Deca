@@ -60,9 +60,9 @@ public class MethodBody extends AbstractMethod {
         vars.iterChildren(f);
         insts.iterChildren(f);
     }
-    @Override //? Is it necessary ?
+    @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        vars.prettyPrintChildren(s, prefix);
-        insts.prettyPrintChildren(s, prefix);
+        vars.prettyPrint(s, prefix, false);
+        insts.prettyPrint(s, prefix, true);
     }
 }

@@ -53,7 +53,7 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
      * @param currentClass 
      *          corresponds to "class" attribute (null in the main bloc).
      */    
-    void verifyBodyListDeclMethod(DecacCompiler compiler, EnvironmentExp localEnv,
+    void verifyListDeclMethodBody(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
         for (AbstractDeclMethod i : getList()) {
             i.verifyMethodBody(compiler, localEnv, currentClass);
