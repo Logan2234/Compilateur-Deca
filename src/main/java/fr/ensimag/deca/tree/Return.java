@@ -56,8 +56,15 @@ public class Return extends AbstractInst {
         e.prettyPrint(s, prefix, true);
     }
 
-    @Override 
-    public void dumpCalcs(){
-        e = e.skipCalculs();
+    @Override
+    public boolean collapse() {
+        return false;
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
     }
 }

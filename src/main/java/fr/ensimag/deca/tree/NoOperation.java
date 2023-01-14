@@ -41,4 +41,15 @@ public class NoOperation extends AbstractInst {
         // leaf node => nothing to do
     }
 
+    @Override
+    public boolean collapse() {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        return new ListInst();
+    }
+
 }

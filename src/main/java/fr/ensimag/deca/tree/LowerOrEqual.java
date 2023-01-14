@@ -29,4 +29,48 @@ public class LowerOrEqual extends AbstractOpIneq {
         compiler.addInstruction(new SLE(register));
     }
 
+    @Override
+    public boolean collapse() {
+        return getRightOperand().collapse() || getLeftOperand().collapse();
+    }
+
+    @Override
+    public Boolean collapseBool() {
+        if(getRightOperand().getType().isInt()) {
+            Integer rightCollapsedValue = getRightOperand().collapseInt();
+            if(rightCollapsedValue != null && getRightOperand().collapsable()) {
+                IntLiteral newInt = new IntLiteral(rightCollapsedValue);
+                newInt.setType(getType());
+                setRightOperand(newInt);
+            }
+            Integer leftCollapsedValue = getLeftOperand().collapseInt();
+            if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
+                IntLiteral newInt = new IntLiteral(leftCollapsedValue);
+                newInt.setType(getType());
+                setLeftOperand(newInt);
+            }
+            if(rightCollapsedValue != null && leftCollapsedValue != null) {
+                return rightCollapsedValue <= leftCollapsedValue;
+            }
+        }
+        else if(getRightOperand().getType().isFloat()) {
+            Float rightCollapsedValue = getRightOperand().collapseFloat();
+            if(rightCollapsedValue != null && getRightOperand().collapsable()) {
+                FloatLiteral newFloat = new FloatLiteral(rightCollapsedValue);
+                newFloat.setType(getType());
+                setRightOperand(newFloat);
+            }
+            Float leftCollapsedValue = getLeftOperand().collapseFloat();
+            if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
+                FloatLiteral newFloat = new FloatLiteral(leftCollapsedValue);
+                newFloat.setType(getType());
+                setLeftOperand(newFloat);
+            }
+            if(rightCollapsedValue != null && leftCollapsedValue != null) {
+                return rightCollapsedValue <= leftCollapsedValue;
+            }
+        }
+        return null;
+    }
+
 }

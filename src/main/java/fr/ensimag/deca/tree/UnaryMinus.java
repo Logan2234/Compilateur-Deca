@@ -44,20 +44,34 @@ public class UnaryMinus extends AbstractUnaryExpr {
     }
 
     @Override
-    public AbstractExpr skipCalculs(){
-        AbstractExpr operand = this.getOperand();
-        if (!(operand.isLiteral())){
-            operand = operand.skipCalculs();
-            this.setOperand(operand);
+    public boolean collapse() {
+        return getOperand().collapse();
+    }
+
+    @Override
+    public Integer collapseInt() {
+        Integer collapsedValue = getOperand().collapseInt();
+        if(collapsedValue != null) {
+            Type oldType = getOperand().getType();
+            IntLiteral newInt = new IntLiteral(collapsedValue);
+            newInt.setType(oldType);
+            setOperand(newInt);
+            return -collapsedValue;
         }
-        if (operand.isLiteral()){
-            if (operand.getType().isInt())
-                return new IntLiteral((((IntLiteral) operand).getValue()) * (-1));
-            
-            if (operand.getType().isFloat())
-                return new FloatLiteral((((FloatLiteral) operand).getValue()) * (-1));
+        return null;
+    }
+
+    @Override
+    public Float collapseFloat() {
+        Float collapsedValue = getOperand().collapseFloat();
+        if(collapsedValue != null) {
+            Type oldType = getOperand().getType();
+            FloatLiteral newInt = new FloatLiteral(collapsedValue);
+            newInt.setType(oldType);
+            setOperand(newInt);
+            return -collapsedValue;
         }
-        return this;
+        return null;
     }
 
 }

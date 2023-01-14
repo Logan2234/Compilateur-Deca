@@ -89,4 +89,9 @@ public class DeclVar extends AbstractDeclVar {
         varName.prettyPrint(s, prefix, false);
         initialization.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    public boolean collapse() {
+        return initialization.collapse();
+    }
 }

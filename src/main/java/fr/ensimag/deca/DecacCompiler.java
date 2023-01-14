@@ -315,7 +315,7 @@ public class DecacCompiler {
             return true;
         }
 
-        if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
+        if (compilerOptions.getCompileMode() != CompileMode.ParseOnly || compilerOptions.getOptimize()) {
             assert (prog.checkAllLocations());
 
             prog.verifyProgram(this);

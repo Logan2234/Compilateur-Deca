@@ -17,4 +17,16 @@ public class Print extends AbstractPrint {
     String getSuffix() {
         return "";
     }
+
+    @Override
+    public boolean collapse() {
+        return false;
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
+    }
 }

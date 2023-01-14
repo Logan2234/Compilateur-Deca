@@ -45,4 +45,10 @@ public class EmptyMain extends AbstractMain {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // leaf node => nothing to do
     }
+
+    @Override
+    public boolean collapse() {
+        // this main is empty : cannot collapse further.
+        return false;
+    }
 }

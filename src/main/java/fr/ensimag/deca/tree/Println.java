@@ -28,4 +28,16 @@ public class Println extends AbstractPrint {
     String getSuffix() {
         return "ln";
     }
+
+    @Override
+    public boolean collapse() {
+        return false;
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
+    }
 }

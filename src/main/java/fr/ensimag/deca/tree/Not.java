@@ -48,15 +48,20 @@ public class Not extends AbstractUnaryExpr {
     }
 
     @Override
-    public AbstractExpr skipCalculs(){
-        AbstractExpr operand = this.getOperand();
-        if (!(operand.isLiteral())){
-            operand = operand.skipCalculs();
-            this.setOperand(operand);
+    public boolean collapse() {
+        return getOperand().collapse();
+    }
+
+    @Override
+    public Boolean collapseBool() {
+        Boolean collapsedValue = getOperand().collapseBool();
+        if(collapsedValue != null) {
+            Type oldType = getOperand().getType();
+            BooleanLiteral newBool = new BooleanLiteral(collapsedValue);
+            newBool.setType(oldType);
+            setOperand(newBool);
+            return !collapsedValue;
         }
-        if (operand.isLiteral()){
-            return new BooleanLiteral(!(((BooleanLiteral) operand).getValue()));
-        }
-        return this;
+        return null;
     }
 }

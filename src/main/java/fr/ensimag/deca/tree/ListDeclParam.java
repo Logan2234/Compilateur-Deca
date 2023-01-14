@@ -40,5 +40,14 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
             ClassDefinition currentClass) throws ContextualError {
     }
 
+    @Override
+    public boolean collapse() {
+        boolean result = false;
+        for(AbstractDeclParam i : getList()) {
+            result |= i.collapse();
+        }
+        return result;
+    }
+
 
 }

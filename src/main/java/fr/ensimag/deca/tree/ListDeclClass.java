@@ -44,5 +44,11 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    public boolean collapse() {
+        return false;
+        // TODO
+    }
+
 
 }

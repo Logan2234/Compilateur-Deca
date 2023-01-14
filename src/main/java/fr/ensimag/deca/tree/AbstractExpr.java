@@ -189,12 +189,18 @@ public abstract class AbstractExpr extends AbstractInst {
         }
     }
 
-    /**
-     * Calculate the value of the expression for export just an Int, a String or a Float
-     * 
-     * @return The old expression or a new expression with the calculus being skipped
-     */
-    public AbstractExpr skipCalculs(){
-        return this;
+    @Override
+    public boolean collapse() {
+        // by default, return false. 
+        return false;
+        // expressions that can collapse will override this.
     }
+
+    @Override
+    public ListInst collapseInst() {
+        // by default, return empty list of instructions. 
+        return new ListInst();
+        // expressions that can collapse will override this.
+    }
+
 }

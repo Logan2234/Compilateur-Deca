@@ -57,4 +57,10 @@ public class NoInitialization extends AbstractInitialization {
         compiler.addInstruction(new PUSH(Register.R0));
     }
 
+    @Override
+    public boolean collapse() {
+        // TODO
+        return false;
+    }
+
 }

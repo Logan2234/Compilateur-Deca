@@ -63,4 +63,10 @@ public class Main extends AbstractMain {
         declVariables.prettyPrint(s, prefix, false);
         insts.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    public boolean collapse() {
+        // if either one of the declaration or instructions collapsed, we collapsed
+        return declVariables.collapse() || insts.collapse();
+    }
 }
