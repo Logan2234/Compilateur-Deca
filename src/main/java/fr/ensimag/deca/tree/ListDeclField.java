@@ -38,5 +38,13 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
             ClassDefinition currentClass) throws ContextualError {
     }
 
+    @Override
+    public boolean collapse() {
+        boolean result = false;
+        for (AbstractDeclField i : getList()) {
+            result |= i.collapse();
+        }
+        return result;
+    }
 
 }

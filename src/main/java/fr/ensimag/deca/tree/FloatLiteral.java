@@ -93,8 +93,18 @@ public class FloatLiteral extends AbstractExpr {
     }
 
     @Override
-    protected Boolean isLiteral() {
+    public boolean collapse() {
         return true;
+    }
+
+    @Override
+    public Float collapseFloat() {
+        return value;
+    }
+
+    @Override
+    public boolean collapsable() {
+        return false;
     }
 
 }

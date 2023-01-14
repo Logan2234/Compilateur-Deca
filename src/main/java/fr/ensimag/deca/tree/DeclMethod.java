@@ -66,4 +66,10 @@ public class DeclMethod extends AbstractDeclMethod {
         params.prettyPrint(s, prefix, false);
         body.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    public boolean collapse() {
+        body.collapse();
+        return false;
+    }
 }

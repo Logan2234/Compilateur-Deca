@@ -1,5 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import org.apache.log4j.lf5.LogLevelFormatException;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -31,4 +33,31 @@ public class And extends AbstractOpBool {
         compiler.addInstruction(new ADD(dval, register));
         compiler.addInstruction(new SHR(register));
     }
+
+    @Override
+    public boolean collapse() {
+        return getRightOperand().collapse() || getLeftOperand().collapse();
+    }
+
+    @Override
+    public Boolean collapseBool() {
+        Boolean rightCollapsedValue = getRightOperand().collapseBool();
+        if(rightCollapsedValue != null && getRightOperand().collapsable()) {
+            BooleanLiteral newBool = new BooleanLiteral(rightCollapsedValue);
+            newBool.setType(getType());
+            setRightOperand(newBool);
+        }
+        Boolean leftCollapsedValue = getLeftOperand().collapseBool();
+        if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
+            BooleanLiteral newBool = new BooleanLiteral(leftCollapsedValue);
+            newBool.setType(getType());
+            setLeftOperand(newBool);
+        }
+        if(rightCollapsedValue != null && leftCollapsedValue != null) {
+            return rightCollapsedValue && leftCollapsedValue;
+        }
+        return null;
+    }
+
+
 }

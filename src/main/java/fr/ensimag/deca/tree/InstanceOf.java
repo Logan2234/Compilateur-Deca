@@ -20,7 +20,7 @@ import org.apache.commons.lang.Validate;
  */
 public class InstanceOf extends AbstractExpr {
 
-    private final AbstractExpr e;
+    private AbstractExpr e;
     private final AbstractIdentifier type;
 
     public InstanceOf(AbstractExpr e, AbstractIdentifier type) {
@@ -61,5 +61,6 @@ public class InstanceOf extends AbstractExpr {
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         throw new UnsupportedOperationException("not yet implemented");
     }
+
 
 }

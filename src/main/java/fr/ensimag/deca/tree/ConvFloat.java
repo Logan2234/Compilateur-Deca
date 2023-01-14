@@ -37,4 +37,23 @@ public class ConvFloat extends AbstractUnaryExpr {
         compiler.addInstruction(new FLOAT(resultRegister, resultRegister));
     }
 
+    @Override
+    public boolean collapse() {
+        return getOperand().collapse();
+    }
+
+    @Override
+    public Float collapseFloat() {
+        Integer collapsedValue = getOperand().collapseInt();
+        if(collapsedValue != null && getOperand().collapsable()) {
+            FloatLiteral newFLoat = new FloatLiteral(collapsedValue);
+            newFLoat.setType(getType());
+            setOperand(newFLoat);
+        }
+        if(collapsedValue != null) {
+            return (float)collapsedValue;
+        }
+        return null;
+    }
+
 }

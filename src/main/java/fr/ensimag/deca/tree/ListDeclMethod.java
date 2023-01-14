@@ -38,5 +38,13 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
             ClassDefinition currentClass) throws ContextualError {
     }
 
+    @Override
+    public boolean collapse() {
+        boolean result = false;
+        for(AbstractDeclMethod i : getList()) {
+            result |= i.collapse();
+        }
+        return result;
+    }
 
 }

@@ -73,4 +73,18 @@ public class BooleanLiteral extends AbstractExpr {
         return "BooleanLiteral (" + value + ")";
     }
 
+    @Override
+    public boolean collapse() {
+        return true;
+    }
+
+    @Override
+    public Boolean collapseBool() {
+        return value;
+    }
+
+    @Override
+    public boolean collapsable() {
+        return false;
+    }
 }

@@ -47,4 +47,22 @@ public class Not extends AbstractUnaryExpr {
         compiler.addInstruction(new ADD(new ImmediateInteger(0), resulRegister));
         compiler.addInstruction(new SEQ(resulRegister));
     }
+
+    @Override
+    public boolean collapse() {
+        return getOperand().collapse();
+    }
+
+    @Override
+    public Boolean collapseBool() {
+        Boolean collapsedValue = getOperand().collapseBool();
+        if(collapsedValue != null) {
+            Type oldType = getOperand().getType();
+            BooleanLiteral newBool = new BooleanLiteral(collapsedValue);
+            newBool.setType(oldType);
+            setOperand(newBool);
+            return !collapsedValue;
+        }
+        return null;
+    }
 }

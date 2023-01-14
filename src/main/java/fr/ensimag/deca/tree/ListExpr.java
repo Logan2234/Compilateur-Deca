@@ -25,4 +25,14 @@ public class ListExpr extends TreeList<AbstractExpr> {
             i.decompile(s);
         }
     }
+
+    @Override
+    public boolean collapse() {
+        // try to collapse each decl var
+        boolean collapsed = false;
+        for(AbstractExpr i : getList()) {
+            collapsed |= i.collapse();
+        }
+        return collapsed;
+    }
 }
