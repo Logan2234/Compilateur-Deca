@@ -1,6 +1,8 @@
 package fr.ensimag.deca.context;
 
 import org.apache.log4j.Logger;
+
+import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
@@ -137,20 +139,20 @@ public abstract class Definition {
      * Set to true its "used" attribute and the one of the defitions in relation with itself
      * @param compiler
      */
-    public void spotUsedVar() {
+    public void spotUsedVar(AbstractProgram prog) {
         if (!this.getUsed()) {
             this.setUsed();
             if (this.type.isClass()) {
                 ClassType classType = (ClassType)(this.type);
-                classType.getDefinition().spotUsedVar();
+                classType.getDefinition().spotUsedVar(prog);
             }
-            this.spotRelatedDefs();
+            this.spotRelatedDefs(prog);
         }
     }
 
     /**
      * Set to true the "used" attribute of related definitions
      */
-    public abstract void spotRelatedDefs();
+    public abstract void spotRelatedDefs(AbstractProgram prog);
 
 }

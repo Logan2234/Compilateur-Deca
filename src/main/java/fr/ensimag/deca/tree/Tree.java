@@ -303,6 +303,6 @@ public abstract class Tree {
      * 
      * @param compiler
      */
-    protected abstract void spotUsedVar();
+    protected abstract void spotUsedVar(AbstractProgram prog);
     
 }

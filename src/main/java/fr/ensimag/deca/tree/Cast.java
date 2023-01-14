@@ -63,9 +63,9 @@ public class Cast extends AbstractExpr {
     }
 
     @Override
-    protected void spotUsedVar() {
-        this.type.spotUsedVar();
-        this.e.spotUsedVar();
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.type.spotUsedVar(prog);
+        this.e.spotUsedVar(prog);
     }
 
 }

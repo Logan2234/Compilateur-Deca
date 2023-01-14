@@ -47,7 +47,7 @@ public class EmptyMain extends AbstractMain {
     }
 
     @Override
-    protected void spotUsedVar() {
+    protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
 }

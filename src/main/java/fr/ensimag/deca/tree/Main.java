@@ -65,8 +65,8 @@ public class Main extends AbstractMain {
     }
 
     @Override
-    protected void spotUsedVar() {
-        declVariables.spotUsedVar();
-        insts.spotUsedVar();
+    protected void spotUsedVar(AbstractProgram prog) {
+        declVariables.spotUsedVar(prog);
+        insts.spotUsedVar(prog);
     }
 }

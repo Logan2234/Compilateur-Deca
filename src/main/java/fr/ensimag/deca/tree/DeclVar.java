@@ -89,8 +89,8 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    protected void spotUsedVar() {
+    protected void spotUsedVar(AbstractProgram prog) {
         // We don't spotUsedVar() on the type (it may be a class) or the identifier as they are just declared.
-        this.initialization.spotUsedVar();
+        this.initialization.spotUsedVar(prog);
     }
 }

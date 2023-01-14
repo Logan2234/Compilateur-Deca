@@ -72,8 +72,8 @@ public class Selection extends AbstractLValue {
     }
 
     @Override
-    protected void spotUsedVar() {
-        this.obj.spotUsedVar();
-        this.field.spotUsedVar();
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.obj.spotUsedVar(prog);
+        this.field.spotUsedVar(prog);
     }
 }

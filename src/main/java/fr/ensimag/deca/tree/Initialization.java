@@ -89,13 +89,8 @@ public class Initialization extends AbstractInitialization {
         
     }
 
-    @Override 
-    public void dumpCalcs(){
-        expression = expression.skipCalculs();
-    }
-
     @Override
-    protected void spotUsedVar() {
-        this.expression.spotUsedVar();
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.expression.spotUsedVar(prog);
     }
 }

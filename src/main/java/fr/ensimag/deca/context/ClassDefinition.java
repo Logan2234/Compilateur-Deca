@@ -1,5 +1,6 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.Label;
 import org.apache.commons.lang.Validate;
@@ -78,8 +79,8 @@ public class ClassDefinition extends TypeDefinition {
     }
 
     @Override
-    public void spotRelatedDefs() {
-        this.superClass.spotUsedVar();
+    public void spotRelatedDefs(AbstractProgram prog) {
+        this.superClass.spotUsedVar(prog);
     }
     
 }

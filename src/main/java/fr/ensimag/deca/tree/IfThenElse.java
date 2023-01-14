@@ -105,10 +105,10 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    protected void spotUsedVar() {
-        this.condition.spotUsedVar();
-        this.thenBranch.spotUsedVar();
-        this.elseBranch.spotUsedVar();
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.condition.spotUsedVar(prog);
+        this.thenBranch.spotUsedVar(prog);
+        this.elseBranch.spotUsedVar(prog);
     }
 
 }

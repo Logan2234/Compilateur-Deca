@@ -287,7 +287,7 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    protected void spotUsedVar() {
-        this.definition.spotUsedVar();
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.definition.spotUsedVar(prog);
     }
 }

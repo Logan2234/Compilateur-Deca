@@ -57,7 +57,7 @@ public class This extends AbstractExpr {
     }
 
     @Override
-    protected void spotUsedVar() {
+    protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
 }

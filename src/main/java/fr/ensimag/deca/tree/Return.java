@@ -57,7 +57,7 @@ public class Return extends AbstractInst {
     }
 
     @Override
-    protected void spotUsedVar() {
-        this.e.spotUsedVar();
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.e.spotUsedVar(prog);
     }
 }

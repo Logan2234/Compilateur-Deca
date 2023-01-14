@@ -85,7 +85,7 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     @Override
-    protected void spotUsedVar() {
+    protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
     }

@@ -53,7 +53,7 @@ public class DeclParam extends AbstractDeclParam {
     }
 
     @Override
-    protected void spotUsedVar() {
+    protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
 }

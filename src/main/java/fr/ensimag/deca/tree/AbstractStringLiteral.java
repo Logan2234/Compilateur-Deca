@@ -18,7 +18,7 @@ public abstract class AbstractStringLiteral extends AbstractExpr {
     }
     
     @Override
-    protected void spotUsedVar() {
+    protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
 }
