@@ -71,5 +71,6 @@ public class DeclMethod extends AbstractDeclMethod {
     protected void spotUsedVar() {
         // do nothing
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
+        // TODO
     }
 }

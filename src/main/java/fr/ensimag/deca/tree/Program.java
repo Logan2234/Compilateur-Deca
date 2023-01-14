@@ -86,4 +86,32 @@ public class Program extends AbstractProgram {
         main.spotUsedVar();
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
     }
+    
+    /**
+     * Optimize the decorated tree.
+     * 
+     * @param prog
+     */
+
+     public void optimizeTree(){
+        removeUnusedVar();
+    }
+
+    /**
+     * Remove all unused variables from the tree
+     * 
+     * @param compiler
+     */
+    public void removeUnusedVar(){
+        spotUsedVar(); // browse the main program
+        // TODO add function to keep browsing from the spotted classes and methods
+        //removeUnspottedVar();
+    }
+
+    /**
+     * Remove from the tree the variables, classes and methodes that are unused
+     * 
+     * @param compiler
+     */
+    //protected abstract void removeUnspottedVar();
 }

@@ -1,5 +1,6 @@
 package fr.ensimag.deca.context;
 
+import org.apache.log4j.Logger;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
@@ -10,6 +11,8 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
  * @date 01/01/2023
  */
 public abstract class Definition {
+    private static final Logger LOG = Logger.getLogger(Definition.class);
+
     @Override
     public String toString() {
         String res;
@@ -126,7 +129,7 @@ public abstract class Definition {
      * Set the used attribute to true
      */
     public void setUsed() {
-        LOG.debug("Set to used : "+this.toString());
+        LOG.debug("Set to used : " + this.toString());
         this.used = true;
     }
 

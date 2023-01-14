@@ -31,6 +31,10 @@ public class DeclClass extends AbstractDeclClass {
         this.methods = methods;
     }
 
+    public ListDeclMethod getMethods() {
+        return this.methods;
+    }
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class ");

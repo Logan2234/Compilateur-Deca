@@ -1,6 +1,6 @@
 package fr.ensimag.deca.context;
 
-import fr.ensimag.deca.tree.Location;
+import fr.ensimag.deca.tree.*;
 import fr.ensimag.ima.pseudocode.Label;
 import org.apache.commons.lang.Validate;
 
@@ -70,10 +70,15 @@ public class MethodDefinition extends ExpDefinition {
     }
 
     @Override
-    public void spotRelatedDefs() {
-        // TODO
+    public void spotRelatedDefs(AbstractProgram prog) {
         // the types of params are spotted at the methodCall and if the type of a param is a class
         // then the class is spotted at the methodCall directly or indirectly by the subclass
-        // the return type could be a class but it already spotted in the body
+        // the return type could be a class but it is spotted in the body
+        for (AbstractDeclClass c : ((Program)(prog)).getClasses().getList()) {
+            for (AbstractDeclMethod method : ((DeclClass)c).getMethods().getList()) {
+                // TODO
+            }
+        }
+
     }
 }

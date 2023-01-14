@@ -298,42 +298,11 @@ public abstract class Tree {
      * @param prog
      */
 
-    public void optimizeTree(){
-        removeUnusedVar();
-        dumpCalcs();
-    }
-
-    /**
-     * Calculate the dump operations of the tree that can be skipped on the compiled program
-     * 
-     * @param compiler
-     */
-    public void dumpCalcs(){
-        // This fonction must be overriden by the classes that need it
-    }
-
-    /**
-     * Remove all unused variables from the tree
-     * 
-     * @param compiler
-     */
-    public void removeUnusedVar(){
-        spotUsedVar();
-        //removeUnspottedVar();
-    }
-
     /**
      * Set to true the "used" attribute of definitions of used variables
      * 
      * @param compiler
      */
     protected abstract void spotUsedVar();
-
-    /**
-     * Remove from the tree the variables, classes and methodes that are unused
-     * 
-     * @param compiler
-     */
-    //protected abstract void removeUnspottedVar();
     
 }
