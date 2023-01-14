@@ -69,4 +69,11 @@ public class MethodDefinition extends ExpDefinition {
         return false;
     }
 
+    @Override
+    public void spotRelatedDefs() {
+        // TODO
+        // the types of params are spotted at the methodCall and if the type of a param is a class
+        // then the class is spotted at the methodCall directly or indirectly by the subclass
+        // the return type could be a class but it already spotted in the body
+    }
 }

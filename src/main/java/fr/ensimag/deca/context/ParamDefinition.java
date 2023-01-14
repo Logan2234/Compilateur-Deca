@@ -29,4 +29,9 @@ public class ParamDefinition extends ExpDefinition {
         return true;
     }
 
+    @Override
+    public void spotRelatedDefs() {
+        // do nothing
+    }
+
 }

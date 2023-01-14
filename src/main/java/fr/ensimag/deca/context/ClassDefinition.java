@@ -76,5 +76,10 @@ public class ClassDefinition extends TypeDefinition {
         members = new EnvironmentExp(parent);
         this.superClass = superClass;
     }
+
+    @Override
+    public void spotRelatedDefs() {
+        this.superClass.spotUsedVar();
+    }
     
 }

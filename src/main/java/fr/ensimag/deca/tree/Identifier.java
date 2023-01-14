@@ -288,7 +288,6 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     protected void spotUsedVar() {
-        // do nothing
-        // TODO
+        this.definition.spotUsedVar();
     }
 }

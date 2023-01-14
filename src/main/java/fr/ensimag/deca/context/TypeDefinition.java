@@ -24,4 +24,8 @@ public class TypeDefinition extends Definition {
         return false;
     }
 
+    @Override
+    public void spotRelatedDefs() {
+        // do nothing
+    }
 }

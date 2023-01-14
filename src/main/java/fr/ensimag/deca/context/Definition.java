@@ -126,7 +126,28 @@ public abstract class Definition {
      * Set the used attribute to true
      */
     public void setUsed() {
+        LOG.debug("Set to used : "+this.toString());
         this.used = true;
     }
+
+    /**
+     * Set to true its "used" attribute and the one of the defitions in relation with itself
+     * @param compiler
+     */
+    public void spotUsedVar() {
+        if (!this.getUsed()) {
+            this.setUsed();
+            if (this.type.isClass()) {
+                ClassType classType = (ClassType)(this.type);
+                classType.getDefinition().spotUsedVar();
+            }
+            this.spotRelatedDefs();
+        }
+    }
+
+    /**
+     * Set to true the "used" attribute of related definitions
+     */
+    public abstract void spotRelatedDefs();
 
 }
