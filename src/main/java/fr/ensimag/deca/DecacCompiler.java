@@ -204,7 +204,7 @@ public class DecacCompiler {
      */
     public void increaseContextUsedStack(int increment) {
         if(stackUsedSizes.size() == 0 || maxStackUseSize.size() == 0) {
-            throw new RuntimeException("No current context to incrment !");
+            throw new RuntimeException("No current context to increment !");
         }
         else {
             int value = stackUsedSizes.get(stackUsedSizes.size() - 1) + increment;
