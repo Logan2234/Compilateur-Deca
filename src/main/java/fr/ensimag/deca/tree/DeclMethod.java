@@ -68,9 +68,10 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
-        // We don't spotUsedVar() on classes. We spot them indirectly from the main
-        // TODO
+    public void spotUsedVar(AbstractProgram prog) {
+        this.type.spotUsedVar(prog);
+        this.body.spotUsedVar(prog);
+        this.methodName.spotUsedVar(prog);
+        // we spot the param when they are used in the body
     }
 }

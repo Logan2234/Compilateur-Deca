@@ -140,6 +140,7 @@ public abstract class Definition {
      * @param compiler
      */
     public void spotUsedVar(AbstractProgram prog) {
+        // prevent looping over methods
         if (!this.getUsed()) {
             this.setUsed();
             if (this.type.isClass()) {
