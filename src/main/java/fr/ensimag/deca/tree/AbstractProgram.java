@@ -16,7 +16,6 @@ public abstract class AbstractProgram extends Tree {
         
     /**
      * Optimize the decorated tree until there is no simplification found
-     * @param prog
      */
      public void optimizeTree(){
         while(removeUnusedVar());
@@ -24,7 +23,6 @@ public abstract class AbstractProgram extends Tree {
 
     /**
      * Remove all unused variables from the tree
-     * @param compiler
      * @return true if tree has been simplified
      */
     public boolean removeUnusedVar(){
@@ -34,7 +32,6 @@ public abstract class AbstractProgram extends Tree {
 
     /**
      * Remove from the tree the variables, classes and methodes that are unused
-     * @param compiler
      * @return true if tree has been simplified
      */
     protected abstract boolean removeUnspottedVar();

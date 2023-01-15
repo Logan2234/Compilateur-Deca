@@ -90,4 +90,9 @@ public class IntLiteral extends AbstractExpr {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
+
+    @Override
+    protected boolean containsMethodCall(){
+        return false;
+    }
 }

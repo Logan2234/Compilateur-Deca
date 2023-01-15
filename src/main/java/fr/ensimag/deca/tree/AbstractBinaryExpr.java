@@ -134,4 +134,9 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         this.rightOperand.spotUsedVar(prog);
     }
 
+    @Override
+    protected boolean containsMethodCall(){
+        return this.leftOperand.containsMethodCall() || this.rightOperand.containsMethodCall();
+    }
+    
 }

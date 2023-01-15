@@ -21,4 +21,9 @@ public abstract class AbstractStringLiteral extends AbstractExpr {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
+
+    @Override
+    protected boolean containsMethodCall(){
+        return false;
+    }
 }

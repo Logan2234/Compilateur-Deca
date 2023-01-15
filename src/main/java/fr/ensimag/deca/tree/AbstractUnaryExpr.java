@@ -100,4 +100,9 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         this.operand.spotUsedVar(prog);
     }
 
+    @Override
+    protected boolean containsMethodCall(){
+        return this.operand.containsMethodCall();
+    }
+
 }

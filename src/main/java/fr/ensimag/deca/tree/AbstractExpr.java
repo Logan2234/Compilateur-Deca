@@ -197,4 +197,13 @@ public abstract class AbstractExpr extends AbstractInst {
     public AbstractExpr skipCalculs(){
         return this;
     }
+
+    /**
+     * Return true if the expression contains a MethodCall
+     * This method is used for optimizing the Program tree.
+     * Instructions should not be removed if they contains a MethodCall to could potentially
+     * print/read on stdin/stdout or change the state of an object.
+     * @return true if the tree contains a MethodCall
+     */
+    protected abstract boolean containsMethodCall();
 }

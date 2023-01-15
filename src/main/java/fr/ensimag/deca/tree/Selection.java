@@ -76,4 +76,10 @@ public class Selection extends AbstractLValue {
         this.obj.spotUsedVar(prog);
         this.field.spotUsedVar(prog);
     }
+
+    @Override
+    protected boolean containsMethodCall(){
+        // the object could be obtained via a MethodCall
+        return this.obj.containsMethodCall();
+    }
 }

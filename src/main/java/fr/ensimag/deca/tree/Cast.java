@@ -68,4 +68,8 @@ public class Cast extends AbstractExpr {
         this.e.spotUsedVar(prog);
     }
 
+    @Override
+    protected boolean containsMethodCall(){
+        return this.e.containsMethodCall();
+    }
 }

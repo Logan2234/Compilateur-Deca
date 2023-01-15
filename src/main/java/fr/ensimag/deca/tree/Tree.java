@@ -293,15 +293,7 @@ public abstract class Tree {
     }
 
     /**
-     * Optimize the decorated tree.
-     * 
-     * @param prog
-     */
-
-    /**
      * Set to true the "used" attribute of definitions of used variables
-     * 
-     * @param compiler
      */
     protected abstract void spotUsedVar(AbstractProgram prog);
     

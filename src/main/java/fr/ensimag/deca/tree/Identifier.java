@@ -290,4 +290,9 @@ public class Identifier extends AbstractIdentifier {
     protected void spotUsedVar(AbstractProgram prog) {
         this.definition.spotUsedVar(prog);
     }
+
+    @Override
+    protected boolean containsMethodCall(){
+        return false;
+    }
 }

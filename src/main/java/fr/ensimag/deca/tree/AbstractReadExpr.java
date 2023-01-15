@@ -47,4 +47,11 @@ public abstract class AbstractReadExpr extends AbstractExpr {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
+
+    @Override
+    protected boolean containsMethodCall(){
+        // A read instruction is considered as a methodCall as it shouldn't either be remove
+        // from the Program tree.
+        return true;
+    }
 }

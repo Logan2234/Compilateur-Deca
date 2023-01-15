@@ -68,4 +68,9 @@ public class InstanceOf extends AbstractExpr {
         // We don't spotUsedVar on the class type.
         // If the class is not used elsewhere then the expression will be evaluated to false.
     }
+
+    @Override
+    protected boolean containsMethodCall(){
+        return this.e.containsMethodCall();
+    }
 }

@@ -84,4 +84,5 @@ public class Assign extends AbstractBinaryExpr {
         // we don't spot leftOperand
         this.rightOperand.spotUsedVar(prog);
     }
+    
 }

@@ -76,4 +76,9 @@ public class MethodCall extends AbstractExpr {
         this.meth.spotUsedVar(prog);
         this.params.spotUsedVar(prog);
     }
+
+    @Override
+    protected boolean containsMethodCall(){
+        return true;
+    }
 }

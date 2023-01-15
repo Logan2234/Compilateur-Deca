@@ -118,32 +118,40 @@ public class Program extends AbstractProgram {
         /* remove useless instructions */
         Iterator<AbstractInst> iterInst = ((Main)this.main).getListInst().iterator();
         while(iterInst.hasNext()){
-            // TODO complete for object cases
             AbstractInst inst = iterInst.next();
 
-            if (inst instanceof Assign) {
-                // TODO complete for object cases
-                // TODO considere the case of a selection on the left or a method call on the right
-                assert(((Assign)inst).getLeftOperand() instanceof Identifier);
-                Identifier ident = (Identifier)((Assign)inst).getLeftOperand();
-                if (!ident.getDefinition().isUsed()){
-                    iterInst.remove();
-                    beenSimplified = true;
-                    LOG.debug("Remove inst at "+inst.getLocation());
+            if (inst instanceof Assign && !((AbstractExpr)inst).containsMethodCall()) {
+                if (((Assign)inst).getLeftOperand() instanceof Identifier) {
+                    Identifier ident = (Identifier)((Assign)inst).getLeftOperand();
+                    if (!ident.getDefinition().isUsed()){
+                        iterInst.remove();
+                        beenSimplified = true;
+                        LOG.debug("Remove inst at "+inst.getLocation() + " : " + inst.getClass());
+                    } 
+                }
+                // ? refer to the getDefinition() method of Selection as I the following code depends on it
+                // ? and we had doubt on it
+                else if (((Assign)inst).getLeftOperand() instanceof Selection) {
+                    Selection select = (Selection)((Assign)inst).getLeftOperand();
+                    if (!select.getDefinition().isUsed()){
+                        iterInst.remove();
+                        beenSimplified = true;
+                        LOG.debug("Remove inst at "+inst.getLocation() + " : " + inst.getClass());
+                    } 
                 }
             }
-            else if (inst instanceof AbstractExpr){
-                // TODO considere the case of a method call
+
+            else if (inst instanceof AbstractExpr && !((AbstractExpr)inst).containsMethodCall()){
                 iterInst.remove();
                 beenSimplified = true;
-                LOG.debug("Remove inst at "+inst.getLocation());
+                LOG.debug("Remove inst at "+inst.getLocation() + " : " + inst.getClass());
             }
+
             else if (inst instanceof NoOperation){
                 iterInst.remove();
                 beenSimplified = true;
-                LOG.debug("Remove inst at "+inst.getLocation());
+                LOG.debug("Remove inst at "+inst.getLocation() + " : " + inst.getClass());
             }
-
         }
         return beenSimplified;
     }
