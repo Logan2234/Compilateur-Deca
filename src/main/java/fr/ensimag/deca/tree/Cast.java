@@ -39,7 +39,7 @@ public class Cast extends AbstractExpr {
         
         if (typeExp.isVoid()
                 || (!assign_compatible(localEnv, typeExp, typeT) && !assign_compatible(localEnv, typeT, typeExp))) {
-            throw new ContextualError("Cast impossible", loc);
+            throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \"" + typeT.getName().getName() + "\"", loc);
         }
 
         // Ajout du décor

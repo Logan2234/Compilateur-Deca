@@ -1,0 +1,13 @@
+// Description:
+//    Operation utilisant les 16 registres.
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 13/01/2023
+
+{
+    int a  = 1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + 1))))))))))));
+    print(a);
+}

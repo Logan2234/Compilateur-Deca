@@ -20,6 +20,7 @@ import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
@@ -249,19 +250,25 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    public void codeGenPrint(DecacCompiler compiler) {
-        if (definition.getType().isInt()) {
-            // print identifier as an int :
+    public void codeGenPrint(DecacCompiler compiler, boolean hex) {
+        if(definition.getType().isInt()) {
+            // print identifier as an int : 
             // load addr in R1
             compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
             // print it
+            
             compiler.addInstruction(new WINT());
         } else if (definition.getType().isFloat()) {
             // print identifier as an float :
             // load addr in R1
             compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
             // print it
-            compiler.addInstruction(new WFLOAT());
+            if(hex) {
+                compiler.addInstruction(new WFLOATX());
+            }
+            else {
+                compiler.addInstruction(new WFLOAT());
+            }
         }
     }
 

@@ -75,6 +75,7 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
                 // save the result in R1 (R1 <- R2)
                 compiler.addInstruction(new LOAD(Register.getR(2), Register.R1));
                 // restore r2
+                compiler.increaseContextUsedStack(-1);
                 compiler.addInstruction(new POP(Register.getR(2)));
                 // load the result on the stack
                 compiler.incrementContextUsedStack();

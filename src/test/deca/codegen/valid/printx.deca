@@ -1,0 +1,13 @@
+// Description:
+//    Operation utilisant les 16 registres et print x. 
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 13/01/2023
+
+{
+    float a  = 1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + 0.1)))))))))))));
+    printx(a);
+}
