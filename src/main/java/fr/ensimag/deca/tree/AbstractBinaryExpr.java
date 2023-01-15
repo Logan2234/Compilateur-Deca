@@ -68,17 +68,24 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         leftOperand.codeGenExpr(compiler, leftRegister);
         // load the right operand
         GPRegister rightRegister = compiler.allocateRegister();
-        // if right register is null, the result will be on the stack
+        boolean needRightRegisterSpace = rightRegister == null;
+        // if right register is null, use R3
+        if(needRightRegisterSpace) {
+            // save R3
+            compiler.incrementContextUsedStack();
+            compiler.addInstruction(new PUSH(Register.getR(3)));
+            rightRegister = Register.getR(3);
+        }
         rightOperand.codeGenExpr(compiler, rightRegister);
         // do the operation
-        codeGenBinExp(compiler, leftRegister, rightRegister == null ? new RegisterOffset(-1, Register.SP) : rightRegister);
-        if(rightRegister == null) {
-            // remove the value from the stack (we don't actually care were we put the result, it have been used already)
+        codeGenBinExp(compiler, leftRegister, rightRegister);
+        if(needRightRegisterSpace) {
+            // restor R3
             compiler.increaseContextUsedStack(-1);
-            compiler.addInstruction(new POP(Register.R0));
+            compiler.addInstruction(new POP(rightRegister));
         }
         else {
-            // free the right register
+            // free right register
             compiler.freeRegister(rightRegister);
         }
         // restore R2 !
