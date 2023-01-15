@@ -325,6 +325,8 @@ public class DecacCompiler {
         if (compilerOptions.getCompileMode() != CompileMode.Verify) {
             if (compilerOptions.getOptimize()){
                 prog.optimizeTree();
+                prog.verifyProgram(this);
+                assert (prog.checkAllDecorations());
             }
             if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
                 addComment("start main program");
