@@ -15,13 +15,30 @@ cd "$(dirname "$0")"/../../../../ || exit 1
 PATH=./src/test/script/launchers:"$PATH"
 
 echo -e "${BWHITE}\n============================= -r option =============================\n"
-test="./src/test/deca/codegen/valid/while.deca"
+test="./src/test/deca/codegen/valid/16-reg.deca"
 
-for i in {4..16}
+for i in {16..4}
 do
-    decac -r $i $test > ./src/test/script/options-scripts/option-r-"$i".tmp 2> /dev/null
-    echo -e "${REDBOLD}TODO: This test needs to be implemented"
-    break
+    decac -r $i $test 2> /dev/null
+    if cat ./src/test/deca/codegen/valid/16-reg.ass | grep -q "R$i"
+    then
+        echo -e "${REDBOLD}Test failed:$RED decac -r not implemented correctly"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
+    else 
+        if [ $i -eq 16 ]
+        then
+            echo -e "${GREENBOLD}Test passed:$GREEN decac -r $i uses all registers"
+        else if [ $i -eq 15 ]
+        then
+            echo -e "${GREENBOLD}Test passed:$GREEN decac -r $i does not use registers R$i"
+        else
+            echo -e "${GREENBOLD}Test passed:$GREEN decac -r $i does not use registers R$i and higher registers"
+        fi 
+        fi
+    fi
 done
 
 decac -r 3 $test 2> /dev/null > /dev/null
@@ -63,4 +80,4 @@ else
     fi
 fi
 
-rm ./src/test/script/options-scripts/option-r*.tmp
+rm ./src/test/deca/codegen/valid/16-reg.ass

@@ -8,9 +8,9 @@ GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
 BWHITE='\033[1;37m'
 
-# This script executes test_codegen on all <example-name>.deca files in src/test/codegen.
-# The outputs are saved in files named <example-name>-codegen.lis to differentiate them
-# from the output files of full-lex.sh which is executed on the same files.
+# This script executes decac -p on all <example-name>.deca files in src/test/codegen/valid.
+# The outputs are saved in files named <example-name>-p[-p].deca.
+# Then checks that <example-name>-p.deca is exactly the same as <example-name>-p-p.deca (theorem 2)
 
 # Change the current working directory to be in the project's directory
 # wherever the script is executed from
@@ -25,19 +25,17 @@ echo -e "${BWHITE}============================= -p option ======================
 
 for test in $files
 do
-    ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
-    decac -p "$test" > "${test%.deca}"_p.deca
-    decac "$test" > "${test%.deca}".ass ; ima "${test%.deca}".ass > "${test%.deca}".res
-    decac "${test%.deca}"_p.deca ; ima "${test%.deca}"_p.ass > "${test%.deca}"_p.res
+    decac -p "$test" > "${test%.deca}"-p.deca
+    decac -p "${test%.deca}"-p.deca > "${test%.deca}"-p-p.deca
     
-    diff=$(diff "${test%.deca}".res "${test%.deca}"_p.res)
+    diff=$(diff "${test%.deca}"-p.deca "${test%.deca}"-p-p.deca)
 
     # check if passed
     if [ "$diff" = "" ] 
     then
-        echo -e "${GREENBOLD}Test passed: $NOCOLOR${test/.\/src\/test\/deca\//} ${GREEN}parsed and decompiled gives the same result after execution"
+        echo -e "${GREENBOLD}Test passed: $NOCOLOR${test/.\/src\/test\/deca\//} ${GREEN}decompiled twice gives the same result as the program decompiled once"
     else
-        echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca\//} ${RED}decompiled version does not return the same result after execution"
+        echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca\//} ${RED}decompiled once and a second time does not give the same result"
         if [[ $1 == "--maven" ]];
         then
             exit 1
@@ -45,4 +43,55 @@ do
     fi
 done
 
-# Check readInt decompiledecac -p ./src/test/deca/codegen/interactive/readInt.deca > ./src/test/deca/codegen/interactive/readInt_p.decadecac ./src/test/deca/codegen/interactive/readInt.decadecac ./src/test/deca/codegen/interactive/readInt_p.decadiff=$(diff ./src/test/deca/codegen/interactive/readInt.ass ./src/test/deca/codegen/interactive/readInt_p.ass)# check if passedif [ "$diff" = "" ] then    echo -e "${GREENBOLD}Test passed: ${NOCOLOR}codegen/interactive/readInt.deca ${GREEN}decompiled version gives the same assembly file"else    echo -e "${REDBOLD}Test failed: ${NOCOLOR}codegen/interactive/readInt.deca ${RED}decompiled version does not give the same assembly file"    if [[ $1 == "--maven" ]];    then        exit 1    fifi# Check readFloat decompiledecac -p ./src/test/deca/codegen/interactive/readFloat.deca > ./src/test/deca/codegen/interactive/readFloat_p.decadecac ./src/test/deca/codegen/interactive/readFloat.decadecac ./src/test/deca/codegen/interactive/readFloat_p.decadiff=$(diff ./src/test/deca/codegen/interactive/readFloat.ass ./src/test/deca/codegen/interactive/readFloat_p.ass)# check if passedif [ "$diff" = "" ] then    echo -e "${GREENBOLD}Test passed: ${NOCOLOR}codegen/interactive/readFloat.deca ${GREEN}decompiled version gives the same assembly file"else    echo -e "${REDBOLD}Test failed: ${NOCOLOR}codegen/interactive/readFloat.deca ${RED}decompiled version does not give the same assembly file"    if [[ $1 == "--maven" ]];    then        exit 1    fifidecac -p -v > ./src/test/script/options-scripts/option-p.tmp 2> ./src/test/script/options-scripts/option-p.tmpif [ "$?" -ne 0 ]then    echo -e "${GREENBOLD}Test passed:$GREEN decac -p -v returns an error"else     echo -e "${REDBOLD}Test failed:$RED decac -p not implemented correctly"    if [[ $1 == "--maven" ]];    then        exit 1    fifi# Cleaning processrm ./src/test/deca/codegen/valid/*_p.deca;rm ./src/test/deca/codegen/valid/*.res;rm ./src/test/deca/codegen/valid/*.ass;rm ./src/test/deca/codegen/interactive/*_p.deca;rm ./src/test/deca/codegen/interactive/*.ass;rm ./src/test/script/options-scripts/option-p.tmp
+# Check readInt decompile
+decac -p ./src/test/deca/codegen/interactive/readInt.deca > ./src/test/deca/codegen/interactive/readInt-p.deca
+decac -p ./src/test/deca/codegen/interactive/readInt-p.deca > ./src/test/deca/codegen/interactive/readInt-p-p.deca
+
+diff=$(diff ./src/test/deca/codegen/interactive/readInt-p.deca ./src/test/deca/codegen/interactive/readInt-p-p.deca)
+
+# check if passed
+if [ "$diff" = "" ] 
+then
+    echo -e "${GREENBOLD}Test passed: ${NOCOLOR}codegen/interactive/readInt.deca ${GREEN}decompiled twice gives the same result as the program decompiled once"
+else
+    echo -e "${REDBOLD}Test failed: ${NOCOLOR}codegen/interactive/readInt.deca ${RED}decompiled once and a second time does not give the same result"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+# Check readFloat decompile
+decac -p ./src/test/deca/codegen/interactive/readFloat.deca > ./src/test/deca/codegen/interactive/readFloat-p.deca
+decac -p ./src/test/deca/codegen/interactive/readFloat-p.deca > ./src/test/deca/codegen/interactive/readFloat-p-p.deca
+
+diff=$(diff ./src/test/deca/codegen/interactive/readFloat-p.deca ./src/test/deca/codegen/interactive/readFloat-p-p.deca)
+
+# check if passed
+if [ "$diff" = "" ] 
+then
+    echo -e "${GREENBOLD}Test passed: ${NOCOLOR}codegen/interactive/readFloat.deca ${GREEN}decompiled twice gives the same result as the program decompiled once"
+else
+    echo -e "${REDBOLD}Test failed: ${NOCOLOR}codegen/interactive/readFloat.deca ${RED}decompiled once and a second time does not give the same result"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+decac -p -v > /dev/null 2> /dev/null
+
+if [ "$?" -ne 0 ]
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -p -v returns an error"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -p not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+# Cleaning process
+rm ./src/test/deca/codegen/valid/*-p.deca;
+rm ./src/test/deca/codegen/interactive/*-p.deca;

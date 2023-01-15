@@ -8,15 +8,19 @@ GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
 BWHITE='\033[1;37m'
 
+# Test the -b option with three small tests.
+# First one checks whether something is returned by decac -b.
+# Second one checks whether an error is returned when using the -b option
+# with another option.
+# The last one checks whether an error is returned when using the option with a file
+
 # On se place dans le répertoire du projet (quel que soit le
 # répertoire d'où est lancé le script) :
 cd "$(dirname "$0")"/../../../.. || exit 1
 
 echo -e "${BWHITE}\n============================= -b option =============================\n"
 
-decac -b > ./src/test/script/options-scripts/option-b.tmp
-
-if cat ./src/test/script/options-scripts/option-b.tmp | grep -q "."
+if decac -b  | grep -q "."
 then
     echo -e "${GREENBOLD}Test passed:$GREEN decac -b prints the banner"
 else 
@@ -27,11 +31,24 @@ else
     fi
 fi
 
-decac -b -v > ./src/test/script/options-scripts/option-b.tmp 2> ./src/test/script/options-scripts/option-b.tmp
+decac -b -v > /dev/null 2>&1
 
 if [ "$?" -ne 0 ]
 then
-    echo -e "${GREENBOLD}Test passed:$GREEN decac -b with another option returns an error\n"
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -b with another option returns an error"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -b not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+decac -b ./src/test/deca/codegen/valid/provided/cond0.deca > /dev/null 2>&1
+
+if [ "$?" -ne 0 ]
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -b with a file returns an error\n"
 else 
     echo -e "${REDBOLD}Test failed:$RED decac -b not implemented correctly\n"
     if [[ $1 == "--maven" ]];
@@ -39,5 +56,3 @@ else
         exit 1
     fi
 fi
-
-rm ./src/test/script/options-scripts/option-b.tmp
