@@ -1,9 +1,0 @@
-{
-	int test1 = 1;
-	int test2 = 1;
-	if ((test1 < test2)){
-		println("ko");
-	} else {
-		println("ok");
-	}
-}

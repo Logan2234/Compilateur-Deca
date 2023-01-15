@@ -1,4 +1,0 @@
-{
-	int i = 34;
-	println(i);
-}
