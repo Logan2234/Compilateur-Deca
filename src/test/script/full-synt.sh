@@ -33,12 +33,12 @@ do
     ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
 
     # save the output
-    test_synt "$test" > "${test%.deca}"-synt.lis 2>&1
+    test_synt "$test" > /dev/null 2>&1
 
     # check if passed
-    if cat "${test%.deca}"-synt.lis | grep -q "$test\|java:"
+    if [ $? -ne 0 ]
     then
-        echo -e "${BRED}Error detected on a valid test ($VALID_PASSED/$NB_VALID_TESTS): ${RED}$test${NOCOLOR}"
+        echo -e "${BRED}Test failed ($VALID_PASSED/$NB_VALID_TESTS): ${RED}$test${NOCOLOR}"
         if [[ $1 == "--maven" ]];
         then
             exit 1
@@ -61,16 +61,13 @@ for test in $files
 do
     ((NB_INVALID_TESTS = NB_INVALID_TESTS + 1))
 
-    # save the output
-    test_synt "$test" > "${test%.deca}"-synt.lis 2>&1
-
     # check if passed
-    if cat "${test%.deca}"-synt.lis | grep -q "$test\|java:\|mismatched"
+    if test_synt "$test" 2>&1 | grep -q "$test\|java:\|mismatched"
     then
         ((INVALID_PASSED = INVALID_PASSED + 1))
         echo -e "${BGREEN}Test passed ($INVALID_PASSED/$NB_INVALID_TESTS): ${GREEN}$test${NOCOLOR}"
     else
-        echo -e "${BRED}Error not detected on an invalid test ($INVALID_PASSED/$NB_INVALID_TESTS): ${RED}$test${NOCOLOR}"
+        echo -e "${BRED}Test failed ($INVALID_PASSED/$NB_INVALID_TESTS): ${RED}$test${NOCOLOR}"
         if [[ $1 == "--maven" ]];
         then
             exit 1

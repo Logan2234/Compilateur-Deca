@@ -8,9 +8,8 @@ GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
 BWHITE='\033[1;37m'
 
-# Stat var
-NB_VALID_TESTS=0
-VALID_PASSED=0
+# Test the -n option. Checks that some optimizations are made
+# when using this command as it does not return verify some errors. 
 
 # On se place dans le répertoire du projet (quel que soit le
 # répertoire d'où est lancé le script) :
@@ -20,13 +19,25 @@ PATH=./src/test/script/launchers:"$PATH"
 
 echo -e "${BWHITE}\n============================= -n option =============================\n"
 
-files=$(find ./src/test/deca/context/valid -maxdepth 1 -name "*.deca")
+# Test avec le débordement arithmétique sur les flottants
+decac ./src/test/deca/codegen/valid/operation-binaire-divide.deca
+mv ./src/test/deca/codegen/valid/operation-binaire-divide.ass ./src/test/deca/codegen/valid/operation-binaire-divide-without-n.ass
+decac -n ./src/test/deca/codegen/valid/operation-binaire-divide.deca
 
-for test in $files
-do
-    decac -n $test
-    echo -e "${REDBOLD}TODO: This test needs to be implemented"
-    break
-done
+diff=$(diff ./src/test/deca/codegen/valid/operation-binaire-divide-without-n.ass ./src/test/deca/codegen/valid/operation-binaire-divide.ass)
 
-# TODO: Suppr les fichiers inutiles
+if echo $diff | grep -q "opOverflow"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -n removes Error.opOverflow"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -n does not remove Error.opOverflow"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+rm ./src/test/deca/codegen/valid/operation-binaire-divide.ass
+rm ./src/test/deca/codegen/valid/operation-binaire-divide-without-n.ass
+
+# TODO: Les autres règles de 11.1 et 11.3

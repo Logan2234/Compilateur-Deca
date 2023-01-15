@@ -8,6 +8,10 @@ GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
 BWHITE='\033[1;37m'
 
+# Test the -v option. Checks that no error is thrown when using the option
+# on a contextually valid .deca file but does throw an error when used on an
+# invalid .deca file.
+
 # On se place dans le répertoire du projet (quel que soit le
 # répertoire d'où est lancé le script) :
 cd "$(dirname "$0")"/../../../../ || exit 1
@@ -20,8 +24,8 @@ files=$(find ./src/test/deca/context/valid -maxdepth 1 -name "*.deca")
 
 for test in $files
 do
-    decac -v "$test" > "${test%.deca}".lis 2>&1
-    if cat "${test%.deca}".lis | grep -q "."
+    decac -v "$test" > /dev/null 2>&1
+    if [ "$?" -ne 0 ]
     then
         echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca/}${RED} returns an error even though the test is valid"
         if [[ $1 == "--maven" ]];
@@ -37,8 +41,8 @@ files=$(find ./src/test/deca/context/invalid -maxdepth 1 -name "*.deca")
 
 for test in $files
 do
-    decac -v "$test" > "${test%.deca}".lis 2>&1
-    if cat "${test%.deca}".lis | grep -q "$test:*:*"
+    decac -v "$test" > /dev/null 2>&1
+    if [ "$?" -ne 0 ]
     then
         echo -e "${GREENBOLD}Test passed: $NOCOLOR${test/.\/src\/test\/deca\//}${GREEN} returns a correct error"
     else
@@ -50,7 +54,7 @@ do
     fi
 done
 
-decac -v -p > ./src/test/script/options-scripts/option-v.tmp 2> ./src/test/script/options-scripts/option-v.tmp
+decac -v -p > /dev/null 2>&1
 
 if [ "$?" -ne 0 ]
 then
@@ -62,6 +66,3 @@ else
         exit 1
     fi
 fi
-
-rm -r ./src/test/deca/context/*/*.lis
-rm ./src/test/script/options-scripts/option-v.tmp
