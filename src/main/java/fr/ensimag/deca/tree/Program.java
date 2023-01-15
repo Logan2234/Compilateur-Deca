@@ -91,9 +91,10 @@ public class Program extends AbstractProgram {
     }
 
     @Override
-    protected void removeUnspottedVar() {
+    protected boolean removeUnspottedVar() {
+        boolean beenSimplified = false;
         if (!(this.main instanceof Main)) {
-            return;
+            return beenSimplified;
         }
 
         /* remove useless declarations */
@@ -102,9 +103,9 @@ public class Program extends AbstractProgram {
             // TODO complete for object cases
             DeclVar decl = (DeclVar)iterDecl.next();
             if(!decl.getVar().getDefinition().isUsed()){
-                LOG.debug("Remove the decl of "+decl.getVar().getDefinition().toString());
                 iterDecl.remove();
-                
+                beenSimplified = true;
+                LOG.debug("Remove the decl of "+decl.getVar().getDefinition().toString());
             }
         }
         
@@ -119,16 +120,31 @@ public class Program extends AbstractProgram {
         while(iterInst.hasNext()){
             // TODO complete for object cases
             AbstractInst inst = iterInst.next();
+
             if (inst instanceof Assign) {
                 // TODO complete for object cases
+                // TODO considere the case of a selection on the left or a method call on the right
                 assert(((Assign)inst).getLeftOperand() instanceof Identifier);
                 Identifier ident = (Identifier)((Assign)inst).getLeftOperand();
                 if (!ident.getDefinition().isUsed()){
                     iterInst.remove();
+                    beenSimplified = true;
                     LOG.debug("Remove inst at "+inst.getLocation());
                 }
             }
+            else if (inst instanceof AbstractExpr){
+                // TODO considere the case of a method call
+                iterInst.remove();
+                beenSimplified = true;
+                LOG.debug("Remove inst at "+inst.getLocation());
+            }
+            else if (inst instanceof NoOperation){
+                iterInst.remove();
+                beenSimplified = true;
+                LOG.debug("Remove inst at "+inst.getLocation());
+            }
 
         }
+        return beenSimplified;
     }
 }

@@ -15,28 +15,27 @@ public abstract class AbstractProgram extends Tree {
     public abstract void codeGenProgram(DecacCompiler compiler);
         
     /**
-     * Optimize the decorated tree.
-     * 
+     * Optimize the decorated tree until there is no simplification found
      * @param prog
      */
      public void optimizeTree(){
-        removeUnusedVar();
+        while(removeUnusedVar());
     }
 
     /**
      * Remove all unused variables from the tree
-     * 
      * @param compiler
+     * @return true if tree has been simplified
      */
-    public void removeUnusedVar(){
+    public boolean removeUnusedVar(){
         this.spotUsedVar(this); // browse the main program
-        this.removeUnspottedVar();
+        return this.removeUnspottedVar();
     }
 
     /**
      * Remove from the tree the variables, classes and methodes that are unused
-     * 
      * @param compiler
+     * @return true if tree has been simplified
      */
-    protected abstract void removeUnspottedVar();
+    protected abstract boolean removeUnspottedVar();
 }
