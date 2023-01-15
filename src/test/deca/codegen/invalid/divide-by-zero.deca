@@ -1,0 +1,13 @@
+// Description:
+//    Division par 0
+//
+// Resultats:
+//    Execution error
+//    Error : division by zero.
+//
+// Historique:
+//    cree le 15/01/2023
+
+{
+        1/0;
+}

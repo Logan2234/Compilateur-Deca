@@ -5,7 +5,6 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
@@ -71,10 +70,15 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         boolean needRightRegisterSpace = rightRegister == null;
         // if right register is null, use R3
         if(needRightRegisterSpace) {
-            // save R3
+            // need to assert left register is not right register
+            if(leftRegister.getNumber() == 2) {
+                rightRegister = Register.getR(3);
+            }
+            else {
+                rightRegister = Register.getR(2);
+            }
             compiler.incrementContextUsedStack();
-            compiler.addInstruction(new PUSH(Register.getR(3)));
-            rightRegister = Register.getR(3);
+            compiler.addInstruction(new PUSH(rightRegister));
         }
         rightOperand.codeGenExpr(compiler, rightRegister);
         // do the operation
