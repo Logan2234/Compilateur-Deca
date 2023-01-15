@@ -1,0 +1,20 @@
+// Description:
+//    Condition de la règle 3.42 non respectée 
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 10 : New is only for classes
+//
+
+class A{
+    
+}
+class B{
+
+}
+{
+    A a = new A();
+    if (a!=null){
+        print(1);
+    }
+}
