@@ -102,6 +102,8 @@ public class Program extends AbstractProgram {
      * Remove all useless variables from the Main (declaration or useless instructions)
      * @return true if Main has been simplified
      */
+    // TODO use an interface implemented by main and methodbody and methodasmbody to pass as a param
+    // the interface allow us to get the lists of DeclVar and DeclInst
     private boolean optimizeMain() {
         boolean simplified = false;
         if (!(this.main instanceof Main)) {
@@ -177,7 +179,50 @@ public class Program extends AbstractProgram {
     private boolean optimizeClasses() {
         // TODO remove useless methods, classes and fields (be carefull with methods and fields indexes)
         // TODO simplify methods (be carefull with params simplification and params required for the call)
+        // TODO Check if we don't remove super classes
         boolean simplified = false;
+        Iterator<AbstractDeclClass> iterClasses = this.classes.iterator();
+        while(iterClasses.hasNext()){
+            DeclClass currentClass = (DeclClass)iterClasses.next();
+            
+            /* remove useless classes */
+            // A used class should have spotUsedVar() its superclass
+            if (!currentClass.getName().getDefinition().isUsed()) {
+                iterClasses.remove();
+                simplified = true;
+                LOG.debug("Remove class : " + currentClass.getName().getDefinition().toString());
+            } 
+
+            else {
+                /* remove useless methods */
+                Iterator<AbstractDeclMethod> iterMethods = currentClass.getMethods().iterator();
+                while(iterMethods.hasNext()){
+                    DeclMethod method = (DeclMethod)iterMethods.next();
+                    if (!method.getName().getDefinition().isUsed()) {
+                        iterMethods.remove();
+                        simplified = true;
+                        LOG.debug("Remove method : " + method.getName().getDefinition().toString());
+                    }
+                    else {
+                        // TODO remove fields in methods -> try reusing the code from program main
+                    }
+                    // How to handle parameters ???
+                }
+
+                /* remove useless fields */
+                Iterator<AbstractDeclField> iterFields = currentClass.getFields().iterator();
+                while(iterFields.hasNext()){
+                    DeclField field= (DeclField)iterFields.next();
+                    if (!field.getName().getDefinition().isUsed()) {
+                        iterFields.remove();
+                        simplified = true;
+                        LOG.debug("Remove field : " + field.getName().getDefinition().toString());
+                    }
+                }
+            }
+        }
         return simplified;
     }
+
+    //private boolean optimizeBlock() {}
 }

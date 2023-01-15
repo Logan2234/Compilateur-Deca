@@ -35,6 +35,10 @@ public class DeclClass extends AbstractDeclClass {
         return this.methods;
     }
 
+    public ListDeclField getFields() {
+        return this.fields;
+    }
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class ");
@@ -88,5 +92,9 @@ public class DeclClass extends AbstractDeclClass {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    }
+
+    public AbstractIdentifier getName() {
+        return this.name;
     }
 }

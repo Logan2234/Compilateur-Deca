@@ -70,4 +70,8 @@ public class DeclField extends AbstractDeclField {
         // do nothing
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
     }
+
+    public AbstractIdentifier getName() {
+        return this.fieldName;
+    }
 }

@@ -74,4 +74,8 @@ public class DeclMethod extends AbstractDeclMethod {
         this.methodName.spotUsedVar(prog);
         // we spot the param when they are used in the body
     }
+
+    public AbstractIdentifier getName() {
+        return this.methodName;
+    }
 }
