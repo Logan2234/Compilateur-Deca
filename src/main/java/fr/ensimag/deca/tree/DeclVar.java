@@ -97,4 +97,8 @@ public class DeclVar extends AbstractDeclVar {
     public AbstractIdentifier getVar() {
         return this.varName;
     }
+
+    public AbstractInitialization getInit() {
+        return this.initialization;
+    }
 }

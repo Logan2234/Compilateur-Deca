@@ -91,20 +91,34 @@ public class Program extends AbstractProgram {
     }
 
     @Override
-    protected boolean removeUnspottedVar() {
-        boolean beenSimplified = false;
-        if (!(this.main instanceof Main)) {
-            return beenSimplified;
-        }
+    public boolean removeUnusedVar() {
+        this.spotUsedVar(this); // browse the main program
+        boolean mainSimplified = this.optimizeMain();
+        boolean classesSimplified = this.optimizeClasses();
+        return mainSimplified || classesSimplified;
+    }
 
-        /* remove useless declarations */
+    /**
+     * Remove all useless variables from the Main (declaration or useless instructions)
+     * @return true if Main has been simplified
+     */
+    private boolean optimizeMain() {
+        boolean simplified = false;
+        if (!(this.main instanceof Main)) {
+            return simplified;
+        }
+        /* remove useless declarations from the main */
         Iterator<AbstractDeclVar> iterDecl = ((Main)this.main).getListDeclVar().iterator();
         while(iterDecl.hasNext()){
-            // TODO complete for object cases
             DeclVar decl = (DeclVar)iterDecl.next();
-            if(!decl.getVar().getDefinition().isUsed()){
+            if (decl.getVar().getDefinition().isUsed()) {
+                break;
+            } else if (decl.getInit() instanceof Initialization
+                       && ((Initialization)(decl.getInit())).getExpression().containsMethodCall()) {
+                break;
+            } else {
                 iterDecl.remove();
-                beenSimplified = true;
+                simplified = true;
                 LOG.debug("Remove the decl of "+decl.getVar().getDefinition().toString());
             }
         }
@@ -115,7 +129,7 @@ public class Program extends AbstractProgram {
         //     LOG.debug("Some var removed : " + listDecl.toString());
         // }
 
-        /* remove useless instructions */
+        /* remove useless instructions form the main */
         Iterator<AbstractInst> iterInst = ((Main)this.main).getListInst().iterator();
         while(iterInst.hasNext()){
             AbstractInst inst = iterInst.next();
@@ -125,7 +139,7 @@ public class Program extends AbstractProgram {
                     Identifier ident = (Identifier)((Assign)inst).getLeftOperand();
                     if (!ident.getDefinition().isUsed()){
                         iterInst.remove();
-                        beenSimplified = true;
+                        simplified = true;
                         LOG.debug("Remove inst at "+inst.getLocation() + " : " + inst.getClass());
                     } 
                 }
@@ -135,7 +149,7 @@ public class Program extends AbstractProgram {
                     Selection select = (Selection)((Assign)inst).getLeftOperand();
                     if (!select.getDefinition().isUsed()){
                         iterInst.remove();
-                        beenSimplified = true;
+                        simplified = true;
                         LOG.debug("Remove inst at "+inst.getLocation() + " : " + inst.getClass());
                     } 
                 }
@@ -143,16 +157,27 @@ public class Program extends AbstractProgram {
 
             else if (inst instanceof AbstractExpr && !((AbstractExpr)inst).containsMethodCall()){
                 iterInst.remove();
-                beenSimplified = true;
+                simplified = true;
                 LOG.debug("Remove inst at "+inst.getLocation() + " : " + inst.getClass());
             }
 
             else if (inst instanceof NoOperation){
                 iterInst.remove();
-                beenSimplified = true;
+                simplified = true;
                 LOG.debug("Remove inst at "+inst.getLocation() + " : " + inst.getClass());
             }
         }
-        return beenSimplified;
+        return simplified;
+    }
+
+    /**
+     * Remove all useless classes, methods and fields
+     * @return true if ListDeclClass has been simplified
+     */
+    private boolean optimizeClasses() {
+        // TODO remove useless methods, classes and fields (be carefull with methods and fields indexes)
+        // TODO simplify methods (be carefull with params simplification and params required for the call)
+        boolean simplified = false;
+        return simplified;
     }
 }

@@ -25,14 +25,5 @@ public abstract class AbstractProgram extends Tree {
      * Remove all unused variables from the tree
      * @return true if tree has been simplified
      */
-    public boolean removeUnusedVar(){
-        this.spotUsedVar(this); // browse the main program
-        return this.removeUnspottedVar();
-    }
-
-    /**
-     * Remove from the tree the variables, classes and methodes that are unused
-     * @return true if tree has been simplified
-     */
-    protected abstract boolean removeUnspottedVar();
+    public abstract boolean removeUnusedVar();
 }
