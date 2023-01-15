@@ -30,8 +30,7 @@ public abstract class AbstractProgram extends Tree {
      */
     public void removeUnusedVar(){
         this.spotUsedVar(this); // browse the main program
-        // TODO add function to keep browsing from the spotted classes and methods
-        //removeUnspottedVar();
+        this.removeUnspottedVar();
     }
 
     /**
@@ -39,5 +38,5 @@ public abstract class AbstractProgram extends Tree {
      * 
      * @param compiler
      */
-    //protected abstract void removeUnspottedVar();
+    protected abstract void removeUnspottedVar();
 }

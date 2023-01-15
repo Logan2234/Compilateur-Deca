@@ -75,18 +75,17 @@ public class MethodDefinition extends ExpDefinition {
         // the types of params are spotted at the methodCall and if the type of a param is a class
         // then the class is spotted at the methodCall directly or indirectly by the subclass
         // the return type could be a class but it is spotted in the body
-        for (AbstractDeclClass c : ((Program)(prog)).getClasses().getList()) {
+        for (AbstractDeclClass c : ((Program)prog).getClasses().getList()) {
             assert(c instanceof DeclClass);
             for (AbstractDeclMethod method : ((DeclClass)c).getMethods().getList()) {
                 assert(method instanceof DeclMethod);
-                // TODO
                 // find the corresponding DeclMethod
                 // (match the tree location of DeclMethod with the definition location of the current MethodDefinition)
                 // Each method as a different location
                 if (this.getLocation() == method.getLocation()) {
                     // explore the body of the method to spot other useful variables
                     ((DeclMethod)(method)).spotUsedVar(prog);
-                    break;
+                    return;
                 }
             }
         }

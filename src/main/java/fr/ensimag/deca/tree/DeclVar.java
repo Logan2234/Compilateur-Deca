@@ -93,4 +93,8 @@ public class DeclVar extends AbstractDeclVar {
         // We don't spotUsedVar() on the type (it may be a class) or the identifier as they are just declared.
         this.initialization.spotUsedVar(prog);
     }
+
+    public AbstractIdentifier getVar() {
+        return this.varName;
+    }
 }

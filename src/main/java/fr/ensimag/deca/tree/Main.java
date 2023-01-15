@@ -69,4 +69,12 @@ public class Main extends AbstractMain {
         declVariables.spotUsedVar(prog);
         insts.spotUsedVar(prog);
     }
+
+    public ListDeclVar getListDeclVar() {
+        return this.declVariables;
+    }
+
+    public ListInst getListInst() {
+        return this.insts;
+    }
 }

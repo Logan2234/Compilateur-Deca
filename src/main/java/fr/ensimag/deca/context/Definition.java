@@ -116,7 +116,7 @@ public abstract class Definition {
      * Get the used attribute
      * @return the used attribute
      */
-    public boolean getUsed() {
+    public boolean isUsed() {
         return this.used;
     }
 
@@ -141,7 +141,7 @@ public abstract class Definition {
      */
     public void spotUsedVar(AbstractProgram prog) {
         // prevent looping over methods
-        if (!this.getUsed()) {
+        if (!this.isUsed()) {
             this.setUsed();
             if (this.type.isClass()) {
                 ClassType classType = (ClassType)(this.type);

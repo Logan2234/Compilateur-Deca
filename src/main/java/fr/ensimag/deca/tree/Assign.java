@@ -78,4 +78,10 @@ public class Assign extends AbstractBinaryExpr {
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
         throw new UnsupportedOperationException("This should never be called.");
     }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        // we don't spot leftOperand
+        this.rightOperand.spotUsedVar(prog);
+    }
 }

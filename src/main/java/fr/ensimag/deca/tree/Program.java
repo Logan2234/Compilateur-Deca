@@ -7,6 +7,9 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
@@ -87,4 +90,45 @@ public class Program extends AbstractProgram {
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
     }
 
+    @Override
+    protected void removeUnspottedVar() {
+        if (!(this.main instanceof Main)) {
+            return;
+        }
+
+        /* remove useless declarations */
+        Iterator<AbstractDeclVar> iterDecl = ((Main)this.main).getListDeclVar().iterator();
+        while(iterDecl.hasNext()){
+            // TODO complete for object cases
+            DeclVar decl = (DeclVar)iterDecl.next();
+            if(!decl.getVar().getDefinition().isUsed()){
+                LOG.debug("Remove the decl of "+decl.getVar().getDefinition().toString());
+                iterDecl.remove();
+                
+            }
+        }
+        
+        // Equivalent loop
+        // List listDecl = ((Main)this.main).getListDeclVar().getModifiableList();
+        // if (listDecl.removeIf(decl -> !((DeclVar)decl).getVar().getDefinition().isUsed())) {
+        //     LOG.debug("Some var removed : " + listDecl.toString());
+        // }
+
+        /* remove useless instructions */
+        Iterator<AbstractInst> iterInst = ((Main)this.main).getListInst().iterator();
+        while(iterInst.hasNext()){
+            // TODO complete for object cases
+            AbstractInst inst = iterInst.next();
+            if (inst instanceof Assign) {
+                // TODO complete for object cases
+                assert(((Assign)inst).getLeftOperand() instanceof Identifier);
+                Identifier ident = (Identifier)((Assign)inst).getLeftOperand();
+                if (!ident.getDefinition().isUsed()){
+                    iterInst.remove();
+                    LOG.debug("Remove inst at "+inst.getLocation());
+                }
+            }
+
+        }
+    }
 }

@@ -35,6 +35,14 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
         return Collections.unmodifiableList(list);
     }
 
+    /**
+     * @return the list contained in the class, muable.
+     *         Use getList() if you don't need to change elements of the list.
+     */
+    public List<TreeType> getModifiableList() {
+        return this.list;
+    }
+
     public TreeType set(int index, TreeType element) {
         return list.set(index, element);
     }

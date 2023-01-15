@@ -38,8 +38,8 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         this.rightOperand = rightOperand;
     }
 
-    private AbstractExpr leftOperand;
-    private AbstractExpr rightOperand;
+    protected AbstractExpr leftOperand;
+    protected AbstractExpr rightOperand;
 
     public AbstractBinaryExpr(AbstractExpr leftOperand,
             AbstractExpr rightOperand) {
