@@ -42,10 +42,6 @@ public class EnvironmentType {
         Symbol object = compiler.createSymbol("Object");
         OBJECT = new ClassType(object, Location.BUILTIN, null);
         envTypes.put(object, new TypeDefinition(OBJECT, Location.BUILTIN));
-
-        Symbol Null = compiler.createSymbol("null");
-        NULL = new ClassType(Null, Location.BUILTIN, null);
-        envTypes.put(object, new TypeDefinition(NULL, Location.BUILTIN));
     }
 
     private final Map<Symbol, TypeDefinition> envTypes;
@@ -58,13 +54,10 @@ public class EnvironmentType {
         envTypes.put(s, def);
     }
 
-
-
     public final VoidType    VOID;
     public final IntType     INT;
     public final FloatType   FLOAT;
     public final StringType  STRING;
     public final BooleanType BOOLEAN;
     public final ClassType   OBJECT;
-    public final ClassType   NULL;
 }
