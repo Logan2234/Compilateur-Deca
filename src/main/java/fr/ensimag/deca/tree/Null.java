@@ -24,8 +24,10 @@ public class Null extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
+        //Ajout du décor
+        setType(compiler.environmentType.NULL);
+        
         return compiler.environmentType.NULL;
-                //throw new UnsupportedOperationException("not yet implemented");
     }
 
 

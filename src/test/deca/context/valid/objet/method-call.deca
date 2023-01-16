@@ -7,11 +7,12 @@
 //
 
 class A{
-    void get(){
+    void get(int x, int y, int z){
 
     }
 }
 {
-    A a = new A();
+    int x, y, z;
+    A a = new A(x, y, z);
     a.get();
 }
