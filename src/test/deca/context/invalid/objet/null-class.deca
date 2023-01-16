@@ -6,15 +6,6 @@
 //    Ligne 10 : New is only for classes
 //
 
-class A{
-    
-}
-class B{
-
-}
 {
-    A a = new A();
-    if (a!=null){
-        print(1);
-    }
+    int a = new int();
 }

@@ -24,42 +24,31 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
         Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
         Location loc = this.getLocation();
 
-        if (typeLeft.isBoolean()) {
-            if (!typeRight.isBoolean()) {
-                throw new ContextualError(
-                        "The right operand of a boolean operation has to be a boolean (rule 3.33)",
-                        loc);
-            }
-            this.setType(typeLeft);
-            return typeLeft;
+        if (typeLeft.isBoolean() && !typeRight.isBoolean())
+            throw new ContextualError("The right operand of a boolean operation has to be a boolean (rule 3.33)", loc);
+
+        if (typeLeft.isClassOrNull() && !typeRight.isClassOrNull())
+            throw new ContextualError("A class can only be compared to another class (rule 3.33)", loc);
+
+        if (!typeLeft.isInt() && !typeLeft.isFloat())
+            throw new ContextualError(
+                    "The left operand of a comparaison operation has to be an int or a float (rule 3.33)", loc);
+
+        if (!typeRight.isInt() && !typeRight.isFloat())
+            throw new ContextualError(
+                    "The right operand of a comparaison operation has to be an int or a float (rule 3.33)", loc);
+
+        ConvFloat convFloat;
+        if (typeLeft.isFloat() && typeRight.isInt()) {
+            convFloat = new ConvFloat(this.getRightOperand());
+            this.setRightOperand(convFloat);
+            convFloat.setType(compiler.environmentType.FLOAT);
         }
 
-        // TODO: Il manque le cas ou on veut comparer T1 et / ou T2 est null ou
-        // type_class(_)
-        if (typeLeft.isClassOrNull()) {
-            if (!typeRight.isClassOrNull())
-                throw new ContextualError("A class can only be compared to another class (rule ??)", loc);
-        } else {
-            if (!typeLeft.isInt() && !typeLeft.isFloat())
-                throw new ContextualError(
-                        "The left operand of a comparaison operation has to be an int or a float (rule 3.33)", loc);
-
-            if (!typeRight.isInt() && !typeRight.isFloat())
-                throw new ContextualError(
-                        "The right operand of a comparaison operation has to be an int or a float (rule 3.33)", loc);
-
-            ConvFloat convFloat;
-            if (typeLeft.isFloat() && typeRight.isInt()) {
-                convFloat = new ConvFloat(this.getRightOperand());
-                this.setRightOperand(convFloat);
-                convFloat.setType(compiler.environmentType.FLOAT);
-            }
-
-            else if (typeLeft.isInt() && typeRight.isFloat()) {
-                convFloat = new ConvFloat(this.getLeftOperand());
-                this.setLeftOperand(convFloat);
-                convFloat.setType(compiler.environmentType.FLOAT);
-            }
+        else if (typeLeft.isInt() && typeRight.isFloat()) {
+            convFloat = new ConvFloat(this.getLeftOperand());
+            this.setLeftOperand(convFloat);
+            convFloat.setType(compiler.environmentType.FLOAT);
         }
 
         // Ajout du décor
