@@ -31,14 +31,14 @@ do
     
     if [ $? -ne 0 ]
     then
-        echo -e "${REDBOLD}Test failed ($VALID_PASSED/$NB_VALID_TESTS): ${RED}$test${NOCOLOR}"
+        echo -e "${REDBOLD}Test failed ($VALID_PASSED/$NB_VALID_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${RED} returns an error"
         if [[ $1 == "--maven" ]];
         then
             exit 1
         fi
     else
         ((VALID_PASSED = VALID_PASSED + 1))
-        echo -e "${GREENBOLD}Test passed ($VALID_PASSED/$NB_VALID_TESTS): ${GREEN}$test${NOCOLOR}"
+        echo -e "${GREENBOLD}Test passed ($VALID_PASSED/$NB_VALID_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${GREEN} returns no error"
     fi
 done
 
@@ -52,9 +52,9 @@ do
     if test_context "$test" 2>&1 | grep -q "$test:*:*"
     then
         ((INVALID_PASSED = INVALID_PASSED + 1))
-        echo -e "${GREENBOLD}Test passed ($INVALID_PASSED/$NB_INVALID_TESTS): ${GREEN}$test${NOCOLOR}"
+        echo -e "${GREENBOLD}Test passed ($INVALID_PASSED/$NB_INVALID_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${NOCOLOR} returns a correct error"
     else
-        echo -e "${REDBOLD}Test failed ($INVALID_PASSED/$NB_INVALID_TESTS): ${RED}$test${NOCOLOR}"
+        echo -e "${REDBOLD}Test failed ($INVALID_PASSED/$NB_INVALID_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${NOCOLOR} returns no error"
         if [[ $1 == "--maven" ]];
         then
             exit 1

@@ -52,7 +52,7 @@ public class MethodAsmBody extends AbstractMethod {
         code.iterChildren(f);
     }
 
-    @Override // ? Is it necessary ?
+    @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         s.println(prefix + "`> " + code.getLocation() + " StringLiteral");
         code.prettyPrintType(s, prefix + "   ");

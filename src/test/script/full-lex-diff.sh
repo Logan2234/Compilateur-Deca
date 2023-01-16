@@ -51,9 +51,9 @@ do
     if [ "$diff" = "" ]
     then
         ((NB_PASSED = NB_PASSED + 1))
-        echo -e "${BGREEN}Test passed ($NB_PASSED/$NB_TESTS): ${GREEN}$test"
+        echo -e "${BGREEN}Test passed ($NB_PASSED/$NB_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${GREEN} returns the same result as in the correction"
     else
-        echo -e "${BRED}Test failed ($NB_PASSED/$NB_TESTS): ${RED}$test"
+        echo -e "${BRED}Test failed ($NB_PASSED/$NB_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${RED} does not return the same result as in the correction"
         if [[ $1 == "--maven" ]];
         then
             exit 1
