@@ -1,11 +1,11 @@
 // Description:
-//    Cast d'une classe vers une autre qui n'est pas une sous-classe
+//    Selection d'un attribut d'une classe mère via un cast
 //
 // Resultats:
-//    Ligne 20: B n'est pas une sous classe de A
+//    
 //
 // Historique:
-//    cree le 06/01/2023
+//    cree le 16/01/2023
 
 class A{
     int x;
