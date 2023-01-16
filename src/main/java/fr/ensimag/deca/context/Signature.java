@@ -10,7 +10,7 @@ import java.util.List;
  * @date 01/01/2023
  */
 public class Signature {
-    public List<Type> args = new ArrayList<Type>();
+    List<Type> args = new ArrayList<Type>();
 
     public void add(Type t) {
         args.add(t);
