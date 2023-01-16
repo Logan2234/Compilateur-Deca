@@ -1,0 +1,27 @@
+// Description:
+//    déclare une nouvelle classe qui hérite d'une autre
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A {
+    int x;
+    void get(){
+        print(x);
+    }
+}
+
+class B extends A {
+    int x;
+    void get(){
+        print(x);
+    }
+}
+
+{
+    A bBoit = new A();
+    bBoit.get();
+}

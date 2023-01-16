@@ -180,7 +180,7 @@ public class Identifier extends AbstractIdentifier {
         Definition def = localEnv.get(this.name);
         Location loc = this.getLocation();
         if (def == null)
-            throw new ContextualError("The variable " + name.getName() + " doesn't exist (rule 0.1)", loc);
+            throw new ContextualError("The identifier \"" + name.getName() + "\" doesn't exist (rule 0.1)", loc);
             
         // Ajout du décor
         Type type = def.getType();

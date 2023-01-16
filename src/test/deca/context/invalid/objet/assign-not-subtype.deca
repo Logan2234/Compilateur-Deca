@@ -17,5 +17,5 @@ class B{
 
 {
     A a;
-    a = new B;
+    a = new B();
 }

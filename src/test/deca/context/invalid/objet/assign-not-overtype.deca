@@ -1,0 +1,21 @@
+// Description:
+//    Assign not a subtype
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 20 : An assignation between a B and a A is not possible (rule 3.32)
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A{
+
+}
+
+class B extends A{
+
+}
+
+{
+    B a = new A();
+}

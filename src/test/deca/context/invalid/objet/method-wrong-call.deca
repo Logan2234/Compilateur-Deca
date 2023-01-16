@@ -1,0 +1,14 @@
+// Description:
+//    Condition de la règle 0.1 non respectée 
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 13 : The identifier "get" doesn't exist (rule 0.1)
+//
+
+class A{
+}
+{
+    A a = new A();
+    a.get(x, y, z);
+}
