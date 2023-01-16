@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -62,9 +63,16 @@ public class Cast extends AbstractExpr {
         if (type1.isFloat() && type2.isInt()) {
             return true;
         }
-        if (type2.getClass().isAssignableFrom(type1.getClass())) {// TODO je dois savoir si t2 est une sous classe de T1
-                                                                  // pour le localEnv
-            return true;
+        if (type2.isClass() && type1.isClass()){
+        try {    
+            ClassType class1 = type1.asClassType("Not a class", getLocation());
+            ClassType class2 = type2.asClassType("Not a class", getLocation());
+            if (class1.isSubClassOf(class2))
+                return true;
+        } catch (ContextualError e) {
+
+        }
+            
         }
         return false;
     }

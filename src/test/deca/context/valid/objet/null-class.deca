@@ -6,6 +6,15 @@
 //    Ligne 10 : New is only for classes
 //
 
+class A{
+    
+}
+class B{
+
+}
 {
-    string a = new string();
+    A a = new A();
+    if (a!=null){
+        print(1);
+    }
 }

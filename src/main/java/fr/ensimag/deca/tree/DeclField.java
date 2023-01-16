@@ -6,6 +6,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
@@ -39,20 +40,34 @@ public class DeclField extends AbstractDeclField {
     @Override
     protected void verifyDeclField(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type type = this.type.getType();
+        Type type = this.type.verifyType(compiler);
+        
+        if (type.isVoid())
+            throw new ContextualError("The field type can't be void (rule 2.5)", getLocation());
+
+        // Si le nom existe déjà dans une classe parente
+        ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(this.fieldName.getName());
+        if (defExp != null){
+            // On cherche à savoir si c'est bien un Field
+            defExp.asFieldDefinition("The name \"" + fieldName.getName().getName() + "\" is already used for a method in the superclass (rule 2.5)", this.getLocation());
+        }
+        
         try {
-            FieldDefinition def = new FieldDefinition(type, this.getLocation(), visib, currentClass,
-                    currentClass.getNumberOfFields());
+            FieldDefinition def = new FieldDefinition(type, this.getLocation(), visib, currentClass, currentClass.getNumberOfFields());
             currentClass.incNumberOfFields();
             localEnv.declare(this.fieldName.getName(), def);
             fieldName.verifyExpr(compiler, localEnv, currentClass);
         } catch (DoubleDefException e) {
             throw new ContextualError(
-                "The field \"" + this.fieldName.getName().getName() + "\" has already been declared (rule )",
+                "The field \"" + this.fieldName.getName().getName() + "\" has already been declared (rule 2.4)",
                 this.getLocation());
             }
-            
-        initialization.verifyInitialization(compiler, type, localEnv, currentClass);
+    }
+
+    @Override
+    protected void verifyInitField(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        initialization.verifyInitialization(compiler, type.getType(), localEnv, currentClass);
     }
 
     @Override

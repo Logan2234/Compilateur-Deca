@@ -31,6 +31,7 @@ public class MethodAsmBody extends AbstractMethod {
 
     @Override
     public void verifyMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentclass, Type type) throws ContextualError {
+        code.verifyExpr(compiler, localEnv, currentclass);
     }
 
     @Override

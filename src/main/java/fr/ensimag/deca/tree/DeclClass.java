@@ -5,6 +5,7 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
@@ -51,32 +52,34 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
         Definition def = compiler.environmentType.defOfType(name.getName());
+        
         if (def != null)
-            throw new ContextualError(name.getName().getName() + " is already a class (rule 1.3)", this.getLocation());
+            throw new ContextualError("\"" + name.getName().getName() + "\" is already a type/class (rule 1.3)", this.getLocation());
         if (!this.superIdentifier.verifyType(compiler).isClass())
-            throw new ContextualError(superIdentifier.getName().getName() + " is not a class (rule 1.3)",
-                    this.getLocation());
-
+            throw new ContextualError("\"" + superIdentifier.getName().getName() +"\" is not a class (rule 1.3)",
+        this.getLocation());
+        
         ClassType classType = new ClassType(name.getName(), this.getLocation(), ((ClassType)superIdentifier.getType()).getDefinition());
         compiler.environmentType.set(name.getName(), new TypeDefinition(classType, this.getLocation()));
-        name.verifyType(compiler);
+        Type type = name.verifyType(compiler);
+
+        // Ajout du décor
+        name.setDefinition(classType.getDefinition());
+        name.setType(type);
     }
 
     @Override
-    protected void verifyClassMembers(DecacCompiler compiler)
-            throws ContextualError {
-        Definition def = compiler.environmentType.defOfType(name.getName());
-        if (def != null)
-            throw new ContextualError(name.getName().getName() + " is already a class (rule 2.3)", this.getLocation());
-        if (!this.superIdentifier.verifyType(compiler).isClass())
-            throw new ContextualError(superIdentifier.getName().getName() + " is not a class (rule 2.3)",
-                    this.getLocation());
-        
+    protected void verifyClassMembers(DecacCompiler compiler) throws ContextualError {
+        ClassDefinition def = this.name.getClassDefinition();
+        fields.verifyListDeclField(compiler, def.getMembers(), def); // TODO: Vérifier la condition de la règle 2.3
+        methods.verifyListDeclMethod(compiler, def.getMembers(), def);
     }
-
+    
     @Override
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented"); // Rule 3.5
+        ClassDefinition def = this.name.getClassDefinition();
+        fields.verifyListInitField(compiler, def.getMembers(), def);
+        methods.verifyListDeclMethodBody(compiler, def.getMembers(), def);
     }
 
     @Override

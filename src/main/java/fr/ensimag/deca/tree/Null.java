@@ -24,7 +24,8 @@ public class Null extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        return compiler.environmentType.NULL;
+                //throw new UnsupportedOperationException("not yet implemented");
     }
 
 

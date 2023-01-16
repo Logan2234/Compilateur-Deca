@@ -42,7 +42,6 @@ public class EnvironmentType {
         Symbol object = compiler.createSymbol("Object");
         OBJECT = new ClassType(object, Location.BUILTIN, null);
         envTypes.put(object, new TypeDefinition(OBJECT, Location.BUILTIN));
-
     }
 
     private final Map<Symbol, TypeDefinition> envTypes;
@@ -54,8 +53,6 @@ public class EnvironmentType {
     public void set(Symbol s, TypeDefinition def) {
         envTypes.put(s, def);
     }
-
-
 
     public final VoidType    VOID;
     public final IntType     INT;

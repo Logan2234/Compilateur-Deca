@@ -24,7 +24,7 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
  * @date 01/01/2023
  */
 public class EnvironmentExp {
-    EnvironmentExp parentEnvironment;
+    public EnvironmentExp parentEnvironment;
     private Map<Symbol, ExpDefinition> dico = new HashMap<>();
 
     public EnvironmentExp(EnvironmentExp parentEnvironment) {
@@ -49,7 +49,6 @@ public class EnvironmentExp {
             else
                 break;
         }
-        
         return null;
     }
 

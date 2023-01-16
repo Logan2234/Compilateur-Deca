@@ -10,7 +10,7 @@ import java.util.List;
  * @date 01/01/2023
  */
 public class Signature {
-    List<Type> args = new ArrayList<Type>();
+    public List<Type> args = new ArrayList<Type>();
 
     public void add(Type t) {
         args.add(t);
@@ -23,5 +23,16 @@ public class Signature {
     public int size() {
         return args.size();
     }
+
+    public boolean sameSignature(Signature s) {
+        if (this.size() != s.size())
+            return false;
+        for (int i = 0; i < args.size(); i++) {
+            if (!this.paramNumber(i).sameType(s.paramNumber(i)))
+                return false;
+        }
+        return true;
+    }
+    //TODO: Fonction de comparaison des signatures
 
 }

@@ -6,6 +6,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
@@ -37,9 +38,22 @@ public class MethodCall extends AbstractExpr {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
         Type typeClass = obj.verifyExpr(compiler, localEnv, currentClass);
-        meth.verifyExpr(compiler, localEnv, currentClass);
-        Definition ident  = meth.getDefinition();
-        throw new UnsupportedOperationException("not yet implemented");
+        if (!typeClass.isClass())
+                throw new ContextualError("A method can only be called in a class (rule 3.71)", getLocation());
+        
+        //On s'occupe de récuperer la signature et le type de retour de la methode 
+        meth.verifyExpr(compiler, localEnv, currentClass); //on verify l'expression de la methode 
+        Signature sig = meth.getMethodDefinition().getSignature();
+        Type typeReturn = meth.verifyType(compiler);
+
+        //Definition ident  = meth.getDefinition();
+
+        /*for (int i = 0; i < sig.args.size(); i++) {
+            Type type = params.getList().get(i).getType();
+            if (!assign_compatible(localEnv,type, sig.paramNumber(i))) //TODO assign_compatible a faire pour ici
+                throw new ContextualError("The parameter number " + i + " is not in the expected Type (rule 3.28)", getLocation());
+        }*/
+        return typeReturn;
     }
 
     @Override
