@@ -21,11 +21,6 @@ import fr.ensimag.deca.tree.StringLiteral;
  */
 public class TestLiteralsAdvanced {
 
-    final Type BOOLEAN = new BooleanType(null);
-    final Type INT = new IntType(null);
-    final Type FLOAT = new FloatType(null);
-    final Type STRING = new StringType(null);
-
     DecacCompiler compiler;
     
     @BeforeEach
