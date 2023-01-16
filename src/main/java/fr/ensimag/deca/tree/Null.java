@@ -22,14 +22,12 @@ public class Null extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        //Ajout du décor
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        // Ajout du décor
         setType(compiler.environmentType.NULL);
-        
         return compiler.environmentType.NULL;
     }
-
 
     @Override
     String prettyPrintNode() {

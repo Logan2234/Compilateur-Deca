@@ -23,7 +23,7 @@ import org.apache.commons.lang.Validate;
 public class MethodCall extends AbstractExpr {
 
     private final AbstractExpr obj;
-    private final AbstractIdentifier meth; 
+    private final AbstractIdentifier meth;
     private final ListExpr params;
 
     public MethodCall(AbstractExpr obj, AbstractIdentifier meth, ListExpr params) {
@@ -35,23 +35,24 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
         Type typeClass = obj.verifyExpr(compiler, localEnv, currentClass);
         if (!typeClass.isClass())
-                throw new ContextualError("A method can only be called in a class (rule 3.71)", getLocation());
-        
-        //On s'occupe de récuperer la signature et le type de retour de la methode 
-        meth.verifyExpr(compiler, localEnv, currentClass); //on verify l'expression de la methode 
+            throw new ContextualError("A method can only be called in a class (rule 3.71)", getLocation());
+
+        // On s'occupe de récuperer la signature et le type de retour de la methode
+        meth.verifyExpr(compiler, localEnv, currentClass); // on verify l'expression de la methode
         Signature sig = meth.getMethodDefinition().getSignature();
         Type typeReturn = meth.verifyType(compiler);
 
-        //Definition ident  = meth.getDefinition();
+        // Definition ident = meth.getDefinition();
 
-        for (int i = 0; i < sig.args.size(); i++) {
+        for (int i = 0; i < sig.size(); i++) {
             Type type = params.getList().get(i).getType();
-            if (!type.assign_compatible(localEnv, sig.paramNumber(i))) //TODO assign_compatible a faire pour ici
-                throw new ContextualError("The parameter number " + i + " is not in the expected Type (rule 3.28)", getLocation());
+            if (!type.assign_compatible(localEnv, sig.paramNumber(i)))
+                throw new ContextualError("The parameter number " + i + " is not in the expected Type (rule 3.28)",
+                        getLocation());
         }
         return typeReturn;
     }
@@ -71,14 +72,18 @@ public class MethodCall extends AbstractExpr {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        if (!(obj.equals(null))) {obj.iter(f);}
+        if (!(obj.equals(null))) {
+            obj.iter(f);
+        }
         meth.iter(f);
         params.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        if (!(obj.equals(null))) {obj.prettyPrint(s, prefix, false);}
+        if (!(obj.equals(null))) {
+            obj.prettyPrint(s, prefix, false);
+        }
         meth.prettyPrint(s, prefix, false);
         params.prettyPrint(s, prefix, true);
     }
