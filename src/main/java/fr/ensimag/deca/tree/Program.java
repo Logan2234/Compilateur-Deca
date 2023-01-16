@@ -114,10 +114,10 @@ public class Program extends AbstractProgram {
         while(iterDecl.hasNext()){
             DeclVar decl = (DeclVar) iterDecl.next();
             if (decl.getVar().getDefinition().isUsed()) {
-                break;
+                // the variable is used
             } else if (decl.getInit() instanceof Initialization
                        && ((Initialization)(decl.getInit())).getExpression().containsMethodCall()) {
-                break;
+                // the variable is not used but is Initialized with a MethodCall
             } else {
                 iterDecl.remove();
                 simplified = true;
@@ -179,7 +179,7 @@ public class Program extends AbstractProgram {
     private boolean optimizeClasses() {
         // TODO remove useless methods, classes and fields (be carefull with methods and fields indexes)
         // TODO simplify methods (be carefull with params simplification and params required for the call)
-        // TODO Check if we don't remove super classes
+        // TODO be carefull with override
         boolean simplified = false;
         Iterator<AbstractDeclClass> iterClasses = this.classes.iterator();
         while(iterClasses.hasNext()){
@@ -225,6 +225,4 @@ public class Program extends AbstractProgram {
         }
         return simplified;
     }
-
-    //private boolean optimizeBlock() {}
 }

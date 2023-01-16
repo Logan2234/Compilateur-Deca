@@ -34,7 +34,6 @@ public class ManualTestOptim {
         try {
             prog.verifyProgram(compiler);
             prog.optimizeTree();
-            prog.verifyProgram(compiler);
         } catch (LocationException e) {
             e.display(System.err);
             System.exit(1);

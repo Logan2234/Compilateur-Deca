@@ -79,6 +79,7 @@ else
 fi
 
 TEMP=`echo "$INVALID_PASSED_PERCENTAGE > 0.5" | bc -l`
+
 if ((TEMP));
 then
     echo -e "\n${GREEN} Invalid test passed: "

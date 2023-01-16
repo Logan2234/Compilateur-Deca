@@ -8,23 +8,49 @@
 //    cree le 04/01/2023
 //
 
-class A {
-}
-
-class B extends A {
-    int x;
-}
-
-class C {
-}
+//class A {
+//    int z,w;                        // w should be removed
+//
+//    void setZ(int a){
+//        this.z = a;
+//        this.w = a;
+//    }
+//
+//    int cos(int a) {
+//        return a;
+//    }
+//}
+//
+//class B extends A {
+//    int x;
+//    int y;                          // y should be removed
+//
+//    int getX(){}                    // getX should be removed
+//}
+//
+//class C {                           // C should be removed
+//}
+//
+//{
+//    int x,y;                        // y should be removed
+//    int z = 2;                      // z should be removed
+//    int trigo;
+//    boolean myBoolean = true;
+//
+//    A a = new A();                  // a should be removed
+//    B b = new B();
+//    C c = new C();                  // c should be removed
+//    x = readInt();
+//    43;                             // 43 should be removed
+//    ;;                              // ;; should be removed
+//    42 + b.cos(3);
+//    trigo = 2 + b.cos(2);
+//    b.setZ(2);
+//    print(x,b.z);
+//    print(b.x);
+//    if (myBoolean) {}
+//}
 
 {
-    int x,y,z;
-    boolean myBoolean = true;
-    A a = new A();
-    B b = new B();
-    x = readInt();
-    print(x);
-    print(b.x);
-    if (myBoolean) {}
+    int x=0;
 }

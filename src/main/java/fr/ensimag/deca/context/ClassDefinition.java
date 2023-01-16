@@ -81,7 +81,6 @@ public class ClassDefinition extends TypeDefinition {
     @Override
     public void spotRelatedDefs(AbstractProgram prog) {
         if (this.superClass != null) {
-            System.out.println("ClassDefinition"); //TODO
             this.superClass.spotUsedVar(prog);
         }
     }
