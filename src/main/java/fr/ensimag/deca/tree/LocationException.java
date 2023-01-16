@@ -17,14 +17,17 @@ public class LocationException extends Exception {
         Location loc = getLocation();
         String line;
         String column;
+        String file;
         if (loc == null) {
             line = "<unknown>";
             column = "";
+            file = "";
         } else {
             line = Integer.toString(loc.getLine());
             column = ":" + loc.getPositionInLine();
+            file = location.getFilename();
         }
-        s.println(location.getFilename() + ":" + line + column + ": " + getMessage());
+        s.println(file + ":" + line + column + ": " + getMessage());
     }
 
     private static final long serialVersionUID = 7628400022855935597L;

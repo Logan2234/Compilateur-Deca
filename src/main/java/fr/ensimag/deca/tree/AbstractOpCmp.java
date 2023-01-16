@@ -47,7 +47,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
 
         ConvFloat convFloat;
         if (typeLeft.isFloat() && typeRight.isInt()){
-            convFloat = new ConvFloat(this.getLeftOperand());
+            convFloat = new ConvFloat(this.getRightOperand());
             this.setRightOperand(convFloat);
             convFloat.setType(compiler.environmentType.FLOAT);
         }

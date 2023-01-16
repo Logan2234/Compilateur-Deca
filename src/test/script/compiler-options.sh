@@ -40,4 +40,46 @@ else
     option-v
 fi
 
+if [[ $1 == "--maven" ]];
+then
+    option-n --maven
+else
+    option-n
+fi
+
+if [[ $1 == "--maven" ]];
+then
+    option-r --maven
+else
+    option-r
+fi
+
+if [[ $1 == "--maven" ]];
+then
+    option-d --maven
+else
+    option-d
+fi
+
+if [[ $1 == "--maven" ]];
+then
+    option-P --maven
+else
+    option-P
+fi
+
+if [[ $1 == "--maven" ]];
+then
+    option-w --maven
+else
+    option-w
+fi
+
+if [[ $1 == "--maven" ]];
+then
+    other-cases --maven
+else
+    other-cases
+fi
+
 # TODO: Supprimer les fichiers inutiles .lis etc

@@ -1,8 +1,11 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -20,7 +23,8 @@ public class DeclClass extends AbstractDeclClass {
     final private ListDeclField fields;
     final private ListDeclMethod methods;
 
-    public DeclClass(AbstractIdentifier name, AbstractIdentifier superIdentifier, ListDeclField fields, ListDeclMethod methods) {
+    public DeclClass(AbstractIdentifier name, AbstractIdentifier superIdentifier, ListDeclField fields,
+            ListDeclMethod methods) {
         Validate.notNull(name);
         Validate.notNull(superIdentifier);
         Validate.notNull(fields);
@@ -46,20 +50,34 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Definition def = compiler.environmentType.defOfType(name.getName());
+        if (def != null)
+            throw new ContextualError(name.getName().getName() + " is already a class (rule 1.3)", this.getLocation());
+        if (!this.superIdentifier.verifyType(compiler).isClass())
+            throw new ContextualError(superIdentifier.getName().getName() + " is not a class (rule 1.3)",
+                    this.getLocation());
+
+        ClassType classType = new ClassType(name.getName(), this.getLocation(), ((ClassType)superIdentifier.getType()).getDefinition());
+        compiler.environmentType.set(name.getName(), new TypeDefinition(classType, this.getLocation()));
+        name.verifyType(compiler);
     }
 
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-    
-    @Override
-    protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Definition def = compiler.environmentType.defOfType(name.getName());
+        if (def != null)
+            throw new ContextualError(name.getName().getName() + " is already a class (rule 2.3)", this.getLocation());
+        if (!this.superIdentifier.verifyType(compiler).isClass())
+            throw new ContextualError(superIdentifier.getName().getName() + " is not a class (rule 2.3)",
+                    this.getLocation());
+        
     }
 
+    @Override
+    protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
+        throw new UnsupportedOperationException("not yet implemented"); // Rule 3.5
+    }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
@@ -68,7 +86,7 @@ public class DeclClass extends AbstractDeclClass {
         fields.prettyPrint(s, prefix, false);
         methods.prettyPrint(s, prefix, true);
 
-        //throw new UnsupportedOperationException("Not yet supported");
+        // throw new UnsupportedOperationException("Not yet supported");
     }
 
     @Override
@@ -77,7 +95,7 @@ public class DeclClass extends AbstractDeclClass {
         superIdentifier.iter(f);
         fields.iter(f);
         methods.iter(f);
-        //throw new UnsupportedOperationException("Not yet supported");
+        // throw new UnsupportedOperationException("Not yet supported");
     }
 
 }

@@ -1,0 +1,66 @@
+// Description:
+//    Test de démo pour le suivi 2
+//
+// Resultats:
+//    Pas d'erreur
+//
+// Historique:
+//    cree le 11/01/2023
+{
+    int borneInf;
+    int borneSup;
+    int choixOrdi;
+    int indice;
+    boolean play = true;
+    int nbTentative = 0;
+
+    println("");
+    println("Welcome! Make me guess your number!");
+    println("");
+    
+    print("First, choose the lower bound: ");
+    borneInf = readInt();
+    
+    print("And the upper bound: ");
+    borneSup = readInt();
+
+    if (borneSup <= borneInf){
+        println("");
+        println("The upper bound must be strictly higher than the lower bound!");
+    } else {
+        println("");
+        println("Now let me find the number!");
+        println("");
+
+        choixOrdi = (borneInf + borneSup) / 2;
+        println("I'll start with ", choixOrdi, "!");
+
+        while (play){                
+            nbTentative = nbTentative + 1;
+
+            print("Is it lower (enter 0) or higher (enter 1) than ", choixOrdi, " or is it right (enter 2): ");
+            indice = readInt();
+            
+            if (indice == 0) {
+                borneSup = choixOrdi;
+            } else if (indice == 1) {
+                borneInf = choixOrdi;
+            } else {
+                play = false;
+            }
+            
+            if (play) {
+                choixOrdi = (borneInf + borneSup) / 2;
+                println("");
+                println("Now I'll go with ", choixOrdi, "!");
+            }
+        }
+
+        println("");
+        if (nbTentative == 1){
+            println("It seems I'm right already! I've guessed it in ", nbTentative, " try! Thanks for letting me play with you!");
+        } else {
+            println("It seems I'm right already! I've guessed it in ", nbTentative, " tries! Thanks for letting me play with you!");
+        }
+    }
+}

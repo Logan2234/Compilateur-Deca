@@ -36,15 +36,13 @@ public class Assign extends AbstractBinaryExpr {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Type type = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
-        Type type2 = this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, type).getType();
+        this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, type);
         
         // Ajout du décor et renvoie du type
-        if (type.sameType(type2)){
-            this.setType(type);
-            return type;
-        }
+        this.setType(type);
+        return type;
+
         // TODO: Tester le cas où type2 est une sous classe de type1
-        throw new ContextualError("An assignation between a " + type + " and a " + type2 + " is not possible (rule 3.32)", this.getLocation());
     }
 
     @Override

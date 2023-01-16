@@ -8,5 +8,5 @@
 //    cree le 09/01/2023
 
 {
-    printlnx(11.0);
+    printlnx(11.0, 1, "coucou");
 }

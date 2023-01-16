@@ -1,5 +1,10 @@
 package fr.ensimag.deca;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.*;
 import java.io.File;
 import org.apache.log4j.Logger;
 
@@ -37,24 +42,37 @@ public class DecacMain {
             System.out.println("\u001B[35m" + "================================================");
         }
 
-        if (options.getSourceFiles().isEmpty()) {
-            if (!options.getPrintBanner())
+        List<File> fichiers = options.getSourceFiles();
+        if (fichiers.isEmpty()) {
+            if (!options.getPrintBanner()) {
+                System.err.println("\u001B[31m/!\\ There is no file to compile.\u001B[37m");
                 options.displayUsage();
-            // throw new UnsupportedOperationException("decac without argument not yet
-            // implemented");
+                System.exit(1);
+            }
         }
 
-        if (options.getParallel()) {
-            // A FAIRE : instancier DecacCompiler pour chaque fichier à
-            // compiler, et lancer l'exécution des méthodes compile() de chaque
-            // instance en parallèle. Il est conseillé d'utiliser
-            // java.util.concurrent de la bibliothèque standard Java.
-            throw new UnsupportedOperationException("Parallel build not yet implemented");
+        else if (options.getParallel()) {
+            int nbProcesseurs = java.lang.Runtime.getRuntime().availableProcessors();
+            ExecutorService filsExec = Executors.newFixedThreadPool(nbProcesseurs);
+            for (int i = 0; i < fichiers.size(); i++) {
+                DecacCompiler compiler = new DecacCompiler(options, fichiers.get(i));
+                Future<Boolean> future = filsExec.submit(() -> {
+                    return compiler.compile();
+                }); // TODO: Vérifier que le parallele se fait bien
+                try {
+                    future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
         } else {
+            Set<File> treatedFiles = new HashSet<File>();
             for (File source : options.getSourceFiles()) {
-                DecacCompiler compiler = new DecacCompiler(options, source);
-                if (compiler.compile()) {
-                    error = true;
+                if (!treatedFiles.contains(source))
+                {
+                    treatedFiles.add(source);
+                    DecacCompiler compiler = new DecacCompiler(options, source);
+                    error = compiler.compile();
                 }
             }
         }

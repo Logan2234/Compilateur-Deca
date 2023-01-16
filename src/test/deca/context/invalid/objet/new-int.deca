@@ -2,7 +2,8 @@
 //    Condition de la règle 3.42 non respectée 
 //
 // Resultats:
-//    Ligne 9: new ne peut être suivi que d'un objet de type class.
+//    Erreur Contextuelle
+//    Ligne 10 : New is only for classes
 //
 
 {
