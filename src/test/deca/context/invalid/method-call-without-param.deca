@@ -3,14 +3,13 @@
 //
 // Resultats:
 //    Erreur Contextuelle
-//    Ligne 17 : The parameter number 3 is not in the expected Type (rule 3.28)
+//    Ligne 16: Not enough params in the method "get" (rule 3.28)
 //
+// Historique:
+//    cree le 16/01/2023
 
 class A{
-    void get(int x, int y, boolean z){
-
-    }
-    //int get;
+    void get(int x){}
 }
 {
     A a = new A();

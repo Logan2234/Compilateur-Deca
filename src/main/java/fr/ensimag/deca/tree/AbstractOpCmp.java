@@ -33,7 +33,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
 
         if ((this.getOperatorName() == "==" || this.getOperatorName() == "!=") && typeLeft.isClassOrNull()) {
             if (!typeRight.isClassOrNull())
-                throw new ContextualError("A class can only be compared to another class (rule 3.33)", loc);
+                throw new ContextualError("A class (or null) can only be compared to another class (rule 3.33)", loc);
             this.setType(compiler.environmentType.BOOLEAN);
             return compiler.environmentType.BOOLEAN;
         }

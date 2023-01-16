@@ -8,12 +8,11 @@
 //    cree le 14/01/2023
 
 class A{
-    protected int x = 3;
-
+    protected int x;
 }
 
 class B extends A {
     void getx(){
-        //x; // TODO: Bug ici a fix
+        x; // TODO: Bug ici a fix
     }
 }

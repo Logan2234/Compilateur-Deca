@@ -1,0 +1,20 @@
+// Description:
+//    override de méthode avec un type de retour différent et non compatible
+//
+// Resultats:
+//    Ligne 17: The return type is not the same as defined in the superclass (or not a subtype) (rule 2.7)
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {
+    float get(int a){
+        println(1);
+    }
+}
+
+class B extends A {
+    void get(int b){
+        println(2);
+    }
+}

@@ -8,6 +8,5 @@
 //    cree le 06/01/2023
 
 {
-    int i = 1;
-    (boolean)(i);
+    (boolean)(1);
 }
