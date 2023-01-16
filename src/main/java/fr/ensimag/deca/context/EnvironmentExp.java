@@ -41,11 +41,14 @@ public class EnvironmentExp {
      */
     public ExpDefinition get(Symbol key) {
         Map<Symbol, ExpDefinition> dico = this.dico;
+        EnvironmentExp current = this;
         while (dico != null) {
             if (dico.containsKey(key))
                 return dico.get(key);
-            if (this.parentEnvironment != null)
+            if (current.parentEnvironment != null){
+                current = current.parentEnvironment;
                 dico = this.parentEnvironment.dico;
+            }
             else
                 break;
         }
