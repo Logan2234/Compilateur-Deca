@@ -93,26 +93,24 @@ public class Program extends AbstractProgram {
     @Override
     public boolean removeUnusedVar() {
         this.spotUsedVar(this); // browse the main program
-        boolean mainSimplified = this.optimizeMain();
-        boolean classesSimplified = this.optimizeClasses();
-        return mainSimplified || classesSimplified;
+        boolean simplified = this.optimizeClasses();
+        if (this.main instanceof Main) {
+            LOG.debug("Optimizing body of Main");
+            simplified = simplified || this.optimizeBlock(((Main)this.main).getListDeclVar(),((Main)this.main).getListInst());
+        }
+        return simplified;
     }
 
     /**
-     * Remove all useless variables from the Main (declaration or useless instructions)
-     * @return true if Main has been simplified
+     * Remove all useless variables from the block (declaration or useless instructions)
+     * @return true if the block has been simplified
      */
-    // TODO use an interface implemented by main and methodbody and methodasmbody to pass as a param
-    // the interface allow us to get the lists of DeclVar and DeclInst
-    private boolean optimizeMain() {
+    private boolean optimizeBlock(ListDeclVar listDecls, ListInst listInsts) {
         boolean simplified = false;
-        if (!(this.main instanceof Main)) {
-            return simplified;
-        }
         /* remove useless declarations from the main */
-        Iterator<AbstractDeclVar> iterDecl = ((Main)this.main).getListDeclVar().iterator();
+        Iterator<AbstractDeclVar> iterDecl = listDecls.iterator();
         while(iterDecl.hasNext()){
-            DeclVar decl = (DeclVar)iterDecl.next();
+            DeclVar decl = (DeclVar) iterDecl.next();
             if (decl.getVar().getDefinition().isUsed()) {
                 break;
             } else if (decl.getInit() instanceof Initialization
@@ -124,7 +122,6 @@ public class Program extends AbstractProgram {
                 LOG.debug("Remove the decl of "+decl.getVar().getDefinition().toString());
             }
         }
-        
         // Equivalent loop
         // List listDecl = ((Main)this.main).getListDeclVar().getModifiableList();
         // if (listDecl.removeIf(decl -> !((DeclVar)decl).getVar().getDefinition().isUsed())) {
@@ -132,11 +129,12 @@ public class Program extends AbstractProgram {
         // }
 
         /* remove useless instructions form the main */
-        Iterator<AbstractInst> iterInst = ((Main)this.main).getListInst().iterator();
+        Iterator<AbstractInst> iterInst = listInsts.iterator();
         while(iterInst.hasNext()){
             AbstractInst inst = iterInst.next();
 
             if (inst instanceof Assign && !((AbstractExpr)inst).containsMethodCall()) {
+
                 if (((Assign)inst).getLeftOperand() instanceof Identifier) {
                     Identifier ident = (Identifier)((Assign)inst).getLeftOperand();
                     if (!ident.getDefinition().isUsed()){
@@ -203,10 +201,12 @@ public class Program extends AbstractProgram {
                         simplified = true;
                         LOG.debug("Remove method : " + method.getName().getDefinition().toString());
                     }
-                    else {
-                        // TODO remove fields in methods -> try reusing the code from program main
+                    else if (method.getBody() instanceof MethodBody){
+                        // TODO How to handle parameters ???
+                        MethodBody body = (MethodBody) method.getBody();
+                        LOG.debug("Optimizing body of : " + method.getName().getDefinition().toString());
+                        this.optimizeBlock(body.getVars(), body.getInsts());
                     }
-                    // How to handle parameters ???
                 }
 
                 /* remove useless fields */

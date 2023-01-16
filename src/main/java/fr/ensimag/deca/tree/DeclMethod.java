@@ -78,4 +78,8 @@ public class DeclMethod extends AbstractDeclMethod {
     public AbstractIdentifier getName() {
         return this.methodName;
     }
+
+    public AbstractMethod getBody() {
+        return this.body;
+    }
 }

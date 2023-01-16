@@ -25,7 +25,7 @@ public class MethodBody extends AbstractMethod {
     private ListDeclVar vars;
     private ListInst insts;
     
-    public ListDeclVar vars() {
+    public ListDeclVar getVars() {
         return vars;
     }
 
