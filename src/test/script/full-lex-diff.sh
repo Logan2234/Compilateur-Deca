@@ -24,6 +24,7 @@ RED='\033[0;31m'
 BGREEN='\033[1;32m'
 GREEN='\033[0;32m'
 BWHITE='\033[1;37m'
+NOCOLOR='\033[0m'
 
 # Stat var
 NB_TESTS=0
