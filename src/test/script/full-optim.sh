@@ -26,7 +26,8 @@ for test in $files
 do
     ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
     #test_context "$test" > /dev/null 2>&1
-    test_optim "$test" > "${test%.deca}".lis #2>&1
+    test_optim "$test" > "${test%.deca}".lis 2>&1
+    decac -o -p "$test" > "${test%.deca}".decomp
     
     if [ $? -ne 0 ]
     then

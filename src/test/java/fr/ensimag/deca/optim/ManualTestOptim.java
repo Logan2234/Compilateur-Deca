@@ -33,6 +33,7 @@ public class ManualTestOptim {
         }
         try {
             prog.verifyProgram(compiler);
+            assert (prog.checkAllLocations());
             prog.optimizeTree();
         } catch (LocationException e) {
             e.display(System.err);
