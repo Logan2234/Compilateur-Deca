@@ -12,4 +12,12 @@ public class STORE extends BinaryInstruction {
     public STORE(Register op1, DAddr op2) {
         super(op1, op2);
     }
+
+    @Override
+    public boolean usesRegister(int regNum) {
+        if(getOperand1().isGpRegister()) {
+            return getOperand1().asGpRegister().getNumber() == regNum;
+        }
+        return false;
+    }
 }

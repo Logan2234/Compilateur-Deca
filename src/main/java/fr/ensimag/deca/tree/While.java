@@ -14,6 +14,7 @@ import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -99,8 +100,32 @@ public class While extends AbstractInst {
     }
 
 
-    @Override 
-    public void dumpCalcs(){
-        condition = condition.skipCalculs();
+    @Override
+    public boolean collapse() {
+        return condition.collapse() || body.collapse();
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        Boolean collapsedCond = condition.collapseBool();
+        if(collapsedCond != null) {
+            // if it's true, get out of block the body
+            if(collapsedCond) {
+                ListInst result = new ListInst();
+                for(AbstractInst i : body.getList()) {
+                    // ! dangerous ...
+                    // result.add(i);
+                }
+                result.add(this);
+                return result;
+            }
+            // if not, skip while
+            else {
+                return new ListInst();
+            }
+        }
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
     }
 }

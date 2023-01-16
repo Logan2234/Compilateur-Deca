@@ -19,4 +19,14 @@ public class ADDSP extends UnaryInstructionImmInt {
         super(i);
     }
 
+    @Override
+    public boolean alterRegister(int regNum) {
+        return false;
+    }
+
+    @Override
+    public boolean usesRegister(int regNum) {
+        return false;
+    }
+
 }

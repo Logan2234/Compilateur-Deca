@@ -79,4 +79,10 @@ public class DeclField extends AbstractDeclField {
         fieldName.prettyPrint(s, prefix, false);
         initialization.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    public boolean collapse() {
+        initialization.collapse();
+        return false;
+    }
 }

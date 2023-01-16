@@ -3,6 +3,7 @@ package fr.ensimag.deca;
 import fr.ensimag.deca.CompilerOptions.CompileMode;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.context.EnvironmentType;
+import fr.ensimag.deca.optim.AssemblyOptimizer;
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -315,7 +316,7 @@ public class DecacCompiler {
             return true;
         }
 
-        if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
+        if (compilerOptions.getCompileMode() != CompileMode.ParseOnly || compilerOptions.getOptimize()) {
             assert (prog.checkAllLocations());
 
             prog.verifyProgram(this);
@@ -332,6 +333,9 @@ public class DecacCompiler {
                 addComment("end main program");
                 LOG.debug("Generated assembly code:" + nl + program.display());
                 LOG.info("Output file assembly file is: " + destName);
+            }
+            if(compilerOptions.getOptimize()) {
+                AssemblyOptimizer.Optimize(program);
             }
 
             if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {

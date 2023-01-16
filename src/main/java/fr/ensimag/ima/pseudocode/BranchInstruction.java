@@ -11,4 +11,16 @@ public class BranchInstruction extends UnaryInstruction {
         super(op);
     }
 
+    @Override
+    public boolean alterRegister(int _regNum) {
+        return false;
+    }
+
+    @Override
+    public boolean usesRegister(int regNum) {
+        if(getOperand().isGpRegister()) {
+            return getOperand().asGpRegister().getNumber() == regNum;
+        }
+        return false;
+    }
 }

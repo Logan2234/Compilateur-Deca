@@ -65,4 +65,10 @@ public class MethodBody extends AbstractMethod {
         vars.prettyPrintChildren(s, prefix);
         insts.prettyPrintChildren(s, prefix);
     }
+
+    @Override
+    public boolean collapse() {
+        // TODO
+        return false;
+    }
 }

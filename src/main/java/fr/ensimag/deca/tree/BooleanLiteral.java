@@ -74,7 +74,17 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    protected Boolean isLiteral() {
+    public boolean collapse() {
         return true;
+    }
+
+    @Override
+    public Boolean collapseBool() {
+        return value;
+    }
+
+    @Override
+    public boolean collapsable() {
+        return false;
     }
 }

@@ -82,8 +82,18 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
-    protected Boolean isLiteral() {
+    public boolean collapse() {
+        // every litteral can be trivialy solved.
         return true;
     }
 
+    @Override
+    public Integer collapseInt() {
+        return value;
+    }
+
+    @Override
+    public boolean collapsable() {
+        return false;
+    }
 }

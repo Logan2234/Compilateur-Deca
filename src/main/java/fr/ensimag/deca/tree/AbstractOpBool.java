@@ -33,29 +33,4 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
         this.setType(typeLeft);
         return typeLeft;
     }
-
-    @Override
-    public AbstractExpr skipCalculs(){
-        AbstractExpr left = getLeftOperand();
-        AbstractExpr right = getRightOperand();
-        if (!(left.isLiteral())){
-            left = left.skipCalculs();
-        }
-
-        if (!(right.isLiteral())){
-            right = right.skipCalculs();
-        }
-
-        if (left.isLiteral() && right.isLiteral()){
-            boolean newValue;
-            if (getOperatorName().equals("&&")){
-                newValue = ((BooleanLiteral) left).getValue() && ((BooleanLiteral) right).getValue();
-            } else {
-                newValue = ((BooleanLiteral) left).getValue() || ((BooleanLiteral) right).getValue();
-            }
-            return new BooleanLiteral(newValue);
-        }
-        return this;
-    }
-
 }

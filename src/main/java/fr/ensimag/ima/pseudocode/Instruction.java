@@ -2,6 +2,8 @@ package fr.ensimag.ima.pseudocode;
 
 import java.io.PrintStream;
 
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+
 /**
  * IMA instruction.
  *
@@ -17,4 +19,26 @@ public abstract class Instruction {
         s.print(getName());
         displayOperands(s);
     }
+
+    public boolean isLOAD() {
+        return false;
+    }
+
+    public LOAD asLOAD() {
+        return null;
+    }
+
+    public boolean isDvalToReg() {
+        return false;
+    }
+
+    public BinaryInstructionDValToReg asDvalToReg() {
+        return null;
+    }
+
+    public abstract boolean alterRegister(int regNum);
+
+    public abstract boolean usesRegister(int regNum);
+
+
 }

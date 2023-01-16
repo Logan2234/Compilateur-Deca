@@ -25,11 +25,6 @@ public class StringLiteral extends AbstractStringLiteral {
         return value;
     }
 
-    @Override
-    protected Boolean isLiteral() {
-        return true;
-    }
-
     private String value;
 
     public StringLiteral(String value) {
@@ -75,5 +70,6 @@ public class StringLiteral extends AbstractStringLiteral {
     String prettyPrintNode() {
         return "StringLiteral (" + value + ")";
     }
+
 
 }

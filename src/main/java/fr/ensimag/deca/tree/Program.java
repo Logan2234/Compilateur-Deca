@@ -82,4 +82,9 @@ public class Program extends AbstractProgram {
         classes.prettyPrint(s, prefix, false);
         main.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    public boolean collapse() {
+        return classes.collapse() || main.collapse();
+    }
 }

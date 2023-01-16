@@ -50,4 +50,11 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
+    @Override
+    public boolean collapse() {
+        return false;
+        // TODO
+    }
+
+
 }

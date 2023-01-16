@@ -69,4 +69,14 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
         }
     }
 
+    @Override
+    public boolean collapse() {
+        // try to collapse each decl var
+        boolean collapsed = false;
+        for(AbstractDeclVar i : getList()) {
+            collapsed |= i.collapse();
+        }
+        return collapsed;
+    }
+
 }

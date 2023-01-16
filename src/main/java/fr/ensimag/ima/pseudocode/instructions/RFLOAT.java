@@ -7,5 +7,8 @@ import fr.ensimag.ima.pseudocode.NullaryInstruction;
  * @date 01/01/2023
  */
 public class RFLOAT extends NullaryInstruction {
-
+    @Override
+    public boolean alterRegister(int regNum) {
+        return regNum == 1;
+    }
 }

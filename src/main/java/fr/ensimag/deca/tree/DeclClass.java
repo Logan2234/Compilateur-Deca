@@ -98,4 +98,11 @@ public class DeclClass extends AbstractDeclClass {
         // throw new UnsupportedOperationException("Not yet supported");
     }
 
+    @Override
+    public boolean collapse() {
+        fields.collapse();
+        methods.collapse();
+        return false;
+    }
+
 }

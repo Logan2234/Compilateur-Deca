@@ -72,9 +72,5 @@ public class InstanceOf extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
-    @Override 
-    public void dumpCalcs(){
-        e = e.skipCalculs();
-    }
 
 }

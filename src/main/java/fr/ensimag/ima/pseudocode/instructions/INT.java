@@ -15,4 +15,9 @@ public class INT extends BinaryInstructionDValToReg {
         super(op1, op2);
     }
 
+    @Override
+    public boolean usesRegister(int regNum) {
+        return false;
+    }
+
 }

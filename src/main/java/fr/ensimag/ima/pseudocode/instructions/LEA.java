@@ -14,4 +14,12 @@ public class LEA extends BinaryInstructionDAddrToReg {
         super(op1, op2);
     }
 
+    @Override
+    public boolean usesRegister(int regNum) {
+        if(getOperand1().isGpRegister()) {
+            return getOperand1().asGpRegister().getNumber() == regNum;
+        }
+        return false;
+    }
+
 }

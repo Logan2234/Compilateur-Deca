@@ -58,4 +58,29 @@ public class Modulo extends AbstractOpArith {
         }
     }
 
+    @Override
+    public boolean collapse() {
+        return getLeftOperand().collapse() || getRightOperand().collapse();
+    }
+
+    @Override
+    public Integer collapseInt() {
+        Integer rightCollapsedValue = getRightOperand().collapseInt();
+        if(rightCollapsedValue != null && getRightOperand().collapsable()) {
+            IntLiteral newInt = new IntLiteral(rightCollapsedValue);
+            newInt.setType(getType());
+            setRightOperand(newInt);
+        }
+        Integer leftCollapsedValue = getLeftOperand().collapseInt();
+        if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
+            IntLiteral newInt = new IntLiteral(leftCollapsedValue);
+            newInt.setType(getType());
+            setLeftOperand(newInt);
+        }
+        if(rightCollapsedValue != null && leftCollapsedValue != null) {
+            return rightCollapsedValue % leftCollapsedValue;
+        }
+        return null;
+    }
+
 }

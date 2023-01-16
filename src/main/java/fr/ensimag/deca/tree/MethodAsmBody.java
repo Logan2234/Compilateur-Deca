@@ -52,4 +52,10 @@ public class MethodAsmBody extends AbstractMethod {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         code.prettyPrintChildren(s, prefix);
     }
+
+    @Override
+    public boolean collapse() {
+        // TODO
+        return false;
+    }
 }
