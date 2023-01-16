@@ -1,0 +1,30 @@
+// Description:
+//    class, extends, instanceof, this, methods, return
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 04/01/2023
+//
+
+class A {
+}
+
+class B extends A {
+    int x;
+}
+
+class C {
+}
+
+{
+    int x,y,z;
+    boolean myBoolean = true;
+    A a = new A();
+    B b = new B();
+    x = readInt();
+    print(x);
+    print(b.x);
+    if (myBoolean) {}
+}

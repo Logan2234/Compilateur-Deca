@@ -8,40 +8,50 @@ GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
 BWHITE='\033[1;37m'
 
+# Stat var
+NB_VALID_TESTS=0
+VALID_PASSED=0
+
 # On se place dans le répertoire du projet (quel que soit le
 # répertoire d'où est lancé le script) :
-cd "$(dirname "$0")"/../../.. || exit 1
+cd "$(dirname "$0")"/../../../ || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
-echo -e "${BWHITE} \n============================= Optim tests =============================\n"
+echo -e "${BWHITE} \n============================= Context valid tests =============================\n"
 
-files=$(find ./src/test/deca/codegen/valid -maxdepth 1 -name "*.deca")
+files=$(find ./src/test/deca/optim -maxdepth 1 -name "*.deca")
 
 for test in $files
 do
-    ((NB_TESTS = NB_TESTS + 1))
-    decac "$test"
-    PERF_NO_OPTI=$(ima -s "${test%.deca}.ass")
+    ((NB_VALID_TESTS = NB_VALID_TESTS + 1))
+    #test_context "$test" > /dev/null 2>&1
+    test_context "$test" > "${test%.deca}".lis #2>&1
     
-    PERF_NO_OPTI=($PERF_NO_OPTI)
-    NB_INST_NO_OPTI=${PERF_NO_OPTI[-1]}
-    TPS_NO_OPTI=${PERF_NO_OPTI[-5]}
-
-    decac -o "$test"
-    PERF_OPTI=$(ima -s "${test%.deca}.ass")
-    
-    PERF_OPTI=($PERF_OPTI)
-    NB_INST_OPTI=${PERF_OPTI[-1]}
-    TPS_OPTI=${PERF_OPTI[-5]}
-
-    if [ $NB_INST_OPTI -le $NB_INST_NO_OPTI -a $TPS_OPTI -le $TPS_NO_OPTI ];
+    if [ $? -ne 0 ]
     then
-        COLOR=$GREEN
+        echo -e "${REDBOLD}Test failed ($VALID_PASSED/$NB_VALID_TESTS): ${RED}$test${NOCOLOR}"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
     else
-        COLOR=$RED
+        ((VALID_PASSED = VALID_PASSED + 1))
+        echo -e "${GREENBOLD}Test passed ($VALID_PASSED/$NB_VALID_TESTS): ${GREEN}$test${NOCOLOR}"
     fi
-
-    echo -e "${COLOR} Nb inst: $NB_INST_NO_OPTI -> $NB_INST_OPTI \t Tps: $TPS_NO_OPTI -> $TPS_OPTI \t ${test:24}"
-    
 done
+
+
+VALID_PASSED_PERCENTAGE=`echo "$VALID_PASSED / $NB_VALID_TESTS * 100" | bc -l`
+TEMP=`echo "$VALID_PASSED_PERCENTAGE > 0.5" | bc -l`
+
+if ((TEMP));
+then
+    echo -e "\n${GREEN} Valid test passed: "
+    printf %2.0f $VALID_PASSED_PERCENTAGE
+    echo "%"
+else
+    echo -e "\n${RED} Valid test passed: "
+    printf %2.0f $VALID_PASSED_PERCENTAGE
+    echo "%"
+fi

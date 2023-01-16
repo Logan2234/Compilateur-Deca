@@ -3,6 +3,7 @@ package fr.ensimag.deca.context;
 import fr.ensimag.deca.tree.*;
 import fr.ensimag.ima.pseudocode.Label;
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 /**
  * Definition of a method
@@ -11,6 +12,7 @@ import org.apache.commons.lang.Validate;
  * @date 01/01/2023
  */
 public class MethodDefinition extends ExpDefinition {
+    private static final Logger LOG = Logger.getLogger(MethodDefinition.class);
 
     @Override
     public boolean isMethod() {
@@ -82,7 +84,9 @@ public class MethodDefinition extends ExpDefinition {
                 // find the corresponding DeclMethod
                 // (match the tree location of DeclMethod with the definition location of the current MethodDefinition)
                 // Each method as a different location
-                if (this.getLocation() == method.getLocation()) {
+                    LOG.debug("Looking for class");
+                    if (this.getLocation() == method.getLocation()) {
+                    LOG.debug("Class matched");
                     // explore the body of the method to spot other useful variables
                     ((DeclMethod)(method)).spotUsedVar(prog);
                     return;
