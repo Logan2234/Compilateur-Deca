@@ -53,3 +53,14 @@ else
         exit 1
     fi
 fi
+
+if decac -o 2>&1 | grep -q "Unknown option"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac with an unknown option returns an error"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac with an unknown option does not return an error"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi

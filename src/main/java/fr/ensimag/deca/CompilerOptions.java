@@ -162,6 +162,10 @@ public class CompilerOptions {
                     case "-w": {
                         displayWarnings = true;
                     }
+                    default: {
+                        throw new CLIException(
+                            "\u001B[31m/!\\ Unknown option\u001B[37m");
+                    }
                 }
                 arg_index++;
             } else {
