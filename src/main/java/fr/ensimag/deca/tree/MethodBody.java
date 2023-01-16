@@ -1,12 +1,15 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
+
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
  * Method Body Statement
@@ -34,8 +37,9 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
-    public void verifyProgram(DecacCompiler compiler) throws ContextualError {
-        //TODO
+    public void verifyMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentclass, Type type) throws ContextualError {
+        vars.verifyListDeclVariable(compiler, localEnv, currentclass);
+        insts.verifyListInst(compiler, localEnv, currentclass, type);
     }
 
     @Override
@@ -56,10 +60,10 @@ public class MethodBody extends AbstractMethod {
         vars.iterChildren(f);
         insts.iterChildren(f);
     }
-    @Override //? Is it necessary ?
+    @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        vars.prettyPrintChildren(s, prefix);
-        insts.prettyPrintChildren(s, prefix);
+        vars.prettyPrint(s, prefix, false);
+        insts.prettyPrint(s, prefix, true);
     }
 
     @Override

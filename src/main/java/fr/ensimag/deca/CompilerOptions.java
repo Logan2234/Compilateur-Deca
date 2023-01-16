@@ -144,12 +144,13 @@ public class CompilerOptions {
                     case "-r": {
                         // try to read the register number
                         try {
-                            int registerNumber = Integer.parseInt(args[arg_index + 1]);
+                            int registerNumber = Integer.parseInt(args[arg_index+1]);
                             if (registerNumber < 4 || registerNumber > 16) {
                                 throw new CLIException(
                                         "\u001B[31m/!\\ The number of register must be between 4 and 16.\u001B[37m");
                             }
                             usedRegisterNumber = registerNumber;
+                            arg_index++;
                             break;
                         } catch (NumberFormatException e) {
                             throw new CLIException(

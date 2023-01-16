@@ -2,12 +2,12 @@
 //    Operation utilisant les 16 registres et print x. 
 //
 // Resultats:
-//    
+//    0x1.c33334p+3 0x1.99999ap-3
 //
 // Historique:
 //    cree le 13/01/2023
 
 {
     float a  = 1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + (1 + 0.1)))))))))))));
-    printx(a);
+    printx(a, " ", 0.2);
 }

@@ -20,7 +20,7 @@ import org.apache.commons.lang.Validate;
  */
 public class New extends AbstractExpr {
 
-    private final AbstractIdentifier classe; 
+    private final AbstractIdentifier classe;
 
     public New(AbstractIdentifier classe) {
         Validate.notNull(classe);
@@ -28,9 +28,15 @@ public class New extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        Type type = this.classe.verifyType(compiler);
+        if (!type.isClass()) {
+            Location loc = this.getLocation();
+            throw new ContextualError("New is only for classes", loc);
+        }
+        this.setType(type);
+        return type;
     }
 
     @Override

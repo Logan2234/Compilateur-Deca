@@ -19,5 +19,5 @@ class B{
     A a;
     B b;
     
-    A == B;
+    a == b;
 }

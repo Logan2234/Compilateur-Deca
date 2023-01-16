@@ -18,7 +18,7 @@
     println("Welcome! Make me guess your number!");
     println("");
     
-    print("First, chose the lower bound: ");
+    print("First, choose the lower bound: ");
     borneInf = readInt();
     
     print("And the upper bound: ");

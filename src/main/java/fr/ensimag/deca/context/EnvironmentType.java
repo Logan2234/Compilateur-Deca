@@ -18,7 +18,7 @@ public class EnvironmentType {
     public EnvironmentType(DecacCompiler compiler) {
         
         envTypes = new HashMap<Symbol, TypeDefinition>();
-        
+
         Symbol intSymb = compiler.createSymbol("int");
         INT = new IntType(intSymb);
         envTypes.put(intSymb, new TypeDefinition(INT, Location.BUILTIN));
@@ -39,6 +39,13 @@ public class EnvironmentType {
         STRING = new StringType(stringSymb);
         // not added to envTypes, it's not visible for the user.
         
+        Symbol object = compiler.createSymbol("Object");
+        OBJECT = new ClassType(object, Location.BUILTIN, null);
+        envTypes.put(object, new TypeDefinition(OBJECT, Location.BUILTIN));
+
+        Symbol Null = compiler.createSymbol("null");
+        NULL = new NullType(Null);
+        envTypes.put(Null, new TypeDefinition(NULL, Location.BUILTIN));
     }
 
     private final Map<Symbol, TypeDefinition> envTypes;
@@ -47,9 +54,15 @@ public class EnvironmentType {
         return envTypes.get(s);
     }
 
+    public void set(Symbol s, TypeDefinition def) {
+        envTypes.put(s, def);
+    }
+
     public final VoidType    VOID;
     public final IntType     INT;
     public final FloatType   FLOAT;
     public final StringType  STRING;
     public final BooleanType BOOLEAN;
+    public final ClassType   OBJECT;
+    public final NullType    NULL;
 }

@@ -1,0 +1,20 @@
+// Description:
+//    selection
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {
+    int x;
+    boolean y;
+    float z;
+}
+{
+    A a = new A();
+    a.x;
+    a.y;
+    a.z;
+}

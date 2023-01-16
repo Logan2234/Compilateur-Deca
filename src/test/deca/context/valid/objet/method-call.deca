@@ -1,0 +1,19 @@
+// Description:
+//    Condition de la règle 3.42 non respectée 
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 10 : New is only for classes
+//
+
+class A{
+    void get(int x, int y, int z){
+
+    }
+    //int get;
+}
+{
+    int x, y, z;
+    A a = new A();
+    a.get(x, y, z);
+}

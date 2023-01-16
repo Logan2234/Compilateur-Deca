@@ -1,0 +1,15 @@
+// Description:
+//    Déclare une méthode qui retourne un param
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A{
+    int x;
+    int instruction(int x){
+        return x;
+    }
+}

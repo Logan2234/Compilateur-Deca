@@ -1,5 +1,5 @@
 // Description:
-//    Condition de la règle 0.1 non respectée, en essayant d'affecter une valeur a cquelque chose qui n'existe pas
+//    Condition de la règle 0.1 non respectée, en essayant d'affecter une valeur a quelque chose qui n'existe pas
 //
 // Resultats:
 //    Erreur contextuelle

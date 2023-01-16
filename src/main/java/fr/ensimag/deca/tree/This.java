@@ -10,7 +10,6 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
 
-
 /**
  * This statment
  *
@@ -19,7 +18,7 @@ import java.io.PrintStream;
  */
 public class This extends AbstractExpr {
 
-    private final boolean impl; 
+    private final boolean impl;
 
     public This(boolean impl) {
         this.impl = impl;
@@ -31,14 +30,22 @@ public class This extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        Location loc = this.getLocation();
+        if (currentClass.getType().getName().getName() == "Object") {
+            throw new ContextualError("Object class doesn't have parameter", loc);
+        }
+
+        this.setType(currentClass.getType());
+        return currentClass.getType();
+        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        if (!impl) s.print("this");
+        if (!impl)
+            s.print("this");
     }
 
     @Override

@@ -12,13 +12,13 @@ import org.apache.commons.lang.Validate;
  * @date 01/01/2023
  */
 public class ClassType extends Type {
-    
+
     protected ClassDefinition definition;
-    
+
     public ClassDefinition getDefinition() {
         return this.definition;
     }
-            
+
     @Override
     public ClassType asClassType(String errorMessage, Location l) {
         return this;
@@ -49,17 +49,34 @@ public class ClassType extends Type {
     protected ClassType(Symbol className) {
         super(className);
     }
-    
 
     @Override
     public boolean sameType(Type otherType) {
-        return otherType.isClass();
+        return (otherType.isClass() && otherType.getName().getName() == this.getName().getName());
     }
 
     /**
      * Return true if potentialSuperClass is a superclass of this class.
      */
     public boolean isSubClassOf(ClassType potentialSuperClass) {
-        return(((Object)this).getClass().getSuperclass() == potentialSuperClass.getClass());
+
+        if (potentialSuperClass.isNull())
+            return false;
+
+        if (this.isNull())
+            return true;
+        
+        if (this.sameType(potentialSuperClass))
+            return true;
+
+        ClassType superClass;
+        do{
+            superClass = this.definition.getSuperClass().getType();
+            if (superClass.sameType(potentialSuperClass))
+                return true;
+        } while (superClass.getDefinition().getType().getName().getName() != "Object");
+
+        return false;
     }
+
 }

@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -32,10 +33,31 @@ public class Selection extends AbstractLValue {
     }
     
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass)
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        ClassType currentClassType = currentClass.getType();
+        Type type = obj.verifyExpr(compiler, localEnv, currentClass);
+
+        if (!type.isClass())
+            throw new ContextualError("A selection is only possible in a class (rule 3.65)", this.getLocation());
+        
+        EnvironmentExp exp = type.asClassType("Not a class type", getLocation()).getDefinition().getMembers();
+        Type typeField = field.verifyExpr(compiler, exp, currentClass);
+        
+        Visibility vis = field.getFieldDefinition().getVisibility();
+        
+        // Ajout du décor
+        this.setType(typeField);
+            if (vis == Visibility.PUBLIC)
+        return typeField;
+        
+        boolean bool1 = type.asClassType("",getLocation()).isSubClassOf(currentClassType);
+        boolean bool2 = currentClassType.isSubClassOf(field.getDefinition().asFieldDefinition("null", getLocation()).getContainingClass().getType());
+        
+        if (!bool1 || !bool2){
+            throw new ContextualError("The variable is protected (rule 3.66)", getLocation());
+        }
+        return typeField;
     }
 
     @Override
