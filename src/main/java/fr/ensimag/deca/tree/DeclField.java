@@ -20,7 +20,7 @@ import org.apache.commons.lang.Validate;
  */
 public class DeclField extends AbstractDeclField {
 
-    private Visibility visib;
+    final private Visibility visib;
     final private AbstractIdentifier type;
     final private AbstractIdentifier fieldName;
     final private AbstractInitialization initialization;
@@ -75,7 +75,7 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(visib.toString());
+        s.print(visib.toString().toLowerCase());
         s.print(' ');
         type.decompile(s);
         s.print(' ');
@@ -89,6 +89,11 @@ public class DeclField extends AbstractDeclField {
         type.iter(f);
         fieldName.iter(f);
         initialization.iter(f);
+    }
+
+    @Override
+    String prettyPrintNode() {
+        return "[visibility=" + visib + "] DeclField";
     }
 
     @Override
