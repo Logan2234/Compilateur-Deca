@@ -39,7 +39,7 @@ public class Cast extends AbstractExpr {
         Type typeT = this.type.verifyType(compiler);
         
         if (typeExp.isVoid()
-                || (!assign_compatible(localEnv, typeExp, typeT) && !assign_compatible(localEnv, typeT, typeExp))) {
+                || (!typeExp.assign_compatible(localEnv, typeT) && !typeT.assign_compatible(localEnv, typeExp))) {
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \"" + typeT.getName().getName() + "\"", loc);
         }
 
@@ -59,23 +59,6 @@ public class Cast extends AbstractExpr {
      * @author Nils Depuille
      * @date 12/01/2023
      */
-    public Boolean assign_compatible(EnvironmentExp localEnv, Type type1, Type type2) {
-        if (type1.isFloat() && type2.isInt()) {
-            return true;
-        }
-        if (type2.isClass() && type1.isClass()){
-        try {    
-            ClassType class1 = type1.asClassType("Not a class", getLocation());
-            ClassType class2 = type2.asClassType("Not a class", getLocation());
-            if (class1.isSubClassOf(class2))
-                return true;
-        } catch (ContextualError e) {
-
-        }
-            
-        }
-        return false;
-    }
 
     @Override
     public void decompile(IndentPrintStream s) {

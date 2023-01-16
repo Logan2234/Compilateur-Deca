@@ -48,11 +48,11 @@ public class MethodCall extends AbstractExpr {
 
         //Definition ident  = meth.getDefinition();
 
-        /*for (int i = 0; i < sig.args.size(); i++) {
+        for (int i = 0; i < sig.args.size(); i++) {
             Type type = params.getList().get(i).getType();
-            if (!assign_compatible(localEnv,type, sig.paramNumber(i))) //TODO assign_compatible a faire pour ici
+            if (!type.assign_compatible(localEnv, sig.paramNumber(i))) //TODO assign_compatible a faire pour ici
                 throw new ContextualError("The parameter number " + i + " is not in the expected Type (rule 3.28)", getLocation());
-        }*/
+        }
         return typeReturn;
     }
 
