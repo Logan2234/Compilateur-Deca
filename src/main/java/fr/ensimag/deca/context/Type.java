@@ -81,6 +81,8 @@ public abstract class Type {
     }
 
     public Boolean assign_compatible(EnvironmentExp localEnv, Type type2) {
+        if (this.sameType(type2))
+            return true;
         if (this.isFloat() && type2.isInt()) {
             return true;
         }

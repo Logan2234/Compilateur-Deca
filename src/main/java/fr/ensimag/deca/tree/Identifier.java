@@ -179,7 +179,6 @@ public class Identifier extends AbstractIdentifier {
             throws ContextualError {
         Definition def = localEnv.get(this.name);
         Location loc = this.getLocation();
-
         if (def == null)
             throw new ContextualError("The variable " + name.getName() + " doesn't exist (rule 0.1)", loc);
             
