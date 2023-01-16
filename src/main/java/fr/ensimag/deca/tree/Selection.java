@@ -9,8 +9,6 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
-import static org.mockito.ArgumentMatchers.any;
-
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 

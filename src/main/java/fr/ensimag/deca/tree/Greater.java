@@ -4,7 +4,6 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.SGT;
-import fr.ensimag.ima.pseudocode.instructions.SNE;
 import fr.ensimag.ima.pseudocode.instructions.SUB;
 
 /**
