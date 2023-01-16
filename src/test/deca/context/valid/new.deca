@@ -1,11 +1,11 @@
 // Description:
-//    Test de new
+//    créé une instance de classe 
 //
 // Resultats:
-//    
+//
 //
 // Historique:
-//    cree le 14/01/2023
+//    cree le 16/01/2023
 
 class A {
 

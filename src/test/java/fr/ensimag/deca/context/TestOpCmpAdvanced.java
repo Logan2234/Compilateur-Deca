@@ -17,11 +17,12 @@ import org.mockito.MockitoAnnotations;
  * @author Ensimag
  * @date 01/01/2023
  */
-public class TestEqualsAdvanced {
-    // TODO: Ajout de Equals pour les classes
+public class TestOpCmpAdvanced {
     final Type INT = new IntType(null);
     final Type FLOAT = new FloatType(null);
     final Type BOOLEAN = new BooleanType(null);
+    final Type CLASS = new ClassType(null);
+    final Type NULL = new NullType(null);
 
     @Mock
     AbstractExpr intexpr1;
@@ -35,6 +36,14 @@ public class TestEqualsAdvanced {
     AbstractExpr booleanexpr1;
     @Mock
     AbstractExpr booleanexpr2;
+    @Mock
+    AbstractExpr classexpr1;
+    @Mock
+    AbstractExpr classexpr2;
+    @Mock
+    AbstractExpr nullexpr1;
+    @Mock
+    AbstractExpr nullexpr2;
 
     DecacCompiler compiler;
     
@@ -48,6 +57,10 @@ public class TestEqualsAdvanced {
         when(floatexpr2.verifyExpr(compiler, null, null)).thenReturn(FLOAT);
         when(booleanexpr1.verifyExpr(compiler, null, null)).thenReturn(BOOLEAN);
         when(booleanexpr2.verifyExpr(compiler, null, null)).thenReturn(BOOLEAN);
+        when(classexpr1.verifyExpr(compiler, null, null)).thenReturn(CLASS);
+        when(classexpr2.verifyExpr(compiler, null, null)).thenReturn(CLASS);
+        when(nullexpr1.verifyExpr(compiler, null, null)).thenReturn(NULL);
+        when(nullexpr2.verifyExpr(compiler, null, null)).thenReturn(NULL);
     }
 
     @Test
@@ -91,9 +104,6 @@ public class TestEqualsAdvanced {
         Equals t = new Equals(booleanexpr1, booleanexpr2);
         // check the result
         assertTrue(t.verifyExpr(compiler, null, null).isBoolean());
-        // ConvFloat should have been inserted on the right side
-        assertFalse(t.getRightOperand() instanceof ConvFloat);
-        assertFalse(t.getLeftOperand() instanceof ConvFloat);
         // check that the mocks have been called properly.
         verify(booleanexpr1).verifyExpr(compiler, null, null);
         verify(booleanexpr2).verifyExpr(compiler, null, null);
@@ -104,9 +114,6 @@ public class TestEqualsAdvanced {
         Equals t = new Equals(booleanexpr1, intexpr1);
         // check the result
         assertThrows(ContextualError.class, ()->{t.verifyExpr(compiler, null, null);});
-        // ConvFloat should have been inserted on the right side
-        assertFalse(t.getRightOperand() instanceof ConvFloat);
-        assertFalse(t.getLeftOperand() instanceof ConvFloat);
         // check that the mocks have been called properly.
         verify(booleanexpr1).verifyExpr(compiler, null, null);
         verify(intexpr1).verifyExpr(compiler, null, null);
@@ -117,11 +124,38 @@ public class TestEqualsAdvanced {
         Equals t = new Equals(booleanexpr1, floatexpr1);
         // check the result
         assertThrows(ContextualError.class, ()->{t.verifyExpr(compiler, null, null);});
-        // ConvFloat should have been inserted on the right side
-        assertFalse(t.getRightOperand() instanceof ConvFloat);
-        assertFalse(t.getLeftOperand() instanceof ConvFloat);
         // check that the mocks have been called properly.
         verify(booleanexpr1).verifyExpr(compiler, null, null);
         verify(floatexpr1).verifyExpr(compiler, null, null);
+    }
+
+    @Test
+    public void testClassClass() throws ContextualError {
+        Equals t = new Equals(classexpr1, classexpr2);
+        // check the result
+        assertTrue(t.verifyExpr(compiler, null, null).isBoolean());
+        // check that the mocks have been called properly.
+        verify(classexpr1).verifyExpr(compiler, null, null);
+        verify(classexpr2).verifyExpr(compiler, null, null);
+    }
+
+    @Test
+    public void testnullnull() throws ContextualError {
+        Equals t = new Equals(nullexpr1, nullexpr2);
+        // check the result
+        assertTrue(t.verifyExpr(compiler, null, null).isBoolean());
+        // check that the mocks have been called properly.
+        verify(nullexpr1).verifyExpr(compiler, null, null);
+        verify(nullexpr2).verifyExpr(compiler, null, null);
+    }
+
+    @Test
+    public void testnullclass() throws ContextualError {
+        Equals t = new Equals(nullexpr1, classexpr1);
+        // check the result
+        assertTrue(t.verifyExpr(compiler, null, null).isBoolean());
+        // check that the mocks have been called properly.
+        verify(nullexpr1).verifyExpr(compiler, null, null);
+        verify(classexpr1).verifyExpr(compiler, null, null);
     }
 }

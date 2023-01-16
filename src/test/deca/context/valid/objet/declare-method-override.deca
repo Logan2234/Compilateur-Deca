@@ -1,0 +1,14 @@
+// Description:
+//    Déclare une méthode simple qui override celle de la classe mere
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A{
+    void get(){
+        
+    }
+}

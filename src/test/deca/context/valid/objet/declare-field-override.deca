@@ -1,0 +1,14 @@
+// Description:
+//    Déclare un attribut qui override celui de la classe mere
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A{
+    void get(){
+        
+    }
+}

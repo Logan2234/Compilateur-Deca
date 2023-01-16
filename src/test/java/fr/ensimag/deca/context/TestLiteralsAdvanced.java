@@ -10,6 +10,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.BooleanLiteral;
 import fr.ensimag.deca.tree.FloatLiteral;
 import fr.ensimag.deca.tree.IntLiteral;
+import fr.ensimag.deca.tree.Null;
 import fr.ensimag.deca.tree.StringLiteral;
 
 /**
@@ -68,5 +69,10 @@ public class TestLiteralsAdvanced {
         assertTrue(t.verifyExpr(compiler, null, null).isInt());
     }
 
-    // TODO: Manque le NULL
+    @Test
+    public void testNull() throws ContextualError {
+        Null t = new Null();
+        // check the result
+        assertTrue(t.verifyExpr(compiler, null, null).isNull());
+    }
 }
