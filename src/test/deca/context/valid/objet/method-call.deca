@@ -10,9 +10,10 @@ class A{
     void get(int x, int y, int z){
 
     }
+    //int get;
 }
 {
     int x, y, z;
-    A a = new A(x, y, z);
-    a.get();
+    A a = new A();
+    a.get(x, y, z);
 }
