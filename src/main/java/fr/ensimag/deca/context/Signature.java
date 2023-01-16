@@ -33,6 +33,5 @@ public class Signature {
         }
         return true;
     }
-    //TODO: Fonction de comparaison des signatures
 
 }
