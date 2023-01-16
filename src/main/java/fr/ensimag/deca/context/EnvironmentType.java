@@ -41,7 +41,7 @@ public class EnvironmentType {
         
         Symbol object = compiler.createSymbol("Object");
         OBJECT = new ClassType(object, Location.BUILTIN, null);
-        envTypes.put(object, new TypeDefinition(OBJECT, Location.BUILTIN));
+        envTypes.put(object, new TypeDefinition(OBJECT, Location.BUILTIN)); // TODO: Rajouter la fonction EQUALS
 
         Symbol Null = compiler.createSymbol("null");
         NULL = new NullType(Null);

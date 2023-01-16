@@ -9,6 +9,7 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -38,11 +39,19 @@ public class Assign extends AbstractBinaryExpr {
         Type type = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         this.getRightOperand().verifyRValue(compiler, localEnv, currentClass, type);
         
+        try {
+            ClassType type1 = this.getLeftOperand().getType().asClassType("Not a class", getLocation());
+            ClassType type2 = this.getRightOperand().getType().asClassType("Not a class", getLocation());
+            if (type2.isSubClassOf(type1)){
+                this.setType(type1);
+                return type1;
+            }
+        } catch (ContextualError e) {
+        }
+        
         // Ajout du décor et renvoie du type
         this.setType(type);
         return type;
-
-        // TODO: Tester le cas où type2 est une sous classe de type1
     }
 
     @Override
