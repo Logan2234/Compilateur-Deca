@@ -69,9 +69,13 @@ if ((TEMP));
 then
     echo -e "\n${GREEN} Valid test passed: "
     printf %2.0f $VALID_PASSED_PERCENTAGE
-    echo "%"
+    echo -e "%\n"
 else
     echo -e "\n${RED} Valid test passed: "
     printf %2.0f $VALID_PASSED_PERCENTAGE
-    echo "%"
+    echo -e "%\n"
 fi
+
+rm ./src/test/deca/syntax/valid/provided/*.lis
+rm ./src/test/deca/syntax/invalid/provided/*.lis
+rm ./src/test/deca/syntax/invalid/lexer/*.lis

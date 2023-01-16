@@ -1,8 +1,0 @@
-{
-	boolean test = true;
-	if (test){
-		println("ok");
-	} else {
-		println("ko");
-	}
-}

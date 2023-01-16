@@ -1,2 +1,1 @@
-  ** IMA ** ERREUR ** Ligne 36 : 
-    Adressage indirect : pas une adresse valide
+0x1.c33334p+3 0x1.99999ap-3

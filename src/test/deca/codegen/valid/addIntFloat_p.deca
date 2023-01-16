@@ -1,6 +1,0 @@
-{
-	int i = 4;
-	float j = 0x1.99999ap-2;
-	(j = (j + i));
-	println(j);
-}

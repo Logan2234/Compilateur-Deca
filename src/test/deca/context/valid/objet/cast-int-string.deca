@@ -1,0 +1,13 @@
+// Description:
+//    Cast un int en un string
+//
+// Resultats:
+//    Ligne 12: The type "string" doesn't exist (rule 0.2)
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    int i = 1;
+    (string)(i);
+}

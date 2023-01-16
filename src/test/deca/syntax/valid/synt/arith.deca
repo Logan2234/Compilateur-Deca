@@ -1,0 +1,15 @@
+// Description:
+//    tests de programme avec operations arithmétiques
+//    syntaxiquement correct
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 16/01/2023
+//
+
+{
+    float x = 3;
+    x = x/x+1-(2*3)%2;
+}

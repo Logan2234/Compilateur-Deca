@@ -150,6 +150,7 @@ public class CompilerOptions {
                                         "\u001B[31m/!\\ The number of register must be between 4 and 16.\u001B[37m");
                             }
                             usedRegisterNumber = registerNumber;
+                            arg_index++;
                             break;
                         } catch (NumberFormatException e) {
                             throw new CLIException(
