@@ -45,9 +45,7 @@ public class DeclMethod extends AbstractDeclMethod {
         Type type = this.type.verifyType(compiler);
         
         Signature signature = params.verifyListDeclParam(compiler);
-        
-        MethodDefinition methodeDef = new MethodDefinition(type, this.getLocation(), signature, currentClass.getNumberOfMethods());
-        currentClass.incNumberOfMethods();
+        MethodDefinition methodeDef;
         
         // Test de la méthode potentiellement existente dans la classe mère
         ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(this.methodName.getName());
@@ -70,6 +68,11 @@ public class DeclMethod extends AbstractDeclMethod {
                     throw new ContextualError("The return type is not the same as defined in the superclass (or not a subtype) (rule 2.7)", getLocation());
                 }
             }
+            methodeDef = new MethodDefinition(type, this.getLocation(), signature, motherMethod.getIndex());
+        }
+        else {
+            methodeDef = new MethodDefinition(type, this.getLocation(), signature, currentClass.getNumberOfMethods());
+            currentClass.incNumberOfMethods();
         }
         try {
             localEnv.declare(this.methodName.getName(), methodeDef);
