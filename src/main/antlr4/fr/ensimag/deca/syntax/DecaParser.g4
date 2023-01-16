@@ -629,6 +629,7 @@ decl_method returns[AbstractDeclMethod tree]
             assert($block.decls != null);
             assert($block.insts != null);
             AbstractMethod body = new MethodBody($block.decls, $block.insts);
+            setLocation(body,$block.start);
             $tree = new DeclMethod($type.tree, $ident.tree, $list_params.tree, body);
             setLocation($tree,$type.start);
         }
