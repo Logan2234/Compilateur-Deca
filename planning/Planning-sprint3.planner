@@ -11,12 +11,12 @@
     <calendar id="1" name="Default">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
       <overridden-day-types>
+        <overridden-day-type id="1">
+          <interval start="1400" end="1900"/>
+        </overridden-day-type>
         <overridden-day-type id="0">
           <interval start="0900" end="1230"/>
           <interval start="1400" end="1930"/>
-        </overridden-day-type>
-        <overridden-day-type id="1">
-          <interval start="1400" end="1900"/>
         </overridden-day-type>
       </overridden-day-types>
       <days/>
@@ -213,11 +213,11 @@
         </predecessors>
       </task>
     </task>
-    <task id="41" name="Sprint 3: Avec objet" note="" work="637200" start="20230112T120000Z" end="20230118T153000Z" work-start="20230112T120000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="41" name="Sprint 3: Avec objet" note="" work="644400" start="20230112T120000Z" end="20230118T153000Z" work-start="20230112T120000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <predecessors>
         <predecessor id="1" predecessor-id="20" type="FS"/>
       </predecessors>
-      <task id="42" name="A. Classes tree" note="" work="7200" duration="7200" start="20230112T143000Z" end="20230112T163000Z" work-start="20230112T143000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="42" name="A. Classes tree" note="" work="18000" duration="18000" start="20230112T143000Z" end="20230112T193000Z" work-start="20230112T143000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="63" type="FS"/>
         </predecessors>
@@ -267,22 +267,22 @@
           <predecessor id="1" predecessor-id="50" type="FS"/>
         </predecessors>
       </task>
-      <task id="52" name="E. Tests calc &#xE9;vidents + redondants" note="" work="18000" duration="18000" start="20230112T163000Z" end="20230113T110000Z" work-start="20230112T163000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="52" name="E. Tests calc &#xE9;vidents + redondants" note="" work="18000" duration="18000" start="20230112T193000Z" end="20230113T153000Z" work-start="20230113T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="42" type="FS"/>
         </predecessors>
       </task>
-      <task id="53" name="E. Calculs &#xE9;vidents" note="" work="46800" duration="46800" start="20230113T110000Z" end="20230115T150000Z" work-start="20230113T110000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="53" name="E. Calculs &#xE9;vidents" note="" work="43200" duration="43200" start="20230113T153000Z" end="20230115T170000Z" work-start="20230113T153000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="52" type="FS"/>
         </predecessors>
       </task>
-      <task id="54" name="E. Calculs redondants" note="" work="50400" duration="50400" start="20230115T150000Z" end="20230117T100000Z" work-start="20230115T150000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="54" name="E. Calculs redondants" note="" work="50400" duration="50400" start="20230115T170000Z" end="20230117T120000Z" work-start="20230115T170000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="53" type="FS"/>
         </predecessors>
       </task>
-      <task id="55" name="E. Doc calc &#xE9;vidents + redondants" note="" work="7200" duration="7200" start="20230117T100000Z" end="20230117T120000Z" work-start="20230117T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="55" name="E. Doc calc &#xE9;vidents + redondants" note="" work="7200" duration="7200" start="20230117T120000Z" end="20230117T153000Z" work-start="20230117T120000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="54" type="FS"/>
         </predecessors>
@@ -323,12 +323,12 @@
         </predecessors>
       </task>
       <task id="63" name="G. Orga sprint 3" note="" work="3600" duration="3600" start="20230112T120000Z" end="20230112T143000Z" work-start="20230112T120000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration"/>
-      <task id="64" name="G. Pr&#xE9;paration suivi 3" note="" work="14400" duration="14400" start="20230117T120000Z" end="20230117T173000Z" work-start="20230117T120000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="64" name="G. Pr&#xE9;paration suivi 3" note="" work="14400" duration="14400" start="20230117T153000Z" end="20230117T193000Z" work-start="20230117T153000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="55" type="FS"/>
         </predecessors>
       </task>
-      <task id="65" name="G. Impact &#xE9;nerg&#xE9;tique" note="" work="7200" duration="7200" start="20230117T173000Z" end="20230117T193000Z" work-start="20230117T173000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <task id="65" name="G. Impact &#xE9;nerg&#xE9;tique" note="" work="7200" duration="7200" start="20230117T193000Z" end="20230118T110000Z" work-start="20230118T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
         <predecessors>
           <predecessor id="1" predecessor-id="64" type="FS"/>
         </predecessors>
