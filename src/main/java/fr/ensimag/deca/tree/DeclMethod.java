@@ -58,7 +58,7 @@ public class DeclMethod extends AbstractDeclMethod {
                         + "\" doesn't have the same signature as the method defined it the superclass (rule 2.7)",
                         getLocation());
 
-            Type motherMethodType = motherMethod.getType(); // TODO: Inc correctement les index
+            Type motherMethodType = motherMethod.getType(); // TODO: Faire un test sur l'incrément des méthodes et des fields
             try {
                 ClassType motherMethodClassType = motherMethodType.asClassType("Not a class type", getLocation());
                 ClassType classType = type.asClassType("Not a class type", getLocation());
@@ -74,8 +74,8 @@ public class DeclMethod extends AbstractDeclMethod {
             }
             methodeDef = new MethodDefinition(type, this.getLocation(), signature, motherMethod.getIndex());
         } else {
-            methodeDef = new MethodDefinition(type, this.getLocation(), signature, currentClass.getNumberOfMethods());
             currentClass.incNumberOfMethods();
+            methodeDef = new MethodDefinition(type, this.getLocation(), signature, currentClass.getNumberOfMethods());
         }
         try {
             localEnv.declare(this.methodName.getName(), methodeDef);

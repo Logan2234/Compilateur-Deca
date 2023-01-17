@@ -6,6 +6,9 @@ class A {
    void setX(int x) {
       this.x = x ;
    }
+   boolean equals(Object o){
+      return true;
+   }
 }
 
 {

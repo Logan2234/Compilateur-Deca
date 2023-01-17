@@ -65,6 +65,10 @@ public class DeclClass extends AbstractDeclClass {
         ClassType classType = new ClassType(name.getName(), this.getLocation(), superClassDef);
         compiler.environmentType.set(name.getName(), classType.getDefinition());
 
+        // On reprend les fields et methods de la classe mère
+        classType.getDefinition().setNumberOfFields(superClassDef.getNumberOfFields());
+        classType.getDefinition().setNumberOfMethods(superClassDef.getNumberOfMethods());
+        
         // Ajout du décor
         name.verifyType(compiler);
     }

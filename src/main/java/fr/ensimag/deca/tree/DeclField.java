@@ -55,8 +55,9 @@ public class DeclField extends AbstractDeclField {
             def = new FieldDefinition(type, this.getLocation(), visib, currentClass, motherField.getIndex());
         }
         
-        def = new FieldDefinition(type, this.getLocation(), visib, currentClass, currentClass.getNumberOfFields());
         currentClass.incNumberOfFields();
+        def = new FieldDefinition(type, this.getLocation(), visib, currentClass, currentClass.getNumberOfFields());
+        
         try {
             localEnv.declare(this.fieldName.getName(), def);
             fieldName.verifyExpr(compiler, localEnv, currentClass);
