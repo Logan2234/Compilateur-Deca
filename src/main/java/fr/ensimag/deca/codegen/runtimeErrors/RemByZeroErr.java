@@ -12,7 +12,7 @@ public class RemByZeroErr extends AbstractRuntimeErr {
     }
 
     public void codeGenErr(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR("Error : remainer by zero"));
+        compiler.addInstruction(new WSTR("Error : Remainer by zero"));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }

@@ -12,7 +12,7 @@ public class DivByZeroErr extends AbstractRuntimeErr {
     }
 
     public void codeGenErr(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR("Error : division by zero."));
+        compiler.addInstruction(new WSTR("Error : Division by zero."));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }
