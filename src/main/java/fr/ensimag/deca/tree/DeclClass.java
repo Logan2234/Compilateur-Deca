@@ -65,16 +65,19 @@ public class DeclClass extends AbstractDeclClass {
         ClassType classType = new ClassType(name.getName(), this.getLocation(), superClassDef);
         compiler.environmentType.set(name.getName(), classType.getDefinition());
 
-        // On reprend les fields et methods de la classe mère
-        classType.getDefinition().setNumberOfFields(superClassDef.getNumberOfFields());
-        classType.getDefinition().setNumberOfMethods(superClassDef.getNumberOfMethods());
-        
         // Ajout du décor
         name.verifyType(compiler);
     }
 
     @Override
     protected void verifyClassMembers(DecacCompiler compiler) throws ContextualError {
+
+        // On reprend les fields et methods de la classe mère
+        this.name.getType().asClassType(null, getLocation()).getDefinition().setNumberOfFields(
+                this.superIdentifier.getType().asClassType(null, getLocation()).getDefinition().getNumberOfFields());
+        this.name.getType().asClassType(null, getLocation()).getDefinition().setNumberOfMethods(
+                this.superIdentifier.getType().asClassType("null", getLocation()).getDefinition().getNumberOfMethods());
+
         ClassDefinition def = this.name.getClassDefinition();
         fields.verifyListDeclField(compiler, def.getMembers(), def); // TODO: Vérifier la condition de la règle 2.3
         methods.verifyListDeclMethod(compiler, def.getMembers(), def);

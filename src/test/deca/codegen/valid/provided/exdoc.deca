@@ -11,6 +11,16 @@ class A {
    }
 }
 
+class B extends A {
+   int y;
+   void setX(int x){
+
+   }
+   void setY(int y){
+
+   }
+}
+
 {
    A a = new A() ;
    a.setX(1) ;
