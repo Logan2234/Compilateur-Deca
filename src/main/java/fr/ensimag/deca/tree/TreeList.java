@@ -3,8 +3,9 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -51,8 +52,8 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
         return list.isEmpty();
     }
 
-    public Iterator<TreeType> iterator() {
-        return list.iterator();
+    public ListIterator<TreeType> iterator() {
+        return list.listIterator();
     }
 
     public int size() {

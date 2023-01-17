@@ -12,6 +12,7 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Boolean literal
@@ -84,7 +85,7 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    protected boolean containsMethodCall(){
-        return false;
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
     }
 }

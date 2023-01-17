@@ -11,6 +11,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -108,7 +109,7 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    protected boolean containsMethodCall(){
-        return true;
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        foundMethodCalls.add(this);
     }
 }

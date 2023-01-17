@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * This statment
@@ -69,7 +70,8 @@ public class This extends AbstractExpr {
     }
 
     @Override
-    protected boolean containsMethodCall(){
-        return false;
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
     }
+
 }

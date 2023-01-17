@@ -14,6 +14,8 @@ import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -103,7 +105,7 @@ public class FloatLiteral extends AbstractExpr {
     }
 
     @Override
-    protected boolean containsMethodCall(){
-        return false;
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
     }
 }

@@ -1,9 +1,15 @@
 class A extends Object {public int z;
+public int w;
+void setZ(int a){(this.z = a);
+(this.w = a);
+}
 int cos(int a){return a;
 
 }
 }
 class B extends A {public int x;
+public int y;
+int getX(){}
 }
 {
 	int x;
@@ -12,6 +18,7 @@ class B extends A {public int x;
 	(x = readInt());
 	(42 + cos(3));
 	(trigo = (2 + cos(2)));
+	setZ(2);
 	print(x, b.z);
 	print(b.x);
 	if (myBoolean){

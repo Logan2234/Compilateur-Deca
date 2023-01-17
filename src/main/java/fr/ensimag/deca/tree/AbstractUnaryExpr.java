@@ -9,6 +9,8 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -101,8 +103,8 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     }
 
     @Override
-    protected boolean containsMethodCall(){
-        return this.operand.containsMethodCall();
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        this.operand.addMethodCalls(foundMethodCalls);
     }
 
 }

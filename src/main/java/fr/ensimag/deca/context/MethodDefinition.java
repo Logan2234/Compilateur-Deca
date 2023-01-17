@@ -79,7 +79,7 @@ public class MethodDefinition extends ExpDefinition {
         // the return type could be a class but it is spotted in the body
         for (AbstractDeclClass c : ((Program)prog).getClasses().getList()) {
             assert(c instanceof DeclClass);
-            if (/* class is class or subclass */) //TODO
+            // TODO if (/* class is class or subclass */)
             for (AbstractDeclMethod method : ((DeclClass)c).getMethods().getList()) {
                 assert(method instanceof DeclMethod);
                 // find the corresponding DeclMethod
@@ -91,14 +91,15 @@ public class MethodDefinition extends ExpDefinition {
                     // explore the body of the method to spot other useful variables
                     ((DeclMethod)(method)).spotUsedVar(prog);
                 } 
+                // TODO
                 // if the dynamique type of the object calling the method is a subclass then the
                 // overriding methods should have been spotted
-                else if (/*method == redéfinition */) { //TODO
-                    LOG.debug("Overriding method found");
-                    // explore the body of the method to spot other useful variables
-                    ((DeclMethod)(method)).spotUsedVar(prog);
+                // else if (/*method == redéfinition */) { 
+                //     LOG.debug("Overriding method found");
+                //     // explore the body of the method to spot other useful variables
+                //     ((DeclMethod)(method)).spotUsedVar(prog);
 
-                }
+                // }
             }
         }
 

@@ -1,5 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import java.util.List;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.InvalidReadErr;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -49,9 +51,7 @@ public abstract class AbstractReadExpr extends AbstractExpr {
     }
 
     @Override
-    protected boolean containsMethodCall(){
-        // A read instruction is considered as a methodCall as it shouldn't either be remove
-        // from the Program tree.
-        return true;
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        foundMethodCalls.add(this);
     }
 }

@@ -12,6 +12,8 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -100,8 +102,8 @@ public class Selection extends AbstractLValue {
     }
 
     @Override
-    protected boolean containsMethodCall(){
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // the object could be obtained via a MethodCall
-        return this.obj.containsMethodCall();
+        this.obj.addMethodCalls(foundMethodCalls);
     }
 }

@@ -13,6 +13,7 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Integer literal
@@ -92,7 +93,7 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
-    protected boolean containsMethodCall(){
-        return false;
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
     }
 }

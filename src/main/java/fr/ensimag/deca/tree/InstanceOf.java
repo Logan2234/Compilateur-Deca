@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -80,7 +81,8 @@ public class InstanceOf extends AbstractExpr {
     }
 
     @Override
-    protected boolean containsMethodCall(){
-        return this.e.containsMethodCall();
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // the expression could be obtained via a MethodCall
+        this.e.addMethodCalls(foundMethodCalls);
     }
 }
