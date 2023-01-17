@@ -8,6 +8,11 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -99,6 +104,29 @@ public class DeclClass extends AbstractDeclClass {
         fields.iter(f);
         methods.iter(f);
         // throw new UnsupportedOperationException("Not yet supported");
+    }
+
+    @Override
+    public void codeGenVTable(DecacCompiler compiler) {
+        // generate the vtable for that class.
+        // get the VTable addr
+        RegisterOffset VTableDAddr = compiler.readNextStackSpace();
+        name.getClassDefinition().setDAddr(VTableDAddr);
+        // generate the VTable
+
+        // increase the compiler stack size accordingly
+    }
+
+    @Override
+    public void codeGenClass(DecacCompiler compiler) {
+        // generate the methods code
+        // init func
+        compiler.addComment("code for method " + name.getName().getName() + " initialization :");
+        compiler.addLabel(new Label("init." + name.getName().getName()));
+        // the location of the object to init is at -2(LB).
+        // let's load the daddr on R1 !
+        compiler.addInstruction(new LOAD(new RegisterOffset(-1, Register.LB), Register.R1));
+
     }
 
 }

@@ -15,6 +15,7 @@ import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Instruction;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Line;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.File;
@@ -56,17 +57,9 @@ public class DecacCompiler {
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
         this.compilerOptions = compilerOptions;
-        if (compilerOptions != null) {
-            availableRegisters = new boolean[compilerOptions.getUsedRegisterNumber() - 2];
-        } else {
-            availableRegisters = new boolean[14];
-        }
-        for (int i = 0; i < availableRegisters.length; i++) {
-            availableRegisters[i] = true;
-        }
         this.usedErrors = new HashMap<>();
-        this.stackUsedSizes = new ArrayList<Integer>();
-        this.maxStackUseSize = new ArrayList<>();
+        contextBlocks = new ArrayList<>();
+        contextBlocks.add(new CompilerContextBlock(compilerOptions == null ? 16 : compilerOptions.getUsedRegisterNumber(), true));
         this.source = source;
     }
 
@@ -149,36 +142,21 @@ public class DecacCompiler {
     private final IMAProgram program = new IMAProgram();
 
     /**
-     * All the available registers.
-     * When generating code, we can ask what registers are used by previous calls.
-     * If null is returned, we can then save a register and restore it.
+     * The contextes of the compiler.
      */
-    private boolean[] availableRegisters;
-    /**
-     * Stores the max reached stack size for each context (code block).
-     * We have one default context when the program starts, and more context with methods calls.
-     * Here, a block, or context, is for main program, ot methods, or classes initialization. 
-     */
-    private List<Integer> maxStackUseSize;
-
-    /**
-     * Store the current number of variables pushed on the stack.
-     */
-    private List<Integer> stackUsedSizes;
-
+    private List<CompilerContextBlock> contextBlocks;
     /**
      * Get a available register.
      * 
      * @return the register we can use. Can be null if none are.
      */
     public GPRegister allocateRegister() {
-        for (int i = 0; i < availableRegisters.length; i++) {
-            if (availableRegisters[i]) {
-                availableRegisters[i] = false;
-                return GPRegister.getR(i + 2);
-            }
+        if(contextBlocks.size() == 0) {
+            throw new UnsupportedOperationException("No context for code generation.");
         }
-        return null;
+        else {
+            return contextBlocks.get(contextBlocks.size() - 1).allocateRegister();
+        }
     }
 
     /**
@@ -187,15 +165,19 @@ public class DecacCompiler {
      * @param register
      */
     public void freeRegister(GPRegister register) {
-        availableRegisters[register.getNumber() - 2] = true;
+        if(contextBlocks.size() == 0) {
+            throw new UnsupportedOperationException("No context for code generation.");
+        }
+        else {
+            contextBlocks.get(contextBlocks.size() - 1).freeRegister(register);
+        }
     }
 
     /**
      * Creates a new code context block.
      */
     public void newCodeContext() {
-        stackUsedSizes.add(0);
-        maxStackUseSize.add(0);
+        contextBlocks.add(new CompilerContextBlock(compilerOptions.getUsedRegisterNumber(), false));
     }
 
     /**
@@ -203,15 +185,11 @@ public class DecacCompiler {
      * @param increment how much we want to increment the stack
      */
     public void increaseContextUsedStack(int increment) {
-        if(stackUsedSizes.size() == 0 || maxStackUseSize.size() == 0) {
-            throw new RuntimeException("No current context to incrment !");
+        if(contextBlocks.size() == 0) {
+            throw new UnsupportedOperationException("No context for code generation.");
         }
         else {
-            int value = stackUsedSizes.get(stackUsedSizes.size() - 1) + increment;
-            stackUsedSizes.set(stackUsedSizes.size() - 1, value);
-            if(value > maxStackUseSize.get(maxStackUseSize.size() - 1)) {
-                maxStackUseSize.set(maxStackUseSize.size() - 1, value);
-            }
+            contextBlocks.get(contextBlocks.size() - 1).increaseUsedStack(increment);
         }
     }
 
@@ -227,8 +205,46 @@ public class DecacCompiler {
      * @return the value of the max stack size of that context.
      */
     public int endCodeContext() {
-        stackUsedSizes.remove(stackUsedSizes.size() - 1);
-        return maxStackUseSize.remove(maxStackUseSize.size() - 1);
+        if(contextBlocks.size() == 0) {
+            throw new UnsupportedOperationException("No context for code generation.");
+        }
+        else {
+            int result = contextBlocks.get(contextBlocks.size() - 1).getMaxStackUse();
+            contextBlocks.remove(contextBlocks.size() - 1);
+            return result;
+        }
+    }
+
+    public RegisterOffset getNextStackSpace() {
+        if(contextBlocks.size() == 0) {
+            throw new UnsupportedOperationException("No context for code generation.");
+        }
+        else {
+            return contextBlocks.get(contextBlocks.size() - 1).getNextStackSpace();
+        }
+    }
+
+    public RegisterOffset readNextStackSpace() {
+        if(contextBlocks.size() == 0) {
+            throw new UnsupportedOperationException("No context for code generation.");
+        }
+        else {
+            return contextBlocks.get(contextBlocks.size() - 1).readNextStackSpace();
+        }
+    }
+
+    /**
+     * Increase the taken space on the lb local base stack.
+     * Use primarly when generating method tables.
+     * @param amount
+     */
+    public void occupyLBSPace(int amount) {
+        if(contextBlocks.size() == 0) {
+            throw new UnsupportedOperationException("No context for code generation.");
+        }
+        else {
+            contextBlocks.get(contextBlocks.size() - 1).occupyLBSPace(amount);
+        }
     }
 
     /**

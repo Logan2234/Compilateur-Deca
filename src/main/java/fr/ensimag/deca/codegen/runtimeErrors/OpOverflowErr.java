@@ -8,7 +8,7 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class OpOverflowErr extends AbstractRuntimeErr {
     public int errorId() {
-        return 2;
+        return 4;
     }
 
     public void codeGenErr(DecacCompiler compiler) {

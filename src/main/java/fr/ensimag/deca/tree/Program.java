@@ -5,6 +5,10 @@ import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.LabelOperand;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -47,10 +51,16 @@ public class Program extends AbstractProgram {
 
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
-        // TODO : generate method tables for classes
+        // generate the vtables
+        compiler.addComment("+--------------------------------------+  \\o/");
+        compiler.addComment("|        Virtual method tables         |   | ");
+        compiler.addComment("+--------------------------------------+  / \\");
+        codeGenDefaultObject(compiler);
+        classes.codeGenVTables(compiler);
         // stack overflow management
-        compiler.newCodeContext();
-        compiler.addComment("Main program");
+        compiler.addComment("+--------------------------------------+");
+        compiler.addComment("|             Main Program             |  _o");
+        compiler.addComment("+--------------------------------------+ /\\)");
         main.codeGenMain(compiler);
         compiler.addInstruction(new HALT());
         // stack overflow mangement
@@ -58,8 +68,15 @@ public class Program extends AbstractProgram {
         compiler.useRuntimeError(ovError);
         compiler.addInstructionFirst(new BOV(ovError.getErrorLabel()));
         compiler.addInstructionFirst(new TSTO(compiler.endCodeContext()));
+        // generate class codes
+        compiler.addComment("+--------------------------------------+ __o");
+        compiler.addComment("|             Methods Code             |   |\\");
+        compiler.addComment("+--------------------------------------+  / \\");
+        classes.codeGenClasses(compiler);
         // generate the errors
-        compiler.addComment("Error management");
+        compiler.addComment("+--------------------------------------+   \\_");
+        compiler.addComment("|           Error Management           | __(");
+        compiler.addComment("+--------------------------------------+   o\\");
         for(AbstractRuntimeErr error : compiler.getAllErrors().values()) {
             compiler.addLabel(error.getErrorLabel());
             error.codeGenErr(compiler);
@@ -82,4 +99,18 @@ public class Program extends AbstractProgram {
         classes.prettyPrint(s, prefix, false);
         main.prettyPrint(s, prefix, true);
     }
+
+    /**
+     * Generate the code for the always existing default class "Object".
+     * @param compiler where we write the code to. 
+     */
+    public void codeGenDefaultObject(DecacCompiler compiler) {
+        // always the same code ?
+        compiler.addComment("VTABLE of 'Object'");
+        compiler.addInstruction(new LOAD(new NullOperand(), Register.R0));
+        compiler.addInstruction(new PUSH(Register.R0));
+        compiler.addInstruction(new LOAD(new LabelOperand(new Label("code.Object.equals")), Register.R0));
+        compiler.addInstruction(new PUSH(Register.R0));
+        compiler.occupyLBSPace(2); // we pushed 2 variables
+    } 
 }

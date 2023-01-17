@@ -6,18 +6,20 @@ import fr.ensimag.ima.pseudocode.instructions.ERROR;
 import fr.ensimag.ima.pseudocode.instructions.WNL;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
-public class DivByZeroErr extends AbstractRuntimeErr {
+public class FullHeapErr extends AbstractRuntimeErr{
+
+    @Override
     public int errorId() {
-        return 1;
+        return 2;
     }
 
     public void codeGenErr(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR("Error : division by zero."));
+        compiler.addInstruction(new WSTR("Error : Heap overflow."));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }
 
     public Label getErrorLabel() {
-        return new Label("Error.divByZero");
+        return new Label("Error.HeapFull");
     }
 }

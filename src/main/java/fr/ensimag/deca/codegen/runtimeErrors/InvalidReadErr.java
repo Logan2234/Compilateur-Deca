@@ -8,7 +8,7 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class InvalidReadErr extends AbstractRuntimeErr {
     public int errorId() {
-        return 6;
+        return 3;
     }
 
     public void codeGenErr(DecacCompiler compiler) {

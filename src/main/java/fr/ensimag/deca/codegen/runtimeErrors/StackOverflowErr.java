@@ -8,7 +8,7 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class StackOverflowErr extends AbstractRuntimeErr {
     public int errorId() {
-        return 1;
+        return 6;
     }
 
     public void codeGenErr(DecacCompiler compiler) {
