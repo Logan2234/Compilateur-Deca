@@ -80,7 +80,7 @@ public abstract class Type {
         throw new ContextualError(errorMessage, l);
     }
 
-    public Boolean assign_compatible(EnvironmentExp localEnv, Type type2) {
+    public Boolean assignCompatible(EnvironmentExp localEnv, Type type2) {
         if (this.sameType(type2))
             return true;
         if (this.isFloat() && type2.isInt()) {

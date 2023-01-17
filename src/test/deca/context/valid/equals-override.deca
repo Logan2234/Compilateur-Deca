@@ -1,0 +1,20 @@
+// Description:
+//    Déclare une méthode simple void
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A{
+    boolean equals(Object a){
+        return true;
+    }
+}
+
+{
+    A a = new A();
+    A b = new A();
+    b.equals(a);
+}

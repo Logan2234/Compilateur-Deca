@@ -1,9 +1,13 @@
 package fr.ensimag.deca.context;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+
 import java.util.HashMap;
 import java.util.Map;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.deca.tree.AbstractIdentifier;
+import fr.ensimag.deca.tree.Identifier;
 import fr.ensimag.deca.tree.Location;
 
 // A FAIRE: étendre cette classe pour traiter la partie "avec objet" de Déca
@@ -41,7 +45,17 @@ public class EnvironmentType {
         
         Symbol object = compiler.createSymbol("Object");
         OBJECT = new ClassType(object, Location.BUILTIN, null);
-        envTypes.put(object, OBJECT.getDefinition()); // TODO: Rajouter la fonction EQUALS
+        envTypes.put(object, OBJECT.getDefinition()); 
+        
+        // Rajouter la fonction EQUALS
+        Symbol equals = compiler.createSymbol("equals");
+        Signature signature = new Signature();
+        signature.add(OBJECT);
+        MethodDefinition method = new MethodDefinition(BOOLEAN, Location.BUILTIN, signature, 0);
+        try {
+            OBJECT.getDefinition().getMembers().declare(equals, method);
+        }
+        catch (DoubleDefException exception ){}
 
         Symbol Null = compiler.createSymbol("null");
         NULL = new NullType(Null);

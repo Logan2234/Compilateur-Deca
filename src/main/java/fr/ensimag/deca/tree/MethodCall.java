@@ -57,7 +57,7 @@ public class MethodCall extends AbstractExpr {
             //     throw new ContextualError(
             //             "The method " + meth.getName().getName() + " needs " + sig.size() + " params (rule 3.28)",
             //             getLocation());
-            if (!type.assign_compatible(localEnv, sig.paramNumber(i)))
+            if (!type.assignCompatible(localEnv, sig.paramNumber(i)))
                 throw new ContextualError(
                         "The parameter number " + (i + 1) + " does not have the correct type (rule 3.28)",
                         getLocation());
