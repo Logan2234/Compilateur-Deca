@@ -60,29 +60,37 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
         Definition def = compiler.environmentType.defOfType(name.getName());
-        
+
         if (def != null)
-            throw new ContextualError("\"" + name.getName().getName() + "\" is already a type/class (rule 1.3)", this.getLocation());
+            throw new ContextualError("\"" + name.getName().getName() + "\" is already a type/class (rule 1.3)",
+                    this.getLocation());
         if (!this.superIdentifier.verifyType(compiler).isClass())
-            throw new ContextualError("\"" + superIdentifier.getName().getName() +"\" is not a class (rule 1.3)",
-        this.getLocation());
-        
-        ClassType classType = new ClassType(name.getName(), this.getLocation(), ((ClassType)superIdentifier.getType()).getDefinition());
-        compiler.environmentType.set(name.getName(), new TypeDefinition(classType, this.getLocation()));
-        Type type = name.verifyType(compiler);
+            throw new ContextualError("\"" + superIdentifier.getName().getName() + "\" is not a class (rule 1.3)",
+                    this.getLocation());
+
+        ClassDefinition superClassDef = this.superIdentifier.getType().asClassType("Not a class type", getLocation())
+                .getDefinition();
+        ClassType classType = new ClassType(name.getName(), this.getLocation(), superClassDef);
+        compiler.environmentType.set(name.getName(), classType.getDefinition());
 
         // Ajout du décor
-        name.setDefinition(classType.getDefinition());
-        name.setType(type);
+        name.verifyType(compiler);
     }
 
     @Override
     protected void verifyClassMembers(DecacCompiler compiler) throws ContextualError {
+
+        // On reprend les fields et methods de la classe mère
+        this.name.getType().asClassType(null, getLocation()).getDefinition().setNumberOfFields(
+                this.superIdentifier.getType().asClassType(null, getLocation()).getDefinition().getNumberOfFields());
+        this.name.getType().asClassType(null, getLocation()).getDefinition().setNumberOfMethods(
+                this.superIdentifier.getType().asClassType("null", getLocation()).getDefinition().getNumberOfMethods());
+
         ClassDefinition def = this.name.getClassDefinition();
         fields.verifyListDeclField(compiler, def.getMembers(), def); // TODO: Vérifier la condition de la règle 2.3
         methods.verifyListDeclMethod(compiler, def.getMembers(), def);
     }
-    
+
     @Override
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
         ClassDefinition def = this.name.getClassDefinition();

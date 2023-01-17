@@ -3,7 +3,6 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -40,7 +39,7 @@ public class Cast extends AbstractExpr {
         Type typeT = this.type.verifyType(compiler);
         
         if (typeExp.isVoid()
-                || (!typeExp.assign_compatible(localEnv, typeT) && !typeT.assign_compatible(localEnv, typeExp))) {
+                || (!typeExp.assignCompatible(localEnv, typeT) && !typeT.assignCompatible(localEnv, typeExp))) {
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \"" + typeT.getName().getName() + "\"", loc);
         }
 

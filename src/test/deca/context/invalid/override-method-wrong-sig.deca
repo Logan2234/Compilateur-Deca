@@ -1,0 +1,20 @@
+// Description:
+//    override de méthode avec une signature différente
+//
+// Resultats:
+//    Ligne 17: The method "get" doesn't have the same signature as the method defined it the superclass (rule 2.7)
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {
+    void get(int a){
+        println(1);
+    }
+}
+
+class B extends A {
+    void get(float b){
+        println(2);
+    }
+}

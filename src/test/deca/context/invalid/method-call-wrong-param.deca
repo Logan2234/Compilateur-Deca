@@ -1,0 +1,20 @@
+// Description:
+//    Condition de la règle 3.28 non respectée 
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 19: The parameter number 2 does not have the correct type (rule 3.28)
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A{
+    void get(int x, boolean z){
+
+    }
+}
+{
+    int x, y;
+    A a = new A();
+    a.get(x, y);
+}

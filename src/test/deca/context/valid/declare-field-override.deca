@@ -1,0 +1,21 @@
+// Description:
+//    Déclare un attribut qui override celui de la classe mere
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A{
+    int x = 1;
+}
+
+class B extends A{
+    int x = 2;
+}
+
+{
+    A b = new B();
+    b.x;
+}

@@ -2,8 +2,10 @@
 //    Condition de la règle 3.31 non respectée 
 //
 // Resultats:
-//    Ligne 14: println ne peut prendre qu'un int ou un float ou une string
+//    Ligne 16: Arguments of a print can only be float, int or string (rules 3.31)
 //
+// Historique:
+//    cree le 16/01/2023
 
 class A{
 

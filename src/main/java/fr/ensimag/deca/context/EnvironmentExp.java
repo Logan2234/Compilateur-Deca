@@ -45,11 +45,10 @@ public class EnvironmentExp {
         while (dico != null) {
             if (dico.containsKey(key))
                 return dico.get(key);
-            if (current.parentEnvironment != null){
+            if (current.parentEnvironment != null) {
                 current = current.parentEnvironment;
-                dico = this.parentEnvironment.dico;
-            }
-            else
+                dico = current.dico;
+            } else
                 break;
         }
         return null;
@@ -76,5 +75,4 @@ public class EnvironmentExp {
             throw new DoubleDefException();
         dico.put(name, def);
     }
-
 }

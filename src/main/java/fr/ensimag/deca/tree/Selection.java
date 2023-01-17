@@ -9,8 +9,6 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
-import static org.mockito.ArgumentMatchers.any;
-
 import java.io.PrintStream;
 import java.util.List;
 
@@ -23,8 +21,8 @@ import org.apache.commons.lang.Validate;
  * @date 01/01/2023
  */
 public class Selection extends AbstractLValue {
-    
-    private final AbstractExpr obj; 
+
+    private final AbstractExpr obj;
     private final AbstractIdentifier field;
 
     public Selection(AbstractExpr obj, AbstractIdentifier field) {
@@ -33,7 +31,7 @@ public class Selection extends AbstractLValue {
         this.obj = obj;
         this.field = field;
     }
-    
+
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
@@ -41,22 +39,25 @@ public class Selection extends AbstractLValue {
         Type type = obj.verifyExpr(compiler, localEnv, currentClass);
 
         if (!type.isClass())
-            throw new ContextualError("A selection is only possible in a class (rule 3.65)", this.getLocation());
-        
+            throw new ContextualError("The object of the selection is not of type class (rule 3.65)",
+                    this.getLocation());
+
         EnvironmentExp exp = type.asClassType("Not a class type", getLocation()).getDefinition().getMembers();
         Type typeField = field.verifyExpr(compiler, exp, currentClass);
-        
+
         Visibility vis = field.getFieldDefinition().getVisibility();
-        
+
         // Ajout du décor
         this.setType(typeField);
-            if (vis == Visibility.PUBLIC)
-        return typeField;
         
-        boolean bool1 = type.asClassType("",getLocation()).isSubClassOf(currentClassType);
-        boolean bool2 = currentClassType.isSubClassOf(field.getDefinition().asFieldDefinition("null", getLocation()).getContainingClass().getType());
-        
-        if (!bool1 || !bool2){
+        if (vis == Visibility.PUBLIC)
+            return typeField;
+
+        boolean bool1 = type.asClassType("", getLocation()).isSubClassOf(currentClassType);
+        boolean bool2 = currentClassType.isSubClassOf(
+                field.getDefinition().asFieldDefinition("null", getLocation()).getContainingClass().getType());
+
+        if (!bool1 || !bool2) {
             throw new ContextualError("The variable is protected (rule 3.66)", getLocation());
         }
         return typeField;
@@ -73,12 +74,11 @@ public class Selection extends AbstractLValue {
         s.print(".");
         field.decompile(s);
 
-        //throw new UnsupportedOperationException("not yet implemented");
+        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
-    protected
-    void iterChildren(TreeFunction f) {
+    protected void iterChildren(TreeFunction f) {
         obj.iter(f);
         field.iter(f);
     }

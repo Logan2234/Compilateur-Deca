@@ -1,0 +1,22 @@
+// Description:
+//    Selection d'un attribut d'une classe mère via un cast
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A{
+    int x;
+}
+
+class B extends A{
+    int x;
+}
+
+{
+    A a = new A();
+    a.x;
+    (B)(a).x;
+}

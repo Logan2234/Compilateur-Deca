@@ -12,7 +12,7 @@ public class InvalidReadErr extends AbstractRuntimeErr {
     }
 
     public void codeGenErr(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR("Error : unable to read user input."));
+        compiler.addInstruction(new WSTR("Error : Input in the wrong format."));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }

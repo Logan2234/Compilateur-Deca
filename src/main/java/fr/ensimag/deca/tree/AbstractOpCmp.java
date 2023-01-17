@@ -24,11 +24,19 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
         Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
         Location loc = this.getLocation();
 
-        if (typeLeft.isBoolean() && !typeRight.isBoolean())
-            throw new ContextualError("The right operand of a boolean operation has to be a boolean (rule 3.33)", loc);
+        if ((this.getOperatorName() == "==" || this.getOperatorName() == "!=") && typeLeft.isBoolean()) {
+            if (!typeRight.isBoolean())
+                throw new ContextualError("A boolean can only be compared to another boolean (rule 3.33)", loc);
+            this.setType(compiler.environmentType.BOOLEAN);
+            return compiler.environmentType.BOOLEAN;
+        }
 
-        if (typeLeft.isClassOrNull() && !typeRight.isClassOrNull())
-            throw new ContextualError("A class can only be compared to another class (rule 3.33)", loc);
+        if ((this.getOperatorName() == "==" || this.getOperatorName() == "!=") && typeLeft.isClassOrNull()) {
+            if (!typeRight.isClassOrNull())
+                throw new ContextualError("A class (or null) can only be compared to another class (rule 3.33)", loc);
+            this.setType(compiler.environmentType.BOOLEAN);
+            return compiler.environmentType.BOOLEAN;
+        }
 
         if (!typeLeft.isInt() && !typeLeft.isFloat())
             throw new ContextualError(

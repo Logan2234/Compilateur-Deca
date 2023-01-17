@@ -16,22 +16,22 @@ import org.apache.commons.lang.Validate;
  * @date 09/01/2023
  */
 public class Return extends AbstractInst {
-    
+
     private final AbstractExpr e;
 
     public Return(AbstractExpr e) {
         Validate.notNull(e);
         this.e = e;
     }
-    
+
     @Override
-    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType)
-            throws ContextualError {
-        Type type = this.e.verifyExpr(compiler, localEnv, currentClass);
-        
-        if (type.isVoid())
-            throw new ContextualError("Can't return a void", this.getLocation());
-        
+    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
+            Type returnType) throws ContextualError {
+
+        if (returnType.isVoid())
+            throw new ContextualError("Return cannot be used when method has void type (rule 3.24)",
+                    this.getLocation());
+
         e.verifyRValue(compiler, localEnv, currentClass, returnType);
     }
 
@@ -46,12 +46,11 @@ public class Return extends AbstractInst {
         e.decompile(s);
         s.println(";");
 
-        //throw new UnsupportedOperationException("not yet implemented");
+        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
-    protected
-    void iterChildren(TreeFunction f) {
+    protected void iterChildren(TreeFunction f) {
         e.iter(f);
     }
 

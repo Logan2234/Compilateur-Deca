@@ -2,18 +2,17 @@
 //    Déclare une méthode ???
 //
 // Resultats:
-//    //
+//
 //
 // Historique:
 //    cree le 14/01/2023
 
 class A{
-    protected int x = 3;
+    protected int x;
 }
 
-class B{
-    A a = new A();
-    int instruction(){
-        return a.x;
+class B extends A {
+    void getx(){
+        x;
     }
 }

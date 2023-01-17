@@ -1,0 +1,17 @@
+// Description:
+//    selection d'un attribut
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {
+    int x;
+}
+
+{
+    A a = new A();
+    a.x;
+}

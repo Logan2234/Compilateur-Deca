@@ -50,10 +50,11 @@ public abstract class Definition {
 
     private Location location;
     private Type type;
+
     public boolean isField() {
         return false;
     }
-    
+
     public boolean isMethod() {
         return false;
     }
@@ -74,7 +75,7 @@ public abstract class Definition {
             throws ContextualError {
         throw new ContextualError(errorMessage, l);
     }
-    
+
     /**
      * Return the same object, as type FieldDefinition, if possible. Throws
      * ContextualError(errorMessage, l) otherwise.
@@ -93,6 +94,7 @@ public abstract class Definition {
 
     /**
      * Get the DAddr of the varaible declaration.
+     * 
      * @return the DAddr in the assembly code of the var.
      */
     public RegisterOffset getDAddr() {
@@ -101,7 +103,8 @@ public abstract class Definition {
 
     /**
      * Set the DAddr of the varaible declaration.
-     * @param dAddr The DAddr in the assembly code of the var. 
+     * 
+     * @param dAddr The DAddr in the assembly code of the var.
      */
     public void setDAddr(RegisterOffset dAddr) {
         this.dAddr = dAddr;

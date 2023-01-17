@@ -15,6 +15,7 @@ RED='\033[0;31m'
 BGREEN='\033[1;32m'
 GREEN='\033[0;32m'
 BWHITE='\033[1;37m'
+NOCOLOR='\033[0m'
 
 # Stat var
 NB_VALID_TESTS=0
@@ -38,14 +39,14 @@ do
     # check if passed
     if [ $? -ne 0 ]
     then
-        echo -e "${BRED}Test failed ($VALID_PASSED/$NB_VALID_TESTS): ${RED}$test${NOCOLOR}"
+        echo -e "${BRED}Test failed ($VALID_PASSED/$NB_VALID_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${RED} returns an error"
         if [[ $1 == "--maven" ]];
         then
             exit 1
         fi
     else
         ((VALID_PASSED = VALID_PASSED + 1))
-        echo -e "${BGREEN}Test passed ($VALID_PASSED/$NB_VALID_TESTS): ${GREEN}$test${NOCOLOR}"
+        echo -e "${BGREEN}Test passed ($VALID_PASSED/$NB_VALID_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${GREEN} returns no error"
     fi
 done
 
@@ -65,9 +66,9 @@ do
     if test_synt "$test" 2>&1 | grep -q "$test\|java:\|mismatched"
     then
         ((INVALID_PASSED = INVALID_PASSED + 1))
-        echo -e "${BGREEN}Test passed ($INVALID_PASSED/$NB_INVALID_TESTS): ${GREEN}$test${NOCOLOR}"
+        echo -e "${BGREEN}Test passed ($INVALID_PASSED/$NB_INVALID_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${GREEN} returns a correct error"
     else
-        echo -e "${BRED}Test failed ($INVALID_PASSED/$NB_INVALID_TESTS): ${RED}$test${NOCOLOR}"
+        echo -e "${BRED}Test failed ($INVALID_PASSED/$NB_INVALID_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${RED} returns no error"
         if [[ $1 == "--maven" ]];
         then
             exit 1

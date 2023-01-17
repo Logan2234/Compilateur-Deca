@@ -27,7 +27,7 @@ do
     decac -v "$test" > /dev/null 2>&1
     if [ "$?" -ne 0 ]
     then
-        echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca/}${RED} returns an error even though the test is valid"
+        echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca\//}${RED} returns an error even though the test is valid"
         if [[ $1 == "--maven" ]];
         then
             exit 1
