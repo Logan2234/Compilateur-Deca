@@ -14,7 +14,8 @@ import fr.ensimag.deca.tree.Null;
 import fr.ensimag.deca.tree.StringLiteral;
 
 /**
- * Test for the Literals nodes using mockito, using @Mock and @Before annotations.
+ * Test for the Literals nodes using mockito, using @Mock and @Before
+ * annotations.
  *
  * @author Ensimag
  * @date 01/01/2023
@@ -22,7 +23,7 @@ import fr.ensimag.deca.tree.StringLiteral;
 public class TestLiteralsAdvanced {
 
     DecacCompiler compiler;
-    
+
     @BeforeEach
     public void setup() throws ContextualError {
         MockitoAnnotations.initMocks(this);
