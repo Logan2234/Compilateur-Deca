@@ -143,10 +143,10 @@ public abstract class Definition {
         // prevent looping over methods
         if (!this.isUsed()) {
             this.setUsed();
-            if (this.type.isClass()) {
-                ClassType classType = (ClassType)(this.type);
-                classType.getDefinition().spotUsedVar(prog);
-            }
+            // if (this.type.isClass()) {
+            //     ClassType classType = (ClassType)(this.type); // TODO check this, not useful anymore ?
+            //     classType.getDefinition().spotUsedVar(prog);
+            // }
             this.spotRelatedDefs(prog);
         }
     }

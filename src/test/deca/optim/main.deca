@@ -11,10 +11,10 @@
 class A {
     int z,w;                        // w should be removed
 
-    void setZ(int a){
-        this.z = a;
-        this.w = a;
-    }
+//    void setZ(int a){
+//        this.z = a;
+//        this.w = a;
+//    }
 
     int cos(int a) {
         return a;
@@ -45,7 +45,7 @@ class C {                           // C should be removed
     ;;                              // ;; should be removed
     42 + b.cos(3);
     trigo = 2 + b.cos(2);
-    b.setZ(2);
+    //b.setZ(2);
     print(x,b.z);
     print(b.x);
     if (myBoolean) {}

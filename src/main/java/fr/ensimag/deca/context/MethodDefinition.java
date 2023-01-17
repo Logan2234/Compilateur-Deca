@@ -79,17 +79,25 @@ public class MethodDefinition extends ExpDefinition {
         // the return type could be a class but it is spotted in the body
         for (AbstractDeclClass c : ((Program)prog).getClasses().getList()) {
             assert(c instanceof DeclClass);
+            if (/* class is class or subclass */) //TODO
             for (AbstractDeclMethod method : ((DeclClass)c).getMethods().getList()) {
                 assert(method instanceof DeclMethod);
                 // find the corresponding DeclMethod
                 // (match the tree location of DeclMethod with the definition location of the current MethodDefinition)
                 // Each method as a different location
-                    LOG.debug("Looking for class");
-                    if (this.getLocation() == method.getLocation()) {
-                    LOG.debug("Class matched");
+                LOG.debug("Looking the method");
+                if (this.getLocation() == method.getLocation()) {
+                    LOG.debug("Methods matched");
                     // explore the body of the method to spot other useful variables
                     ((DeclMethod)(method)).spotUsedVar(prog);
-                    return;
+                } 
+                // if the dynamique type of the object calling the method is a subclass then the
+                // overriding methods should have been spotted
+                else if (/*method == redéfinition */) { //TODO
+                    LOG.debug("Overriding method found");
+                    // explore the body of the method to spot other useful variables
+                    ((DeclMethod)(method)).spotUsedVar(prog);
+
                 }
             }
         }

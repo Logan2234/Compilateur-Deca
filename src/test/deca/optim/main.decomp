@@ -1,0 +1,20 @@
+class A extends Object {public int z;
+int cos(int a){return a;
+
+}
+}
+class B extends A {public int x;
+}
+{
+	int x;
+	boolean myBoolean = true;
+	B b = newB();
+	(x = readInt());
+	(42 + cos(3));
+	(trigo = (2 + cos(2)));
+	print(x, b.z);
+	print(b.x);
+	if (myBoolean){
+	} else {
+	}
+}
