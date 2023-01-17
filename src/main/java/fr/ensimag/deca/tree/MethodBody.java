@@ -45,11 +45,6 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
-    public void codeGenProgram(DecacCompiler compiler) {
-        // TODO
-    }
-
-    @Override
     public void decompile(IndentPrintStream s) {
         s.print("{");
         vars.decompile(s);
@@ -67,5 +62,12 @@ public class MethodBody extends AbstractMethod {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         vars.prettyPrint(s, prefix, false);
         insts.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    public void codeGenMethod(DecacCompiler compiler) {
+        // generate code for delcare variables
+        vars.codeGenDeclVar(compiler);
+        insts.codeGenListInst(compiler);
     }
 }

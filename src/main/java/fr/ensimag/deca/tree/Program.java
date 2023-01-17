@@ -132,6 +132,7 @@ public class Program extends AbstractProgram {
 
 
     public void codeGenDefaultEquals(DecacCompiler compiler) {
+        compiler.addComment("========== Class Object ==========");
         compiler.addLabel(new Label("code.Object.equals"));
         // compare -2(LB) (object on which method was called) and -3(LB) param
         // put the result in R0 (return register)

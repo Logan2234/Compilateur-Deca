@@ -8,6 +8,8 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -69,5 +71,27 @@ public class DeclParam extends AbstractDeclParam {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);
         paramName.prettyPrint(s, prefix, true);
+    }
+
+    /**
+     * The location of the param on the stack.
+     * With the way we call methods, these are of the type -d(LB).
+     */
+    private RegisterOffset DAddr;
+
+    /**
+     * Set the DAddr of this param.
+     * @param newDAddr the new DAddr.
+     */
+    public void setDAddr(RegisterOffset newDAddr) {
+        this.DAddr = newDAddr;
+    }
+
+    /**
+     * Get the DAddr of this param.
+     * @return the DAddr.
+     */
+    public RegisterOffset getDAddr() {
+        return this.DAddr;
     }
 }

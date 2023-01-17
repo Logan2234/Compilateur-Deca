@@ -9,10 +9,12 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -112,15 +114,20 @@ public class DeclClass extends AbstractDeclClass {
     public void codeGenVTable(DecacCompiler compiler) {
         // generate the vtable for that class.
         // get the VTable addr
-        RegisterOffset VTableDAddr = compiler.readNextStackSpace();
+        RegisterOffset VTableDAddr = compiler.getNextStackSpace();
         name.getClassDefinition().setDAddr(VTableDAddr);
         // generate the VTable
-        
+        for(AbstractDeclMethod method : methods.getList()) {
+            RegisterOffset methodAddr = compiler.getNextStackSpace();
+            compiler.addInstruction(new LOAD(new LabelOperand(new Label("code." + name.getName() + "." + method.getMethodName())), Register.R0));
+            compiler.addInstruction(new STORE(Register.R0, methodAddr));
+        }
         
     }
 
     @Override
     public void codeGenClass(DecacCompiler compiler) {
+        compiler.addComment("========== Class " + name.getName() + " ==========");
         // generate the methods code
         // init func, we need a context for it
         compiler.newCodeContext();
@@ -135,9 +142,12 @@ public class DeclClass extends AbstractDeclClass {
         compiler.addInstruction(new RTS());
         compiler.endCodeContext();
         // for each method, generate the code for it.
-        compiler.newCodeContext();
+        for(AbstractDeclMethod method : methods.getList()) {
+            compiler.newCodeContext();
+            method.codeGenMethod(compiler, name.getName().getName());
+            compiler.endCodeContext();
+        }
 
-        compiler.endCodeContext();
 
     }
 

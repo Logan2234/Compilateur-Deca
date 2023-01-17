@@ -11,6 +11,8 @@ import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Label;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -121,4 +123,22 @@ public class DeclMethod extends AbstractDeclMethod {
         params.prettyPrint(s, prefix, false);
         body.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    public String getMethodName() {
+        return methodName.getName().getName();
+    }
+
+    @Override
+    public void codeGenMethod(DecacCompiler compiler, String className) {
+        // write down the label
+        compiler.addLabel(new Label("code." + className + "." + getMethodName()));
+        // generate method body
+        body.codeGenMethod(compiler);
+        // label of end of method
+
+        // save and restore context used registers 
+
+        // add return
+    } 
 }

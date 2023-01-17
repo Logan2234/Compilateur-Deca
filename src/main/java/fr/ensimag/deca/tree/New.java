@@ -91,7 +91,7 @@ public class New extends AbstractExpr {
             compiler.addInstruction(new BOV(error.getErrorLabel()));
             // set the pointer to the vtable
             compiler.addInstruction(new LEA(classe.getClassDefinition().getDAddr(), Register.R0));
-            compiler.addInstruction(new STORE(resultRegister, new RegisterOffset(0, resultRegister)));
+            compiler.addInstruction(new STORE(Register.R0, new RegisterOffset(0, resultRegister)));
             // we'll push the result before call anyway, so restore R2 now anyway
             if(needRegisterSpace) {
                 compiler.addInstruction(new POP(Register.R0));
