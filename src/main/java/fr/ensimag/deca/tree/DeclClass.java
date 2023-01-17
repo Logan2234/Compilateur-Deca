@@ -12,6 +12,7 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
@@ -117,8 +118,13 @@ public class DeclClass extends AbstractDeclClass {
         RegisterOffset VTableDAddr = compiler.getNextStackSpace();
         name.getClassDefinition().setDAddr(VTableDAddr);
         // generate the VTable
+        compiler.addComment("========== VTable for " + name.getName() + " ==========");
+        // load pointer to parent
+        compiler.addInstruction(new LEA(new RegisterOffset(1, Register.GB), Register.R0));
+        compiler.addInstruction(new STORE(Register.R0, compiler.getNextStackSpace()));
         for(AbstractDeclMethod method : methods.getList()) {
             RegisterOffset methodAddr = compiler.getNextStackSpace();
+            method.setMethodDAddr(methodAddr);
             compiler.addInstruction(new LOAD(new LabelOperand(new Label("code." + name.getName() + "." + method.getMethodName())), Register.R0));
             compiler.addInstruction(new STORE(Register.R0, methodAddr));
         }

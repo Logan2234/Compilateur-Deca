@@ -107,6 +107,7 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister) {
+        fieldName.getDefinition().setDAddrOffsetOnly(resultRegister.getOffset());
         initialization.codeGenInit(compiler, type.getType(), resultRegister);
     }
 }

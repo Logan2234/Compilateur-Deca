@@ -8,6 +8,10 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
 
@@ -96,7 +100,21 @@ public class MethodCall extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // put the params on the stack, in reverse order
+        for(int i = params.size() - 1; i >= 0; i--) {
+            params.getList().get(i).codeGenExpr(compiler, null); // null so the result will be on the stack !
+        }
+        // push the object on the stack
+        obj.codeGenExpr(compiler, null);
+        // call the bsr with the correct method adress
+        compiler.addInstruction(new BSR(meth.getDefinition().getDAddr()));
+        // if the method returned something, it is now in R0 ! put it as a result
+        if(resultRegister == null) {
+            compiler.addInstruction(new PUSH(Register.R0));
+        }
+        else {
+            compiler.addInstruction(new LOAD(Register.R0, resultRegister));
+        }
     }
 
 }

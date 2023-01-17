@@ -73,25 +73,9 @@ public class DeclParam extends AbstractDeclParam {
         paramName.prettyPrint(s, prefix, true);
     }
 
-    /**
-     * The location of the param on the stack.
-     * With the way we call methods, these are of the type -d(LB).
-     */
-    private RegisterOffset DAddr;
-
-    /**
-     * Set the DAddr of this param.
-     * @param newDAddr the new DAddr.
-     */
-    public void setDAddr(RegisterOffset newDAddr) {
-        this.DAddr = newDAddr;
+    @Override
+    public void SetDAddr(RegisterOffset dAddr) {
+        paramName.getDefinition().setDAddr(dAddr);
     }
 
-    /**
-     * Get the DAddr of this param.
-     * @return the DAddr.
-     */
-    public RegisterOffset getDAddr() {
-        return this.DAddr;
-    }
 }

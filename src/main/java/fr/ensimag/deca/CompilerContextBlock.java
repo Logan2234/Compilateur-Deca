@@ -84,6 +84,29 @@ public class CompilerContextBlock {
     }
 
     /**
+     * Returns all the registers that have been used during this context.
+     * @return
+     */
+    public GPRegister[] getAllContextUsedRegister() {
+        int usedRegisterAmount = 0;
+        for(boolean registerUsed : usedRegisters) {
+            if(registerUsed) {
+                usedRegisterAmount ++;
+            }
+        }
+        GPRegister[] result = new GPRegister[usedRegisterAmount];
+        int index = 0;
+        for(int i = 0; i < usedRegisters.length; i++) {
+            if(usedRegisters[i]) {
+                result[index] = GPRegister.getR(i + 2);
+                index++;
+            }
+        }
+        return result;
+    }
+
+
+    /**
      * Increase the size of the use stack of the block 
      * @param increment how much we want to increment the stack
      */

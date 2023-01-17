@@ -202,6 +202,15 @@ public class DecacCompiler {
         }
     }
 
+    public GPRegister[] getAllContextUsedRegister() {
+        if(contextBlocks.size() == 0) {
+            throw new UnsupportedOperationException("No context for code generation.");
+        }
+        else {
+            return contextBlocks.get(contextBlocks.size() - 1).getAllContextUsedRegister();
+        }
+    }
+
     /**
      * Creates a new code context block.
      */
