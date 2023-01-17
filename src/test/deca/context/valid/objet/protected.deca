@@ -2,7 +2,7 @@
 //    Déclare une méthode ???
 //
 // Resultats:
-//    //
+//
 //
 // Historique:
 //    cree le 14/01/2023
@@ -13,6 +13,6 @@ class A{
 
 class B extends A {
     void getx(){
-        x; // TODO: Bug ici a fix
+        x;
     }
 }

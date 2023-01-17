@@ -80,6 +80,13 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClassMembers(DecacCompiler compiler) throws ContextualError {
+
+        // On reprend les fields et methods de la classe mère
+        this.name.getType().asClassType(null, getLocation()).getDefinition().setNumberOfFields(
+                this.superIdentifier.getType().asClassType(null, getLocation()).getDefinition().getNumberOfFields());
+        this.name.getType().asClassType(null, getLocation()).getDefinition().setNumberOfMethods(
+                this.superIdentifier.getType().asClassType("null", getLocation()).getDefinition().getNumberOfMethods());
+
         ClassDefinition def = this.name.getClassDefinition();
         fields.verifyListDeclField(compiler, def.getMembers(), def); // TODO: Vérifier la condition de la règle 2.3
         methods.verifyListDeclMethod(compiler, def.getMembers(), def);
