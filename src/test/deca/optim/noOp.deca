@@ -1,0 +1,13 @@
+// Description:
+//    NoOperation qui se transforme en main vide
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 17/01/2023
+//
+{
+    // should be removed
+    ;;;
+}

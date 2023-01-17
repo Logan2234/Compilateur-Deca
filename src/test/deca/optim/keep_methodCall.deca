@@ -1,0 +1,28 @@
+// Description:
+//    tests de programme sans main
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 11/01/2023
+//
+class A {
+    int cos(int x){return x;}
+}
+
+{
+    // should remove "60" only
+    int x = 60 + a.cos(3);
+    A a = new A();
+    // should remove the delcarations and add a.cos(1)) and a.cos(5) as instructions
+    int y = a.cos(1) + 1;
+    int z = a.cos(5) + 5;
+
+    //  should be removed
+    45 + 5; 
+
+    // should keep the method call only
+    a.cos(3);
+    45*3 + a.cos(3)+ 2 - a.cos(3);
+}
