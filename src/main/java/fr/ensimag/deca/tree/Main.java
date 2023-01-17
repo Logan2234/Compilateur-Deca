@@ -69,4 +69,9 @@ public class Main extends AbstractMain {
         // if either one of the declaration or instructions collapsed, we collapsed
         return declVariables.collapse() || insts.collapse();
     }
+
+    @Override
+    public boolean irrelevant(){
+        return declVariables.irrelevant() || insts.irrelevant();
+    }
 }

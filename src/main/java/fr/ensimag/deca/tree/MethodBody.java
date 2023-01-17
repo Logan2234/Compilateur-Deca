@@ -71,4 +71,9 @@ public class MethodBody extends AbstractMethod {
         // TODO
         return false;
     }
+
+    @Override
+    public boolean irrelevant() {
+        return false;
+    }
 }

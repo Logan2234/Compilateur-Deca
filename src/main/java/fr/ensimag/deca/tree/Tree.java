@@ -3,8 +3,12 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -288,6 +292,8 @@ public abstract class Tree {
         }
     }
 
+    public static HashMap<Symbol, AbstractExpr> currentValues = new HashMap<Symbol, AbstractExpr>();
+
     /**
      * Optimize the decorated tree.
      */
@@ -296,8 +302,53 @@ public abstract class Tree {
         while(collapse()) {
             // rien
         }
+
+        while(irrelevant()){
+            //rien
+        }
     }
 
+    /**
+     * Check if the tree have irrelevant assignments.
+     * Example : int a = 1; int b = a; b = 2; a = 3; // a = 1, b=a are irrelevant
+     * This calls the irrelevant triggers on each nodes.
+     * @return if this node could find more irrelevant assignments.
+     */
+    public abstract boolean irrelevant();
+
+    /**
+     * Replace the boolean values known at compile time by the variables.
+     * if the expression cannot be replaced, null is returned.
+     * @return the value of the compile-time known boolean.
+     */
+    public Boolean irrelevantBool() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    };
+
+    /**
+     * Replace the integer values known at compile time by the variables.
+     * if the expression cannot be replaced, null is returned.
+     * @return the value of the compile-time known int.
+     */
+    public Integer irrelevantInt() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    };
+
+    /**
+     * Replace the float values known at compile time by the variables.
+     * if the expression cannot be replaced, null is returned.
+     * @return the value of the compile-time known float.
+     */
+    public Float irrelevantFloat() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    };
+
+
+    public boolean irrelevantable() {
+        // tells if we are at a terminal node or not. only true for variables.
+        // by default, return false. 
+        return false;
+    }
 
     /**
      * Check if the tree can collapse into a compile time known node.

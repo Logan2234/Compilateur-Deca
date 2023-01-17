@@ -126,5 +126,15 @@ public class Initialization extends AbstractInitialization {
         }
         return collapsing;
     }
+
+    @Override
+    public boolean irrelevant(){
+        return expression.irrelevant();
+    }
+
+    @Override
+    public boolean hasInitialization() {
+        return true;
+    }
     
 }

@@ -85,4 +85,10 @@ public class DeclField extends AbstractDeclField {
         initialization.collapse();
         return false;
     }
+
+    @Override
+    public boolean irrelevant(){
+        initialization.irrelevant();
+        return false;
+    }
 }

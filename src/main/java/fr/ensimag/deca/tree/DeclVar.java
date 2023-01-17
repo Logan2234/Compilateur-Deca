@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import net.bytebuddy.agent.builder.AgentBuilder.InitializationStrategy;
 
 /**
  * Declaration of a variable
@@ -93,5 +94,13 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     public boolean collapse() {
         return initialization.collapse();
+    }
+
+    @Override
+    public boolean irrelevant(){ 
+        if (initialization.hasInitialization()) 
+            currentValues.put(varName.getName(), ((Initialization) initialization).getExpression());
+        // todo : revoir
+        return false;
     }
 }

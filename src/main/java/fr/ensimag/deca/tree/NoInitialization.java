@@ -63,4 +63,9 @@ public class NoInitialization extends AbstractInitialization {
         return false;
     }
 
+    @Override
+    public boolean irrelevant() {
+        return false;
+    }
+
 }

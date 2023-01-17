@@ -67,4 +67,9 @@ public class Return extends AbstractInst {
         result.add(this);
         return result;
     }
+
+    @Override
+    public boolean irrelevant(){
+        return e.irrelevant();
+    }
 }

@@ -35,4 +35,13 @@ public class ListExpr extends TreeList<AbstractExpr> {
         }
         return collapsed;
     }
+
+    @Override
+    public boolean irrelevant() {
+        boolean result = false;
+        for (AbstractExpr i : getList()) {
+            result |= i.irrelevant();
+        }
+        return result;
+    }
 }

@@ -68,4 +68,9 @@ public class DeclParam extends AbstractDeclParam {
     public boolean collapse() {
         return false;
     }
+
+    @Override
+    public boolean irrelevant(){
+        return false;
+    }
 }

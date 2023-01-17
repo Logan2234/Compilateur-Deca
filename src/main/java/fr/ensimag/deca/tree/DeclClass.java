@@ -105,4 +105,11 @@ public class DeclClass extends AbstractDeclClass {
         return false;
     }
 
+    @Override
+    public boolean irrelevant(){
+        fields.irrelevant();
+        methods.irrelevant();
+        return false;
+    }
+
 }

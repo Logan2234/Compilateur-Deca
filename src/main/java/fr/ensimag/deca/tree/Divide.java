@@ -101,4 +101,49 @@ public class Divide extends AbstractOpArith {
         }
         return null;
     }
+
+    @Override
+    public boolean irrelevant() {
+        return getLeftOperand().irrelevant() || getRightOperand().irrelevant();
+    }
+
+    @Override
+    public Float irrelevantFloat() {
+        Float rightIrrelevantdValue = getRightOperand().irrelevantFloat();
+        if(rightIrrelevantdValue != null && getRightOperand().irrelevantable()) {
+            FloatLiteral newFloat = new FloatLiteral(rightIrrelevantdValue);
+            newFloat.setType(getType());
+            setRightOperand(newFloat);
+        }
+        Float leftIrrelevantValue = getLeftOperand().irrelevantFloat();
+        if(leftIrrelevantValue != null && getLeftOperand().irrelevantable()) {
+            FloatLiteral newFloat = new FloatLiteral(leftIrrelevantValue);
+            newFloat.setType(getType());
+            setLeftOperand(newFloat);
+        }
+        if(rightIrrelevantdValue != null && leftIrrelevantValue != null) {
+            return rightIrrelevantdValue / leftIrrelevantValue;
+        }
+        return null;
+    }
+
+    @Override
+    public Integer irrelevantInt() {
+        Integer rightIrrelevantdValue = getRightOperand().irrelevantInt();
+        if(rightIrrelevantdValue != null && getRightOperand().irrelevantable()) {
+            IntLiteral newInt = new IntLiteral(rightIrrelevantdValue);
+            newInt.setType(getType());
+            setRightOperand(newInt);
+        }
+        Integer leftIrrelevantValue = getLeftOperand().irrelevantInt();
+        if(leftIrrelevantValue != null && getLeftOperand().irrelevantable()) {
+            IntLiteral newInt = new IntLiteral(leftIrrelevantValue);
+            newInt.setType(getType());
+            setLeftOperand(newInt);
+        }
+        if(rightIrrelevantdValue != null && leftIrrelevantValue != null) {
+            return rightIrrelevantdValue / leftIrrelevantValue;
+        }
+        return null;
+    }
 }

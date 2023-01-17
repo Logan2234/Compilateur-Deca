@@ -66,4 +66,9 @@ public class ListInst extends TreeList<AbstractInst> {
         }
         return collapse;
     }
+
+    @Override
+    public boolean irrelevant() {
+        //TODO
+    }
 }

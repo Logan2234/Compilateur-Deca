@@ -50,4 +50,13 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
         return result;
     }
 
+    @Override
+    public boolean irrelevant() {
+        boolean result = false;
+        for (AbstractDeclMethod i : getList()) {
+            result |= i.irrelevant();
+        }
+        return result;
+    }
+
 }

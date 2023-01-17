@@ -87,4 +87,9 @@ public class Program extends AbstractProgram {
     public boolean collapse() {
         return classes.collapse() || main.collapse();
     }
+
+    @Override
+    public boolean irrelevant() {
+        return classes.irrelevant() && main.irrelevant();
+    }
 }

@@ -51,4 +51,9 @@ public class EmptyMain extends AbstractMain {
         // this main is empty : cannot collapse further.
         return false;
     }
+
+    @Override
+    public boolean irrelevant() {
+        return false;
+    }
 }

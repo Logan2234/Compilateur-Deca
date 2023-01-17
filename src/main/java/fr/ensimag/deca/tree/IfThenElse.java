@@ -110,6 +110,11 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
+    public boolean irrelevant(){
+        return condition.irrelevant() || thenBranch.irrelevant() || elseBranch.irrelevant();
+    }
+
+    @Override
     public ListInst collapseInst() {
         // try to collapse the condition
         Boolean collapsedCond = condition.collapseBool();

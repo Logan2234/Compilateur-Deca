@@ -39,6 +39,7 @@ public class And extends AbstractOpBool {
         return getRightOperand().collapse() || getLeftOperand().collapse();
     }
 
+    
     @Override
     public Boolean collapseBool() {
         Boolean rightCollapsedValue = getRightOperand().collapseBool();
@@ -58,6 +59,31 @@ public class And extends AbstractOpBool {
         }
         return null;
     }
+    
+    @Override
+    public boolean irrelevant() {
+        return getRightOperand().irrelevant() || getLeftOperand().irrelevant();
+    }
 
-
+    @Override
+    public Boolean irrelevantBool() {
+        Boolean rightIrrelevantdValue = getRightOperand().irrelevantBool();
+        if(rightIrrelevantdValue != null && getRightOperand().irrelevantable()) {
+            BooleanLiteral newBool = new BooleanLiteral(rightIrrelevantdValue);
+            newBool.setType(getType());
+            setRightOperand(newBool);
+        }
+        Boolean leftIrrelevantValue = getLeftOperand().irrelevantBool();
+        if(leftIrrelevantValue != null && getLeftOperand().irrelevantable()) {
+            BooleanLiteral newBool = new BooleanLiteral(leftIrrelevantValue);
+            newBool.setType(getType());
+            setLeftOperand(newBool);
+        }
+        if(rightIrrelevantdValue != null && leftIrrelevantValue != null) {
+            return rightIrrelevantdValue && leftIrrelevantValue;
+        }
+        return null;
+    }
+    
+    
 }

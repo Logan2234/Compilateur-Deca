@@ -175,6 +175,26 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
+    public boolean irrelevantable(){
+        return true;
+    }
+
+    @Override
+    public Boolean irrelevantBool(){
+        return ((BooleanLiteral) currentValues.get(name)).getValue();
+    }
+
+    @Override
+    public Integer irrelevantInt(){
+        return ((IntLiteral) currentValues.get(name)).getValue();
+    }
+
+    @Override
+    public Float irrelevantFloat(){
+        return ((FloatLiteral) currentValues.get(name)).getValue();
+    }
+
+    @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         // ! Peut etre pas Definition

@@ -52,5 +52,13 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
         return result;
     }
 
+    @Override
+    public boolean irrelevant() {
+        boolean result = false;
+        for (AbstractDeclParam i : getList()) {
+            result |= i.irrelevant();
+        }
+        return result;
+    }
 
 }

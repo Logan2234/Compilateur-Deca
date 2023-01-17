@@ -79,4 +79,13 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
         return collapsed;
     }
 
+    @Override
+    public boolean irrelevant() {
+        boolean result = false;
+        for (AbstractDeclVar i : getList()) {
+            result |= i.irrelevant();
+        }
+        return result;
+    }
+
 }

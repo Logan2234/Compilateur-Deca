@@ -50,4 +50,12 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         return result;
     }
 
+    @Override
+    public boolean irrelevant() {
+        boolean result = false;
+        for (AbstractDeclField i : getList()) {
+            result |= i.irrelevant();
+        }
+        return result;
+    }
 }

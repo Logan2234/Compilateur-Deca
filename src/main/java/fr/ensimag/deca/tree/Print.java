@@ -17,6 +17,7 @@ public class Print extends AbstractPrint {
     String getSuffix() {
         return "";
     }
+    
 
     @Override
     public boolean collapse() {
@@ -29,4 +30,5 @@ public class Print extends AbstractPrint {
         result.add(this);
         return result;
     }
+
 }

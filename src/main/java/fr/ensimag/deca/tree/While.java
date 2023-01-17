@@ -128,4 +128,9 @@ public class While extends AbstractInst {
         result.add(this);
         return result;
     }
+
+    @Override
+    public boolean irrelevant() {
+        return condition.irrelevant() || body.irrelevant();
+    }
 }

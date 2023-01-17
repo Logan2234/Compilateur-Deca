@@ -52,4 +52,9 @@ public class NoOperation extends AbstractInst {
         return new ListInst();
     }
 
+    @Override
+    public boolean irrelevant() {
+        return false;
+    }
+
 }

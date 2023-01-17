@@ -189,6 +189,14 @@ public abstract class AbstractExpr extends AbstractInst {
         }
     }
 
+    @Override 
+    public boolean irrelevant() {
+        // by default, return false. 
+        return false;
+        // expressions that can errase irrelevant expressions will override this.
+    }
+
+
     @Override
     public boolean collapse() {
         // by default, return false. 

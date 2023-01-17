@@ -88,4 +88,10 @@ public class DeclMethod extends AbstractDeclMethod {
         body.collapse();
         return false;
     }
+
+    @Override
+    public boolean irrelevant(){
+        body.irrelevant();
+        return false;
+    }
 }

@@ -56,5 +56,10 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         // TODO
     }
 
+    @Override
+    public boolean irrelevant(){
+        return false;
+    }
+
 
 }
