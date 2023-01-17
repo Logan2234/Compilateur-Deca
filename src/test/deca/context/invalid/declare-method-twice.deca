@@ -1,0 +1,14 @@
+// Description:
+//    Double déclaration d'une méthode
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 13: The method "get" has already been declared (rule 2.6)
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {
+    void get(){}
+    void get(){}
+}

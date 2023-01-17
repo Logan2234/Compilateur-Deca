@@ -22,7 +22,7 @@ import org.apache.commons.lang.Validate;
  */
 public class DeclField extends AbstractDeclField {
 
-    private Visibility visib;
+    final private Visibility visib;
     final private AbstractIdentifier type;
     final private AbstractIdentifier fieldName;
     final private AbstractInitialization initialization;
@@ -43,20 +43,23 @@ public class DeclField extends AbstractDeclField {
     protected void verifyDeclField(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Type type = this.type.verifyType(compiler);
-        
+                
         if (type.isVoid())
-            throw new ContextualError("The field type can't be void (rule 2.5)", getLocation());
+            throw new ContextualError("The field's type can't be void (rule 2.5)", getLocation());
+                
+        FieldDefinition def;
 
         // Si le nom existe déjà dans une classe parente
         ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(this.fieldName.getName());
         if (defExp != null){
             // On cherche à savoir si c'est bien un Field
-            defExp.asFieldDefinition("The name \"" + fieldName.getName().getName() + "\" is already used for a method in the superclass (rule 2.5)", this.getLocation());
+            FieldDefinition motherField = defExp.asFieldDefinition("The name \"" + fieldName.getName().getName() + "\" is already used for a method in the superclass (rule 2.5)", this.getLocation());
+            def = new FieldDefinition(type, this.getLocation(), visib, currentClass, motherField.getIndex());
         }
         
+        def = new FieldDefinition(type, this.getLocation(), visib, currentClass, currentClass.getNumberOfFields());
+        currentClass.incNumberOfFields();
         try {
-            FieldDefinition def = new FieldDefinition(type, this.getLocation(), visib, currentClass, currentClass.getNumberOfFields());
-            currentClass.incNumberOfFields();
             localEnv.declare(this.fieldName.getName(), def);
             fieldName.verifyExpr(compiler, localEnv, currentClass);
         } catch (DoubleDefException e) {
@@ -74,7 +77,7 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(visib.toString());
+        s.print(visib.toString().toLowerCase());
         s.print(' ');
         type.decompile(s);
         s.print(' ');
@@ -88,6 +91,11 @@ public class DeclField extends AbstractDeclField {
         type.iter(f);
         fieldName.iter(f);
         initialization.iter(f);
+    }
+
+    @Override
+    String prettyPrintNode() {
+        return "[visibility=" + visib + "] DeclField";
     }
 
     @Override

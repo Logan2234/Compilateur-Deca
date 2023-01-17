@@ -24,5 +24,3 @@ do
     echo -e "${GREENBOLD}TODO: Find a way to test this option efficiently."
     break
 done
-
-# TODO: Suppr les fichiers inutiles

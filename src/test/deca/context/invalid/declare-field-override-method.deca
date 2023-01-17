@@ -1,0 +1,17 @@
+// Description:
+//    Ecris un attribut du nom d'une méthode de la classe mère
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 16: The name "a" is already used for a method in the superclass (rule 2.5)
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {
+    void a(){}
+}
+
+class B extends A {
+    int a;
+}

@@ -1,0 +1,20 @@
+// Description:
+//    override de méthode
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {
+    float get(int a){
+        println(1);
+    }
+}
+
+class B extends A {
+    int get(int b){
+        println(2);
+    }
+}

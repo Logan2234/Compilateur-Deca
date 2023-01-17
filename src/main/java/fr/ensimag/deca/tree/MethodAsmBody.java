@@ -18,25 +18,26 @@ import fr.ensimag.deca.tools.IndentPrintStream;
  * @date 05/01/2023
  */
 public class MethodAsmBody extends AbstractMethod {
-    
+    private StringLiteral code;
+
     public MethodAsmBody(StringLiteral code) {
         Validate.notNull(code);
         this.code = code;
     }
-    private StringLiteral code;
-    
+
     public StringLiteral getCode() {
         return code;
     }
 
     @Override
-    public void verifyMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentclass, Type type) throws ContextualError {
+    public void verifyMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentclass, Type type)
+            throws ContextualError {
         code.verifyExpr(compiler, localEnv, currentclass);
     }
 
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
-       //TODO
+        // TODO
     }
 
     @Override
@@ -45,12 +46,17 @@ public class MethodAsmBody extends AbstractMethod {
         code.decompile(s);
         s.print(");");
     }
-    @Override 
+
+    @Override
     protected void iterChildren(TreeFunction f) {
         code.iterChildren(f);
     }
-    @Override //? Is it necessary ?
+
+    @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
+        s.println(prefix + "`> " + code.getLocation() + " StringLiteral");
+        code.prettyPrintType(s, prefix + "   ");
+        // code.prettyPrint(s, prefix, true);
         code.prettyPrintChildren(s, prefix);
     }
 }

@@ -217,7 +217,8 @@ public class DecacCompiler {
     }
 
     /**
-     * Increase the size of the use stack of the block 
+     * Increase the size of the use stack of the block
+     * 
      * @param increment how much we want to increment the stack
      */
     public void increaseContextUsedStack(int increment) {
@@ -248,6 +249,7 @@ public class DecacCompiler {
 
     /**
      * finish the current context.
+     * 
      * @return the value of the max stack size of that context.
      */
     public void endCodeContext() {
@@ -304,11 +306,12 @@ public class DecacCompiler {
     public HashMap<Integer, AbstractRuntimeErr> usedErrors;
 
     /**
-     * Add an error to the used errors. They will then be generated at the end of the assembly code.
+     * Add an error to the used errors. They will then be generated at the end of
+     * the assembly code.
      */
     public void useRuntimeError(AbstractRuntimeErr error) {
         // check we are not using that error already
-        if(!usedErrors.containsKey(error.errorId())) {
+        if (!usedErrors.containsKey(error.errorId())) {
             usedErrors.put(error.errorId(), error);
         }
     }
@@ -376,31 +379,26 @@ public class DecacCompiler {
     private boolean doCompile(String sourceName, String destName, PrintStream out, PrintStream err)
             throws DecacFatalError, LocationException {
         AbstractProgram prog = doLexingAndParsing(sourceName, err);
+        assert (prog.checkAllLocations());
 
         if (prog == null) {
             LOG.info("Parsing failed");
             return true;
         }
 
-        if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
-            assert (prog.checkAllLocations());
-
+        if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
+            LOG.info("Writing deca file ...");
+            prog.decompile(out);
+            LOG.info("Decompilation of " + sourceName + " successful.");
+        }
+        
+        else {
             prog.verifyProgram(this);
             assert (prog.checkAllDecorations());
-        }
-
-        if (compilerOptions.getCompileMode() != CompileMode.Verify) {
-            if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
+            if (compilerOptions.getCompileMode() == CompileMode.Compile) {
                 prog.codeGenProgram(this);
                 LOG.debug("Generated assembly code:" + nl + program.display());
                 LOG.info("Output file assembly file is: " + destName);
-            }
-
-            if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
-                LOG.info("Writing deca file ...");
-                prog.decompile(out);
-                LOG.info("Decompilation of " + sourceName + " successful.");
-            } else {
                 FileOutputStream fstream = null;
                 try {
                     fstream = new FileOutputStream(destName);
