@@ -66,7 +66,7 @@ public class MethodCall extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        if (obj.equals(null) || obj.getImpl()) {
+        if (!obj.equals(null) || !obj.getImpl()) {
             obj.decompile(s);
             s.print(".");
         }
@@ -74,7 +74,6 @@ public class MethodCall extends AbstractExpr {
         s.print("(");
         params.decompile(s);
         s.print(")");
-
     }
 
     @Override

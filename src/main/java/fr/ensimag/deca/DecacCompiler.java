@@ -321,7 +321,7 @@ public class DecacCompiler {
             return true;
         }
 
-        if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
+        if (compilerOptions.getCompileMode() == CompileMode.ParseOnly && !compilerOptions.getOptimize()) {
             LOG.info("Writing deca file ...");
             prog.decompile(out);
             LOG.info("Decompilation of " + sourceName + " successful.");
@@ -334,9 +334,13 @@ public class DecacCompiler {
 
         if (compilerOptions.getCompileMode() != CompileMode.Verify) {
             if (compilerOptions.getOptimize()){
-                prog.verifyProgram(this);
-                prog.optimizeTree();
                 assert (prog.checkAllDecorations());
+                prog.optimizeTree();
+                if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
+                    LOG.info("Writing deca file ...");
+                    prog.decompile(out);
+                    LOG.info("Decompilation of " + sourceName + " successful.");
+                }
             }
             if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
                 addComment("start main program");

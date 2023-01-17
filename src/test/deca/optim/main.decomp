@@ -14,11 +14,11 @@ int getX(){}
 {
 	int x;
 	boolean myBoolean = true;
-	B b = newB();
+	B b = new B();
 	(x = readInt());
-	(42 + cos(3));
-	(trigo = (2 + cos(2)));
-	setZ(2);
+	b.cos(3);
+	b.cos(2);
+	b.setZ(2);
 	print(x, b.z);
 	print(b.x);
 	if (myBoolean){
