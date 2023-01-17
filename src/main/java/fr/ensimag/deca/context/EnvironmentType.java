@@ -18,7 +18,7 @@ import fr.ensimag.deca.tree.Location;
  */
 public class EnvironmentType {
     public EnvironmentType(DecacCompiler compiler) {
-        
+
         envTypes = new HashMap<Symbol, TypeDefinition>();
 
         Symbol intSymb = compiler.createSymbol("int");
@@ -40,11 +40,11 @@ public class EnvironmentType {
         Symbol stringSymb = compiler.createSymbol("string");
         STRING = new StringType(stringSymb);
         // not added to envTypes, it's not visible for the user.
-        
+
         Symbol object = compiler.createSymbol("Object");
         OBJECT = new ClassType(object, Location.BUILTIN, null);
-        envTypes.put(object, OBJECT.getDefinition()); 
-        
+        envTypes.put(object, OBJECT.getDefinition());
+
         // Rajouter la fonction EQUALS
         Symbol equals = compiler.createSymbol("equals");
         Signature signature = new Signature();
@@ -53,8 +53,8 @@ public class EnvironmentType {
         OBJECT.getDefinition().setNumberOfMethods(1);
         try {
             OBJECT.getDefinition().getMembers().declare(equals, method);
+        } catch (DoubleDefException exception) {
         }
-        catch (DoubleDefException exception ){}
 
         Symbol Null = compiler.createSymbol("null");
         NULL = new NullType(Null);
@@ -71,11 +71,11 @@ public class EnvironmentType {
         envTypes.put(s, def);
     }
 
-    public final VoidType    VOID;
-    public final IntType     INT;
-    public final FloatType   FLOAT;
-    public final StringType  STRING;
+    public final VoidType VOID;
+    public final IntType INT;
+    public final FloatType FLOAT;
+    public final StringType STRING;
     public final BooleanType BOOLEAN;
-    public final ClassType   OBJECT;
-    public final NullType    NULL;
+    public final ClassType OBJECT;
+    public final NullType NULL;
 }
