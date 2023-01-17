@@ -6,19 +6,6 @@ class A {
    void setX(int x) {
       this.x = x ;
    }
-   boolean equals(Object o){
-      return true;
-   }
-}
-
-class B extends A {
-   int y;
-   void setX(int x){
-
-   }
-   void setY(int y){
-
-   }
 }
 
 {

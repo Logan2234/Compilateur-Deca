@@ -58,8 +58,7 @@ public class DeclMethod extends AbstractDeclMethod {
                         + "\" doesn't have the same signature as the method defined it the superclass (rule 2.7)",
                         getLocation());
 
-            Type motherMethodType = motherMethod.getType(); // TODO: Faire un test sur l'incrément des méthodes et des
-                                                            // fields
+            Type motherMethodType = motherMethod.getType();
             try {
                 ClassType motherMethodClassType = motherMethodType.asClassType("Not a class type", getLocation());
                 ClassType classType = type.asClassType("Not a class type", getLocation());
