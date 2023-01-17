@@ -1,15 +1,13 @@
 // Description:
-//    Assign un float a un int
+//    Créé une variable et s'auto assigne
 //
 // Resultats:
 //    Erreur contextuelle
-//    Ligne 13 : An assignation between a int and a float is not possible (rule 3.32)
+//    Ligne 12 : The identifier "i" doesn't exist (rule 0.1)
 //
 // Historique:
-//    cree le 06/01/2023
+//    cree le 17/01/2023
 
 {
-    int i;
-    int j = i;
-    print(i);
+    int i = i;
 }
