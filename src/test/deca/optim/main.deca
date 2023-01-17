@@ -46,8 +46,8 @@ class C {                           // C should be removed
     ;;                              // ;; should be removed
     42 + b.cos(3);
     trigo = 2 + b.cos(2);
-    b.setZ(2);
-    print(x,b.z);
+    //b.setZ(2);
+    //print(x,b.z);
     print(b.x);
     if (myBoolean) {}
 }

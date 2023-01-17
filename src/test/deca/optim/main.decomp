@@ -12,14 +12,11 @@ public int y;
 int getX(){}
 }
 {
-	int x;
 	boolean myBoolean = true;
 	B b = new B();
-	(x = readInt());
+	readInt();
 	b.cos(3);
 	b.cos(2);
-	b.setZ(2);
-	print(x, b.z);
 	print(b.x);
 	if (myBoolean){
 	} else {

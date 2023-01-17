@@ -85,11 +85,13 @@ public class MethodDefinition extends ExpDefinition {
                 // find the corresponding DeclMethod
                 // (match the tree location of DeclMethod with the definition location of the current MethodDefinition)
                 // Each method as a different location
-                LOG.debug("Looking the method");
+                LOG.debug("Looking for the method");
                 if (this.getLocation() == method.getLocation()) {
                     LOG.debug("Methods matched");
                     // explore the body of the method to spot other useful variables
                     ((DeclMethod)(method)).spotUsedVar(prog);
+                    // spot the containing class
+                    ((DeclClass)c).getName().getClassDefinition().spotUsedVar(prog);
                 } 
                 // TODO
                 // if the dynamique type of the object calling the method is a subclass then the
