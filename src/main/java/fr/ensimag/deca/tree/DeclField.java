@@ -9,6 +9,8 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -93,5 +95,10 @@ public class DeclField extends AbstractDeclField {
         type.prettyPrint(s, prefix, false);
         fieldName.prettyPrint(s, prefix, false);
         initialization.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    public void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister) {
+        initialization.codeGenInit(compiler, type.getType(), resultRegister);
     }
 }

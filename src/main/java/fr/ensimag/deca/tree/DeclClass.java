@@ -12,6 +12,7 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -113,19 +114,29 @@ public class DeclClass extends AbstractDeclClass {
         RegisterOffset VTableDAddr = compiler.readNextStackSpace();
         name.getClassDefinition().setDAddr(VTableDAddr);
         // generate the VTable
-
-        // increase the compiler stack size accordingly
+        
+        
     }
 
     @Override
     public void codeGenClass(DecacCompiler compiler) {
         // generate the methods code
-        // init func
-        compiler.addComment("code for method " + name.getName().getName() + " initialization :");
+        // init func, we need a context for it
+        compiler.newCodeContext();
         compiler.addLabel(new Label("init." + name.getName().getName()));
         // the location of the object to init is at -2(LB).
         // let's load the daddr on R1 !
-        compiler.addInstruction(new LOAD(new RegisterOffset(-1, Register.LB), Register.R1));
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+        // for each field, compute it in R0 and store it
+        for(int i = 0; i < fields.size(); i++) {
+            fields.getList().get(i).codeGenField(compiler, new RegisterOffset(i + 1, Register.R1));
+        }
+        compiler.addInstruction(new RTS());
+        compiler.endCodeContext();
+        // for each method, generate the code for it.
+        compiler.newCodeContext();
+
+        compiler.endCodeContext();
 
     }
 

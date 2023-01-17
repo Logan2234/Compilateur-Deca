@@ -1,6 +1,7 @@
 package fr.ensimag.deca;
 
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
@@ -22,6 +23,7 @@ public class CompilerContextBlock {
         stackUsedSizes = 0;
         LBtakenSpace = 0;
         isGlobalBase = globalBase;
+        program = new IMAProgram();
     }
 
     /**
@@ -50,6 +52,11 @@ public class CompilerContextBlock {
      * Store the current number of variables pushed on the stack.
      */
     private int stackUsedSizes;
+
+    /**
+     * Where we write the instructions to.
+     */
+    private IMAProgram program;
 
     /**
      * Get a available register.
@@ -123,6 +130,10 @@ public class CompilerContextBlock {
      */
     public void occupyLBSPace(int amount) {
         LBtakenSpace += amount;
+    }
+
+    public IMAProgram getProgram() {
+        return program;
     }
 
 }
