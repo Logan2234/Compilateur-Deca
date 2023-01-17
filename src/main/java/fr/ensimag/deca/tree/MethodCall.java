@@ -53,10 +53,6 @@ public class MethodCall extends AbstractExpr {
                     getLocation());
         for (int i = 0; i < sig.size(); i++) {
             Type type = params.getList().get(i).verifyExpr(compiler, localEnv, currentClass);
-            // if (type == null)
-            //     throw new ContextualError(
-            //             "The method " + meth.getName().getName() + " needs " + sig.size() + " params (rule 3.28)",
-            //             getLocation());
             if (!type.assignCompatible(localEnv, sig.paramNumber(i)))
                 throw new ContextualError(
                         "The parameter number " + (i + 1) + " does not have the correct type (rule 3.28)",

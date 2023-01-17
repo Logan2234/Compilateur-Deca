@@ -6,8 +6,6 @@ import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import java.util.HashMap;
 import java.util.Map;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-import fr.ensimag.deca.tree.AbstractIdentifier;
-import fr.ensimag.deca.tree.Identifier;
 import fr.ensimag.deca.tree.Location;
 
 // A FAIRE: étendre cette classe pour traiter la partie "avec objet" de Déca
@@ -51,7 +49,8 @@ public class EnvironmentType {
         Symbol equals = compiler.createSymbol("equals");
         Signature signature = new Signature();
         signature.add(OBJECT);
-        MethodDefinition method = new MethodDefinition(BOOLEAN, Location.BUILTIN, signature, 0);
+        MethodDefinition method = new MethodDefinition(BOOLEAN, Location.BUILTIN, signature, 1);
+        OBJECT.getDefinition().setNumberOfMethods(1);
         try {
             OBJECT.getDefinition().getMembers().declare(equals, method);
         }
