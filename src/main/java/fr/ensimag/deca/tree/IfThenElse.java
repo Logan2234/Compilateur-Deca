@@ -111,4 +111,12 @@ public class IfThenElse extends AbstractInst {
         this.elseBranch.spotUsedVar(prog);
     }
 
+    public ListInst getThenInst() {
+        return this.thenBranch;
+    }
+
+    public ListInst getElseInst() {
+        return this.elseBranch;
+    }
+
 }

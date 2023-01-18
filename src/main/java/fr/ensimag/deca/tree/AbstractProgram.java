@@ -20,8 +20,7 @@ public abstract class AbstractProgram extends Tree {
      * Optimize the decorated tree until there is no simplification found
      */
     public void optimizeTree() {
-        while (removeUnusedVar())
-            ;
+        while (removeUnusedVar());
     }
 
     /**

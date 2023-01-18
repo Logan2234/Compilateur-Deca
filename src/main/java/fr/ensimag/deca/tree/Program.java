@@ -111,19 +111,21 @@ public class Program extends AbstractProgram {
     private boolean optimizeBlock(ListDeclVar listDecls, ListInst listInsts) {
         boolean simplified = false;
         /* remove useless declarations from the main */
-        Iterator<AbstractDeclVar> iterDecl = listDecls.iterator();
-        while(iterDecl.hasNext()){
-            DeclVar decl = (DeclVar) iterDecl.next();
-            if (decl.getVar().getDefinition().isUsed()) {
-                // the variable is used
-            } else if (decl.getInit() instanceof Initialization
-                       && !((Initialization)(decl.getInit())).getExpression().getMethodCalls().isEmpty()) {
-                // the variable is not used but is Initialized with a MethodCall
-            } else {
-                // the variable is not used and (not initialized or initialized with no methodCall)
-                iterDecl.remove();
-                simplified = true;
-                LOG.debug("Remove the decl of "+decl.getVar().getDefinition().toString());
+        if (listDecls != null) {
+            Iterator<AbstractDeclVar> iterDecl = listDecls.iterator();
+            while(iterDecl.hasNext()){
+                DeclVar decl = (DeclVar) iterDecl.next();
+                if (decl.getVar().getDefinition().isUsed()) {
+                    // the variable is used
+                } else if (decl.getInit() instanceof Initialization
+                        && !((Initialization)(decl.getInit())).getExpression().getMethodCalls().isEmpty()) {
+                    // the variable is not used but is Initialized with a MethodCall
+                } else {
+                    // the variable is not used and (not initialized or initialized with no methodCall)
+                    iterDecl.remove();
+                    simplified = true;
+                    LOG.debug("Remove the decl of "+decl.getVar().getDefinition().toString());
+                }
             }
         }
 
@@ -164,6 +166,19 @@ public class Program extends AbstractProgram {
                 iterInst.remove();
                 simplified = true;
                 LOG.debug("Remove NoOp at "+inst.getLocation() + " : " + inst.getClass());
+            }
+
+            else if (inst instanceof While){
+                // TODO if while empty and condition with no method call
+                simplified = optimizeBlock(null, ((While)inst).getBody());
+                LOG.debug("Optimize While at "+inst.getLocation() + " : " + inst.getClass());
+            }
+
+            else if (inst instanceof IfThenElse){
+                // TODO if if and else empty -> only keep methodCall
+                simplified = optimizeBlock(null, ((IfThenElse)inst).getThenInst());
+                simplified = (simplified || optimizeBlock(null, ((IfThenElse)inst).getElseInst()));
+                LOG.debug("Optimize if at "+inst.getLocation() + " : " + inst.getClass());
             }
         }
         return simplified;
