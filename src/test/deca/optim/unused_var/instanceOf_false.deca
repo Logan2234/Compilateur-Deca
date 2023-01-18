@@ -13,7 +13,7 @@ class B extends A {}
 
 {
     A a = new A();
-    if(a instance of b) {
+    if(a instanceof b) {
         print("Error");
     }
 }

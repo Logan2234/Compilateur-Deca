@@ -20,7 +20,7 @@ PATH=./src/test/script/launchers:"$PATH"
 
 echo -e "${BWHITE} \n============================= Context valid tests =============================\n"
 
-files=$(find ./src/test/deca/optim -maxdepth 1 -name "*.deca")
+files=$(find ./src/test/deca/optim -maxdepth 2 -name "*.deca")
 
 for test in $files
 do
