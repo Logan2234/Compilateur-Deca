@@ -209,15 +209,6 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     /**
-     * Calculate the value of the expression for export just an Int, a String or a Float
-     * 
-     * @return The old expression or a new expression with the calculus being skipped
-     */
-    public AbstractExpr skipCalculs(){
-        return this;
-    }
-
-    /**
      * Fin recursively all method calls and Reads in the expression and add them on top of the list
      * This method is used for optimizing the Program tree.
      * Instructions should not be removed if they contains a MethodCall or a Read that could

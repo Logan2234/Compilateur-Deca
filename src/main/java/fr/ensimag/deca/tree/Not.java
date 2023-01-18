@@ -46,13 +46,4 @@ public class Not extends AbstractUnaryExpr {
         compiler.addInstruction(new ADD(resulRegister, resulRegister));
         compiler.addInstruction(new SEQ(resulRegister));
     }
-
-    @Override
-    public AbstractExpr skipCalculs(){
-        AbstractExpr operand = this.getOperand();
-        if (!(operand.isLiteral())){
-
-        }
-        return this;
-    }
 }
