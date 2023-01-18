@@ -41,6 +41,10 @@ public class EnvironmentType {
         STRING = new StringType(stringSymb);
         // not added to envTypes, it's not visible for the user.
 
+        Symbol Null = compiler.createSymbol("null");
+        NULL = new NullType(Null);
+        envTypes.put(Null, new TypeDefinition(NULL, Location.BUILTIN));
+
         Symbol object = compiler.createSymbol("Object");
         OBJECT = new ClassType(object, Location.BUILTIN, null);
         envTypes.put(object, OBJECT.getDefinition());
@@ -55,10 +59,6 @@ public class EnvironmentType {
             OBJECT.getDefinition().getMembers().declare(equals, method);
         } catch (DoubleDefException exception) {
         }
-
-        Symbol Null = compiler.createSymbol("null");
-        NULL = new NullType(Null);
-        envTypes.put(Null, new TypeDefinition(NULL, Location.BUILTIN));
     }
 
     private final Map<Symbol, TypeDefinition> envTypes;

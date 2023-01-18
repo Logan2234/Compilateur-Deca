@@ -50,10 +50,12 @@ public class DeclClass extends AbstractDeclClass {
         name.decompile(s);
         s.print(" extends ");
         superIdentifier.decompile(s);
-        s.print(" {");
+        s.println(" {");
+        s.indent();
         fields.decompile(s);
         methods.decompile(s);
-        s.print("}");
+        s.unindent();
+        s.print("\n}");
 
     }
 

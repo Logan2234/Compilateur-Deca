@@ -1,4 +1,10 @@
+//! Not used when testing. See TestPlusAdvanced.java.
+
 package fr.ensimag.deca.context;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -8,18 +14,12 @@ import fr.ensimag.deca.tree.Plus;
 import fr.ensimag.deca.tree.TreeFunction;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
-import java.io.PrintStream;
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * Test for the Plus node in a manual way. The same test would be much easier to
  * write using a mock-up framework like Mockito.
  *
  * @see TestPlusPlain to see how the Mockito library can help writing this kind
- * of tests.
+ *      of tests.
  *
  * @author Ensimag
  * @date 01/01/2023
@@ -81,7 +81,6 @@ public class TestPlusWithoutMock {
         }
     }
 
-    @Test
     public void testType() throws ContextualError {
         DecacCompiler compiler = new DecacCompiler(null, null);
         DummyIntExpression left = new DummyIntExpression();
