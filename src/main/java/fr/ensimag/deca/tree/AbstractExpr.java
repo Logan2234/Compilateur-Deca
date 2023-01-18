@@ -113,7 +113,6 @@ public abstract class AbstractExpr extends AbstractInst {
         {
             AbstractExpr convFloat = new ConvFloat(this);
             convFloat.verifyExpr(compiler, localEnv, currentClass);
-            convFloat.setLocation(this.getLocation());
             return convFloat;
         }
 
