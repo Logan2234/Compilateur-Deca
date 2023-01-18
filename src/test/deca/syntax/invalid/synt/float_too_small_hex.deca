@@ -1,0 +1,14 @@
+// Description:
+//    valeur differente de zero arrondie a zero
+//    syntaxiquement incorrect
+//
+// Resultats:
+//    rule literal failed predicate: {$tree != null}?
+//
+// Historique:
+//    cree le 18/01/2023
+//
+
+{
+    float y = 0x1.0p-1000;
+}
