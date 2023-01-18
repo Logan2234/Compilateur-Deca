@@ -11,9 +11,12 @@ options {
 @header  {
    import java.util.Set;
    import java.util.HashSet;
+   import org.apache.log4j.Logger;
+   import static java.lang.Math.min;
 }
 
 @members {
+   private static final Logger LOG = Logger.getLogger(DecaLexer.class);
 }
 
 
@@ -87,12 +90,38 @@ fragment SIGN: ('+'|'-')?;
 fragment EXP:  ('E' | 'e') SIGN NUM;
 fragment DEC:  NUM '.' NUM;
 fragment FLOATDEC:   (DEC | DEC EXP) ('F' | 'f')?;
+
 fragment DIGITHEX:   ('0'.. '9'|'A' .. 'F'|'a' .. 'f');
 fragment NUMHEX:     DIGITHEX+;
 fragment FLOATHEX:   ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN? NUM ('F' | 'f')?;
 
 INT: ('0' | POSITIVE_DIGIT DIGIT*);
-FLOAT: FLOATDEC | FLOATHEX;
+FLOAT: (FLOATDEC | FLOATHEX)
+      {
+         String s = getText();
+         assert(s.length() >= 2);
+         // FLOATHEX
+         if(s.charAt(1)=='x') {
+            LOG.debug("\n================ FLOATHEXA ================");
+         }
+         // FLOATDEC
+         else {
+            LOG.debug("\n================ FLOATDEC ================");
+            // get the float without the power
+            int indexe = (s.indexOf('e')==-1 ? s.length(): s.indexOf('e'));
+            int indexE = (s.indexOf('E')==-1 ? s.length(): s.indexOf('E'));
+            int indexf = (s.indexOf('f')==-1 ? s.length(): s.indexOf('f'));
+            int indexF = (s.indexOf('F')==-1 ? s.length(): s.indexOf('F'));
+            int indexEnd = Math.min(s.length(), indexe);
+            indexEnd = Math.min(indexEnd, indexE);
+            indexEnd = Math.min(indexEnd, indexf);
+            indexEnd = Math.min(indexEnd, indexF);
+            String floatWithoutPower = s.substring(0, indexEnd);
+            if ((Float.parseFloat(floatWithoutPower) != 0) && (Float.parseFloat(getText())==0)) {
+               LOG.debug("error");
+            }
+         }
+      };
 
 // Identifier
 IDENT: (LETTER | '$' | '_')(LETTER | DIGIT | '$' | '_')*;
@@ -103,9 +132,9 @@ fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
 INCLUDE: ('#include' (' ')* '"' FILENAME '"')
          {
             String s = getText();
-            int startIndex = s.indexOf('"')-1;
+            int startIndex = s.indexOf('"');
             int endIndex = s.length();
-            String file = s.substring(startIndex + 1, endIndex);
+            String file = s.substring(startIndex, endIndex);
             doInclude(file);
          };
 

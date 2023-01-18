@@ -1,0 +1,18 @@
+// Description:
+//    valeurs minimale de float
+//    syntaxiquement correct
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 18/01/2023
+//
+
+{
+    float x = 0.0e-45;
+    float x = 4.0e-45;
+    float y = 3.4028234e-46;
+    float u = 0x1.0p-150;
+    //float v = 0x1.0p-160
+}
