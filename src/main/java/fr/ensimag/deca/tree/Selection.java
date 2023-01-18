@@ -8,6 +8,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -92,4 +93,10 @@ public class Selection extends AbstractLValue {
         // ? pas trop sur de moi la dessus
         return field.getDefinition();
     }
+
+    @Override
+    public Symbol getName() {
+        return field.getName();
+    }
+
 }

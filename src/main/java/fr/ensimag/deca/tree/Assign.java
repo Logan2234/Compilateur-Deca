@@ -107,4 +107,38 @@ public class Assign extends AbstractBinaryExpr {
         return false;
     }
 
+    @Override
+    public boolean irrelevant(){
+        if (getRightOperand().irrelevant()){
+            if (getType().isFloat()) {
+                Float rightIrrelevantdValue = getRightOperand().irrelevantFloat();
+                if(rightIrrelevantdValue != null && getRightOperand().irrelevantable()) {
+                    FloatLiteral newFloat = new FloatLiteral(rightIrrelevantdValue);
+                    newFloat.setType(getType());
+                    setRightOperand(newFloat);
+                }
+            }
+
+            if (getType().isInt()){
+                Integer rightIrrelevantdValue = getRightOperand().irrelevantInt();
+                if(rightIrrelevantdValue != null && getRightOperand().irrelevantable()) {
+                    IntLiteral newInt = new IntLiteral(rightIrrelevantdValue);
+                    newInt.setType(getType());
+                    setRightOperand(newInt);
+                }
+            }
+
+            if (getType().isBoolean()){
+                Boolean rightIrrelevantdValue = getRightOperand().irrelevantBool();
+                if(rightIrrelevantdValue != null && getRightOperand().irrelevantable()) {
+                    BooleanLiteral newBool = new BooleanLiteral(rightIrrelevantdValue);
+                    newBool.setType(getType());
+                    setRightOperand(newBool);
+                }
+            }
+        }
+        currentValues.put(getLeftOperand().getName(), getRightOperand());
+        return false;
+    }
+
 }

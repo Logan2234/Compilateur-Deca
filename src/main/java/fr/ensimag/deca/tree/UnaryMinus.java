@@ -74,4 +74,35 @@ public class UnaryMinus extends AbstractUnaryExpr {
         return null;
     }
 
+    @Override
+    public boolean irrelevant() {
+        return getOperand().irrelevant();
+    }
+
+    @Override
+    public Integer irrelevantInt(){
+        Integer irrelevantValue = getOperand().irrelevantInt();
+        if(irrelevantValue != null) {
+            Type oldType = getOperand().getType();
+            IntLiteral newInt = new IntLiteral(irrelevantValue);
+            newInt.setType(oldType);
+            setOperand(newInt);
+            return -irrelevantValue;
+        }
+        return null;
+    }
+
+    @Override
+    public Float irrelevantFloat(){
+        Float irrelevantValue = getOperand().irrelevantFloat();
+        if(irrelevantValue != null) {
+            Type oldType = getOperand().getType();
+            FloatLiteral newInt = new FloatLiteral(irrelevantValue);
+            newInt.setType(oldType);
+            setOperand(newInt);
+            return -irrelevantValue;
+        }
+        return null;
+    }
+
 }

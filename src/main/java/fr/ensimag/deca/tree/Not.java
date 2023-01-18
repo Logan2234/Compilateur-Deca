@@ -65,4 +65,22 @@ public class Not extends AbstractUnaryExpr {
         }
         return null;
     }
+
+    @Override
+    public boolean irrelevant() {
+        return getOperand().irrelevant();
+    }
+
+    @Override
+    public Boolean irrelevantBool() {
+        Boolean irrelevantValue = getOperand().irrelevantBool();
+        if(irrelevantValue != null) {
+            Type oldType = getOperand().getType();
+            BooleanLiteral newBool = new BooleanLiteral(irrelevantValue);
+            newBool.setType(oldType);
+            setOperand(newBool);
+            return !irrelevantValue;
+        }
+        return null;
+    }
 }

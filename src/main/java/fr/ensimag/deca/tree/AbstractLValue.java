@@ -7,6 +7,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 /**
  * Left-hand side value of an assignment.
@@ -22,4 +23,6 @@ public abstract class AbstractLValue extends AbstractExpr {
 
     // ? do all LValue have a definition ? looks like they do, so we need this. 
     public abstract Definition getDefinition();
+
+    public abstract Symbol getName();
 }
