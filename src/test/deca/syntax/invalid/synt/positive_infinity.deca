@@ -3,7 +3,7 @@
 //    syntaxiquement incorrect
 //
 // Resultats:
-//    Ligne 13 : rule literal failed predicate: {$tree != null}?
+//    Ligne 13 : literal values cannot be infinite
 //
 // Historique:
 //    cree le 18/01/2023

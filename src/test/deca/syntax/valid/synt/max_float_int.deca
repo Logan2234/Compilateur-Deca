@@ -14,4 +14,7 @@
     float y = -3.402823e38;
     int u = 2147483647;
     int v = -2147483647;
+    float f = 0.0;
+    float g = 0x0.0p1;
+    float h = 0X0.0P1;
 }

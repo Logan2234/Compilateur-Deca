@@ -11,14 +11,10 @@ options {
 @header  {
    import java.util.Set;
    import java.util.HashSet;
-   import org.apache.log4j.Logger;
-   import static java.lang.Math.min;
 }
 
 @members {
-   private static final Logger LOG = Logger.getLogger(DecaLexer.class);
 }
-
 
 // Ignore spaces, tabs, newlines, whitespaces and comments
 WS:   ( ' '
@@ -96,32 +92,7 @@ fragment NUMHEX:     DIGITHEX+;
 fragment FLOATHEX:   ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN? NUM ('F' | 'f')?;
 
 INT: ('0' | POSITIVE_DIGIT DIGIT*);
-FLOAT: (FLOATDEC | FLOATHEX)
-      {
-         String s = getText();
-         assert(s.length() >= 2);
-         // FLOATHEX
-         if(s.charAt(1)=='x') {
-            LOG.debug("\n================ FLOATHEXA ================");
-         }
-         // FLOATDEC
-         else {
-            LOG.debug("\n================ FLOATDEC ================");
-            // get the float without the power
-            int indexe = (s.indexOf('e')==-1 ? s.length(): s.indexOf('e'));
-            int indexE = (s.indexOf('E')==-1 ? s.length(): s.indexOf('E'));
-            int indexf = (s.indexOf('f')==-1 ? s.length(): s.indexOf('f'));
-            int indexF = (s.indexOf('F')==-1 ? s.length(): s.indexOf('F'));
-            int indexEnd = Math.min(s.length(), indexe);
-            indexEnd = Math.min(indexEnd, indexE);
-            indexEnd = Math.min(indexEnd, indexf);
-            indexEnd = Math.min(indexEnd, indexF);
-            String floatWithoutPower = s.substring(0, indexEnd);
-            if ((Float.parseFloat(floatWithoutPower) != 0) && (Float.parseFloat(getText())==0)) {
-               LOG.debug("error");
-            }
-         }
-      };
+FLOAT: (FLOATDEC | FLOATHEX);
 
 // Identifier
 IDENT: (LETTER | '$' | '_')(LETTER | DIGIT | '$' | '_')*;
