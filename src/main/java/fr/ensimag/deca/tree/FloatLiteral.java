@@ -50,7 +50,7 @@ public class FloatLiteral extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(java.lang.Float.toHexString(value));
+        s.print(java.lang.Float.toString(value));
     }
 
     @Override
