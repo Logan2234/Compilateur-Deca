@@ -2,14 +2,20 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
+import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BSR;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
@@ -101,13 +107,25 @@ public class MethodCall extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // put the params on the stack, in reverse order
+        compiler.addComment("Method call : " + meth.getName().getName());
         for(int i = params.size() - 1; i >= 0; i--) {
             params.getList().get(i).codeGenExpr(compiler, null); // null so the result will be on the stack !
         }
         // push the object on the stack
         obj.codeGenExpr(compiler, null);
+        // null reference exception
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
+        compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
+        AbstractRuntimeErr error = new NullReferenceErr();
+        compiler.useRuntimeError(error);
+        compiler.addInstruction(new BEQ(error.getErrorLabel()));
         // call the bsr with the correct method adress
-        compiler.addInstruction(new BSR(meth.getDefinition().getDAddr()));
+        // load the adress of the object on the stack : it is a pointer to the method table.
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
+        // then get the method with it's correct offset.
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.R1), Register.R1));
+        // the offset is the index !
+        compiler.addInstruction(new BSR(new RegisterOffset(meth.getMethodDefinition().getIndex(), Register.R1)));
         // if the method returned something, it is now in R0 ! put it as a result
         if(resultRegister == null) {
             compiler.addInstruction(new PUSH(Register.R0));

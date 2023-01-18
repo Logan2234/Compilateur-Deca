@@ -6,18 +6,20 @@ import fr.ensimag.ima.pseudocode.instructions.ERROR;
 import fr.ensimag.ima.pseudocode.instructions.WNL;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
-public class OpOverflowErr extends AbstractRuntimeErr {
+public class NullReferenceErr extends AbstractRuntimeErr {
+    
+    @Override
     public int errorId() {
-        return 5;
+        return 4;
     }
 
     public void codeGenErr(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR("Error : Floating point number operation overflow"));
+        compiler.addInstruction(new WSTR("Error : Null reference exception."));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }
 
     public Label getErrorLabel() {
-        return new Label("Error.opOverflow");
+        return new Label("Error.NullReference");
     }
 }

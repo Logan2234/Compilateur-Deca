@@ -5,8 +5,8 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
-import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.TypeDefinition;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
@@ -16,6 +16,7 @@ import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
+import net.bytebuddy.implementation.bytecode.member.MethodInvocation;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -127,15 +128,28 @@ public class DeclClass extends AbstractDeclClass {
         // generate the VTable
         compiler.addComment("========== VTable for " + name.getName() + " ==========");
         // load pointer to parent
-        compiler.addInstruction(new LEA(new RegisterOffset(1, Register.GB), Register.R0));
-        compiler.addInstruction(new STORE(Register.R0, compiler.getNextStackSpace()));
-        for(AbstractDeclMethod method : methods.getList()) {
-            RegisterOffset methodAddr = compiler.getNextStackSpace();
-            method.setMethodDAddr(methodAddr);
-            compiler.addInstruction(new LOAD(new LabelOperand(new Label("code." + name.getName() + "." + method.getMethodName())), Register.R0));
-            compiler.addInstruction(new STORE(Register.R0, methodAddr));
+        compiler.addInstruction(new LEA(superIdentifier.getDefinition().getDAddr(), Register.R0));
+        compiler.addInstruction(new STORE(Register.R0, VTableDAddr));
+        // get method number
+        int methodNumber = name.getClassDefinition().getNumberOfMethods();
+        boolean[] writtenMethods = new boolean[methodNumber];
+        // write each method if it has not been written already
+        ClassDefinition currentClass = name.getClassDefinition();
+        while(currentClass != null) {
+            for(MethodDefinition method : currentClass.getMembers().getMethods()) {
+                int methodIndex = method.getIndex() - 1;
+                if(!writtenMethods[methodIndex]) {
+                    //method was not yet written in it !
+                    writtenMethods[methodIndex] = true;
+                    RegisterOffset methodAddr = new RegisterOffset(compiler.readNextStackSpace().getOffset() + methodIndex, Register.GB);
+                    method.setDAddr(methodAddr);
+                    compiler.addInstruction(new LOAD(new LabelOperand(new Label("code." + currentClass.getType().getName().getName() + "." + method.getName())), Register.R0));
+                    compiler.addInstruction(new STORE(Register.R0, methodAddr));
+                }
+            }
+            currentClass = currentClass.getSuperClass();
         }
-        
+        compiler.occupyLBSPace(methodNumber);
     }
 
     @Override
@@ -148,7 +162,7 @@ public class DeclClass extends AbstractDeclClass {
         // the location of the object to init is at -2(LB).
         // let's load the daddr on R1 !
         compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-        // for each field, compute it in R0 and store it
+        // for each field, compute it and store it at its offset
         for(int i = 0; i < fields.size(); i++) {
             fields.getList().get(i).codeGenField(compiler, new RegisterOffset(i + 1, Register.R1));
         }

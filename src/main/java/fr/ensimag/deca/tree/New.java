@@ -104,6 +104,7 @@ public class New extends AbstractExpr {
                 compiler.addInstruction(new LOAD(Register.R0, Register.getR(2)));
             }
             compiler.addInstruction(new BSR(new Label("init." + type.getName().getName())));
+            compiler.addInstruction(new POP(resultRegister));
         }
         catch(ContextualError e) {
             throw new UnsupportedOperationException(e.toString());

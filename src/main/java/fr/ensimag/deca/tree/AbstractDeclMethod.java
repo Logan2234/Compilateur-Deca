@@ -52,7 +52,6 @@ public abstract class AbstractDeclMethod extends Tree {
             ClassDefinition currentClass) throws ContextualError;
 
 
-    public abstract void setMethodDAddr(RegisterOffset dAddr);
     /**
      * Get the name of the method. Used to generate the vTable.
      * @return

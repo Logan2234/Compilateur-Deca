@@ -28,6 +28,12 @@ public class Return extends AbstractInst {
         this.expression = expression;
     }
 
+    private String methodClassName;
+
+    public void setMethodClassName(String name) {
+        this.methodClassName = name;
+    }
+
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type returnType) throws ContextualError {
@@ -43,7 +49,7 @@ public class Return extends AbstractInst {
     protected void codeGenInst(DecacCompiler compiler) {
         // load the result in R0, then branch to method end
         expression.codeGenExpr(compiler, Register.R0);
-        compiler.addInstruction(new BRA(new Label("end.")));
+        compiler.addInstruction(new BRA(new Label("end." + methodClassName)));
         
     }
 
@@ -64,5 +70,15 @@ public class Return extends AbstractInst {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         expression.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    public boolean isReturn() {
+        return true;
+    }
+
+    @Override
+    public Return asReturn() {
+        return this;
     }
 }

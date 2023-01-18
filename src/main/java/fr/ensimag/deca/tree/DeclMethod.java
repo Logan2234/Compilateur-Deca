@@ -47,6 +47,8 @@ public class DeclMethod extends AbstractDeclMethod {
         this.body = body;
     }
 
+    private String className;
+
     @Override
     protected void verifyDeclMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
@@ -54,6 +56,9 @@ public class DeclMethod extends AbstractDeclMethod {
 
         Signature signature = params.verifyListDeclParam(compiler);
         MethodDefinition methodeDef;
+
+        // set the name of the class (hi lolo)
+        className = currentClass.getType().getName().getName();
 
         // Test de la méthode potentiellement existente dans la classe mère
         ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(this.methodName.getName());
@@ -131,20 +136,17 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
-    public void setMethodDAddr(RegisterOffset dAddr) {
-        methodName.getDefinition().setDAddr(dAddr);
-    }
-
-    @Override
     public String getMethodName() {
         return methodName.getName().getName();
     }
 
     @Override
     public void codeGenMethod(DecacCompiler compiler, String className) {
+        // set the labels for the returns
+        body.setReturnsNames(className + "." + methodName.getName().getName());
         // set the daddr of the params
         for(int i = 0; i < params.size(); i++) {
-            params.getList().get(i).SetDAddr(new RegisterOffset(3 + i, Register.LB));
+            params.getList().get(i).SetDAddr(new RegisterOffset(-(3 + i), Register.LB));
         }
         // write down the label
         compiler.addLabel(new Label("code." + className + "." + getMethodName()));

@@ -59,4 +59,9 @@ public class MethodAsmBody extends AbstractMethod {
     public void codeGenMethod(DecacCompiler compiler) {
         // todo : find a way to insert a string litteral in the code
     }
+
+    @Override
+    public void setReturnsNames(String name) {
+        // useless here ?
+    }
 }

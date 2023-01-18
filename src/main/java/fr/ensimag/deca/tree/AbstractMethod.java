@@ -22,4 +22,10 @@ public abstract class AbstractMethod extends Tree {
      */
     public abstract void codeGenMethod(DecacCompiler compiler);
 
+
+    /**
+     * Set the name of the class + method for the returns to know the labels.
+     */
+    public abstract void setReturnsNames(String name);
+
 }

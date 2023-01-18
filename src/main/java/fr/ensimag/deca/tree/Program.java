@@ -123,7 +123,7 @@ public class Program extends AbstractProgram {
      */
     public void codeGenDefaultObject(DecacCompiler compiler) {
         // always the same code ?
-        compiler.addComment("VTABLE of 'Object'");
+        compiler.addComment("========== VTable for Object ==========");
         compiler.addInstruction(new LOAD(new NullOperand(), Register.R0));
         compiler.addInstruction(new STORE(Register.R0, compiler.getNextStackSpace()));
         compiler.addInstruction(new LOAD(new LabelOperand(new Label("code.Object.equals")), Register.R0));

@@ -70,4 +70,13 @@ public class MethodBody extends AbstractMethod {
         vars.codeGenDeclVar(compiler);
         insts.codeGenListInst(compiler);
     }
+
+    @Override
+    public void setReturnsNames(String name) {
+        for(AbstractInst inst : insts.getList()) {
+            if(inst.isReturn()) {
+                inst.asReturn().setMethodClassName(name);
+            }
+        }
+    }
 }
