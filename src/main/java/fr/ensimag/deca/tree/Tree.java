@@ -312,7 +312,7 @@ public abstract class Tree {
      * @return the value of the compile-time known boolean.
      */
     public Boolean collapseBool() {
-        throw new UnsupportedOperationException("Not yet implemented !");
+        return null;
     };
 
     /**
@@ -321,7 +321,7 @@ public abstract class Tree {
      * @return the value of the compile-time known int.
      */
     public Integer collapseInt() {
-        throw new UnsupportedOperationException("Not yet implemented !");
+        return null;
     }
 
     /**
@@ -330,7 +330,7 @@ public abstract class Tree {
      * @return the value of the compile-time known float.
      */
     public Float collapseFloat() {
-        throw new UnsupportedOperationException("Not yet implemented !");
+        return null;
     }
 
     public boolean collapsable() {

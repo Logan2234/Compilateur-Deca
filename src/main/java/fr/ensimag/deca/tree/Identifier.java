@@ -286,4 +286,9 @@ public class Identifier extends AbstractIdentifier {
         }
     }
 
+
+    @Override
+    public boolean collapse() {
+        return false;
+    }
 }
