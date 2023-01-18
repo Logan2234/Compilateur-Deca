@@ -113,6 +113,7 @@ public abstract class AbstractExpr extends AbstractInst {
         {
             AbstractExpr convFloat = new ConvFloat(this);
             convFloat.verifyExpr(compiler, localEnv, currentClass);
+            convFloat.setLocation(this.getLocation());
             return convFloat;
         }
 
@@ -206,15 +207,6 @@ public abstract class AbstractExpr extends AbstractInst {
             s.print(t);
             s.println();
         }
-    }
-
-    /**
-     * Calculate the value of the expression for export just an Int, a String or a Float
-     * 
-     * @return The old expression or a new expression with the calculus being skipped
-     */
-    public AbstractExpr skipCalculs(){
-        return this;
     }
 
     /**

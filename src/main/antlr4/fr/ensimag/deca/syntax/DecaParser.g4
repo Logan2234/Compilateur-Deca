@@ -424,6 +424,7 @@ primary_expr returns[AbstractExpr tree]
             assert($args.tree != null);
             assert($m.tree != null);
             This _this = new This(true);
+            setLocation(_this, $m.start);
             $tree = new MethodCall(_this, $m.tree, $args.tree);
             setLocation($tree, $m.start);
 

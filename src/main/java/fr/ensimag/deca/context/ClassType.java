@@ -62,12 +62,13 @@ public class ClassType extends Type {
         if (this.sameType(potentialSuperClass))
             return true;
 
-        ClassType superClass;
-        do{
-            superClass = this.definition.getSuperClass().getType();
-            if (superClass.sameType(potentialSuperClass))
+        ClassDefinition superclass = this.definition.getSuperClass();
+        while (superclass != null) {
+            ClassType superClassType = superclass.getType();
+            if (superClassType.sameType(potentialSuperClass))
                 return true;
-        } while (superClass.getDefinition().getType().getName().getName() != "Object");
+            superclass = superclass.getSuperClass();
+        }
 
         return false;
     }

@@ -37,10 +37,11 @@ public class Cast extends AbstractExpr {
         Location loc = this.getLocation();
         Type typeExp = this.e.verifyExpr(compiler, localEnv, currentClass);
         Type typeT = this.type.verifyType(compiler);
-        
+
         if (typeExp.isVoid()
                 || (!typeExp.assignCompatible(localEnv, typeT) && !typeT.assignCompatible(localEnv, typeExp))) {
-            throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \"" + typeT.getName().getName() + "\"", loc);
+            throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
+                    + typeT.getName().getName() + "\"", loc);
         }
 
         // Ajout du décor
@@ -64,7 +65,7 @@ public class Cast extends AbstractExpr {
     public void decompile(IndentPrintStream s) {
         s.print("(");
         type.decompile(s);
-        s.print(") (");
+        s.print(")(");
         e.decompile(s);
         s.print(")");
     }

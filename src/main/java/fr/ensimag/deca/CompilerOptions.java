@@ -167,10 +167,11 @@ public class CompilerOptions {
                     }
                     case "-w": {
                         displayWarnings = true;
+                        break;
                     }
-
                     case "-o": {
                         optimize = true;
+                        break;
                     }
                     default: {
                         throw new CLIException("\u001B[31m/!\\ Unknown option\u001B[37m");

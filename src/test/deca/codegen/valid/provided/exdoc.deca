@@ -1,15 +1,24 @@
+// Description:
+//    tests de programme syntaxiquement correct.
+//
+// Resultats:
+//    pas d'erreur
+//
+// Historique:
+//    cree le 04/01/2023
+
 class A {
-   protected int x ;
-   int getX() {
-      return x ;
-   }
-   void setX(int x) {
-      this.x = x ;
-   }
+    protected int x ;
+    int getX() {
+        return x ;
+    }
+    void setX(int x) {
+        this.x = x ;
+    }
 }
 
 {
-   A a = new A() ;
-   a.setX(1) ;
-   println("a.getX() = ", a.getX()) ;
+    A a = new A() ;
+    a.setX(1) ;
+    println("a.getX() = ", a.getX()) ;
 }

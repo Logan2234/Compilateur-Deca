@@ -6,7 +6,7 @@ class A {
 
 class B extends A {
     int x;
-    int getX(){x=2;}                    
+    int getX(){x=2;return x;}                    
 }
 
 class C {}

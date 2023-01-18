@@ -14,7 +14,6 @@ import fr.ensimag.deca.tree.Location;
 
 public abstract class Type {
 
-
     /**
      * True if this and otherType represent the same type (in the case of
      * classes, this means they represent the same class).
@@ -86,16 +85,14 @@ public abstract class Type {
         if (this.isFloat() && type2.isInt()) {
             return true;
         }
-        if (type2.isClass() && this.isClass()){
-        try {
-            ClassType class1 = this.asClassType("Not a class", null);
-            ClassType class2 = type2.asClassType("Not a class", null);
-            if (class1.isSubClassOf(class2))
-                return true;
-        } catch (ContextualError e) {
-
-        }
-            
+        if (type2.isClass() && this.isClass()) {
+            try {
+                ClassType class1 = this.asClassType("Not a class", null);
+                ClassType class2 = type2.asClassType("Not a class", null);
+                if (class1.isSubClassOf(class2))
+                    return true;
+            } catch (ContextualError e) {
+            }
         }
         return false;
     }
