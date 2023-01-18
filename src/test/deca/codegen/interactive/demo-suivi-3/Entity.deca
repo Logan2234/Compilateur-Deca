@@ -1,0 +1,29 @@
+class Entity {
+	protected int poids = 70;
+	protected float taille = 75.0;
+	
+	void stats(){
+		println("The entity weights ", poids, "kg and measures ", taille, "cm");
+	}
+	
+	void set_poids(int poids) {
+		this.poids = poids;
+	}
+	
+	int get_poids() {
+		return poids;
+	}
+	
+	void set_taille(float taille) {
+		this.taille = taille;
+	}
+	
+	float get_taille() {
+		return taille;
+	}
+	
+	void Entity(int poids, float taille) {
+		this.poids = poids;
+		this.taille = taille;
+	}
+}
