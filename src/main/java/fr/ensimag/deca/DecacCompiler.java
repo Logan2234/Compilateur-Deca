@@ -206,10 +206,9 @@ public class DecacCompiler {
      * @param increment how much we want to increment the stack
      */
     public void increaseContextUsedStack(int increment) {
-        if(stackUsedSizes.size() == 0 || maxStackUseSize.size() == 0) {
-            throw new RuntimeException("No current context to increment !");
-        }
-        else {
+        if (stackUsedSizes.size() == 0 || maxStackUseSize.size() == 0) {
+            throw new RuntimeException("No current context to incrment !");
+        } else {
             int value = stackUsedSizes.get(stackUsedSizes.size() - 1) + increment;
             stackUsedSizes.set(stackUsedSizes.size() - 1, value);
             if (value > maxStackUseSize.get(maxStackUseSize.size() - 1)) {
@@ -321,28 +320,25 @@ public class DecacCompiler {
             return true;
         }
 
-        if (compilerOptions.getCompileMode() == CompileMode.ParseOnly && !compilerOptions.getOptimize()) {
+        if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
+            if (compilerOptions.getOptimize()){
+                prog.verifyProgram(this);
+                prog.optimizeTree();
+            }
             LOG.info("Writing deca file ...");
             prog.decompile(out);
             LOG.info("Decompilation of " + sourceName + " successful.");
         }
-        
+
         else {
             prog.verifyProgram(this);
             assert (prog.checkAllDecorations());
-        }
-
-        if (compilerOptions.getCompileMode() != CompileMode.Verify) {
-            if (compilerOptions.getOptimize()){
-                assert (prog.checkAllDecorations());
-                prog.optimizeTree();
-                if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
-                    LOG.info("Writing deca file ...");
-                    prog.decompile(out);
-                    LOG.info("Decompilation of " + sourceName + " successful.");
+            if (compilerOptions.getCompileMode() == CompileMode.Compile) {
+                if (compilerOptions.getOptimize()){
+                    LOG.info("Optimizing the tree...");
+                    prog.optimizeTree();
+                    LOG.info("Tree optimized...");
                 }
-            }
-            if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
                 addComment("start main program");
                 prog.codeGenProgram(this);
                 addComment("end main program");
