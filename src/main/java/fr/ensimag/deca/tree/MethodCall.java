@@ -10,6 +10,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -65,7 +66,7 @@ public class MethodCall extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        if (obj.equals(null) || obj.getImpl()) {
+        if (!obj.equals(null) || !obj.getImpl()) {
             obj.decompile(s);
             s.print(".");
         }
@@ -73,7 +74,6 @@ public class MethodCall extends AbstractExpr {
         s.print("(");
         params.decompile(s);
         s.print(")");
-
     }
 
     @Override
@@ -99,4 +99,15 @@ public class MethodCall extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.obj.spotUsedVar(prog);
+        this.meth.spotUsedVar(prog);
+        this.params.spotUsedVar(prog);
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        foundMethodCalls.add(this);
+    }
 }

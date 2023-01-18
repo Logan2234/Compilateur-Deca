@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -71,4 +72,16 @@ public class InstanceOf extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.e.spotUsedVar(prog);
+        // We don't spotUsedVar on the class type.
+        // If the class is not used elsewhere then the expression will be evaluated to false.
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // the expression could be obtained via a MethodCall
+        this.e.addMethodCalls(foundMethodCalls);
+    }
 }

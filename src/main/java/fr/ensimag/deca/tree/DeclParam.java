@@ -70,4 +70,9 @@ public class DeclParam extends AbstractDeclParam {
         type.prettyPrint(s, prefix, false);
         paramName.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+    }
 }

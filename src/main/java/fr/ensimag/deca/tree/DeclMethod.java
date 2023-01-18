@@ -121,4 +121,20 @@ public class DeclMethod extends AbstractDeclMethod {
         params.prettyPrint(s, prefix, false);
         body.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    public void spotUsedVar(AbstractProgram prog) {
+        this.type.spotUsedVar(prog);
+        this.body.spotUsedVar(prog);
+        this.methodName.spotUsedVar(prog);
+        // we spot the param when they are used in the body
+    }
+
+    public AbstractIdentifier getName() {
+        return this.methodName;
+    }
+
+    public AbstractMethod getBody() {
+        return this.body;
+    }
 }

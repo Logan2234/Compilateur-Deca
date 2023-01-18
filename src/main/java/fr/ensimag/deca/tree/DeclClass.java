@@ -34,6 +34,14 @@ public class DeclClass extends AbstractDeclClass {
         this.methods = methods;
     }
 
+    public ListDeclMethod getMethods() {
+        return this.methods;
+    }
+
+    public ListDeclField getFields() {
+        return this.fields;
+    }
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class ");
@@ -108,4 +116,13 @@ public class DeclClass extends AbstractDeclClass {
         // throw new UnsupportedOperationException("Not yet supported");
     }
 
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    }
+
+    public AbstractIdentifier getName() {
+        return this.name;
+    }
 }

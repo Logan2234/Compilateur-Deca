@@ -55,6 +55,10 @@ public class CompilerOptions {
         return displayWarnings;
     }
 
+    public boolean getOptimize() {
+        return optimize;
+    }
+
     // added to support compile options
     enum CompileMode {
         Compile,
@@ -70,6 +74,7 @@ public class CompilerOptions {
     private boolean runTestChecks = true;
     private int usedRegisterNumber = 16;
     private boolean displayWarnings = false;
+    private boolean optimize = false;
 
     public void parseArgs(String[] args) throws CLIException {
 
@@ -85,6 +90,7 @@ public class CompilerOptions {
         // -d (debug) : display debug trace. Can be repeated.
         // -P (parallel) compile all deca files in parallel.
         // -w (warnings) (optional) : display warnings
+        // -o (optimize) : optimize the code
 
         // Note : -p and -v are incompatible.
 
@@ -138,7 +144,7 @@ public class CompilerOptions {
                     case "-r": {
                         // try to read the register number
                         try {
-                            int registerNumber = Integer.parseInt(args[arg_index+1]);
+                            int registerNumber = Integer.parseInt(args[arg_index + 1]);
                             if (registerNumber < 4 || registerNumber > 16) {
                                 throw new CLIException(
                                         "\u001B[31m/!\\ The number of register must be between 4 and 16.\u001B[37m");
@@ -162,9 +168,12 @@ public class CompilerOptions {
                     case "-w": {
                         displayWarnings = true;
                     }
+
+                    case "-o": {
+                        optimize = true;
+                    }
                     default: {
-                        throw new CLIException(
-                            "\u001B[31m/!\\ Unknown option\u001B[37m");
+                        throw new CLIException("\u001B[31m/!\\ Unknown option\u001B[37m");
                     }
                 }
                 arg_index++;
@@ -182,8 +191,7 @@ public class CompilerOptions {
                 if (args[i].endsWith(".deca")) {
                     // read the file
                     sourceFiles.add(new File(args[i]));
-                }
-                else {
+                } else {
                     throw new CLIException("\u001B[31m/!\\ The file must be a .deca file.\u001B[37m");
                 }
             }
@@ -230,6 +238,7 @@ public class CompilerOptions {
         System.out.println("-d (debug)               : display debug trace. Can be repeated.");
         System.out.println("-P (parallel)            : compile all deca files in parallel.");
         System.out.println("-w (warnings) (optional) : display warnings");
+        System.out.println("-o (optimize)            : optimize the code");
         System.out.println();
         System.out.println("Note : -p and -v are incompatible.");
     }

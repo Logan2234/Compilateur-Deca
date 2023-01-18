@@ -9,6 +9,8 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -94,5 +96,15 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
      *                      this register.
      */
     public abstract void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister);
+    
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.operand.spotUsedVar(prog);
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        this.operand.addMethodCalls(foundMethodCalls);
+    }
 
 }

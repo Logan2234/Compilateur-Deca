@@ -12,6 +12,7 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Boolean literal
@@ -73,4 +74,18 @@ public class BooleanLiteral extends AbstractExpr {
         return "BooleanLiteral (" + value + ")";
     }
 
+    @Override
+    protected Boolean isLiteral() {
+        return true;
+    }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
+    }
 }

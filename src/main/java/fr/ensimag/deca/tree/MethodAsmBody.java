@@ -59,4 +59,9 @@ public class MethodAsmBody extends AbstractMethod {
         // code.prettyPrint(s, prefix, true);
         code.prettyPrintChildren(s, prefix);
     }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+    }
 }

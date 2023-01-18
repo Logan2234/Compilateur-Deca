@@ -24,6 +24,8 @@ import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
@@ -284,4 +286,13 @@ public class Identifier extends AbstractIdentifier {
         }
     }
 
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.definition.spotUsedVar(prog);
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
+    }
 }

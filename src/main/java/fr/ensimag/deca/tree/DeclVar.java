@@ -89,4 +89,18 @@ public class DeclVar extends AbstractDeclVar {
         varName.prettyPrint(s, prefix, false);
         initialization.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        // We don't spotUsedVar() on the type (it may be a class) or the identifier as they are just declared.
+        this.initialization.spotUsedVar(prog);
+    }
+
+    public AbstractIdentifier getVar() {
+        return this.varName;
+    }
+
+    public AbstractInitialization getInit() {
+        return this.initialization;
+    }
 }

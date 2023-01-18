@@ -9,6 +9,8 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -37,8 +39,8 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         this.rightOperand = rightOperand;
     }
 
-    private AbstractExpr leftOperand;
-    private AbstractExpr rightOperand;
+    protected AbstractExpr leftOperand;
+    protected AbstractExpr rightOperand;
 
     public AbstractBinaryExpr(AbstractExpr leftOperand,
             AbstractExpr rightOperand) {
@@ -138,5 +140,17 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         leftOperand.prettyPrint(s, prefix, false);
         rightOperand.prettyPrint(s, prefix, true);
     }
+    
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.leftOperand.spotUsedVar(prog);
+        this.rightOperand.spotUsedVar(prog);
+    }
 
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        this.leftOperand.addMethodCalls(foundMethodCalls);
+        this.rightOperand.addMethodCalls(foundMethodCalls);
+    }
+    
 }

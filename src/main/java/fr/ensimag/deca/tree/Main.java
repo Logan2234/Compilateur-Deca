@@ -65,4 +65,18 @@ public class Main extends AbstractMain {
         declVariables.prettyPrint(s, prefix, false);
         insts.prettyPrint(s, prefix, true);
     }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        declVariables.spotUsedVar(prog);
+        insts.spotUsedVar(prog);
+    }
+
+    public ListDeclVar getListDeclVar() {
+        return this.declVariables;
+    }
+
+    public ListInst getListInst() {
+        return this.insts;
+    }
 }

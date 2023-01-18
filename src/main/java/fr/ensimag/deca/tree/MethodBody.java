@@ -28,8 +28,8 @@ public class MethodBody extends AbstractMethod {
 
     private ListDeclVar vars;
     private ListInst insts;
-
-    public ListDeclVar vars() {
+    
+    public ListDeclVar getVars() {
         return vars;
     }
 
@@ -69,5 +69,11 @@ public class MethodBody extends AbstractMethod {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         vars.prettyPrint(s, prefix, false);
         insts.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.vars.spotUsedVar(prog);
+        this.insts.spotUsedVar(prog);
     }
 }

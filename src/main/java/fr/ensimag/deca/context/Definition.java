@@ -1,5 +1,8 @@
 package fr.ensimag.deca.context;
 
+import org.apache.log4j.Logger;
+
+import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
@@ -10,6 +13,8 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
  * @date 01/01/2023
  */
 public abstract class Definition {
+    private static final Logger LOG = Logger.getLogger(Definition.class);
+
     @Override
     public String toString() {
         String res;
@@ -104,5 +109,54 @@ public abstract class Definition {
     public void setDAddr(RegisterOffset dAddr) {
         this.dAddr = dAddr;
     }
+
+    /**
+     * If the variable is used in the main program
+     */
+    boolean used = false;
+
+    /**
+     * Get the used attribute
+     * @return the used attribute
+     */
+    public boolean isUsed() {
+        return this.used;
+    }
+
+    /**
+     * Reset the used attribute back to false
+     */
+    public void resetUsed() {
+        this.used = false;
+    }
+
+    /*
+     * Set the used attribute to true
+     */
+    public void setUsed() {
+        LOG.debug("Set to used : " + this.toString());
+        this.used = true;
+    }
+
+    /**
+     * Set to true its "used" attribute and the one of the defitions in relation with itself
+     * @param compiler
+     */
+    public void spotUsedVar(AbstractProgram prog) {
+        // prevent looping over methods
+        if (!this.isUsed()) {
+            this.setUsed();
+            // if (this.type.isClass()) {
+            //     ClassType classType = (ClassType)(this.type); // TODO check this, not useful anymore ?
+            //     classType.getDefinition().spotUsedVar(prog);
+            // }
+            this.spotRelatedDefs(prog);
+        }
+    }
+
+    /**
+     * Set to true the "used" attribute of related definitions
+     */
+    public abstract void spotRelatedDefs(AbstractProgram prog);
 
 }

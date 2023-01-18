@@ -206,9 +206,10 @@ public class DecacCompiler {
      * @param increment how much we want to increment the stack
      */
     public void increaseContextUsedStack(int increment) {
-        if (stackUsedSizes.size() == 0 || maxStackUseSize.size() == 0) {
-            throw new RuntimeException("No current context to incrment !");
-        } else {
+        if(stackUsedSizes.size() == 0 || maxStackUseSize.size() == 0) {
+            throw new RuntimeException("No current context to increment !");
+        }
+        else {
             int value = stackUsedSizes.get(stackUsedSizes.size() - 1) + increment;
             stackUsedSizes.set(stackUsedSizes.size() - 1, value);
             if (value > maxStackUseSize.get(maxStackUseSize.size() - 1)) {
@@ -320,7 +321,7 @@ public class DecacCompiler {
             return true;
         }
 
-        if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
+        if (compilerOptions.getCompileMode() == CompileMode.ParseOnly && !compilerOptions.getOptimize()) {
             LOG.info("Writing deca file ...");
             prog.decompile(out);
             LOG.info("Decompilation of " + sourceName + " successful.");
@@ -329,7 +330,19 @@ public class DecacCompiler {
         else {
             prog.verifyProgram(this);
             assert (prog.checkAllDecorations());
-            if (compilerOptions.getCompileMode() == CompileMode.Compile) {
+        }
+
+        if (compilerOptions.getCompileMode() != CompileMode.Verify) {
+            if (compilerOptions.getOptimize()){
+                assert (prog.checkAllDecorations());
+                prog.optimizeTree();
+                if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
+                    LOG.info("Writing deca file ...");
+                    prog.decompile(out);
+                    LOG.info("Decompilation of " + sourceName + " successful.");
+                }
+            }
+            if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
                 addComment("start main program");
                 prog.codeGenProgram(this);
                 addComment("end main program");

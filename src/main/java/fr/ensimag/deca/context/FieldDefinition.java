@@ -1,5 +1,6 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.deca.tree.Visibility;
 
@@ -56,4 +57,8 @@ public class FieldDefinition extends ExpDefinition {
         return true;
     }
 
+    @Override
+    public void spotRelatedDefs(AbstractProgram prog) {
+        this.containingClass.spotUsedVar(prog);
+    }
 }

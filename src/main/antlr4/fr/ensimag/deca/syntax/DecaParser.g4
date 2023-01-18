@@ -292,7 +292,7 @@ eq_neq_expr returns[AbstractExpr tree]
             setLocation($tree, $NEQ);
         }
     ;
-// INSTANCEOF case not implemented
+
 inequality_expr returns[AbstractExpr tree]
     : e=sum_expr {
             assert($e.tree != null);
