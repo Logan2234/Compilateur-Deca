@@ -38,7 +38,7 @@ public class Cast extends AbstractExpr {
         Type typeT = this.type.verifyType(compiler);
         
         if (typeExp.isVoid()
-                || (!assign_compatible(localEnv, typeExp, typeT) && !assign_compatible(localEnv, typeT, typeExp))) {
+                || (!typeExp.assignCompatible(localEnv, typeT) && !typeT.assignCompatible(localEnv, typeExp))) {
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \"" + typeT.getName().getName() + "\"", loc);
         }
 
@@ -58,16 +58,6 @@ public class Cast extends AbstractExpr {
      * @author Nils Depuille
      * @date 12/01/2023
      */
-    public Boolean assign_compatible(EnvironmentExp localEnv, Type type1, Type type2) {
-        if (type1.isFloat() && type2.isInt()) {
-            return true;
-        }
-        if (type2.getClass().isAssignableFrom(type1.getClass())) {// TODO je dois savoir si t2 est une sous classe de T1
-                                                                  // pour le localEnv
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void decompile(IndentPrintStream s) {

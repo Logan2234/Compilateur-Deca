@@ -1,0 +1,17 @@
+// Description:
+//    Déclare une classe qui a déjà été déclarée
+//
+// Resultats:
+//    Erreur contextuelle   
+//    Ligne 15: "A" is already a class (rule 1.3)
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A {
+
+}
+
+class A {
+
+}

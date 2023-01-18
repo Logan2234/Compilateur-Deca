@@ -46,6 +46,7 @@ public class DeclVar extends AbstractDeclVar {
 
         try {
             ExpDefinition def = new VariableDefinition(type, this.getLocation());
+            initialization.verifyInitialization(compiler, type, localEnv, currentClass);
             localEnv.declare(this.varName.getName(), def);
             varName.verifyExpr(compiler, localEnv, currentClass);
         } catch (DoubleDefException e) {
@@ -54,7 +55,6 @@ public class DeclVar extends AbstractDeclVar {
                 this.getLocation());
         }
 
-        initialization.verifyInitialization(compiler, type, localEnv, currentClass);
     }
 
     @Override

@@ -10,23 +10,20 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.BooleanLiteral;
 import fr.ensimag.deca.tree.FloatLiteral;
 import fr.ensimag.deca.tree.IntLiteral;
+import fr.ensimag.deca.tree.Null;
 import fr.ensimag.deca.tree.StringLiteral;
 
 /**
- * Test for the Literals nodes using mockito, using @Mock and @Before annotations.
+ * Test for the Literals nodes using mockito, using @Mock and @Before
+ * annotations.
  *
  * @author Ensimag
  * @date 01/01/2023
  */
 public class TestLiteralsAdvanced {
 
-    final Type BOOLEAN = new BooleanType(null);
-    final Type INT = new IntType(null);
-    final Type FLOAT = new FloatType(null);
-    final Type STRING = new StringType(null);
-
     DecacCompiler compiler;
-    
+
     @BeforeEach
     public void setup() throws ContextualError {
         MockitoAnnotations.initMocks(this);
@@ -68,5 +65,10 @@ public class TestLiteralsAdvanced {
         assertTrue(t.verifyExpr(compiler, null, null).isInt());
     }
 
-    // TODO: Manque le NULL
+    @Test
+    public void testNull() throws ContextualError {
+        Null t = new Null();
+        // check the result
+        assertTrue(t.verifyExpr(compiler, null, null).isNull());
+    }
 }

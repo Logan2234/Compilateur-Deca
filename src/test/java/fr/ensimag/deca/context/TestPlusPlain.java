@@ -1,18 +1,23 @@
+//! Not used when testing. See TestPlusAdvanced.java.
+
 package fr.ensimag.deca.context;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mockito.Mockito;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.Plus;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import org.mockito.Mockito;
-import static org.mockito.Mockito.*;
 
 /**
  * Test for the Plus node using mockito, without using advanced features.
+ * 
  * @see TestPlusAdvanced for more advanced examples.
  * @see TestPlusWithoutMock too see what would need to be written if the test
- * was done without using Mockito.
+ *      was done without using Mockito.
  *
  * @author Ensimag
  * @date 01/01/2023
@@ -21,7 +26,6 @@ public class TestPlusPlain {
     final Type INT = new IntType(null);
     final Type FLOAT = new FloatType(null);
 
-    @Test
     public void testType() throws ContextualError {
         DecacCompiler compiler = new DecacCompiler(null, null);
         AbstractExpr left = Mockito.mock(AbstractExpr.class);

@@ -34,11 +34,11 @@ public class This extends AbstractExpr {
             throws ContextualError {
         Location loc = this.getLocation();
         if (currentClass.getType().getName().getName() == "Object") {
-            throw new ContextualError("Object class doesn't have parameter", loc);
+            throw new ContextualError("This can only be used in a class (rule 3.43)", loc);
         }
 
         this.setType(currentClass.getType());
-        return compiler.environmentType.BOOLEAN;
+        return currentClass.getType();
         // throw new UnsupportedOperationException("not yet implemented");
     }
 
