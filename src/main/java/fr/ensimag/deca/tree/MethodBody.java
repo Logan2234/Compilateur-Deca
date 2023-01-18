@@ -56,7 +56,7 @@ public class MethodBody extends AbstractMethod {
         vars.decompile(s);
         insts.decompile(s);
         s.unindent();
-        s.print("\n}");
+        s.print("}");
     }
 
     @Override
