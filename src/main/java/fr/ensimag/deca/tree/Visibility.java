@@ -9,14 +9,5 @@ package fr.ensimag.deca.tree;
 
 public enum Visibility {
     PUBLIC,
-    PROTECTED;
-
-    @Override
-    public String toString() {
-        switch (this) {
-            case PUBLIC : return "public";
-            case PROTECTED : return "protected";
-            default : throw new IllegalArgumentException();
-        }
-    }
+    PROTECTED
 }

@@ -18,16 +18,17 @@ import fr.ensimag.deca.tools.IndentPrintStream;
  * @date 05/01/2023
  */
 public class MethodBody extends AbstractMethod {
-    
+
     public MethodBody(ListDeclVar vars, ListInst insts) {
         Validate.notNull(vars);
         Validate.notNull(insts);
         this.vars = vars;
         this.insts = insts;
     }
+
     private ListDeclVar vars;
     private ListInst insts;
-    
+
     public ListDeclVar vars() {
         return vars;
     }
@@ -37,33 +38,37 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
-    public void verifyMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentclass, Type type) throws ContextualError {
+    public void verifyMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentclass, Type type)
+            throws ContextualError {
         vars.verifyListDeclVariable(compiler, localEnv, currentclass);
         insts.verifyListInst(compiler, localEnv, currentclass, type);
     }
 
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
-       //TODO
+        // TODO
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("{");
+        s.println("{");
+        s.indent();
         vars.decompile(s);
         insts.decompile(s);
-        s.print("}");
+        s.unindent();
+        s.print("\n}");
     }
-    
-    @Override 
+
+    @Override
     protected void iterChildren(TreeFunction f) {
         vars.iterChildren(f);
         insts.iterChildren(f);
     }
-    @Override //? Is it necessary ?
+
+    @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        vars.prettyPrintChildren(s, prefix);
-        insts.prettyPrintChildren(s, prefix);
+        vars.prettyPrint(s, prefix, false);
+        insts.prettyPrint(s, prefix, true);
     }
 
     @Override

@@ -1,14 +1,3 @@
-// Description:
-//    champs et methodes simples
-//
-// Resultats:
-//    a.getX() = 1
-//
-// Historique:
-//    cree le 01/01/2023
-
-// Un exemple de programme Deca
-
 class A {
    protected int x ;
    int getX() {
@@ -21,7 +10,6 @@ class A {
 
 {
    A a = new A() ;
-
    a.setX(1) ;
    println("a.getX() = ", a.getX()) ;
 }

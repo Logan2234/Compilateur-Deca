@@ -197,12 +197,10 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        // ! Peut etre pas Definition
-        Definition def = localEnv.get(this.name); // TODO: Utilisation de currentClass éventuelle 
+        Definition def = localEnv.get(this.name);
         Location loc = this.getLocation();
-
         if (def == null)
-            throw new ContextualError("The variable " + name.getName() + " doesn't exist (rule 0.1)", loc);
+            throw new ContextualError("The identifier \"" + name.getName() + "\" doesn't exist (rule 0.1)", loc);
 
         // Ajout du décor
         Type type = def.getType();
@@ -272,22 +270,21 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     public void codeGenPrint(DecacCompiler compiler, boolean hex) {
-        if(definition.getType().isInt()) {
-            // print identifier as an int : 
+        if (definition.getType().isInt()) {
+            // print identifier as an int :
             // load addr in R1
             compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
             // print it
-            
+
             compiler.addInstruction(new WINT());
         } else if (definition.getType().isFloat()) {
             // print identifier as an float :
             // load addr in R1
             compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
             // print it
-            if(hex) {
+            if (hex) {
                 compiler.addInstruction(new WFLOATX());
-            }
-            else {
+            } else {
                 compiler.addInstruction(new WFLOAT());
             }
         }

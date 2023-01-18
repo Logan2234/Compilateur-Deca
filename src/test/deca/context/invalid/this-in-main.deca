@@ -1,0 +1,12 @@
+// Description:
+//    this in main 
+//
+// Resultats:
+//    Ligne 11: This can only be used in a class (rule 3.43)
+//
+// Historique:
+//    cree le 16/01/2023
+
+{
+    this;
+}

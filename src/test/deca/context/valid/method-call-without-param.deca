@@ -1,0 +1,17 @@
+// Description:
+//    method call sans paramètre
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {
+    void get(){}
+}
+
+{
+    A a = new A();
+    a.get();
+}

@@ -23,12 +23,16 @@ public class Return extends AbstractInst {
         Validate.notNull(e);
         this.e = e;
     }
-    
+
     @Override
-    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass, Type returnType)
-            throws ContextualError {
-                throw new UnsupportedOperationException("not yet implemented");
+    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
+            Type returnType) throws ContextualError {
+
+        if (returnType.isVoid())
+            throw new ContextualError("Return cannot be used when method has void type (rule 3.24)",
+                    this.getLocation());
+
+        e.verifyRValue(compiler, localEnv, currentClass, returnType);
     }
 
     @Override
@@ -42,12 +46,11 @@ public class Return extends AbstractInst {
         e.decompile(s);
         s.println(";");
 
-        //throw new UnsupportedOperationException("not yet implemented");
+        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
-    protected
-    void iterChildren(TreeFunction f) {
+    protected void iterChildren(TreeFunction f) {
         e.iter(f);
     }
 

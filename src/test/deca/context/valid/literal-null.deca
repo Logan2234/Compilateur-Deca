@@ -1,0 +1,12 @@
+// Description:
+//    Literal null
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    null;
+}

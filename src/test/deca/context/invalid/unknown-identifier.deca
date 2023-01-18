@@ -3,7 +3,10 @@
 //
 // Resultats:
 //    Erreur contextuelle
-//    Ligne 9 : The variable x doesn't exist (rule 0.1)
+//    Ligne 12: The variable x doesn't exist (rule 0.1)
+//
+// Historique:
+//    cree le 14/01/2023
 
 {
     x = 1;

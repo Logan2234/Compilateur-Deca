@@ -1,0 +1,15 @@
+// Description:
+//    Déclare une méthode avec une instruction
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 14/01/2023
+
+class A{
+    void instruction(){
+        int i;
+        println(1);
+    }
+}

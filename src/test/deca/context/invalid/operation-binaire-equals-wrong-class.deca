@@ -2,7 +2,7 @@
 //    Test 3.33 fail avec equals avec une string et un objet d'une classe
 //
 // Resultats:
-//    Ligne 16 : The right operand of a comparaison operation has to be an int or a float (rule 3.33).
+//    Ligne 16 : A class (or null) can only be compared to another class (rule 3.33)
 //
 // Historique:
 //    cree le 06/01/2023

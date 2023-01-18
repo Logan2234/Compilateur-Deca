@@ -629,6 +629,7 @@ decl_method returns[AbstractDeclMethod tree]
             assert($block.decls != null);
             assert($block.insts != null);
             AbstractMethod body = new MethodBody($block.decls, $block.insts);
+            setLocation(body,$block.start);
             $tree = new DeclMethod($type.tree, $ident.tree, $list_params.tree, body);
             setLocation($tree,$type.start);
         }
@@ -640,8 +641,9 @@ decl_method returns[AbstractDeclMethod tree]
             StringLiteral codeAsm = new StringLiteral($code.text);
             setLocation(codeAsm,$code.start);
             AbstractMethod asmBody = new MethodAsmBody(codeAsm);
+            setLocation(asmBody,$ASM);
             $tree = new DeclMethod($type.tree, $ident.tree, $list_params.tree, asmBody);
-            setLocation($tree,$ASM);
+            setLocation($tree,$type.start);
         }
       ) {
         }
