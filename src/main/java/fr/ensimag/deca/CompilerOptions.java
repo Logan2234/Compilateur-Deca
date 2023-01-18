@@ -176,6 +176,7 @@ public class CompilerOptions {
 
                     case "-o": {
                         optimize = true;
+                        break;
                     }
                 }
                 arg_index++;
