@@ -83,7 +83,7 @@ fragment DIGIT :  ('0' | POSITIVE_DIGIT);
 fragment LETTER : ('a' .. 'z'|'A' .. 'Z');
 
 fragment NUM:  DIGIT+;
-fragment SIGN: ('+'|'-');
+fragment SIGN: ('+'|'-')?;
 fragment EXP:  ('E' | 'e') SIGN NUM;
 fragment DEC:  NUM '.' NUM;
 fragment FLOATDEC:   (DEC | DEC EXP) ('F' | 'f')?;

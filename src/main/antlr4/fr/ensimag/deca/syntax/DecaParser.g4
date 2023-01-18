@@ -26,9 +26,12 @@ options {
 @header {
     import fr.ensimag.deca.tree.*;
     import java.io.PrintStream;
+    import org.apache.log4j.Logger;
 }
 
 @members {
+    private static final Logger LOG = Logger.getLogger(DecaParser.class);
+
     @Override
     protected AbstractProgram parseProgram() {
         return prog().tree;
@@ -479,8 +482,24 @@ literal returns[AbstractExpr tree]
         } {$tree != null}?
     | fd=FLOAT {
         try {
-                $tree = new FloatLiteral(Float.parseFloat($fd.text));
+                LOG.debug("\n================ parse float ================");
+                float f = Float.parseFloat($fd.text);
+                if (f==Float.POSITIVE_INFINITY) {
+                    LOG.debug("\n"+f);
+                    throw new NumberFormatException("float rounded to positive infinity");
+                }
+                if (f==Float.NEGATIVE_INFINITY) {
+                    LOG.debug("\n"+f);
+                    throw new NumberFormatException("float rounded to negative infinity");
+                }
+                if (f==Float.NaN) {
+                    LOG.debug("\n"+f);
+                    throw new NumberFormatException("float evaluated to NaN");
+                }
+
+                $tree = new FloatLiteral(f);
                 setLocation($tree, $fd);
+                LOG.debug("\n================ end parse float ================");
             } catch (NumberFormatException e) {
                 // The float could not be parsed (it's probably too large).
                 // set $tree to null, and then fail with the semantic predicate
