@@ -65,7 +65,7 @@ public class Cast extends AbstractExpr {
     public void decompile(IndentPrintStream s) {
         s.print("(");
         type.decompile(s);
-        s.print(") (");
+        s.print(")(");
         e.decompile(s);
         s.print(")");
     }
