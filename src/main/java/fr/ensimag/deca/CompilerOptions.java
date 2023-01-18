@@ -144,7 +144,7 @@ public class CompilerOptions {
                     case "-r": {
                         // try to read the register number
                         try {
-                            int registerNumber = Integer.parseInt(args[arg_index+1]);
+                            int registerNumber = Integer.parseInt(args[arg_index + 1]);
                             if (registerNumber < 4 || registerNumber > 16) {
                                 throw new CLIException(
                                         "\u001B[31m/!\\ The number of register must be between 4 and 16.\u001B[37m");
@@ -172,6 +172,9 @@ public class CompilerOptions {
                     case "-o": {
                         optimize = true;
                     }
+                    default: {
+                        throw new CLIException("\u001B[31m/!\\ Unknown option\u001B[37m");
+                    }
                 }
                 arg_index++;
             } else {
@@ -188,8 +191,7 @@ public class CompilerOptions {
                 if (args[i].endsWith(".deca")) {
                     // read the file
                     sourceFiles.add(new File(args[i]));
-                }
-                else {
+                } else {
                     throw new CLIException("\u001B[31m/!\\ The file must be a .deca file.\u001B[37m");
                 }
             }

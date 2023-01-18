@@ -5,6 +5,7 @@ package fr.ensimag.deca.context;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
