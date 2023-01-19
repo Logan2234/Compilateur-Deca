@@ -13,4 +13,14 @@ public abstract class NullaryInstruction extends Instruction {
     void displayOperands(PrintStream s) {
         // no operand
     }
+
+    @Override
+    public boolean alterRegister(int regNum) {
+        return false;
+    }
+
+    @Override
+    public boolean usesRegister(int regNum) {
+        return false;
+    }
 }

@@ -81,4 +81,10 @@ public class MethodBody extends AbstractMethod {
     public boolean factorised(){
         return insts.factorised();
     }
+
+    @Override
+    public boolean collapse() {
+        // TODO
+        return false;
+    }
 }

@@ -93,4 +93,42 @@ public class Initialization extends AbstractInitialization {
     protected void spotUsedVar(AbstractProgram prog) {
         this.expression.spotUsedVar(prog);
     }
+    @Override 
+    public boolean collapse(){
+        boolean collapsing = false;
+        if(expression.collapse()) {
+            if(expression.getType().isBoolean()) {
+                // try to collapse to bool expr
+                Boolean collapsedValue = expression.collapseBool();
+                if(collapsedValue != null && expression.collapsable()) {
+                    Type type = expression.getType();
+                    expression = new BooleanLiteral(collapsedValue);
+                    expression.setType(type);
+                    collapsing = true;
+                }
+            }
+            else if(expression.getType().isInt()) {
+                // try to collapse to a int expr
+                Integer collapsedValue = expression.collapseInt();
+                if(collapsedValue != null && expression.collapsable()) {
+                    Type type = expression.getType();
+                    expression = new IntLiteral(collapsedValue);
+                    expression.setType(type);
+                    collapsing = true;
+                }
+            }
+            else if(expression.getType().isFloat()) {
+                // try to collapse to a float
+                Float collapsedValue = expression.collapseFloat();
+                if(collapsedValue != null && expression.collapsable()) {
+                    Type type = expression.getType();
+                    expression = new FloatLiteral(collapsedValue);
+                    expression.setType(type);
+                    collapsing = true;
+                }
+            }
+        }
+        return collapsing;
+    }
+    
 }

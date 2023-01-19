@@ -61,4 +61,9 @@ public class NoInitialization extends AbstractInitialization {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
+    public boolean collapse() {
+        // TODO
+        return false;
+    }
+
 }

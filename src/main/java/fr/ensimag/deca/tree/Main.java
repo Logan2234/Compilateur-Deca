@@ -84,4 +84,9 @@ public class Main extends AbstractMain {
     public boolean factorised() {
         return declVariables.factorised() && insts.factorised();
     }
+    
+    public boolean collapse() {
+        // if either one of the declaration or instructions collapsed, we collapsed
+        return declVariables.collapse() || insts.collapse();
+    }
 }

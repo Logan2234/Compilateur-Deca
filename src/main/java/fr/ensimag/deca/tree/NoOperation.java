@@ -50,4 +50,14 @@ public class NoOperation extends AbstractInst {
     public boolean factorised() {
         return false;//TODO
     }
+    public boolean collapse() {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        return new ListInst();
+    }
+
 }

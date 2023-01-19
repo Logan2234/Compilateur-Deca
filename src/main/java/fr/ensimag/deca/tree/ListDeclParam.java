@@ -56,5 +56,14 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
         }
 
     }
+    @Override
+    public boolean collapse() {
+        boolean result = false;
+        for(AbstractDeclParam i : getList()) {
+            result |= i.collapse();
+        }
+        return result;
+    }
+
 
 }

@@ -75,11 +75,12 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    protected Boolean isLiteral() {
+    public boolean collapse() {
         return true;
     }
 
     @Override
+<<<<<<< HEAD
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
@@ -91,6 +92,14 @@ public class BooleanLiteral extends AbstractExpr {
 
     @Override
     public boolean factorised() {
+=======
+    public Boolean collapseBool() {
+        return value;
+    }
+
+    @Override
+    public boolean collapsable() {
+>>>>>>> feature/optim
         return false;
     }
 }

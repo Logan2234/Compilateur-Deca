@@ -61,12 +61,17 @@ public class MethodAsmBody extends AbstractMethod {
     }
 
     @Override
+<<<<<<< HEAD
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
 
     @Override
     public boolean factorised() {
+=======
+    public boolean collapse() {
+        // TODO
+>>>>>>> feature/optim
         return false;
     }
 }

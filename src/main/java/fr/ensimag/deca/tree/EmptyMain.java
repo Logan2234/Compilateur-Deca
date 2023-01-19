@@ -53,6 +53,10 @@ public class EmptyMain extends AbstractMain {
 
     @Override
     public boolean factorised() {
-        return true;
+        return false;
+    }
+    public boolean collapse() {
+        // this main is empty : cannot collapse further.
+        return false;
     }
 }

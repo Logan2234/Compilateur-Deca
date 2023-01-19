@@ -29,6 +29,31 @@ public class Or extends AbstractOpBool {
         compiler.addInstruction(new SNE(register));
     }
 
+    @Override
+    public boolean collapse() {
+        return getRightOperand().collapse() || getLeftOperand().collapse();
+    }
+
+    @Override
+    public Boolean collapseBool() {
+        Boolean rightCollapsedValue = getRightOperand().collapseBool();
+        if(rightCollapsedValue != null && getRightOperand().collapsable()) {
+            BooleanLiteral newBool = new BooleanLiteral(rightCollapsedValue);
+            newBool.setType(getType());
+            setRightOperand(newBool);
+        }
+        Boolean leftCollapsedValue = getLeftOperand().collapseBool();
+        if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
+            BooleanLiteral newBool = new BooleanLiteral(leftCollapsedValue);
+            newBool.setType(getType());
+            setLeftOperand(newBool);
+        }
+        if(rightCollapsedValue != null && leftCollapsedValue != null) {
+            return rightCollapsedValue || leftCollapsedValue;
+        }
+        return null;
+    }
+
 
     @Override
     public boolean factorised() {

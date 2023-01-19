@@ -130,4 +130,11 @@ public class DeclClass extends AbstractDeclClass {
     public boolean factorised() {
         return methods.factorised() || fields.factorised();
     }
+    @Override
+    public boolean collapse() {
+        fields.collapse();
+        methods.collapse();
+        return false;
+    }
+
 }

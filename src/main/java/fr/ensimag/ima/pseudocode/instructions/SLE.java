@@ -14,4 +14,9 @@ public class SLE extends UnaryInstructionToReg {
         super(op);
     }
 
+    @Override
+    public boolean usesRegister(int regNum) {
+        return false;
+    }
+
 }

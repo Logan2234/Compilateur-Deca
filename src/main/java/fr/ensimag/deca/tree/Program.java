@@ -229,4 +229,8 @@ public class Program extends AbstractProgram {
     public boolean factorised() {
         return classes.factorised() && main.factorised();
     }
+    
+    public boolean collapse() {
+        return classes.collapse() || main.collapse();
+    }
 }

@@ -141,4 +141,9 @@ public class DeclMethod extends AbstractDeclMethod {
     public boolean factorised() {
         return body.factorised();
     }
+    
+    public boolean collapse() {
+        body.collapse();
+        return false;
+    }
 }

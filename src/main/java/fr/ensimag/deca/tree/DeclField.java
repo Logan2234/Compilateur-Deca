@@ -116,4 +116,9 @@ public class DeclField extends AbstractDeclField {
     public boolean factorised() {
         return true;   
     }
+    
+    public boolean collapse() {
+        initialization.collapse();
+        return false;
+    }
 }

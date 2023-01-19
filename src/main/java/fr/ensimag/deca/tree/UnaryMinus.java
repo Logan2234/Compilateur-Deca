@@ -44,7 +44,40 @@ public class UnaryMinus extends AbstractUnaryExpr {
     }
 
     @Override
+<<<<<<< HEAD
     public boolean factorised() {
         return false;//TODO
     }
+=======
+    public boolean collapse() {
+        return getOperand().collapse();
+    }
+
+    @Override
+    public Integer collapseInt() {
+        Integer collapsedValue = getOperand().collapseInt();
+        if(collapsedValue != null) {
+            Type oldType = getOperand().getType();
+            IntLiteral newInt = new IntLiteral(collapsedValue);
+            newInt.setType(oldType);
+            setOperand(newInt);
+            return -collapsedValue;
+        }
+        return null;
+    }
+
+    @Override
+    public Float collapseFloat() {
+        Float collapsedValue = getOperand().collapseFloat();
+        if(collapsedValue != null) {
+            Type oldType = getOperand().getType();
+            FloatLiteral newInt = new FloatLiteral(collapsedValue);
+            newInt.setType(oldType);
+            setOperand(newInt);
+            return -collapsedValue;
+        }
+        return null;
+    }
+
+>>>>>>> feature/optim
 }

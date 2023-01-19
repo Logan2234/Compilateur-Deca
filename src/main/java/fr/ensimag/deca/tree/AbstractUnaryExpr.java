@@ -32,6 +32,12 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         this.operand = operand;
     }
 
+    public void setOperand(AbstractExpr operand){
+        Validate.notNull(operand);
+        this.operand = operand;
+    }
+
+
     protected abstract String getOperatorName();
 
     @Override

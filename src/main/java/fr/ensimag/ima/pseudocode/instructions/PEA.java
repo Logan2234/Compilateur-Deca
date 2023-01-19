@@ -13,4 +13,14 @@ public class PEA extends UnaryInstruction {
         super(operand);
     }
 
+    @Override
+    public boolean alterRegister(int regNum) {
+        return false;
+    }
+
+    @Override
+    public boolean usesRegister(int regNum) {
+        return false;
+    }
+
 }

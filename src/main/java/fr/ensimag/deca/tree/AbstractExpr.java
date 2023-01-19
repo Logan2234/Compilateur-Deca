@@ -230,4 +230,18 @@ public abstract class AbstractExpr extends AbstractInst {
         this.addMethodCalls(foundMethodCalls);
         return foundMethodCalls;
     }
+    @Override
+    public boolean collapse() {
+        // by default, return false. 
+        return false;
+        // expressions that can collapse will override this.
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        // by default, return empty list of instructions. 
+        return new ListInst();
+        // expressions that can collapse will override this.
+    }
+
 }

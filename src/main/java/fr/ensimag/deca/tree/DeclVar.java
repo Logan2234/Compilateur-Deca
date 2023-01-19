@@ -103,4 +103,7 @@ public class DeclVar extends AbstractDeclVar {
     public AbstractInitialization getInit() {
         return this.initialization;
     }
+    public boolean collapse() {
+        return initialization.collapse();
+    }
 }

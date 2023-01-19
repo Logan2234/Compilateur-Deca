@@ -76,4 +76,25 @@ public class ListInst extends TreeList<AbstractInst> {
         }
         return facto;
     }
+
+
+
+    public boolean collapse() {
+        // try to collapse each instruction into a list of instructions
+        boolean collapse = false;
+        for (int i = 0; i < getList().size(); i++) {
+            AbstractInst toCollapse = getList().get(i);
+            if(toCollapse.collapse()) {
+                collapse = true;
+                // remove this inst, replace it with it's collapsed form
+                removeAt(i);
+                int offset = 0;
+                for(AbstractInst newInst : toCollapse.collapseInst().getList()) {
+                    insert(newInst, i + offset);
+                    offset ++;
+                }
+            }
+        }
+        return collapse;
+    }
 }

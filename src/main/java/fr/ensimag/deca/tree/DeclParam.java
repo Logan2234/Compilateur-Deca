@@ -75,4 +75,7 @@ public class DeclParam extends AbstractDeclParam {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
+    public boolean collapse() {
+        return false;
+    }
 }

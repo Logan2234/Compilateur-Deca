@@ -288,13 +288,57 @@ public abstract class Tree {
         }
     }
 
-    protected Boolean isLiteral() {
-        return false;
+    /**
+     * Optimize the decorated tree.
+     */
+    public void optimizeTree() {
+        // solve compile time known cases.
+        while(collapse()) {
+            // rien
+        }
     }
+
 
     /**
      * Set to true the "used" attribute of definitions of used variables
      */
     protected abstract void spotUsedVar(AbstractProgram prog);
+     /** Check if the tree can collapse into a compile time known node.
+     * This calls the collapse triggers on each nodes.
+     * @return if this node could collapse.
+     */
+    public abstract boolean collapse();
+
+    /**
+     * Collapse the boolean values known at compile time.
+     * if the expression cannot collapse, null is returned.
+     * @return the value of the compile-time known boolean.
+     */
+    public Boolean collapseBool() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    };
+
+    /**
+     * Collapse the int values known at compile time.
+     * if the expression cannot collapse, null is returned.
+     * @return the value of the compile-time known int.
+     */
+    public Integer collapseInt() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    }
+
+    /**
+     * Collapse the float values known at compile time.
+     * if the expression cannot collapse, null is returned.
+     * @return the value of the compile-time known float.
+     */
+    public Float collapseFloat() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    }
+
+    public boolean collapsable() {
+        // tells if we are at a terminal node or not. only true for litterals.
+        return true;
+    }
     
 }

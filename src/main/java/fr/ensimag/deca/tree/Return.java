@@ -68,4 +68,14 @@ public class Return extends AbstractInst {
     public boolean factorised() {
         return false;//TODO
     }
+    public boolean collapse() {
+        return false;
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
+    }
 }

@@ -46,4 +46,10 @@ public abstract class AbstractInst extends Tree {
     }
 
     public abstract boolean factorised();
+    /**
+     * Collapse instructions.
+     * It collapse to a list of instructions, because if blocks can collapse to one of the branches for example.
+     * @return
+     */
+    public abstract ListInst collapseInst();
 }

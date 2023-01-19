@@ -83,7 +83,8 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
-    protected Boolean isLiteral() {
+    public boolean collapse() {
+        // every litteral can be trivialy solved.
         return true;
     }
 
@@ -100,5 +101,13 @@ public class IntLiteral extends AbstractExpr {
     @Override
     public boolean factorised() {
         return false;//TODO
+    }
+    public Integer collapseInt() {
+        return value;
+    }
+
+    @Override
+    public boolean collapsable() {
+        return false;
     }
 }

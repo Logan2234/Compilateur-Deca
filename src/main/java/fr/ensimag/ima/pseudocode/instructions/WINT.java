@@ -7,5 +7,8 @@ import fr.ensimag.ima.pseudocode.NullaryInstruction;
  * @date 01/01/2023
  */
 public class WINT extends NullaryInstruction {
-
+    @Override
+    public boolean usesRegister(int regNum) {
+        return regNum == 1;
+    }
 }
