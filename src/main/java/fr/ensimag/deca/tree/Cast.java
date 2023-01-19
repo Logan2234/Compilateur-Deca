@@ -21,8 +21,8 @@ import org.apache.commons.lang.Validate;
  */
 public class Cast extends AbstractExpr {
 
-    private final AbstractIdentifier type;
-    private final AbstractExpr e;
+    private AbstractIdentifier type;
+    private AbstractExpr e;
 
     public Cast(AbstractIdentifier type, AbstractExpr e) {
         Validate.notNull(type);
@@ -40,7 +40,21 @@ public class Cast extends AbstractExpr {
         if (typeExp.isVoid() || (!typeExp.assignCompatible(typeT) && !typeT.assignCompatible(typeExp)))
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
                     + typeT.getName().getName() + "\"", getLocation());
-
+        
+        if (typeT.isInt() && typeExp.isFloat()){
+            ConvInt convint = new ConvInt(e);
+            convint.setLocation(e.getLocation());
+            convint.verifyExpr(compiler, localEnv, currentClass);
+            e = convint;
+        }
+        
+        if (typeT.isFloat() && typeExp.isInt()){
+            ConvFloat convfloat = new ConvFloat(e);
+            convfloat.setLocation(e.getLocation());
+            convfloat.verifyExpr(compiler, localEnv, currentClass);
+            e = convfloat;
+        }
+            
         // Ajout du décor
         setType(typeT);
         return typeT;

@@ -38,12 +38,12 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         // Ajout du décor et renvoie du type
         if (typeLeft.isFloat() && typeRight.isInt()) {
             ConvFloat convFloat = new ConvFloat(getRightOperand());
-            convFloat.setType(typeLeft);
+            convFloat.verifyExpr(compiler, localEnv, currentClass);
             convFloat.setLocation(getRightOperand().getLocation());
             setRightOperand(convFloat);
         } else if (typeRight.isFloat() && typeLeft.isInt()) {
             ConvFloat convFloat = new ConvFloat(getLeftOperand());
-            convFloat.setType(typeRight);
+            convFloat.verifyExpr(compiler, localEnv, currentClass);
             convFloat.setLocation(getLeftOperand().getLocation());
             setLeftOperand(convFloat);
             typeLeft = typeRight;
