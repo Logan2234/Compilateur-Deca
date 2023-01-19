@@ -187,7 +187,7 @@ public class Program extends AbstractProgram {
                     Assign assign = (Assign)inst;
                     if (!assign.getLeftOperand().getDefinition().isUsed()) {
                         iterInst.remove();
-                        iterInst.add(assign.getLeftOperand()); // add after the current instruction
+                        iterInst.add(assign.getRightOperand()); // add after the current instruction
                         simplified = true;
                         LOG.debug("Break Assign at "+inst.getLocation() + " : " + inst.getClass());
                     }

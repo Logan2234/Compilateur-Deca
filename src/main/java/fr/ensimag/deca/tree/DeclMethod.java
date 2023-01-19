@@ -72,10 +72,10 @@ public class DeclMethod extends AbstractDeclMethod {
                             "The return type is not the same as defined in the superclass (or not a subtype) (rule 2.7)",
                             getLocation());
             }
-            methodeDef = new MethodDefinition(type, this.getLocation(), signature, motherMethod.getIndex());
+            methodeDef = new MethodDefinition(type, this.getLocation(), signature, motherMethod.getIndex(), currentClass);
         } else {
             currentClass.incNumberOfMethods();
-            methodeDef = new MethodDefinition(type, this.getLocation(), signature, currentClass.getNumberOfMethods());
+            methodeDef = new MethodDefinition(type, this.getLocation(), signature, currentClass.getNumberOfMethods(), currentClass);
         }
         try {
             localEnv.declare(this.methodName.getName(), methodeDef);

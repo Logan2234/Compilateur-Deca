@@ -49,7 +49,7 @@ public abstract class Definition {
     }
 
     private Location location;
-    private Type type;
+    protected Type type;
 
     public boolean isField() {
         return false;
@@ -154,7 +154,14 @@ public abstract class Definition {
 
     /**
      * Set to true the "used" attribute of related definitions (super or containing class)
+     * @return true if a definition as been set to true
      */
-    public abstract boolean spotRelatedDefs();
+    public boolean spotRelatedDefs() {
+        boolean varSpotted = false;
+        if (this.type.isClass()) {
+            varSpotted = ((ClassType)this.type).getDefinition().spotUsedVar();
+        }
+        return varSpotted;
+    }
 
 }

@@ -72,5 +72,4 @@ public class ClassType extends Type {
 
         return false;
     }
-
 }

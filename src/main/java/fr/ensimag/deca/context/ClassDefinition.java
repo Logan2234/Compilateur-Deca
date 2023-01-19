@@ -80,10 +80,11 @@ public class ClassDefinition extends TypeDefinition {
 
     @Override
     public boolean spotRelatedDefs() {
+        boolean varSpotted = super.spotRelatedDefs();
         if (this.superClass != null) {
-            return this.superClass.spotUsedVar();
+            return this.superClass.spotUsedVar() || varSpotted;
         }
-        return false;
+        return varSpotted;
     }
     
 }
