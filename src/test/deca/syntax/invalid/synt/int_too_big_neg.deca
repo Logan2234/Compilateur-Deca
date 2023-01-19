@@ -1,0 +1,14 @@
+// Description:
+//    erreur du a un int trop petit
+//    syntaxiquement incorrect
+//
+// Resultats:
+//    Ligne 13 : rule literal failed predicate: {$tree != null}?
+//
+// Historique:
+//    cree le 18/01/2023
+//
+
+{
+    int v = -2147483648;
+}

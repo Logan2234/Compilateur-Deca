@@ -12,6 +12,7 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import javax.swing.plaf.synth.Region;
 
@@ -41,10 +42,11 @@ public class Cast extends AbstractExpr {
         Location loc = this.getLocation();
         Type typeExp = this.e.verifyExpr(compiler, localEnv, currentClass);
         Type typeT = this.type.verifyType(compiler);
-        
+
         if (typeExp.isVoid()
                 || (!typeExp.assignCompatible(localEnv, typeT) && !typeT.assignCompatible(localEnv, typeExp))) {
-            throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \"" + typeT.getName().getName() + "\"", loc);
+            throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
+                    + typeT.getName().getName() + "\"", loc);
         }
 
         // Ajout du décor
@@ -68,7 +70,7 @@ public class Cast extends AbstractExpr {
     public void decompile(IndentPrintStream s) {
         s.print("(");
         type.decompile(s);
-        s.print(") (");
+        s.print(")(");
         e.decompile(s);
         s.print(")");
     }
@@ -96,4 +98,15 @@ public class Cast extends AbstractExpr {
         compiler.addInstruction(new LOAD(type.getDefinition().getDAddr(), Register.R1));
     }
 
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.type.spotUsedVar(prog);
+        this.e.spotUsedVar(prog);
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // the expression could be obtained via a MethodCall
+        this.e.addMethodCalls(foundMethodCalls);
+    }
 }

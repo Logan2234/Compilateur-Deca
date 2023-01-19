@@ -24,6 +24,7 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -56,7 +57,7 @@ public class New extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("new");
+        s.print("new ");
         classe.decompile(s);
         s.print("()");
     }
@@ -111,4 +112,13 @@ public class New extends AbstractExpr {
         }
     }
 
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
+    }
 }

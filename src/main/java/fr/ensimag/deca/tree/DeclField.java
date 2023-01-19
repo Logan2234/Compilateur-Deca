@@ -77,8 +77,7 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(visib.toString().toLowerCase());
-        s.print(' ');
+        s.print((visib == Visibility.PROTECTED ? "protected " : ""));
         type.decompile(s);
         s.print(' ');
         fieldName.decompile(s);
@@ -109,5 +108,15 @@ public class DeclField extends AbstractDeclField {
     public void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister) {
         fieldName.getDefinition().setDAddrOffsetOnly(resultRegister.getOffset());
         initialization.codeGenInit(compiler, type.getType(), resultRegister);
+    }
+
+    
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    }
+
+    public AbstractIdentifier getName() {
+        return this.fieldName;
     }
 }

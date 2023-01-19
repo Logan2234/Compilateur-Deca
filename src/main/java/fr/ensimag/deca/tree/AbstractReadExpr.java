@@ -1,5 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import java.util.List;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.InvalidReadErr;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -42,6 +44,14 @@ public abstract class AbstractReadExpr extends AbstractExpr {
      * @param compiler Where we write the instructions to.
      */
     protected abstract void codeGenRead(DecacCompiler compiler);
+    
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+    }
 
-
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        foundMethodCalls.add(this);
+    }
 }

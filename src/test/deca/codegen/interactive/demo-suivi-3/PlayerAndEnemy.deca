@@ -1,0 +1,56 @@
+#include "Entity.deca"
+
+class Player extends Entity {
+	protected int vie = 100;
+	protected int damage = 10;
+
+	void Player(int poids, float taille) {
+		Entity(poids, taille);
+	}
+
+	void stats(){
+		println("The player weights ", poids, "kg and measures ", taille, "cm, has", vie, "life points and deals ", damage, " damage to monsters.");
+	}
+
+	int getVie(){
+		return vie;
+	}
+
+	void getHurt(int dmg){
+		println("You lost ", dmg, "life points");
+		vie = vie - dmg;
+		if (vie <= 0){
+			println("Game Over");
+		}
+	}
+
+	int getDamage(){
+		return damage;
+	}
+}
+
+class Enemy extends Entity {
+	protected int vie = 100;
+	protected int damage = 25;
+
+	void Enemy(int poids, float taille) {
+		Entity(poids, taille);
+	}
+
+	void stats(){
+		println("The enemy weights ", poids, "kg and measures ", taille, "cm, has", vie, "life points and deals ", damage, " damage.");
+	}
+
+	int getVie(){
+		return vie;
+	}
+
+	void getHurt(int dmg){
+		println("The enemy lost ", dmg, "life points. ", vie, " remaining.");
+		vie = vie - dmg;
+	}
+
+	int getDamage(){
+		return damage;
+	}
+}

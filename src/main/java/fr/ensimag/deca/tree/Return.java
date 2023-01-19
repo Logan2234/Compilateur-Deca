@@ -81,4 +81,9 @@ public class Return extends AbstractInst {
     public Return asReturn() {
         return this;
     }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.expression.spotUsedVar(prog);
+    }
 }

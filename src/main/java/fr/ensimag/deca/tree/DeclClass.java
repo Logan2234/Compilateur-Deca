@@ -5,7 +5,6 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
-import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
@@ -16,7 +15,6 @@ import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
-import net.bytebuddy.implementation.bytecode.member.MethodInvocation;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -46,17 +44,26 @@ public class DeclClass extends AbstractDeclClass {
         this.methods = methods;
     }
 
+    public ListDeclMethod getMethods() {
+        return this.methods;
+    }
+
+    public ListDeclField getFields() {
+        return this.fields;
+    }
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class ");
         name.decompile(s);
         s.print(" extends ");
         superIdentifier.decompile(s);
-        s.print(" {");
+        s.println(" {");
+        s.indent();
         fields.decompile(s);
         methods.decompile(s);
-        s.print("}");
-
+        s.unindent();
+        s.print("}\n");
     }
 
     @Override
@@ -178,4 +185,12 @@ public class DeclClass extends AbstractDeclClass {
 
     }
 
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    }
+
+    public AbstractIdentifier getName() {
+        return this.name;
+    }
 }

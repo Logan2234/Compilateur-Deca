@@ -98,4 +98,9 @@ public class While extends AbstractInst {
         body.prettyPrint(s, prefix, true);
     }
 
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.condition.spotUsedVar(prog);
+        this.body.spotUsedVar(prog);
+    }
 }

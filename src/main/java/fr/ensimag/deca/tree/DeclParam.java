@@ -78,4 +78,7 @@ public class DeclParam extends AbstractDeclParam {
         paramName.getDefinition().setDAddr(dAddr);
     }
 
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+    }
 }

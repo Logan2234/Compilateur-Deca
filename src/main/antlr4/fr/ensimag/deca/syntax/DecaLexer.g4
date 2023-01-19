@@ -16,7 +16,6 @@ options {
 @members {
 }
 
-
 // Ignore spaces, tabs, newlines, whitespaces and comments
 WS:   ( ' '
          | '//' .*? '\n'
@@ -83,16 +82,17 @@ fragment DIGIT :  ('0' | POSITIVE_DIGIT);
 fragment LETTER : ('a' .. 'z'|'A' .. 'Z');
 
 fragment NUM:  DIGIT+;
-fragment SIGN: ('+'|'-');
+fragment SIGN: ('+'|'-')?;
 fragment EXP:  ('E' | 'e') SIGN NUM;
 fragment DEC:  NUM '.' NUM;
 fragment FLOATDEC:   (DEC | DEC EXP) ('F' | 'f')?;
+
 fragment DIGITHEX:   ('0'.. '9'|'A' .. 'F'|'a' .. 'f');
 fragment NUMHEX:     DIGITHEX+;
 fragment FLOATHEX:   ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN? NUM ('F' | 'f')?;
 
 INT: ('0' | POSITIVE_DIGIT DIGIT*);
-FLOAT: FLOATDEC | FLOATHEX;
+FLOAT: (FLOATDEC | FLOATHEX);
 
 // Identifier
 IDENT: (LETTER | '$' | '_')(LETTER | DIGIT | '$' | '_')*;
@@ -103,9 +103,9 @@ fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
 INCLUDE: ('#include' (' ')* '"' FILENAME '"')
          {
             String s = getText();
-            int startIndex = s.indexOf('"')-1;
+            int startIndex = s.indexOf('"');
             int endIndex = s.length();
-            String file = s.substring(startIndex + 1, endIndex);
+            String file = s.substring(startIndex, endIndex);
             doInclude(file);
          };
 

@@ -3,8 +3,9 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -35,6 +36,14 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
         return Collections.unmodifiableList(list);
     }
 
+    /**
+     * @return the list contained in the class, muable.
+     *         Use getList() if you don't need to change elements of the list.
+     */
+    public List<TreeType> getModifiableList() {
+        return this.list;
+    }
+
     public TreeType set(int index, TreeType element) {
         return list.set(index, element);
     }
@@ -43,8 +52,8 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
         return list.isEmpty();
     }
 
-    public Iterator<TreeType> iterator() {
-        return list.iterator();
+    public ListIterator<TreeType> iterator() {
+        return list.listIterator();
     }
 
     public int size() {
@@ -84,4 +93,11 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
         }
     }
 
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        for (TreeType tree : getList()) {
+            tree.spotUsedVar(prog);
+        }
+    }
+    
 }

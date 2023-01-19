@@ -287,4 +287,14 @@ public abstract class Tree {
             return "";
         }
     }
+
+    protected Boolean isLiteral() {
+        return false;
+    }
+
+    /**
+     * Set to true the "used" attribute of definitions of used variables
+     */
+    protected abstract void spotUsedVar(AbstractProgram prog);
+    
 }

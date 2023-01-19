@@ -25,6 +25,11 @@ public class StringLiteral extends AbstractStringLiteral {
         return value;
     }
 
+    @Override
+    protected Boolean isLiteral() {
+        return true;
+    }
+
     private String value;
 
     public StringLiteral(String value) {

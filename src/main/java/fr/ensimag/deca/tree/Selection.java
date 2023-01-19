@@ -10,6 +10,8 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -91,5 +93,17 @@ public class Selection extends AbstractLValue {
     public Definition getDefinition() {
         // ? pas trop sur de moi la dessus
         return field.getDefinition();
+    }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.obj.spotUsedVar(prog);
+        this.field.spotUsedVar(prog);
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // the object could be obtained via a MethodCall
+        this.obj.addMethodCalls(foundMethodCalls);
     }
 }

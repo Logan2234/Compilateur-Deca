@@ -1,5 +1,6 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Location;
 
 /**
@@ -24,4 +25,8 @@ public class TypeDefinition extends Definition {
         return false;
     }
 
+    @Override
+    public void spotRelatedDefs(AbstractProgram prog) {
+        // do nothing
+    }
 }

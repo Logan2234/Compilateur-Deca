@@ -54,7 +54,7 @@ else
     fi
 fi
 
-if decac -o 2>&1 | grep -q "Unknown option"
+if decac -l 2>&1 | grep -q "Unknown option"
 then
     echo -e "${GREENBOLD}Test passed:$GREEN decac with an unknown option returns an error"
 else 

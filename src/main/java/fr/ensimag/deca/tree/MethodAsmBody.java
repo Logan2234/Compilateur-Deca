@@ -64,4 +64,8 @@ public class MethodAsmBody extends AbstractMethod {
     public void setReturnsNames(String name) {
         // useless here ?
     }
+    
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+    }
 }

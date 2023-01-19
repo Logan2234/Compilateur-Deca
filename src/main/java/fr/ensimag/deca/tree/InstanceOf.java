@@ -7,7 +7,6 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
@@ -23,7 +22,7 @@ import fr.ensimag.ima.pseudocode.instructions.SEQ;
 import fr.ensimag.ima.pseudocode.instructions.SNE;
 
 import java.io.PrintStream;
-import java.io.PushbackInputStream;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -125,4 +124,16 @@ public class InstanceOf extends AbstractExpr {
         }
     }
 
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.e.spotUsedVar(prog);
+        // We don't spotUsedVar on the class type.
+        // If the class is not used elsewhere then the expression will be evaluated to false.
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // the expression could be obtained via a MethodCall
+        this.e.addMethodCalls(foundMethodCalls);
+    }
 }

@@ -102,4 +102,9 @@ public class Initialization extends AbstractInitialization {
         }
         
     }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.expression.spotUsedVar(prog);
+    }
 }

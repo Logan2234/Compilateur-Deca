@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Integer literal
@@ -52,6 +53,16 @@ public class Null extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         throw new UnsupportedOperationException("not yet implemented");
+    }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
     }
 
 }

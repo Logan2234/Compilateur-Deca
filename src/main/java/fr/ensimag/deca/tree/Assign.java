@@ -11,7 +11,6 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -115,4 +114,11 @@ public class Assign extends AbstractBinaryExpr {
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
         throw new UnsupportedOperationException("This should never be called.");
     }
+
+    @Override
+    protected void spotUsedVar(AbstractProgram prog) {
+        // we don't spot leftOperand
+        this.rightOperand.spotUsedVar(prog);
+    }
+    
 }

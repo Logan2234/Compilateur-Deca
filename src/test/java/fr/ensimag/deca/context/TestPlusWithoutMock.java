@@ -1,22 +1,26 @@
+//! Not used when testing. See TestPlusAdvanced.java.
+
 package fr.ensimag.deca.context;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.PrintStream;
+import java.util.List;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tree.AbstractExpr;
+import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Plus;
 import fr.ensimag.deca.tree.TreeFunction;
 import fr.ensimag.ima.pseudocode.GPRegister;
-
-import java.io.PrintStream;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test for the Plus node in a manual way. The same test would be much easier to
  * write using a mock-up framework like Mockito.
  *
  * @see TestPlusPlain to see how the Mockito library can help writing this kind
- * of tests.
+ *      of tests.
  *
  * @author Ensimag
  * @date 01/01/2023
@@ -66,9 +70,18 @@ public class TestPlusWithoutMock {
         public void checkProperUse() {
             assertTrue(hasBeenVerified, "verifyExpr has not been called");
         }
+
+        @Override
+        protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+            // TODO Auto-generated method stub  
+        }
+
+        @Override
+        protected void spotUsedVar(AbstractProgram prog) {
+            // TODO Auto-generated method stub
+        }
     }
 
-    @Test
     public void testType() throws ContextualError {
         DecacCompiler compiler = new DecacCompiler(null, null);
         DummyIntExpression left = new DummyIntExpression();
@@ -80,4 +93,5 @@ public class TestPlusWithoutMock {
         left.checkProperUse();
         right.checkProperUse();
     }
+
 }

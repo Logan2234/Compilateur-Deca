@@ -1,15 +1,20 @@
 package fr.ensimag.deca.context;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.ConvFloat;
 import fr.ensimag.deca.tree.Equals;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mock;
-import static org.mockito.Mockito.*;
-import org.mockito.MockitoAnnotations;
 
 /**
  * Test for the Equals node using mockito, using @Mock and @Before annotations.
@@ -46,7 +51,7 @@ public class TestOpCmpAdvanced {
     AbstractExpr nullexpr2;
 
     DecacCompiler compiler;
-    
+
     @BeforeEach
     public void setup() throws ContextualError {
         MockitoAnnotations.initMocks(this);
@@ -113,17 +118,45 @@ public class TestOpCmpAdvanced {
     public void testBooleanInt() throws ContextualError {
         Equals t = new Equals(booleanexpr1, intexpr1);
         // check the result
-        assertThrows(ContextualError.class, ()->{t.verifyExpr(compiler, null, null);});
+        assertThrows(ContextualError.class, () -> {
+            t.verifyExpr(compiler, null, null);
+        });
         // check that the mocks have been called properly.
         verify(booleanexpr1).verifyExpr(compiler, null, null);
         verify(intexpr1).verifyExpr(compiler, null, null);
     }
 
     @Test
+    public void testIntNull() throws ContextualError {
+        Equals t = new Equals(intexpr1, nullexpr1);
+        // check the result
+        assertThrows(ContextualError.class, () -> {
+            t.verifyExpr(compiler, null, null);
+        });
+        // check that the mocks have been called properly.
+        verify(intexpr1).verifyExpr(compiler, null, null);
+        verify(nullexpr1).verifyExpr(compiler, null, null);
+    }
+
+    @Test
+    public void testNullFloat() throws ContextualError {
+        Equals t = new Equals(nullexpr1, floatexpr1);
+        // check the result
+        assertThrows(ContextualError.class, () -> {
+            t.verifyExpr(compiler, null, null);
+        });
+        // check that the mocks have been called properly.
+        verify(nullexpr1).verifyExpr(compiler, null, null);
+        verify(floatexpr1).verifyExpr(compiler, null, null);
+    }
+
+    @Test
     public void testBooleanFloat() throws ContextualError {
         Equals t = new Equals(booleanexpr1, floatexpr1);
         // check the result
-        assertThrows(ContextualError.class, ()->{t.verifyExpr(compiler, null, null);});
+        assertThrows(ContextualError.class, () -> {
+            t.verifyExpr(compiler, null, null);
+        });
         // check that the mocks have been called properly.
         verify(booleanexpr1).verifyExpr(compiler, null, null);
         verify(floatexpr1).verifyExpr(compiler, null, null);

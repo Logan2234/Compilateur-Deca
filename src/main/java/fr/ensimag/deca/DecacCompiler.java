@@ -396,15 +396,25 @@ public class DecacCompiler {
         }
 
         if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
+            if (compilerOptions.getOptimize()){
+                prog.verifyProgram(this);
+                prog.optimizeTree();
+            }
             LOG.info("Writing deca file ...");
             prog.decompile(out);
             LOG.info("Decompilation of " + sourceName + " successful.");
         }
-        
+
         else {
             prog.verifyProgram(this);
             assert (prog.checkAllDecorations());
             if (compilerOptions.getCompileMode() == CompileMode.Compile) {
+                if (compilerOptions.getOptimize()){
+                    LOG.info("Optimizing the tree...");
+                    prog.optimizeTree();
+                    LOG.info("Tree optimized...");
+                }
+                addComment("start main program");
                 prog.codeGenProgram(this);
                 LOG.debug("Generated assembly code:" + nl + program.display());
                 LOG.info("Output file assembly file is: " + destName);

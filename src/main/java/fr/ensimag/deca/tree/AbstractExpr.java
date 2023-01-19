@@ -15,6 +15,9 @@ import fr.ensimag.ima.pseudocode.instructions.WINT;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -203,5 +206,28 @@ public abstract class AbstractExpr extends AbstractInst {
             s.print(t);
             s.println();
         }
+    }
+
+    /**
+     * Fin recursively all method calls and Reads in the expression and add them on top of the list
+     * This method is used for optimizing the Program tree.
+     * Instructions should not be removed if they contains a MethodCall or a Read that could
+     * potentially print/read on stdin/stdout or change the state of an object.
+     * It had the methods found on top of the list
+     * @param the list of MethodCalls and Reads ordered by order of apparition
+     */
+    protected abstract void addMethodCalls(List<AbstractExpr> foundMethodCalls);
+
+    /**
+     * Fin recursively all method calls and reads in the expression
+     * This method is used for optimizing the Program tree.
+     * Instructions should not be removed if they contains a MethodCall or a Read that could
+     * potentially print/read on stdin/stdout or change the state of an object.
+     * @return the list of MethodCall ordered by order of apparition
+     */
+    protected final List<AbstractExpr> getMethodCalls() {
+        List<AbstractExpr> foundMethodCalls = new LinkedList<AbstractExpr>();
+        this.addMethodCalls(foundMethodCalls);
+        return foundMethodCalls;
     }
 }

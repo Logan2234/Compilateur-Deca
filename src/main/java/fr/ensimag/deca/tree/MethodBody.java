@@ -28,8 +28,8 @@ public class MethodBody extends AbstractMethod {
 
     private ListDeclVar vars;
     private ListInst insts;
-
-    public ListDeclVar vars() {
+    
+    public ListDeclVar getVars() {
         return vars;
     }
 
@@ -46,9 +46,11 @@ public class MethodBody extends AbstractMethod {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("{");
+        s.println("{");
+        s.indent();
         vars.decompile(s);
         insts.decompile(s);
+        s.unindent();
         s.print("}");
     }
 
@@ -78,5 +80,10 @@ public class MethodBody extends AbstractMethod {
                 inst.asReturn().setMethodClassName(name);
             }
         }
+    }
+    
+    protected void spotUsedVar(AbstractProgram prog) {
+        this.vars.spotUsedVar(prog);
+        this.insts.spotUsedVar(prog);
     }
 }

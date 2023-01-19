@@ -87,13 +87,13 @@ fi
 
 if [[ $1 == "--maven" ]];
 then
-    option-P --maven
+    option-parallel --maven
     if [ $? -ne 0 ]
     then
         exit 1
     fi
 else
-    option-P
+    option-parallel
 fi
 
 if [[ $1 == "--maven" ]];

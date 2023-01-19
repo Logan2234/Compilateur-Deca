@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.tree.ConvFloat;
-import fr.ensimag.deca.tree.Greater;
 import fr.ensimag.deca.tree.ReadFloat;
 import fr.ensimag.deca.tree.ReadInt;
 

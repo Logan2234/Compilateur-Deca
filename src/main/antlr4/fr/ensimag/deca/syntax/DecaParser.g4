@@ -26,9 +26,12 @@ options {
 @header {
     import fr.ensimag.deca.tree.*;
     import java.io.PrintStream;
+    import org.apache.log4j.Logger;
 }
 
 @members {
+    private static final Logger LOG = Logger.getLogger(DecaParser.class);
+
     @Override
     protected AbstractProgram parseProgram() {
         return prog().tree;
@@ -292,7 +295,7 @@ eq_neq_expr returns[AbstractExpr tree]
             setLocation($tree, $NEQ);
         }
     ;
-// INSTANCEOF case not implemented
+
 inequality_expr returns[AbstractExpr tree]
     : e=sum_expr {
             assert($e.tree != null);
@@ -424,6 +427,7 @@ primary_expr returns[AbstractExpr tree]
             assert($args.tree != null);
             assert($m.tree != null);
             This _this = new This(true);
+            setLocation(_this, $m.start);
             $tree = new MethodCall(_this, $m.tree, $args.tree);
             setLocation($tree, $m.start);
 
@@ -477,16 +481,61 @@ literal returns[AbstractExpr tree]
                 $tree = null;
             }
         } {$tree != null}?
-    | fd=FLOAT {
-        try {
-                $tree = new FloatLiteral(Float.parseFloat($fd.text));
-                setLocation($tree, $fd);
+    | FLOAT 
+        {
+            LOG.debug("\n================== Parsing float ==================");
+            float f = Float.POSITIVE_INFINITY;
+
+            try {
+                f = Float.parseFloat($FLOAT.text);
+                $tree = new FloatLiteral(f);
+                setLocation($tree, $FLOAT);
             } catch (NumberFormatException e) {
-                // The float could not be parsed (it's probably too large).
+                // The float could not be parsed.
                 // set $tree to null, and then fail with the semantic predicate
                 // {$tree != null}?. In decac, we'll have a more advanced error
                 // management.
                 $tree = null;
+            }
+
+            if (f==Float.POSITIVE_INFINITY || f==Float.NEGATIVE_INFINITY || f==Float.NaN) {
+                $tree = null;
+            }
+
+            else if (f==0) {
+                // error if non 0 rounded to 0
+                String s = $FLOAT.text;
+                assert(s.length() >= 2);
+
+                // FLOATHEX
+                if(s.charAt(1)=='x' || s.charAt(1)=='X') {
+                    // get the float without the power
+                    int indexp = (s.indexOf('p')==-1 ? s.length(): s.indexOf('p'));
+                    int indexP = (s.indexOf('P')==-1 ? s.length(): s.indexOf('P'));
+                    int indexEnd = Math.min(indexp, indexP);
+                    String floatWithoutPower = s.substring(2, indexEnd);
+                    LOG.debug("floatWithoutPower : "+floatWithoutPower);
+                    if (Float.parseFloat(floatWithoutPower) != 0) {
+                        $tree = null;
+                    }
+                }
+
+                // FLOATDEC
+                else {
+                    // get the float without the power
+                    int indexe = (s.indexOf('e')==-1 ? s.length(): s.indexOf('e'));
+                    int indexE = (s.indexOf('E')==-1 ? s.length(): s.indexOf('E'));
+                    int indexf = (s.indexOf('f')==-1 ? s.length(): s.indexOf('f'));
+                    int indexF = (s.indexOf('F')==-1 ? s.length(): s.indexOf('F'));
+                    int indexEnd = Math.min(indexe, indexE);
+                    indexEnd = Math.min(indexEnd, indexf);
+                    indexEnd = Math.min(indexEnd, indexF);
+                    String floatWithoutPower = s.substring(0, indexEnd);
+                    LOG.debug("floatWithoutPower : "+floatWithoutPower);
+                    if (Float.parseFloat(floatWithoutPower) != 0) {
+                        $tree = null;
+                    }
+                }
             }
         } {$tree != null}?
     | STRING {

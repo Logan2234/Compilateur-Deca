@@ -16,11 +16,11 @@ PATH=./src/test/script/launchers:"$PATH"
 
 echo -e "${BWHITE}\n============================= -P option =============================\n"
 
-files=$(find ./src/test/deca/context/valid -maxdepth 1 -name "*.deca")
+# files=$(find ./src/test/deca/context/valid -maxdepth 1 -name "*.deca")
 
-for test in $files
-do
-    decac -P $test $test
+# for test in $files
+# do
+#     decac -P $test $test
     echo -e "${GREENBOLD}TODO: Find a way to test this option efficiently."
-    break
-done
+#     break
+# done
