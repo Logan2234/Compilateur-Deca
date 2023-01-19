@@ -1,5 +1,8 @@
 package fr.ensimag.deca.context;
 
+import java.util.Map;
+import java.util.Set;
+
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.deca.tree.Visibility;
@@ -62,5 +65,19 @@ public class FieldDefinition extends ExpDefinition {
         boolean varSpotted = super.spotRelatedDefs();
         varSpotted = this.containingClass.spotUsedVar() || varSpotted;
         return varSpotted;
+    }
+
+    /**
+     * If the unspotted field is an override of a useful method, it may be dynamically useful.
+     * @return true if the method is an override of a used method
+     */
+    public boolean isOverrideOfUsed(Map<ClassDefinition,Set<Integer>> exploredFields) {
+        boolean res = false;
+        ClassDefinition superClass = this.containingClass.getSuperClass();
+        while(superClass != null && !res && this.index<=superClass.getNumberOfMethods()) {
+            res = exploredFields.get(superClass).contains(this.index);
+            superClass = superClass.getSuperClass();
+        }
+        return res;
     }
 }

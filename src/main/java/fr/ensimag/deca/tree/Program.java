@@ -3,10 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
-import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Definition;
-import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
@@ -99,8 +96,9 @@ public class Program extends AbstractProgram {
         boolean varSpotted = true;
         while (varSpotted) {
             varSpotted = this.main.spotUsedVar();
-            varSpotted = this.spotUsedVarFromClasses() || varSpotted;
+            varSpotted = this.spotFromUsedMethods() || varSpotted;
         }
+        varSpotted = this.spotOverridingFields() || varSpotted;
         return varSpotted;
     }
 
@@ -310,15 +308,15 @@ public class Program extends AbstractProgram {
     }
 
     /**
-     * Spot all useful variables from classes
-     * @return
+     * Spot useful variables from used methods and spot methods overriding useful methods
+     * @return true if variables have been spotted
      */
-    private boolean spotUsedVarFromClasses() {
+    private boolean spotFromUsedMethods() {
         boolean res = false;
         boolean varSpotted = true;
 
         /* init */
-        Map<Definition,Set<Integer>> exploredMethods = new HashMap<Definition,Set<Integer>>();
+        Map<ClassDefinition,Set<Integer>> exploredMethods = new HashMap<ClassDefinition,Set<Integer>>();
         Set<DeclMethod> methodsToSpot = new HashSet<DeclMethod>();
         for (AbstractDeclClass c : this.classes.getList()) {
             for (AbstractDeclMethod m : ((DeclClass)c).getMethods().getList()) {
@@ -332,16 +330,16 @@ public class Program extends AbstractProgram {
             Iterator<DeclMethod> iter = methodsToSpot.iterator();
             while (iter.hasNext()) {
                 DeclMethod method = iter.next();
-                if (method.getName().getDefinition().isUsed()
-                    || (method.getName().getMethodDefinition().getContainingClass().isUsed()
-                    && ((Identifier)method.getName()).getMethodDefinition().isOverrideOfUsed(exploredMethods))) {
+                MethodDefinition methDef= method.getName().getMethodDefinition();
+                ClassDefinition containingClass = methDef.getContainingClass();
+                if (methDef.isUsed() || (containingClass.isUsed() && methDef.isOverrideOfUsed(exploredMethods))) {
                     // if method used or (containing class used and override)
                     varSpotted = method.spotUsedVar() || varSpotted;
                     iter.remove();
-                    if (!exploredMethods.containsKey(method.getName().getDefinition())) {
-                        exploredMethods.put(method.getName().getDefinition(),new HashSet<Integer>());
+                    if (!exploredMethods.containsKey(containingClass)) {
+                        exploredMethods.put(containingClass,new HashSet<Integer>());
                     }
-                    exploredMethods.get(method.getName().getDefinition()).add(method.getName().getMethodDefinition().getIndex());
+                    exploredMethods.get(containingClass).add(methDef.getIndex());
                 }
             }
             res = res || varSpotted;
@@ -349,6 +347,43 @@ public class Program extends AbstractProgram {
         return res;
     }
 
+    /**
+     * Spot fields overriding useful fields
+     * @return true if fields have been spotted
+     */
+    private boolean spotOverridingFields() {
+        boolean varSpotted = true;
 
+        /* init */
+        Map<ClassDefinition,Set<Integer>> usedFields = new HashMap<ClassDefinition,Set<Integer>>();
+        Set<FieldDefinition> fieldsToSpot = new HashSet<FieldDefinition>();
+        for (AbstractDeclClass c : this.classes.getList()) {
+            for (AbstractDeclField field : ((DeclClass)c).getFields().getList()) {
+
+                FieldDefinition fieldDef = ((DeclField)field).getName().getFieldDefinition();
+                if (fieldDef.isUsed()) {
+                    ClassDefinition containingClass = ((DeclClass)c).getName().getClassDefinition();                   
+                    if (!usedFields.containsKey(containingClass)) {
+                        usedFields.put(containingClass,new HashSet<Integer>());
+                    }
+                    usedFields.get(containingClass).add(fieldDef.getIndex());
+                }
+                else {
+                    fieldsToSpot.add(fieldDef);
+                }
+            }
+        }
+        for (FieldDefinition fieldDef : fieldsToSpot) {
+            if (fieldDef.isOverrideOfUsed(usedFields)) {
+                varSpotted = fieldDef.spotUsedVar();
+                ClassDefinition containingClass = fieldDef.getContainingClass();
+                if (!usedFields.containsKey(containingClass)) {
+                    usedFields.put(containingClass,new HashSet<Integer>());
+                }
+                usedFields.get(containingClass).add(fieldDef.getIndex());
+            }
+        }
+        return varSpotted;
+    }
 
 }

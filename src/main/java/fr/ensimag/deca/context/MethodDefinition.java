@@ -89,10 +89,10 @@ public class MethodDefinition extends ExpDefinition {
     }
 
     /**
-     * If the method is an override of a useful method, it may be dynamically useful.
+     * If the unspotted method is an override of a useful method, it may be dynamically useful.
      * @return true if the method is an override of a used method
      */
-    public boolean isOverrideOfUsed(Map<Definition,Set<Integer>> exploredMethods) {
+    public boolean isOverrideOfUsed(Map<ClassDefinition,Set<Integer>> exploredMethods) {
         boolean res = false;
         ClassDefinition superClass = this.containingClass.getSuperClass();
         while(superClass != null && !res && this.index<=superClass.getNumberOfMethods()) {
