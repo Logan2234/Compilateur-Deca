@@ -49,18 +49,6 @@ public class Cast extends AbstractExpr {
         return typeT;
     }
 
-    /**
-     * Check if the two types are compatible for the cast
-     * 
-     * @param localEnv the local environment
-     * @param typeExp  the type of the expression to cast
-     * @param typeT    the type of the expected cast
-     * @return true if the two types are compatible, false if not
-     * 
-     * @author Nils Depuille
-     * @date 12/01/2023
-     */
-
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("(");
