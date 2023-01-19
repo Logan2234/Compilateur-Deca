@@ -39,8 +39,36 @@ public class ListExpr extends TreeList<AbstractExpr> {
     @Override
     public boolean irrelevant() {
         boolean result = false;
-        for (AbstractExpr i : getList()) {
-            result |= i.irrelevant();
+        for (int i = 0; i < getList().size(); i++) {
+            if (getList().get(i).irrelevant()){
+                result |= true;
+                if (getList().get(i).getType().isFloat()) {
+                    Float rightIrrelevantdValue = getList().get(i).irrelevantFloat();
+                    if(rightIrrelevantdValue != null && getList().get(i).irrelevantable()) {
+                        FloatLiteral newFloat = new FloatLiteral(rightIrrelevantdValue);
+                        newFloat.setType(getList().get(i).getType());
+                        set(i, newFloat);
+                    }
+                }
+    
+                if (getList().get(i).getType().isInt()){
+                    Integer rightIrrelevantdValue = getList().get(i).irrelevantInt();
+                    if(rightIrrelevantdValue != null && getList().get(i).irrelevantable()) {
+                        IntLiteral newInt = new IntLiteral(rightIrrelevantdValue);
+                        newInt.setType(getList().get(i).getType());
+                        set(i, newInt);
+                    }
+                }
+    
+                if (getList().get(i).getType().isBoolean()){
+                    Boolean rightIrrelevantdValue = getList().get(i).irrelevantBool();
+                    if(rightIrrelevantdValue != null && getList().get(i).irrelevantable()) {
+                        BooleanLiteral newBool = new BooleanLiteral(rightIrrelevantdValue);
+                        newBool.setType(getList().get(i).getType());
+                        set(i, newBool);
+                    }
+                }
+            }
         }
         return result;
     }
