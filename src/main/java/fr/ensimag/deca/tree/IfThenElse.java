@@ -119,4 +119,7 @@ public class IfThenElse extends AbstractInst {
         return this.elseBranch;
     }
 
+    public AbstractExpr getCondition() {
+        return this.condition;
+    }
 }

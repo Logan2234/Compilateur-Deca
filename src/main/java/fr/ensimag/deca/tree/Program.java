@@ -99,7 +99,13 @@ public class Program extends AbstractProgram {
         boolean simplified = this.optimizeClasses();
         if (this.main instanceof Main) {
             LOG.debug("Optimizing body of Main");
-            simplified = simplified || this.optimizeBlock(((Main)this.main).getListDeclVar(),((Main)this.main).getListInst());
+            Main mainNotEmpty = (Main)(this.main);
+            if(mainNotEmpty.getListDeclVar().isEmpty() && mainNotEmpty.getListInst().isEmpty()) {
+                this.main = new EmptyMain();
+                simplified = true;
+            } else {
+                simplified = simplified || this.optimizeBlock(((Main)this.main).getListDeclVar(),((Main)this.main).getListInst());
+            }
         }
         return simplified;
     }
@@ -130,55 +136,93 @@ public class Program extends AbstractProgram {
         }
 
         /* remove useless instructions form the main */
+        // the order of if statements is important
         ListIterator<AbstractInst> iterInst = listInsts.iterator();
         while(iterInst.hasNext()){
             AbstractInst inst = iterInst.next();
 
-            if ((inst instanceof Assign && !((Assign)inst).getLeftOperand().getDefinition().isUsed())
-                    || (inst instanceof AbstractExpr && !(inst instanceof Assign) && !(inst instanceof AbstractReadExpr) && !(inst instanceof MethodCall))) {
-                /* The instruction can either be an assignation with a useless left operand or
-                 * an expression (but not a method call, a read or an assignement expression with 
-                 * a useful leftoperand).
-                 * 
-                 * In both cases we can remove the instruction but we have to keep the method call
-                 * that appear in them because they can possibly change the state of an object or
-                 * interact with the user.
-                 * 
-                 * The left operand of the assign could either be an Identifier or a Selection
-                 * The only difference is that the object of the Selection could be obtained via
-                 * a MethodCall but this MethodCall will be contained in the list bellow as well.
-                 * 
-                 * Not treating the Reads and MethodCall prevents from looping on the optimization
-                 * of the tree by setting simplified to true for no reason.
-                 */
-                List<AbstractExpr> methods = ((AbstractExpr)(inst)).getMethodCalls();
-                iterInst.remove();
-                LOG.debug("Remove expr at "+inst.getLocation() + " : " + inst.getClass());
-                for (AbstractExpr methodCall : methods) {
-                    // add after the current instruction
-                    iterInst.add(methodCall);
-                    LOG.debug("Add method call at "+inst.getLocation() + " : " + inst.getClass());
-                }
-                simplified = true;
+            if (inst instanceof MethodCall || inst instanceof AbstractReadExpr) {
+                // keep it
+                // prevents from looping by setting simplified to true in the AbstractExpr case
             }
 
-            else if (inst instanceof NoOperation){
+            else if (inst instanceof Not) {
+                iterInst.remove();
+                iterInst.add(((Not)inst).getOperand()); // add after the current instruction
+                simplified = true;
+                LOG.debug("Break Not at "+inst.getLocation() + " : " + inst.getClass());
+            }
+
+            else if (inst instanceof InstanceOf) {
+                iterInst.remove();
+                iterInst.add(((InstanceOf)inst).getExpr()); // add after the current instruction
+                simplified = true;
+                LOG.debug("Break InstanceOf at "+inst.getLocation() + " : " + inst.getClass());
+            }
+
+            else if (inst instanceof Assign) {
+                // don't group the if because it prevents from entering the next if
+                Assign assign = (Assign)inst;
+                if (!assign.getLeftOperand().getDefinition().isUsed()) {
+                    iterInst.remove();
+                    iterInst.add(assign.getLeftOperand()); // add after the current instruction
+                    simplified = true;
+                    LOG.debug("Break Assign at "+inst.getLocation() + " : " + inst.getClass());
+                }
+            }
+
+            else if (inst instanceof AbstractExpr) {
+                AbstractExpr expr = (AbstractExpr)inst;
+                List<AbstractExpr> methods = expr.getMethodCalls();
+                if (methods.isEmpty()) {
+                    iterInst.remove();
+                    simplified = true;
+                    LOG.debug("Remove expr at "+inst.getLocation() + " : " + inst.getClass());
+                }
+                else if (expr.getType().isBoolean()) {
+                    // we cannot break the expression because for instance, the left operand
+                    // of an AND shouldn't be evaluated if the right operand is false
+                }
+                else {
+                    iterInst.remove();
+                    for (AbstractExpr methodCall : methods) {
+                        iterInst.add(methodCall); // add after the current instruction
+                    }
+                    simplified = true;
+                    LOG.debug("Break expr at "+inst.getLocation() + " : " + inst.getClass());
+                }
+            }
+
+            else if (inst instanceof NoOperation) {
                 iterInst.remove();
                 simplified = true;
                 LOG.debug("Remove NoOp at "+inst.getLocation() + " : " + inst.getClass());
             }
 
-            else if (inst instanceof While){
-                // TODO if while empty and condition with no method call
-                simplified = optimizeBlock(null, ((While)inst).getBody());
-                LOG.debug("Optimize While at "+inst.getLocation() + " : " + inst.getClass());
+            else if (inst instanceof While) {
+                While while_ = (While)inst;
+                simplified = optimizeBlock(null, while_.getBody());
+                // We keep the while if the condition have a method call
+                if (while_.getBody().isEmpty() && while_.getCondition().getMethodCalls().isEmpty()) {
+                    iterInst.remove();
+                    simplified = true;
+                    // the condition will be optimized at the next optimizeBlock call
+                    iterInst.add(while_.getCondition()); // add after the current instruction
+                }
+                if (simplified) LOG.debug("Optimize While at "+inst.getLocation() + " : " + inst.getClass());
             }
 
             else if (inst instanceof IfThenElse){
-                // TODO if if and else empty -> only keep methodCall
+                IfThenElse ifThenElse = (IfThenElse)inst;
                 simplified = optimizeBlock(null, ((IfThenElse)inst).getThenInst());
                 simplified = (simplified || optimizeBlock(null, ((IfThenElse)inst).getElseInst()));
-                LOG.debug("Optimize if at "+inst.getLocation() + " : " + inst.getClass());
+                if (ifThenElse.getThenInst().isEmpty() && ifThenElse.getElseInst().isEmpty()) {
+                    iterInst.remove();
+                    simplified = true;
+                    // the condition will be optimized at the next optimizeBlock call
+                    iterInst.add(ifThenElse.getCondition()); // add after the current instruction
+                }
+                if (simplified) LOG.debug("Optimize if at "+inst.getLocation() + " : " + inst.getClass());
             }
         }
         return simplified;

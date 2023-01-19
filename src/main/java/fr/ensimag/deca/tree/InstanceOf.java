@@ -84,4 +84,8 @@ public class InstanceOf extends AbstractExpr {
         // the expression could be obtained via a MethodCall
         this.e.addMethodCalls(foundMethodCalls);
     }
+
+    public AbstractExpr getExpr() {
+        return this.e;
+    }
 }

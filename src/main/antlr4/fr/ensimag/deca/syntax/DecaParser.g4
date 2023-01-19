@@ -47,6 +47,7 @@ prog returns[AbstractProgram tree]
 main returns[AbstractMain tree]
     : /* epsilon */ {
             $tree = new EmptyMain();
+            $tree.setLocation(Location.BUILTIN);
         }
     | block {
             assert($block.decls != null);
