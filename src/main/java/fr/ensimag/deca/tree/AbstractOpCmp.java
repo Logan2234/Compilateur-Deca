@@ -53,7 +53,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
             convFloat.setType(typeLeft);
             setRightOperand(convFloat);
         }
-        
+
         else if (typeLeft.isInt() && typeRight.isFloat()) {
             convFloat = new ConvFloat(getLeftOperand());
             convFloat.setLocation(getLeftOperand().getLocation());

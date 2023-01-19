@@ -29,5 +29,4 @@ public class NotEquals extends AbstractOpExactCmp {
         compiler.addInstruction(new SUB(dVal, register));
         compiler.addInstruction(new SNE(register));
     }
-
 }

@@ -33,12 +33,11 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        this.setType(compiler.environmentType.INT);
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        setType(compiler.environmentType.INT);
         return compiler.environmentType.INT;
     }
-
 
     @Override
     String prettyPrintNode() {
@@ -70,11 +69,10 @@ public class IntLiteral extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // check if result register is not null
-        if(resultRegister != null) {
+        if (resultRegister != null) {
             // put the value in the given register
             compiler.addInstruction(new LOAD(value, resultRegister));
-        }
-        else {
+        } else {
             // by convention, put the result on the stack.
             compiler.addInstruction(new LOAD(value, Register.R0));
             compiler.incrementContextUsedStack();

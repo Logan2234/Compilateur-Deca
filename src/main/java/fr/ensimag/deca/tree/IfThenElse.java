@@ -26,7 +26,7 @@ public class IfThenElse extends AbstractInst {
 
     private final AbstractExpr condition;
     private final ListInst thenBranch;
-    private ListInst elseBranch;
+    private final ListInst elseBranch;
 
     public IfThenElse(AbstractExpr condition, ListInst thenBranch, ListInst elseBranch) {
         Validate.notNull(condition);
@@ -40,28 +40,29 @@ public class IfThenElse extends AbstractInst {
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type returnType) throws ContextualError {
-        this.condition.verifyCondition(compiler, localEnv, currentClass);
-        this.thenBranch.verifyListInst(compiler, localEnv, currentClass, returnType);
-        this.elseBranch.verifyListInst(compiler, localEnv, currentClass, returnType);
+        condition.verifyCondition(compiler, localEnv, currentClass);
+        thenBranch.verifyListInst(compiler, localEnv, currentClass, returnType);
+        elseBranch.verifyListInst(compiler, localEnv, currentClass, returnType);
     }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        // we need something like : 
+        // we need something like :
         // if not condition, jump to else block
         // if block
-        //      [...]
-        //      jump to end
+        // [...]
+        // jump to end
         // else block
-        //      [...]
+        // [...]
         // end
-        
+
         // need a unique label for our name.
         String label = "IF." + getLocation().toLabel();
         Label elseLabel = new Label(label + ".else");
         Label endLabel = new Label(label + ".end");
         // the if expression returns a bool. write it down in R1,
-        // then add 0 to R1 to trigger flags : if EQ, then the expression was false : branch to else block
+        // then add 0 to R1 to trigger flags : if EQ, then the expression was false :
+        // branch to else block
         condition.codeGenExpr(compiler, Register.R1);
         compiler.addInstruction(new ADD(new ImmediateInteger(0), Register.R1));
         // branch to else flag if EQ, then if block
@@ -110,5 +111,4 @@ public class IfThenElse extends AbstractInst {
         this.thenBranch.spotUsedVar(prog);
         this.elseBranch.spotUsedVar(prog);
     }
-
 }

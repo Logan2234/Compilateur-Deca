@@ -321,7 +321,7 @@ public class DecacCompiler {
         }
 
         if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
-            if (compilerOptions.getOptimize()){
+                if (compilerOptions.getOptimize()) {
                 prog.verifyProgram(this);
                 prog.optimizeTree();
             }
@@ -334,7 +334,7 @@ public class DecacCompiler {
             prog.verifyProgram(this);
             assert (prog.checkAllDecorations());
             if (compilerOptions.getCompileMode() == CompileMode.Compile) {
-                if (compilerOptions.getOptimize()){
+                if (compilerOptions.getOptimize()) {
                     LOG.info("Optimizing the tree...");
                     prog.optimizeTree();
                     LOG.info("Tree optimized...");

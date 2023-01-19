@@ -179,16 +179,15 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Definition def = localEnv.get(this.name);
-        Location loc = this.getLocation();
+        Definition def = localEnv.get(name);
+
         if (def == null)
-            throw new ContextualError("The identifier \"" + name.getName() + "\" doesn't exist (rule 0.1)", loc);
+            throw new ContextualError("The identifier \"" + name.getName() + "\" doesn't exist (rule 0.1)", getLocation());
 
         // Ajout du décor
         Type type = def.getType();
-        this.setDefinition(def);
-        this.setType(type);
-
+        setDefinition(def);
+        setType(type);
         return type;
     }
 

@@ -42,10 +42,9 @@ public class MethodCall extends AbstractExpr {
             throw new ContextualError("The object of the method call is not of type class (rule 3.71)", getLocation());
 
         // On s'occupe de récuperer la signature et le type de retour de la methode
+        // on verify l'expression de la methode
         Type typeReturn = meth.verifyExpr(compiler,
-                typeClass.asClassType(null, getLocation()).getDefinition().getMembers(), currentClass); // on verify
-                                                                                                        // l'expression
-                                                                                                        // de la methode
+                typeClass.asClassType(null, getLocation()).getDefinition().getMembers(), currentClass);
         Signature sig = meth.getMethodDefinition().getSignature();
 
         if (sig.size() != params.getList().size())
@@ -60,7 +59,7 @@ public class MethodCall extends AbstractExpr {
                         getLocation());
         }
 
-        this.setType(typeReturn);
+        setType(typeReturn);
         return typeReturn;
     }
 
@@ -78,18 +77,16 @@ public class MethodCall extends AbstractExpr {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        if (!(obj.equals(null))) {
+        if (!(obj.equals(null)))
             obj.iter(f);
-        }
         meth.iter(f);
         params.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        if (!(obj.equals(null))) {
+        if (!(obj.equals(null)))
             obj.prettyPrint(s, prefix, false);
-        }
         meth.prettyPrint(s, prefix, false);
         params.prettyPrint(s, prefix, true);
     }
@@ -101,9 +98,9 @@ public class MethodCall extends AbstractExpr {
 
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
-        this.obj.spotUsedVar(prog);
-        this.meth.spotUsedVar(prog);
-        this.params.spotUsedVar(prog);
+        obj.spotUsedVar(prog);
+        meth.spotUsedVar(prog);
+        params.spotUsedVar(prog);
     }
 
     @Override

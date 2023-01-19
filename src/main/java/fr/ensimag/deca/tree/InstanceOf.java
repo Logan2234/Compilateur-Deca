@@ -34,15 +34,13 @@ public class InstanceOf extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Location loc = this.getLocation();
-        Type typeE = this.e.verifyExpr(compiler, localEnv, currentClass);
-        Type typeT = this.type.verifyType(compiler);
-        if (!typeE.isClassOrNull() || !typeT.isClass()) {
-            throw new ContextualError("instanceof argument has to be a class (rule 3.40)", loc);
-        }
+        Type typeE = e.verifyExpr(compiler, localEnv, currentClass);
+        Type typeT = type.verifyType(compiler);
+        if (!typeE.isClassOrNull() || !typeT.isClass())
+            throw new ContextualError("instanceof argument has to be a class (rule 3.40)", getLocation());
         
         // Ajout du décor
-        this.setType(compiler.environmentType.BOOLEAN);
+        setType(compiler.environmentType.BOOLEAN);
         return compiler.environmentType.BOOLEAN;
     }
 

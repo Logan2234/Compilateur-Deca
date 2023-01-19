@@ -29,5 +29,4 @@ public class Lower extends AbstractOpIneq {
         compiler.addInstruction(new SUB(dVal, register));
         compiler.addInstruction(new SLT(register));
     }
-
 }
