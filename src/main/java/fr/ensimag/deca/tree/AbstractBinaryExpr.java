@@ -140,13 +140,17 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
     @Override
     public boolean irrelevant() {
-        if (getRightOperand().irrelevant()) {
+        if (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName())) {
             rightOperand = currentValues.get(((Identifier) getRightOperand()).getName());
         }
-        if (getLeftOperand().irrelevant()) {
+        if (getLeftOperand().irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) {
             leftOperand = currentValues.get(((Identifier) getLeftOperand()).getName());
         }
-        return leftOperand.irrelevant() || rightOperand.irrelevant();
+        return (leftOperand.irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) || (rightOperand.irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName()));
+    }
+
+    @Override
+    public boolean isReadExpr() {
+        return leftOperand.isReadExpr() || rightOperand.isReadExpr();
     }
 }
- // TODO : HASREADINT

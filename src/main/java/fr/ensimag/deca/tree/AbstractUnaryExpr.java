@@ -103,10 +103,15 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
 
     @Override
     public boolean irrelevant() {
-        if (operand.irrelevant()){
+        if (operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName())){
             operand = currentValues.get(((Identifier) operand).getName());
         }
-        return operand.irrelevant();
+        return operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName());
+    }
+
+    @Override
+    public boolean isReadExpr() {
+        return operand.isReadExpr();
     }
 
 }

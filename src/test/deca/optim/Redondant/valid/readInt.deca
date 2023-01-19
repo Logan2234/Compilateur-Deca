@@ -1,0 +1,24 @@
+// Description:
+//    On va voir si l'optimisation traite bien les readInts, en ne modifiant pas la valeur dans le reste du code car on attend la donnée de l'utilisateur
+//
+// Resultats:
+//    ok (ça dépend de l'utilisateur) 
+//    Le décompile doit être : 
+//{
+//	int test = 0;
+//	int test1 = 2;
+//	int test2 = ((2 + readInt()) + 2);
+//	(test = test2);
+//	print((test2 + test2));
+//}
+//
+// Historique:
+//    cree le 19/01/2023
+
+{
+    int test = 0;
+    int test1 = 2;
+	int test2 = 2 + readInt() + test1;
+    test = test2;
+    print(test + test2);
+}

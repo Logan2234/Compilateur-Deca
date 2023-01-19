@@ -100,14 +100,15 @@ public class DeclVar extends AbstractDeclVar {
     public boolean irrelevant(){ 
         if (initialization.hasInitialization()) {
             AbstractExpr expr = ((Initialization) initialization).getExpression();
-            if (expr.isReadExpr() && currentValues.containsKey(varName.getName())){
-                currentValues.remove(varName.getName());
-                return false;
-            }
             if (expr.irrelevant()){
                 ((Initialization) initialization).setExpression(currentValues.get(((Identifier) expr).getName()));
             }
-            currentValues.put(varName.getName(), ((Initialization) initialization).getExpression());
+            if (!expr.isReadExpr()){
+                currentValues.put(varName.getName(), ((Initialization) initialization).getExpression());
+    
+            } else if (currentValues.containsKey(varName.getName())){
+                currentValues.remove(varName.getName());
+            } 
         }
         return false;
     }

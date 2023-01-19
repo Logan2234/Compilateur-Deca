@@ -109,14 +109,20 @@ public class Assign extends AbstractBinaryExpr {
 
     @Override
     public boolean irrelevant(){
-        if (getRightOperand().isReadExpr() && currentValues.containsKey(getLeftOperand().getName())){
+        if (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName())){
+            setRightOperand((currentValues.get(((Identifier) getRightOperand()).getName())));
+        }
+        if (!getRightOperand().isReadExpr()){
+            currentValues.put(getLeftOperand().getName(), getRightOperand());
+
+        } else if (currentValues.containsKey(getLeftOperand().getName())){
             currentValues.remove(getLeftOperand().getName());
-            return false;
-        }
-        if (getRightOperand().irrelevant()){
-            setRightOperand((currentValues.get(getLeftOperand().getName())));
-        }
-        currentValues.put(getLeftOperand().getName(), getRightOperand());
+        } 
+        return false;
+    }
+
+    @Override
+    public boolean isReadExpr(){
         return false;
     }
 
