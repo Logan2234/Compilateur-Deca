@@ -414,7 +414,7 @@ public class DecacCompiler {
                     prog.optimizeTree();
                     LOG.info("Tree optimized...");
                 }
-                addComment("start main program");
+                // addComment("start main program");
                 prog.codeGenProgram(this);
                 LOG.debug("Generated assembly code:" + nl + program.display());
                 LOG.info("Output file assembly file is: " + destName);
