@@ -2,6 +2,10 @@ package fr.ensimag.deca.context;
 
 import fr.ensimag.deca.tree.*;
 import fr.ensimag.ima.pseudocode.Label;
+
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
@@ -63,6 +67,10 @@ public class MethodDefinition extends ExpDefinition {
         return signature;
     }
 
+    public ClassDefinition getContainingClass() {
+        return this.containingClass;
+    }
+
     @Override
     public String getNature() {
         return "method";
@@ -78,6 +86,20 @@ public class MethodDefinition extends ExpDefinition {
         boolean varSpotted = super.spotRelatedDefs();
         varSpotted = this.containingClass.spotUsedVar() || varSpotted;
         return varSpotted;
+    }
+
+    /**
+     * If the method is an override of a useful method, it may be dynamically useful.
+     * @return true if the method is an override of a used method
+     */
+    public boolean isOverrideOfUsed(Map<Definition,Set<Integer>> exploredMethods) {
+        boolean res = false;
+        ClassDefinition superClass = this.containingClass.getSuperClass();
+        while(superClass != null && !res && this.index<=superClass.getNumberOfMethods()) {
+            res = exploredMethods.get(superClass).contains(this.index);
+            superClass = superClass.getSuperClass();
+        }
+        return res;
     }
 
 }

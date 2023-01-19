@@ -3,13 +3,20 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -92,7 +99,7 @@ public class Program extends AbstractProgram {
         boolean varSpotted = true;
         while (varSpotted) {
             varSpotted = this.main.spotUsedVar();
-            varSpotted = this.classes.spotUsedVar() || varSpotted;
+            varSpotted = this.spotUsedVarFromClasses() || varSpotted;
         }
         return varSpotted;
     }
@@ -103,8 +110,7 @@ public class Program extends AbstractProgram {
      * @return true if the program have been simplified
      */
     private boolean removeUnusedVar() {
-            LOG.debug("Optimizing classes");
-            boolean simplified = this.optimizeClasses();
+        boolean simplified = this.optimizeClasses();
         if (this.main instanceof Main) {
             LOG.debug("Optimizing body of Main");
             Main mainNotEmpty = (Main)(this.main);
@@ -302,4 +308,47 @@ public class Program extends AbstractProgram {
         }
         return simplified;
     }
+
+    /**
+     * Spot all useful variables from classes
+     * @return
+     */
+    private boolean spotUsedVarFromClasses() {
+        boolean res = false;
+        boolean varSpotted = true;
+
+        /* init */
+        Map<Definition,Set<Integer>> exploredMethods = new HashMap<Definition,Set<Integer>>();
+        Set<DeclMethod> methodsToSpot = new HashSet<DeclMethod>();
+        for (AbstractDeclClass c : this.classes.getList()) {
+            for (AbstractDeclMethod m : ((DeclClass)c).getMethods().getList()) {
+                methodsToSpot.add((DeclMethod)m);
+            }
+        }
+
+        while (varSpotted) {
+            varSpotted = false;
+
+            Iterator<DeclMethod> iter = methodsToSpot.iterator();
+            while (iter.hasNext()) {
+                DeclMethod method = iter.next();
+                if (method.getName().getDefinition().isUsed()
+                    || (method.getName().getMethodDefinition().getContainingClass().isUsed()
+                    && ((Identifier)method.getName()).getMethodDefinition().isOverrideOfUsed(exploredMethods))) {
+                    // if method used or (containing class used and override)
+                    varSpotted = method.spotUsedVar() || varSpotted;
+                    iter.remove();
+                    if (!exploredMethods.containsKey(method.getName().getDefinition())) {
+                        exploredMethods.put(method.getName().getDefinition(),new HashSet<Integer>());
+                    }
+                    exploredMethods.get(method.getName().getDefinition()).add(method.getName().getMethodDefinition().getIndex());
+                }
+            }
+            res = res || varSpotted;
+        }
+        return res;
+    }
+
+
+
 }

@@ -12,6 +12,8 @@ class B extends A {
 {
 	boolean myBoolean = true;
 	B b = new B();
+	readInt();
 	b.cos(3);
+	b.cos(2);
 	print(b.x);
 }
