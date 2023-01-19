@@ -10,6 +10,10 @@ class C {
 
 }
 
+class D extends B {
+
+}
+
 {
     B b = new B();
 
@@ -35,6 +39,13 @@ class C {
     }
 
     if(b instanceof C) {
+        println("ko");
+    }
+    else {
+        println("ok");
+    }   
+
+    if(b instanceof D) {
         println("ko");
     }
     else {
