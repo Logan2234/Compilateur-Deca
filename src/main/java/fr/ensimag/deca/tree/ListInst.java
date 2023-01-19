@@ -59,10 +59,21 @@ public class ListInst extends TreeList<AbstractInst> {
     }
 
     public boolean factorised() {
-        for (AbstractInst i : getList()) {
-            if (i.factorised())
-                return true;
+        // try to collapse each instruction into a list of instructions
+        boolean facto = false;
+        for (int i = 0; i < getList().size(); i++) {
+            AbstractInst toFacto = getList().get(i);
+            if(toFacto.factorised()) {
+                facto = true;
+                // remove this inst, replace it with it's collapsed form
+                removeAt(i);
+                int offset = 0;
+                for(AbstractInst newInst : toFacto.factorised().getList()) {
+                    insert(newInst, i + offset);
+                    offset ++;
+                }
+            }
         }
-        return false;
+        return facto;
     }
 }
