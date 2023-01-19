@@ -99,8 +99,9 @@ public class While extends AbstractInst {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.condition.spotUsedVar(prog);
-        this.body.spotUsedVar(prog);
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.condition.spotUsedVar();
+        varSpotted = this.body.spotUsedVar() || varSpotted;
+        return varSpotted;
     }
 }

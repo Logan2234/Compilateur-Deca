@@ -48,14 +48,14 @@ public class ListInst extends TreeList<AbstractInst> {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
+    protected boolean spotUsedVar() {
+        boolean varSpotted = false;
         for (AbstractInst inst : this.getList()) {
-            // TODO avoid from a higher level in the class hierarchy for more spotUsedVar avoidance
-            // TODO It requires to know if there is methodcall in the abstractexpr
             if (!(inst instanceof Identifier)) {
-                inst.spotUsedVar(prog);
+                varSpotted = inst.spotUsedVar() || varSpotted;
             }
         }
+        return varSpotted;
     }
 
 }

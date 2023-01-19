@@ -42,7 +42,7 @@ public class NoOperation extends AbstractInst {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    protected boolean spotUsedVar() {
+        return false;
     }
 }

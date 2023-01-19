@@ -1,10 +1,3 @@
-class A extends Object {
-
-	int cos(int x){
-		return x;
-	}
-}
-
 {
 	int x = (60 + readInt());
 	A a = new A();

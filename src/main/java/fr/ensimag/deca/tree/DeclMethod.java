@@ -123,11 +123,12 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
-    public void spotUsedVar(AbstractProgram prog) {
-        this.type.spotUsedVar(prog);
-        this.body.spotUsedVar(prog);
-        this.methodName.spotUsedVar(prog);
+    public boolean spotUsedVar() {
+        boolean varSpotted = this.type.spotUsedVar();
+        varSpotted = this.body.spotUsedVar() || varSpotted;
+        varSpotted = this.methodName.spotUsedVar() || varSpotted;
         // we spot the param when they are used in the body
+        return varSpotted;
     }
 
     public AbstractIdentifier getName() {

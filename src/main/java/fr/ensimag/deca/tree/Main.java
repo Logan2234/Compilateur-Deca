@@ -67,9 +67,10 @@ public class Main extends AbstractMain {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        declVariables.spotUsedVar(prog);
-        insts.spotUsedVar(prog);
+    protected boolean spotUsedVar() {
+        boolean varSpotted = declVariables.spotUsedVar();
+        varSpotted = insts.spotUsedVar() || varSpotted;
+        return varSpotted;
     }
 
     public ListDeclVar getListDeclVar() {

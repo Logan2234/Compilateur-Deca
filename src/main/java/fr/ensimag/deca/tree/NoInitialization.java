@@ -58,7 +58,7 @@ public class NoInitialization extends AbstractInitialization {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    protected boolean spotUsedVar() {
+        return false;
     }
 }

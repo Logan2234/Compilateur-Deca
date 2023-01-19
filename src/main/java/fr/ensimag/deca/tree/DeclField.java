@@ -103,9 +103,9 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    protected boolean spotUsedVar() {
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
+        return false;
     }
 
     public AbstractIdentifier getName() {

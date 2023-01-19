@@ -94,10 +94,12 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
+    protected boolean spotUsedVar() {
+        boolean varSpotted = false;
         for (TreeType tree : getList()) {
-            tree.spotUsedVar(prog);
+            varSpotted = tree.spotUsedVar() || varSpotted;
         }
+        return varSpotted;
     }
     
 }

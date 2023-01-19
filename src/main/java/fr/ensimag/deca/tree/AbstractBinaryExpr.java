@@ -142,9 +142,10 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
     
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.leftOperand.spotUsedVar(prog);
-        this.rightOperand.spotUsedVar(prog);
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.leftOperand.spotUsedVar();
+        varSpotted = this.rightOperand.spotUsedVar() || varSpotted;
+        return varSpotted;
     }
 
     @Override

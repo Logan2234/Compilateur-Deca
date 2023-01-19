@@ -88,11 +88,11 @@ public class Program extends AbstractProgram {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
+    protected boolean spotUsedVar() {
         boolean varSpotted = true;
         while (varSpotted) {
-            varSpotted = this.main.spotUsedVar(prog);
-            varSpotted = varSpotted || this.classes.spotUsedVar(prog);
+            varSpotted = this.main.spotUsedVar();
+            varSpotted = this.classes.spotUsedVar() || varSpotted;
         }
         return varSpotted;
     }
@@ -112,7 +112,8 @@ public class Program extends AbstractProgram {
                 this.main = new EmptyMain();
                 simplified = true;
             } else {
-                simplified = simplified || this.optimizeBlock(((Main)this.main).getListDeclVar(),((Main)this.main).getListInst());
+                simplified = this.optimizeBlock(((Main)this.main).getListDeclVar(),((Main)this.main).getListInst())
+                            || simplified;
             }
         }
         return simplified;
@@ -122,8 +123,8 @@ public class Program extends AbstractProgram {
     public void optimizeTree() {
         boolean simplified = true;
         while (simplified) {
-            this.resetSpottedVar();
-            this.spotUsedVar(this);
+            // TODO this.resetSpottedVar();
+            this.spotUsedVar();
             simplified = this.removeUnusedVar();
         }
     }
@@ -236,7 +237,8 @@ public class Program extends AbstractProgram {
                 else if (inst instanceof IfThenElse){
                     IfThenElse ifThenElse = (IfThenElse)inst;
                     simplified = optimizeBlock(null, ((IfThenElse)inst).getThenInst());
-                    simplified = (simplified || optimizeBlock(null, ((IfThenElse)inst).getElseInst()));
+                    simplified = optimizeBlock(null, ((IfThenElse)inst).getElseInst())
+                                || simplified;
                     if (ifThenElse.getThenInst().isEmpty() && ifThenElse.getElseInst().isEmpty()) {
                         iterInst.remove();
                         simplified = true;

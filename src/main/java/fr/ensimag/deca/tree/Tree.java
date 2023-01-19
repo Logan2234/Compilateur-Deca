@@ -295,6 +295,6 @@ public abstract class Tree {
     /**
      * Set to true the "used" attribute of definitions of used variables
      */
-    protected abstract void spotUsedVar(AbstractProgram prog);
+    protected abstract boolean spotUsedVar();
     
 }

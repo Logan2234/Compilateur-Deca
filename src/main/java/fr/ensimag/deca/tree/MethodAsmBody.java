@@ -61,7 +61,7 @@ public class MethodAsmBody extends AbstractMethod {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    protected boolean spotUsedVar() {
+        return false;
     }
 }

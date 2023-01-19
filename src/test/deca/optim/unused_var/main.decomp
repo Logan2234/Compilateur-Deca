@@ -1,11 +1,4 @@
 class A extends Object {
-	int z;
-	int w;
-
-	void setZ(int a){
-		(this.z = a);
-		(this.w = a);
-	}
 
 	int cos(int a){
 		return a;
@@ -14,10 +7,6 @@ class A extends Object {
 
 class B extends A {
 	int x;
-	int y;
-
-	int getX(){
-	}
 }
 
 {

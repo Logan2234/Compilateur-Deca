@@ -517,8 +517,6 @@ ident returns[AbstractIdentifier tree]
     : IDENT {
             $tree = new Identifier(this.getDecacCompiler().createSymbol($IDENT.text));
             // the createSymbol methods add the Symbol to the table only if it is not already in it
-            //$tree = new Identifier(this.getDecacCompiler().symbolTable.create($IDENT.text));
-            // it seems to be equivalent but it is deeper in the class hierarchy
             setLocation($tree, $IDENT);
         }
     ;

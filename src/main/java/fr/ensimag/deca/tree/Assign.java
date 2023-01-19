@@ -78,9 +78,9 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
+    protected boolean spotUsedVar() {
         // we don't spot leftOperand
-        this.rightOperand.spotUsedVar(prog);
+        return this.rightOperand.spotUsedVar();
     }
     
 }

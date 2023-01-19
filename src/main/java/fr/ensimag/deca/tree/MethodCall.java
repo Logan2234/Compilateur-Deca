@@ -100,10 +100,11 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.obj.spotUsedVar(prog);
-        this.meth.spotUsedVar(prog);
-        this.params.spotUsedVar(prog);
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.obj.spotUsedVar();
+        varSpotted = this.meth.spotUsedVar() || varSpotted;
+        varSpotted = this.params.spotUsedVar() || varSpotted;
+        return varSpotted;
     }
 
     @Override

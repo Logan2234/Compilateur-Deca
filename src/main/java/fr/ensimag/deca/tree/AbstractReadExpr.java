@@ -46,8 +46,8 @@ public abstract class AbstractReadExpr extends AbstractExpr {
     protected abstract void codeGenRead(DecacCompiler compiler);
     
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    protected boolean spotUsedVar() {
+        return false;
     }
 
     @Override
