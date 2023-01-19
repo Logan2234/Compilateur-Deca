@@ -1,5 +1,8 @@
 // Description:
-//    Test pseudo complet pour le test des classes
+//    Test pseudo complet pour le test des classes.
+//    Il test: DeclClass avec et sans Extends, DeclMethod avec et sans redefinition, 
+//             DeclField, Protected et Public, Return de fonctions, Instanceof, Cast
+//             MethodCall, New, Selection,
 //
 // Resultats:
 //    5.0
@@ -56,5 +59,4 @@ class B extends A {
     else {
         println("ko");
     }
-
 }
