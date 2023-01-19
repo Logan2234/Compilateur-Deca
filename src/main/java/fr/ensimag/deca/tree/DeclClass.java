@@ -125,4 +125,9 @@ public class DeclClass extends AbstractDeclClass {
     public AbstractIdentifier getName() {
         return this.name;
     }
+
+    @Override
+    public boolean factorised() {
+        return methods.factorised() && fields.factorised();
+    }
 }

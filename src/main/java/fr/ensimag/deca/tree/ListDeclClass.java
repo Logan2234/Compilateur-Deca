@@ -50,4 +50,11 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
+    @Override
+    public boolean factorised() {
+        for (AbstractDeclClass c : getList()) {
+            c.verifyClassBody(compiler);
+        }
+    }
+
 }

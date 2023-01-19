@@ -30,4 +30,11 @@ public abstract class AbstractProgram extends Tree {
      * @return true if tree has been simplified
      */
     public abstract boolean removeUnusedVar();
+
+
+    /**
+     * 
+     * @return true if tree has been factorised
+     */
+    public abstract boolean factorised();
 }

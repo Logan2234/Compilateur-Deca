@@ -18,4 +18,10 @@ public abstract class AbstractMain extends Tree {
      * Implements non-terminal "main" of [SyntaxeContextuelle] in pass 3 
      */
     protected abstract void verifyMain(DecacCompiler compiler) throws ContextualError;
+
+    /**
+     * 
+     * @return true if the main has been factorised
+     */
+    public abstract boolean factorised();
 }

@@ -79,4 +79,9 @@ public class Main extends AbstractMain {
     public ListInst getListInst() {
         return this.insts;
     }
+
+    @Override
+    public boolean factorised() {
+        return declVariables.factorised() && insts.factorised();
+    }
 }

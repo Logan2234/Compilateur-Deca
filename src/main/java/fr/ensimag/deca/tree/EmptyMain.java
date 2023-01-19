@@ -50,4 +50,9 @@ public class EmptyMain extends AbstractMain {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
+
+    @Override
+    public boolean factorised() {
+        return true;
+    }
 }

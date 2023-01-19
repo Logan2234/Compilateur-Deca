@@ -224,4 +224,9 @@ public class Program extends AbstractProgram {
         }
         return simplified;
     }
+
+    @Override
+    public boolean factorised() {
+        return classes.factorised() && main.factorised();
+    }
 }
