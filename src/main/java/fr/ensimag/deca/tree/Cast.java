@@ -7,8 +7,13 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 import java.io.PrintStream;
+
+import javax.swing.plaf.synth.Region;
 
 import org.apache.commons.lang.Validate;
 
@@ -82,7 +87,13 @@ public class Cast extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // at this point the context told the cast is valid.
+        // let's change the value of the vtable pointer to point to the given type.
+        e.codeGenExpr(compiler, Register.R1);
+        // R1 is now the object, get the pointer to the vtable
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.R1), Register.R1));
+        // load the new value in
+        compiler.addInstruction(new LOAD(type.getDefinition().getDAddr(), Register.R1));
     }
 
 }
