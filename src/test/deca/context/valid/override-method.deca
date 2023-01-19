@@ -8,18 +8,9 @@
 //    cree le 16/01/2023
 
 class A {
-    void get(int a){
-        println(1);
-    }
+    void get(int a){}
 }
 
 class B extends A {
-    void get(int b){
-        println(2);
-    }
-}
-
-{
-    A b = new B();
-    b.get(1); 
+    void get(int b){}
 }

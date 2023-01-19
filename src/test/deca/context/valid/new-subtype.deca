@@ -8,13 +8,9 @@
 //    cree le 14/01/2023
 
 
-class A {
+class A {}
 
-}
-
-class B extends A {
-
-}
+class B extends A {}
 
 {
     A a = new B();

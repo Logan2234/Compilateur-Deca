@@ -13,7 +13,7 @@ class A{
 }
 
 {
-    int int, y;
+    int x, y;
     A a = new A();
     a.get(x, y);
 }
