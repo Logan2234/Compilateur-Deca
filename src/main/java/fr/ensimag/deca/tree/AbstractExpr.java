@@ -3,7 +3,6 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -112,10 +111,10 @@ public abstract class AbstractExpr extends AbstractInst {
         // Ajout du décor
         this.setType(expectedType);
 
-        if (expectedType.isFloat() && rtype.isInt())
-        {
+        if (expectedType.isFloat() && rtype.isInt()) {
             AbstractExpr convFloat = new ConvFloat(this);
             convFloat.verifyExpr(compiler, localEnv, currentClass);
+            convFloat.setLocation(this.getLocation());
             return convFloat;
         }
         return this;
@@ -139,9 +138,9 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        this.verifyExpr(compiler, localEnv, currentClass);
-        if (!this.getType().isBoolean())
-            throw new ContextualError("The condition is not a boolean (rule 3.29)", this.getLocation());
+        verifyExpr(compiler, localEnv, currentClass);
+        if (!getType().isBoolean())
+            throw new ContextualError("The condition is not a boolean (rule 3.29)", getLocation());
     }
 
     /**

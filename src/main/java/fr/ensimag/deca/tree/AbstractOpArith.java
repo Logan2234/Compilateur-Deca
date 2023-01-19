@@ -37,19 +37,16 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
                     "The right operand of an arithmetical operation has to be an int or a float (rule 3.33)", loc);
 
         // Ajout du décor et renvoie du type
-        if (typeLeft.isFloat() || typeRight.isFloat()) {
-            ConvFloat convFloat;
-            if (typeLeft.isInt()) {
-                convFloat = new ConvFloat(this.getLeftOperand());
-                this.setLeftOperand(convFloat);
-                convFloat.setType(compiler.environmentType.FLOAT);
-            } else if (typeRight.isInt()) {
-                convFloat = new ConvFloat(this.getRightOperand());
-                this.setRightOperand(convFloat);
-                convFloat.setType(compiler.environmentType.FLOAT);
-            }
-            this.setType(compiler.environmentType.FLOAT);
-            return compiler.environmentType.FLOAT;
+        if (typeLeft.isFloat() && typeRight.isInt()) {
+            ConvFloat convFloat = new ConvFloat(getRightOperand());
+            convFloat.setType(compiler.environmentType.FLOAT);
+            convFloat.setLocation(getRightOperand().getLocation());
+            setRightOperand(convFloat);
+        } else if (typeRight.isFloat() && typeLeft.isInt()) {
+            ConvFloat convFloat = new ConvFloat(this.getLeftOperand());
+            convFloat.setType(compiler.environmentType.FLOAT);
+            convFloat.setLocation(getLeftOperand().getLocation());
+            setLeftOperand(convFloat);
         }
 
         // Ajout du décor

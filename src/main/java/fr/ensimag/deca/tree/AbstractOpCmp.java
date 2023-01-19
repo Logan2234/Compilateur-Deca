@@ -48,15 +48,17 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
 
         ConvFloat convFloat;
         if (typeLeft.isFloat() && typeRight.isInt()) {
-            convFloat = new ConvFloat(this.getRightOperand());
-            this.setRightOperand(convFloat);
-            convFloat.setType(compiler.environmentType.FLOAT);
+            convFloat = new ConvFloat(getRightOperand());
+            convFloat.setLocation(getRightOperand().getLocation());
+            convFloat.setType(typeLeft);
+            setRightOperand(convFloat);
         }
-
+        
         else if (typeLeft.isInt() && typeRight.isFloat()) {
-            convFloat = new ConvFloat(this.getLeftOperand());
-            this.setLeftOperand(convFloat);
-            convFloat.setType(compiler.environmentType.FLOAT);
+            convFloat = new ConvFloat(getLeftOperand());
+            convFloat.setLocation(getLeftOperand().getLocation());
+            setLeftOperand(convFloat);
+            convFloat.setType(typeRight);
         }
 
         // Ajout du décor
