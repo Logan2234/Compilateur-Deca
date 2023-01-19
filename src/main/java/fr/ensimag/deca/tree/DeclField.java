@@ -9,6 +9,8 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -103,6 +105,12 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
+    public void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister) {
+        fieldName.getDefinition().setDAddrOffsetOnly(resultRegister.getOffset());
+        initialization.codeGenInit(compiler, type.getType(), resultRegister);
+    }
+
+    
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
         // We don't spotUsedVar() on classes. We spot them indirectly from the main

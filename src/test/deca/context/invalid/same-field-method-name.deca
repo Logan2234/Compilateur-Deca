@@ -1,0 +1,15 @@
+// Description:
+//    Une classe qui a un attribut et une méthode de même nom 
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 13: The method "b" has already been declared (rule 2.6)
+//
+// Historique:
+//    cree le 19/01/2023
+
+class A {
+    int b;
+    void b(){
+    }
+}

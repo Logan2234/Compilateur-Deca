@@ -71,6 +71,16 @@ public class MethodDefinition extends ExpDefinition {
         return false;
     }
 
+    private String methodName;
+
+    public void setName(String name) {
+        this.methodName = name;
+    }
+
+    public String getName() {
+        return this.methodName;
+    }
+
     @Override
     public void spotRelatedDefs(AbstractProgram prog) {
         assert(prog instanceof Program);

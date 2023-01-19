@@ -4,6 +4,8 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
@@ -58,17 +60,53 @@ public class Assign extends AbstractBinaryExpr {
             compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.getR(2)));
             this.getRightOperand().codeGenExpr(compiler, Register.getR(2));
-            compiler.addInstruction(new STORE(Register.getR(2), getLeftOperand().getDefinition().getDAddr()));
+            if(getLeftOperand().getDefinition().isField()) {
+                // load the field
+                GPRegister classPointerRegister = compiler.allocateRegister();
+                if(classPointerRegister == null) {
+                    // save R3 and restore
+                    compiler.addInstruction(new PUSH(Register.getR(3)));
+                    classPointerRegister = Register.getR(3);
+                }
+                compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
+                compiler.addInstruction(new STORE(Register.getR(2), new RegisterOffset(getLeftOperand().getDefinition().getDAddrOffsetOnly(), classPointerRegister)));
+                if(classPointerRegister == null) {
+                    // restore R3
+                    compiler.addInstruction(new POP(Register.getR(3)));
+                }
+            }
+            else {
+                compiler.addInstruction(new STORE(Register.getR(2), getLeftOperand().getDefinition().getDAddr()));
+            }
             // restore r2
             compiler.increaseContextUsedStack(-1);
             compiler.addInstruction(new POP(Register.getR(2)));
         }
         else {
-            // compute right expression in the register
             this.getRightOperand().codeGenExpr(compiler, resultRegister);
-            compiler.addInstruction(new STORE(resultRegister, getLeftOperand().getDefinition().getDAddr()));
-            // free the alocated register
-            compiler.freeRegister(resultRegister);
+            if(getLeftOperand().getDefinition().isField()) {
+                // load the field
+                GPRegister classPointerRegister = compiler.allocateRegister();
+                if(classPointerRegister == null) {
+                    // save R2 and restore
+                    compiler.addInstruction(new PUSH(Register.getR(2)));
+                    classPointerRegister = Register.getR(3);
+                }
+                compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
+                compiler.addInstruction(new STORE(resultRegister, new RegisterOffset(getLeftOperand().getDefinition().getDAddrOffsetOnly(), classPointerRegister)));
+                if(classPointerRegister == null) {
+                    // restore R2
+                    compiler.addInstruction(new POP(Register.getR(2)));
+                }
+            }
+            else {
+                // compute right expression in the register
+                this.getRightOperand().codeGenExpr(compiler, resultRegister);
+                compiler.addInstruction(new STORE(resultRegister, getLeftOperand().getDefinition().getDAddr()));
+                // free the alocated register
+                compiler.freeRegister(resultRegister);
+            }
+
         }
     }
 

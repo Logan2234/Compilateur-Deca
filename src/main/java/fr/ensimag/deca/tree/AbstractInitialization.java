@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -31,6 +33,6 @@ public abstract class AbstractInitialization extends Tree {
      * This must writes the value of the initialization on the stack using PUSH.
      * @param compiler Where we write the code.
      */
-    public abstract void codeGenInit(DecacCompiler compiler);
+    public abstract void codeGenInit(DecacCompiler compiler, Type objectType, RegisterOffset resultRegister);
 
 }

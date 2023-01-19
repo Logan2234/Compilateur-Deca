@@ -1,6 +1,8 @@
 package fr.ensimag.deca.context;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
@@ -74,5 +76,24 @@ public class EnvironmentExp {
         if (dico.containsKey(name))
             throw new DoubleDefException();
         dico.put(name, def);
+    }
+
+
+    public List<MethodDefinition> getMethods() {
+        List<MethodDefinition> methods = new LinkedList<>();
+        for(Symbol sym : dico.keySet()) {
+            ExpDefinition def = dico.get(sym);
+            if(def.isMethod()) {
+                try {
+                    MethodDefinition method = def.asMethodDefinition(null, null);
+                    method.setName(sym.getName());
+                    methods.add(method);
+                }
+                catch(ContextualError e) {
+                    continue;
+                }
+            }
+        }
+        return methods;
     }
 }

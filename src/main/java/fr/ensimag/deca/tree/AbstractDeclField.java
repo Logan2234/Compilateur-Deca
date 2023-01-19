@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 /**
  * Field declaration
@@ -45,4 +46,8 @@ public abstract class AbstractDeclField extends Tree {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
 
+        /**
+         * Generates the code to initialize this field. This is similar to code gen init 
+         */
+        public abstract void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister);
 }

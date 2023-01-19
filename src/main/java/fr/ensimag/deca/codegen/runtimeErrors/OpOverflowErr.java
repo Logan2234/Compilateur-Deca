@@ -8,11 +8,11 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class OpOverflowErr extends AbstractRuntimeErr {
     public int errorId() {
-        return 2;
+        return 5;
     }
 
     public void codeGenErr(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR("Error : floating point number operation overflow"));
+        compiler.addInstruction(new WSTR("Error : Floating point number operation overflow"));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }
