@@ -32,9 +32,6 @@ public abstract class AbstractDeclClass extends Tree {
     protected abstract void verifyClassBody(DecacCompiler compiler)
             throws ContextualError;
 
-        /**
-         * 
-         * @return true if the class has been factorised
-         */
-    public abstract boolean factorised();
+            
+        public abstract boolean factorised();
 }

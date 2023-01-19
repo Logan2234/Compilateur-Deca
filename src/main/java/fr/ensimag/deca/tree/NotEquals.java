@@ -30,4 +30,8 @@ public class NotEquals extends AbstractOpExactCmp {
         compiler.addInstruction(new SNE(register));
     }
 
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

@@ -30,4 +30,8 @@ public class Or extends AbstractOpBool {
     }
 
 
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

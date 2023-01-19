@@ -45,4 +45,9 @@ public class NoOperation extends AbstractInst {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
+
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

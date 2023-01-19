@@ -61,5 +61,12 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
         }
     }
 
+    public boolean factorised() {
+        for (AbstractDeclMethod i : getList()) {
+            if (i.factorised())
+                return true;
+        }
+        return false;
+    }
 
 }

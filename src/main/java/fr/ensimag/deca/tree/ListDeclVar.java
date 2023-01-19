@@ -69,4 +69,7 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
         }
     }
 
+    public boolean factorised() {
+        return false;
+    }
 }

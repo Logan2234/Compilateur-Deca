@@ -50,4 +50,6 @@ public abstract class AbstractDeclMethod extends Tree {
     protected abstract void verifyMethodBody(DecacCompiler compiler, EnvironmentExp locaEnv,
             ClassDefinition currentClass) throws ContextualError;
 
+    public abstract boolean factorised();
+
 }

@@ -43,4 +43,8 @@ public class UnaryMinus extends AbstractUnaryExpr {
         compiler.addInstruction(new OPP(resulRegister, resulRegister));
     }
 
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

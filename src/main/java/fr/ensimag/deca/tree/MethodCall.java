@@ -110,4 +110,9 @@ public class MethodCall extends AbstractExpr {
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         foundMethodCalls.add(this);
     }
+
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

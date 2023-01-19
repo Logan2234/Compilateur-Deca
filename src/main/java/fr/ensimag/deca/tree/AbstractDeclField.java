@@ -45,4 +45,6 @@ public abstract class AbstractDeclField extends Tree {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
 
+        public abstract boolean factorised();
+
 }

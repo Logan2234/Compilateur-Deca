@@ -128,6 +128,6 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     public boolean factorised() {
-        return methods.factorised() && fields.factorised();
+        return methods.factorised() || fields.factorised();
     }
 }

@@ -103,4 +103,9 @@ public class While extends AbstractInst {
         this.condition.spotUsedVar(prog);
         this.body.spotUsedVar(prog);
     }
+    
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

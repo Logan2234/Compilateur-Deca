@@ -58,4 +58,11 @@ public class ListInst extends TreeList<AbstractInst> {
         }
     }
 
+    public boolean factorised() {
+        for (AbstractInst i : getList()) {
+            if (i.factorised())
+                return true;
+        }
+        return false;
+    }
 }

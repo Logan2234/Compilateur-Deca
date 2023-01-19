@@ -33,4 +33,9 @@ public class And extends AbstractOpBool {
         compiler.addInstruction(new SUB(new ImmediateInteger(1), register));
         compiler.addInstruction(new SEQ(register));
     }
+
+    @Override
+    public boolean factorised() {
+        return false;
+    }
 }

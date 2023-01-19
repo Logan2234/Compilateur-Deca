@@ -35,4 +35,9 @@ public class ConvFloat extends AbstractUnaryExpr {
         compiler.addInstruction(new FLOAT(resultRegister, resultRegister));
     }
 
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
+
 }

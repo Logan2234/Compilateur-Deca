@@ -30,4 +30,8 @@ public class Lower extends AbstractOpIneq {
         compiler.addInstruction(new SLT(register));
     }
 
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

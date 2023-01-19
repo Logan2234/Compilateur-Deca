@@ -75,4 +75,8 @@ public class StringLiteral extends AbstractStringLiteral {
     String prettyPrintNode() {
         return "StringLiteral (" + value + ")";
     }
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

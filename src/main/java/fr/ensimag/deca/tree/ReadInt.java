@@ -44,5 +44,9 @@ public class ReadInt extends AbstractReadExpr {
         compiler.addInstruction(new RINT());
         
     }
+        @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 
 }

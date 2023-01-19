@@ -137,4 +137,8 @@ public class DeclMethod extends AbstractDeclMethod {
     public AbstractMethod getBody() {
         return this.body;
     }
+
+    public boolean factorised() {
+        return body.factorised();
+    }
 }

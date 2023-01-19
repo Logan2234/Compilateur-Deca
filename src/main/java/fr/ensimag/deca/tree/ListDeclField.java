@@ -64,4 +64,12 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         }
     }
 
+    public boolean factorised(){
+        for (AbstractDeclField i : getList()) {
+            if (i.factorised())
+                return true;
+        }
+        return false;
+    }
+
 }

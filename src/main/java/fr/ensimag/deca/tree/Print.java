@@ -17,4 +17,9 @@ public class Print extends AbstractPrint {
     String getSuffix() {
         return "";
     }
+
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

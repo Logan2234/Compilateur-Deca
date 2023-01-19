@@ -17,4 +17,6 @@ public abstract class AbstractMethod extends Tree {
     public abstract void verifyMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentclass, Type type) throws ContextualError;
     public abstract void codeGenProgram(DecacCompiler compiler) ;
 
+    public abstract boolean factorised();
+
 }

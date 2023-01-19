@@ -45,4 +45,8 @@ public class ReadFloat extends AbstractReadExpr {
         // todo : manage overflow
     }
 
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

@@ -74,4 +74,9 @@ public class This extends AbstractExpr {
         // do nothing
     }
 
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
+
 }

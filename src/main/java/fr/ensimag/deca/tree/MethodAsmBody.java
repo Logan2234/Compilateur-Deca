@@ -64,4 +64,9 @@ public class MethodAsmBody extends AbstractMethod {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
+
+    @Override
+    public boolean factorised() {
+        return false;
+    }
 }

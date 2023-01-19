@@ -295,4 +295,9 @@ public class Identifier extends AbstractIdentifier {
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
+
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

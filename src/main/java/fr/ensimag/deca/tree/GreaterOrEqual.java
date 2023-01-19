@@ -31,4 +31,8 @@ public class GreaterOrEqual extends AbstractOpIneq {
         compiler.addInstruction(new SGE(register));
     }
 
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

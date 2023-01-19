@@ -111,4 +111,8 @@ public class IfThenElse extends AbstractInst {
         this.elseBranch.spotUsedVar(prog);
     }
 
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

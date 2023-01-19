@@ -34,4 +34,8 @@ public class Multiply extends AbstractOpArith {
         }
     }
 
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

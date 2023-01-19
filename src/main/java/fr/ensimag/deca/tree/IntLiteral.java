@@ -96,4 +96,9 @@ public class IntLiteral extends AbstractExpr {
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
+
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

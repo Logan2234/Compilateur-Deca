@@ -30,4 +30,8 @@ public class Equals extends AbstractOpExactCmp {
         compiler.addInstruction(new SEQ(register));
     }
     
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

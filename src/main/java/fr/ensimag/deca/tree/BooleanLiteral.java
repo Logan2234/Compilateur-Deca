@@ -88,4 +88,9 @@ public class BooleanLiteral extends AbstractExpr {
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
+
+    @Override
+    public boolean factorised() {
+        return false;
+    }
 }

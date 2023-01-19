@@ -33,5 +33,9 @@ public class Minus extends AbstractOpArith {
             compiler.addInstruction(new BOV(error.getErrorLabel()));
         }
     }
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
     
 }

@@ -111,4 +111,9 @@ public class DeclField extends AbstractDeclField {
     public AbstractIdentifier getName() {
         return this.fieldName;
     }
+
+    @Override
+    public boolean factorised() {
+        return true;   
+    }
 }

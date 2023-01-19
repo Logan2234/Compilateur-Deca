@@ -63,4 +63,9 @@ public class Return extends AbstractInst {
     protected void spotUsedVar(AbstractProgram prog) {
         this.e.spotUsedVar(prog);
     }
+
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

@@ -84,4 +84,9 @@ public class InstanceOf extends AbstractExpr {
         // the expression could be obtained via a MethodCall
         this.e.addMethodCalls(foundMethodCalls);
     }
+
+    @Override
+    public boolean factorised() {
+        return false;//TODO
+    }
 }

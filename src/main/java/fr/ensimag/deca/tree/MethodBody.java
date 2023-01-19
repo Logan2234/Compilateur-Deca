@@ -76,4 +76,9 @@ public class MethodBody extends AbstractMethod {
         this.vars.spotUsedVar(prog);
         this.insts.spotUsedVar(prog);
     }
+
+    @Override
+    public boolean factorised(){
+        return insts.factorised();
+    }
 }
