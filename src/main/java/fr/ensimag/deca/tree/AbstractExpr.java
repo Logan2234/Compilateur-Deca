@@ -103,32 +103,22 @@ public abstract class AbstractExpr extends AbstractInst {
             Type expectedType) throws ContextualError {
         Type rtype = this.verifyExpr(compiler, localEnv, currentClass);
 
-        // Ajout du décor et renvoie du type
-        if (rtype.sameType(expectedType)) {
-            this.setType(type);
-            return this;
+        if (!expectedType.assignCompatible(rtype)) {
+            throw new ContextualError(
+                    "An assignation between a " + expectedType + " and a " + rtype + " is not possible (rule 3.32)",
+                    getLocation());
         }
 
-        if (expectedType.isFloat() && rtype.isInt()) // TODO: assignCompatible pour factoriser
+        // Ajout du décor
+        this.setType(expectedType);
+
+        if (expectedType.isFloat() && rtype.isInt())
         {
             AbstractExpr convFloat = new ConvFloat(this);
             convFloat.verifyExpr(compiler, localEnv, currentClass);
             return convFloat;
         }
-
-        try {
-            ClassType expectedClassType = expectedType.asClassType("Not a class type", getLocation());
-            ClassType RClassType = rtype.asClassType("Not a class type", getLocation());
-            if (RClassType.isSubClassOf(expectedClassType)) {
-                this.setType(rtype);
-                return this;
-            }
-        } catch (ContextualError e) {
-        }
-
-        throw new ContextualError(
-                "An assignation between a " + expectedType + " and a " + rtype + " is not possible (rule 3.32)",
-                this.getLocation());
+        return this;
     }
 
     @Override
@@ -209,11 +199,14 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     /**
-     * Fin recursively all method calls and Reads in the expression and add them on top of the list
+     * Fin recursively all method calls and Reads in the expression and add them on
+     * top of the list
      * This method is used for optimizing the Program tree.
-     * Instructions should not be removed if they contains a MethodCall or a Read that could
+     * Instructions should not be removed if they contains a MethodCall or a Read
+     * that could
      * potentially print/read on stdin/stdout or change the state of an object.
      * It had the methods found on top of the list
+     * 
      * @param the list of MethodCalls and Reads ordered by order of apparition
      */
     protected abstract void addMethodCalls(List<AbstractExpr> foundMethodCalls);
@@ -221,8 +214,10 @@ public abstract class AbstractExpr extends AbstractInst {
     /**
      * Fin recursively all method calls and reads in the expression
      * This method is used for optimizing the Program tree.
-     * Instructions should not be removed if they contains a MethodCall or a Read that could
+     * Instructions should not be removed if they contains a MethodCall or a Read
+     * that could
      * potentially print/read on stdin/stdout or change the state of an object.
+     * 
      * @return the list of MethodCall ordered by order of apparition
      */
     protected final List<AbstractExpr> getMethodCalls() {

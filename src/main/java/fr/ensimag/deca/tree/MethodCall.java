@@ -54,7 +54,7 @@ public class MethodCall extends AbstractExpr {
                     getLocation());
         for (int i = 0; i < sig.size(); i++) {
             Type type = params.getList().get(i).verifyExpr(compiler, localEnv, currentClass);
-            if (!type.assignCompatible(localEnv, sig.paramNumber(i)))
+            if (!type.assignCompatible(sig.paramNumber(i)))
                 throw new ContextualError(
                         "The parameter number " + (i + 1) + " does not have the correct type (rule 3.28)",
                         getLocation());

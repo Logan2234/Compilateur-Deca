@@ -39,7 +39,7 @@ public class Cast extends AbstractExpr {
         Type typeT = this.type.verifyType(compiler);
 
         if (typeExp.isVoid()
-                || (!typeExp.assignCompatible(localEnv, typeT) && !typeT.assignCompatible(localEnv, typeExp))) {
+                || (!typeExp.assignCompatible(typeT) && !typeT.assignCompatible(typeExp))) {
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
                     + typeT.getName().getName() + "\"", loc);
         }
