@@ -307,6 +307,14 @@ public abstract class Tree {
         }
         
     }
+
+    /**
+     * Check if the class is a read expression.
+     * @return if the class is a read expression.
+     */
+    public boolean isReadExpr() {
+        return false;
+    }
     
     /**
      * Check if the tree have irrelevant assignments.

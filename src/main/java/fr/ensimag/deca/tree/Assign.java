@@ -109,33 +109,12 @@ public class Assign extends AbstractBinaryExpr {
 
     @Override
     public boolean irrelevant(){
+        if (getRightOperand().isReadExpr() && currentValues.containsKey(getLeftOperand().getName())){
+            currentValues.remove(getLeftOperand().getName());
+            return false;
+        }
         if (getRightOperand().irrelevant()){
-            if (getType().isFloat()) {
-                Float rightIrrelevantdValue = getRightOperand().irrelevantFloat();
-                if(rightIrrelevantdValue != null && getRightOperand().irrelevantable()) {
-                    FloatLiteral newFloat = new FloatLiteral(rightIrrelevantdValue);
-                    newFloat.setType(getType());
-                    setRightOperand(newFloat);
-                }
-            }
-
-            if (getType().isInt()){
-                Integer rightIrrelevantdValue = getRightOperand().irrelevantInt();
-                if(rightIrrelevantdValue != null && getRightOperand().irrelevantable()) {
-                    IntLiteral newInt = new IntLiteral(rightIrrelevantdValue);
-                    newInt.setType(getType());
-                    setRightOperand(newInt);
-                }
-            }
-
-            if (getType().isBoolean()){
-                Boolean rightIrrelevantdValue = getRightOperand().irrelevantBool();
-                if(rightIrrelevantdValue != null && getRightOperand().irrelevantable()) {
-                    BooleanLiteral newBool = new BooleanLiteral(rightIrrelevantdValue);
-                    newBool.setType(getType());
-                    setRightOperand(newBool);
-                }
-            }
+            setRightOperand((currentValues.get(getLeftOperand().getName())));
         }
         currentValues.put(getLeftOperand().getName(), getRightOperand());
         return false;

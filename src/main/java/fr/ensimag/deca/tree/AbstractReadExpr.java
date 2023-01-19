@@ -43,5 +43,9 @@ public abstract class AbstractReadExpr extends AbstractExpr {
      */
     protected abstract void codeGenRead(DecacCompiler compiler);
 
+    @Override
+    public boolean isReadExpr() {
+        return true;
+    }
 
 }
