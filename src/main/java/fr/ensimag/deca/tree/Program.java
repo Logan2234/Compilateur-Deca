@@ -115,117 +115,122 @@ public class Program extends AbstractProgram {
      * @return true if the block has been simplified
      */
     private boolean optimizeBlock(ListDeclVar listDecls, ListInst listInsts) {
-        boolean simplified = false;
-        /* remove useless declarations from the main */
-        if (listDecls != null) {
-            Iterator<AbstractDeclVar> iterDecl = listDecls.iterator();
-            while(iterDecl.hasNext()){
-                DeclVar decl = (DeclVar) iterDecl.next();
-                if (decl.getVar().getDefinition().isUsed()) {
-                    // the variable is used
-                } else if (decl.getInit() instanceof Initialization
-                        && !((Initialization)(decl.getInit())).getExpression().getMethodCalls().isEmpty()) {
-                    // the variable is not used but is Initialized with a MethodCall
-                } else {
-                    // the variable is not used and (not initialized or initialized with no methodCall)
-                    iterDecl.remove();
-                    simplified = true;
-                    LOG.debug("Remove the decl of "+decl.getVar().getDefinition().toString());
-                }
-            }
-        }
-
-        /* remove useless instructions form the main */
-        // the order of if statements is important
-        ListIterator<AbstractInst> iterInst = listInsts.iterator();
-        while(iterInst.hasNext()){
-            AbstractInst inst = iterInst.next();
-
-            if (inst instanceof MethodCall || inst instanceof AbstractReadExpr) {
-                // keep it
-                // prevents from looping by setting simplified to true in the AbstractExpr case
-            }
-
-            else if (inst instanceof Not) {
-                iterInst.remove();
-                iterInst.add(((Not)inst).getOperand()); // add after the current instruction
-                simplified = true;
-                LOG.debug("Break Not at "+inst.getLocation() + " : " + inst.getClass());
-            }
-
-            else if (inst instanceof InstanceOf) {
-                iterInst.remove();
-                iterInst.add(((InstanceOf)inst).getExpr()); // add after the current instruction
-                simplified = true;
-                LOG.debug("Break InstanceOf at "+inst.getLocation() + " : " + inst.getClass());
-            }
-
-            else if (inst instanceof Assign) {
-                // don't group the if because it prevents from entering the next if
-                Assign assign = (Assign)inst;
-                if (!assign.getLeftOperand().getDefinition().isUsed()) {
-                    iterInst.remove();
-                    iterInst.add(assign.getLeftOperand()); // add after the current instruction
-                    simplified = true;
-                    LOG.debug("Break Assign at "+inst.getLocation() + " : " + inst.getClass());
-                }
-            }
-
-            else if (inst instanceof AbstractExpr) {
-                AbstractExpr expr = (AbstractExpr)inst;
-                List<AbstractExpr> methods = expr.getMethodCalls();
-                if (methods.isEmpty()) {
-                    iterInst.remove();
-                    simplified = true;
-                    LOG.debug("Remove expr at "+inst.getLocation() + " : " + inst.getClass());
-                }
-                else if (expr.getType().isBoolean()) {
-                    // we cannot break the expression because for instance, the left operand
-                    // of an AND shouldn't be evaluated if the right operand is false
-                }
-                else {
-                    iterInst.remove();
-                    for (AbstractExpr methodCall : methods) {
-                        iterInst.add(methodCall); // add after the current instruction
+        boolean res = false;
+        boolean simplified = true;
+        while (simplified) {
+            simplified = false;
+            /* remove useless declarations from the main */
+            if (listDecls != null) {
+                Iterator<AbstractDeclVar> iterDecl = listDecls.iterator();
+                while(iterDecl.hasNext()){
+                    DeclVar decl = (DeclVar) iterDecl.next();
+                    if (decl.getVar().getDefinition().isUsed()) {
+                        // the variable is used
+                    } else if (decl.getInit() instanceof Initialization
+                            && !((Initialization)(decl.getInit())).getExpression().getMethodCalls().isEmpty()) {
+                        // the variable is not used but is Initialized with a MethodCall
+                    } else {
+                        // the variable is not used and (not initialized or initialized with no methodCall)
+                        iterDecl.remove();
+                        simplified = true;
+                        LOG.debug("Remove the decl of "+decl.getVar().getDefinition().toString());
                     }
-                    simplified = true;
-                    LOG.debug("Break expr at "+inst.getLocation() + " : " + inst.getClass());
                 }
             }
 
-            else if (inst instanceof NoOperation) {
-                iterInst.remove();
-                simplified = true;
-                LOG.debug("Remove NoOp at "+inst.getLocation() + " : " + inst.getClass());
-            }
+            /* remove useless instructions form the main */
+            // the order of if statements is important
+            ListIterator<AbstractInst> iterInst = listInsts.iterator();
+            while(iterInst.hasNext()){
+                AbstractInst inst = iterInst.next();
 
-            else if (inst instanceof While) {
-                While while_ = (While)inst;
-                simplified = optimizeBlock(null, while_.getBody());
-                // We keep the while if the condition have a method call
-                if (while_.getBody().isEmpty() && while_.getCondition().getMethodCalls().isEmpty()) {
+                if (inst instanceof MethodCall || inst instanceof AbstractReadExpr) {
+                    // keep it
+                    // prevents from looping by setting simplified to true in the AbstractExpr case
+                }
+
+                else if (inst instanceof Not) {
+                    iterInst.remove();
+                    iterInst.add(((Not)inst).getOperand()); // add after the current instruction
+                    simplified = true;
+                    LOG.debug("Break Not at "+inst.getLocation() + " : " + inst.getClass());
+                }
+
+                else if (inst instanceof InstanceOf) {
+                    iterInst.remove();
+                    iterInst.add(((InstanceOf)inst).getExpr()); // add after the current instruction
+                    simplified = true;
+                    LOG.debug("Break InstanceOf at "+inst.getLocation() + " : " + inst.getClass());
+                }
+
+                else if (inst instanceof Assign) {
+                    // don't group the if because it prevents from entering the next if
+                    Assign assign = (Assign)inst;
+                    if (!assign.getLeftOperand().getDefinition().isUsed()) {
+                        iterInst.remove();
+                        iterInst.add(assign.getLeftOperand()); // add after the current instruction
+                        simplified = true;
+                        LOG.debug("Break Assign at "+inst.getLocation() + " : " + inst.getClass());
+                    }
+                }
+
+                else if (inst instanceof AbstractExpr) {
+                    AbstractExpr expr = (AbstractExpr)inst;
+                    List<AbstractExpr> methods = expr.getMethodCalls();
+                    if (methods.isEmpty()) {
+                        iterInst.remove();
+                        simplified = true;
+                        LOG.debug("Remove expr at "+inst.getLocation() + " : " + inst.getClass());
+                    }
+                    else if (expr.getType().isBoolean()) {
+                        // we cannot break the expression because for instance, the left operand
+                        // of an AND shouldn't be evaluated if the right operand is false
+                    }
+                    else {
+                        iterInst.remove();
+                        for (AbstractExpr methodCall : methods) {
+                            iterInst.add(methodCall); // add after the current instruction
+                        }
+                        simplified = true;
+                        LOG.debug("Break expr at "+inst.getLocation() + " : " + inst.getClass());
+                    }
+                }
+
+                else if (inst instanceof NoOperation) {
                     iterInst.remove();
                     simplified = true;
-                    // the condition will be optimized at the next optimizeBlock call
-                    iterInst.add(while_.getCondition()); // add after the current instruction
+                    LOG.debug("Remove NoOp at "+inst.getLocation() + " : " + inst.getClass());
                 }
-                if (simplified) LOG.debug("Optimize While at "+inst.getLocation() + " : " + inst.getClass());
-            }
 
-            else if (inst instanceof IfThenElse){
-                IfThenElse ifThenElse = (IfThenElse)inst;
-                simplified = optimizeBlock(null, ((IfThenElse)inst).getThenInst());
-                simplified = (simplified || optimizeBlock(null, ((IfThenElse)inst).getElseInst()));
-                if (ifThenElse.getThenInst().isEmpty() && ifThenElse.getElseInst().isEmpty()) {
-                    iterInst.remove();
-                    simplified = true;
-                    // the condition will be optimized at the next optimizeBlock call
-                    iterInst.add(ifThenElse.getCondition()); // add after the current instruction
+                else if (inst instanceof While) {
+                    While while_ = (While)inst;
+                    simplified = optimizeBlock(null, while_.getBody());
+                    // We keep the while if the condition have a method call
+                    if (while_.getBody().isEmpty() && while_.getCondition().getMethodCalls().isEmpty()) {
+                        iterInst.remove();
+                        simplified = true;
+                        // the condition will be optimized at the next optimizeBlock call
+                        iterInst.add(while_.getCondition()); // add after the current instruction
+                    }
+                    if (simplified) LOG.debug("Optimize While at "+inst.getLocation() + " : " + inst.getClass());
                 }
-                if (simplified) LOG.debug("Optimize if at "+inst.getLocation() + " : " + inst.getClass());
+
+                else if (inst instanceof IfThenElse){
+                    IfThenElse ifThenElse = (IfThenElse)inst;
+                    simplified = optimizeBlock(null, ((IfThenElse)inst).getThenInst());
+                    simplified = (simplified || optimizeBlock(null, ((IfThenElse)inst).getElseInst()));
+                    if (ifThenElse.getThenInst().isEmpty() && ifThenElse.getElseInst().isEmpty()) {
+                        iterInst.remove();
+                        simplified = true;
+                        // the condition will be optimized at the next optimizeBlock call
+                        iterInst.add(ifThenElse.getCondition()); // add after the current instruction
+                    }
+                    if (simplified) LOG.debug("Optimize if at "+inst.getLocation() + " : " + inst.getClass());
+                }
+                res = res || simplified;
             }
         }
-        return simplified;
+        return res;
     }
 
     /**
