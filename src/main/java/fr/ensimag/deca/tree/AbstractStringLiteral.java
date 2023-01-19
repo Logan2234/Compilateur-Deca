@@ -17,4 +17,8 @@ public abstract class AbstractStringLiteral extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
     
+    @Override
+    public boolean irrelevant(){
+        return false;
+    }
 }

@@ -101,4 +101,12 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
      */
     public abstract void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister);
 
+    @Override
+    public boolean irrelevant() {
+        if (operand.irrelevant()){
+            operand = currentValues.get(((Identifier) operand).getName());
+        }
+        return operand.irrelevant();
+    }
+
 }

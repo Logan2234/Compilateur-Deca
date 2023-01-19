@@ -1,0 +1,15 @@
+// Description:
+//     Vérifier que, si on a décompile, on a bien les variables qui ont été changées par des int.
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 19/01/2023
+
+{
+    boolean test;
+	boolean result1 = true;
+    boolean result2 = !result1;
+    result1 && result2;
+}
