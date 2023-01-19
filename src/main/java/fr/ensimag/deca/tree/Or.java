@@ -54,30 +54,5 @@ public class Or extends AbstractOpBool {
         return null;
     }
 
-    @Override
-    public boolean irrelevant() {
-        return getRightOperand().irrelevant() || getLeftOperand().irrelevant();
-    }
-
-    @Override
-    public Boolean irrelevantBool() {
-        Boolean rightIrrelevantdValue = getRightOperand().irrelevantBool();
-        if(rightIrrelevantdValue != null && getRightOperand().irrelevantable()) {
-            BooleanLiteral newBool = new BooleanLiteral(rightIrrelevantdValue);
-            newBool.setType(getType());
-            setRightOperand(newBool);
-        }
-        Boolean leftIrrelevantValue = getLeftOperand().irrelevantBool();
-        if(leftIrrelevantValue != null && getLeftOperand().irrelevantable()) {
-            BooleanLiteral newBool = new BooleanLiteral(leftIrrelevantValue);
-            newBool.setType(getType());
-            setLeftOperand(newBool);
-        }
-        if(rightIrrelevantdValue != null && leftIrrelevantValue != null) {
-            return rightIrrelevantdValue || leftIrrelevantValue;
-        }
-        return null;
-    }
-
 
 }

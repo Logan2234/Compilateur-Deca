@@ -299,12 +299,10 @@ public abstract class Tree {
      */
     public void optimizeTree() {
         // solve compile time known cases.
-        while(collapse()) {
-            // rien
-        }
+        // while(collapse()) {
+        //     // rien
+        // }
         while(irrelevant()){
-
-            System.out.println("FIREEE");
             //rien
         }
         
@@ -312,7 +310,7 @@ public abstract class Tree {
     
     /**
      * Check if the tree have irrelevant assignments.
-     * Example : int a = 1; int b = a; b = 2; a = 3; // a = 1, b=a are irrelevant
+     * Example : int a = 1; int b = a; b = 2; a = 3; --> int a = 1, int b=1, ... 
      * This calls the irrelevant triggers on each nodes.
      * @return if this node could find more irrelevant assignments.
      */

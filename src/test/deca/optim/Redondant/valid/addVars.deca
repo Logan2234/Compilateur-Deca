@@ -1,0 +1,15 @@
+// Description:
+//    Vérifier que, si on a décompile, on a bien les variables qui ont été changées par des int.
+//
+// Resultats:
+//    32
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+	int test1 = 2 + 3;
+    int test2 = test1 + 8;
+    int test3 = test2 + 1;
+    println(test1 + test2 + test3);
+}

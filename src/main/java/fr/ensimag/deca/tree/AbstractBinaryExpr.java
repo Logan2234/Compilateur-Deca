@@ -138,5 +138,14 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         leftOperand.prettyPrint(s, prefix, false);
         rightOperand.prettyPrint(s, prefix, true);
     }
-
+    @Override
+    public boolean irrelevant() {
+        if (getRightOperand().irrelevant()) {
+            rightOperand = currentValues.get(((Identifier) getRightOperand()).getName());
+        }
+        if (getLeftOperand().irrelevant()) {
+            leftOperand = currentValues.get(((Identifier) getLeftOperand()).getName());
+        }
+        return leftOperand.irrelevant() || rightOperand.irrelevant();
+    }
 }
