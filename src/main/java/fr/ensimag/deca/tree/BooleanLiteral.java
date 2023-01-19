@@ -33,20 +33,19 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
         // Ajout du décor
-        this.setType(compiler.environmentType.BOOLEAN);
+        setType(compiler.environmentType.BOOLEAN);
         return compiler.environmentType.BOOLEAN;
     }
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        if(resultRegister != null) {
+        if (resultRegister != null) {
             // put it in the result register
             compiler.addInstruction(new LOAD(value ? 1 : 0, resultRegister));
-        }
-        else {
+        } else {
             // push it on the stack
             compiler.addInstruction(new LOAD(value ? 1 : 0, Register.R1));
             compiler.incrementContextUsedStack();

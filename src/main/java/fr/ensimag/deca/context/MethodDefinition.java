@@ -86,7 +86,7 @@ public class MethodDefinition extends ExpDefinition {
                 // (match the tree location of DeclMethod with the definition location of the current MethodDefinition)
                 // Each method as a different location
                 LOG.debug("Looking for the method");
-                if (this.getLocation() == method.getLocation()) {
+                if (getLocation() == method.getLocation()) {
                     LOG.debug("Methods matched");
                     // explore the body of the method to spot other useful variables
                     ((DeclMethod)(method)).spotUsedVar(prog);

@@ -24,17 +24,16 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
-        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
-        Location loc = this.getLocation();
+        Type typeLeft = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
 
         if (!typeLeft.isInt() && !typeLeft.isFloat())
             throw new ContextualError(
-                    "The left operand of an arithmetical operation has to be an int or a float (rule 3.33)", loc);
+                    "The left operand of an arithmetical operation has to be an int or a float (rule 3.33)", getLocation());
 
         if (!typeRight.isInt() && !typeRight.isFloat())
             throw new ContextualError(
-                    "The right operand of an arithmetical operation has to be an int or a float (rule 3.33)", loc);
+                    "The right operand of an arithmetical operation has to be an int or a float (rule 3.33)", getLocation());
 
         // Ajout du décor et renvoie du type
         if (typeLeft.isFloat() && typeRight.isInt()) {

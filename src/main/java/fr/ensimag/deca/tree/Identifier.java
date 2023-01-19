@@ -182,7 +182,8 @@ public class Identifier extends AbstractIdentifier {
         Definition def = localEnv.get(name);
 
         if (def == null)
-            throw new ContextualError("The identifier \"" + name.getName() + "\" doesn't exist (rule 0.1)", getLocation());
+            throw new ContextualError("The identifier \"" + name.getName() + "\" doesn't exist (rule 0.1)",
+                    getLocation());
 
         // Ajout du décor
         Type type = def.getType();
@@ -198,21 +199,15 @@ public class Identifier extends AbstractIdentifier {
      */
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
-        Type type;
         TypeDefinition def = compiler.environmentType.defOfType(name);
-        Location loc = getLocation();
 
-        try {
-            // Si le symbole n'est pas un type, on catch l'erreur pour envoyer une
-            // ContextualError
-            type = def.getType();
-        } catch (NullPointerException e) {
-            throw new ContextualError("The type \"" + name + "\" doesn't exist (rule 0.2)", loc);
-        }
+        if (def == null)
+            throw new ContextualError("The type \"" + name + "\" doesn't exist (rule 0.2)", getLocation());
 
         // Ajout du décor
-        this.setDefinition(def);
-        this.setType(type);
+        Type type = def.getType();
+        setDefinition(def);
+        setType(type);
         return type;
     }
 

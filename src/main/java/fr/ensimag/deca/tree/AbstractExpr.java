@@ -100,7 +100,7 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     public AbstractExpr verifyRValue(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type expectedType) throws ContextualError {
-        Type rtype = this.verifyExpr(compiler, localEnv, currentClass);
+        Type rtype = verifyExpr(compiler, localEnv, currentClass);
 
         if (!expectedType.assignCompatible(rtype)) {
             throw new ContextualError(
@@ -109,12 +109,12 @@ public abstract class AbstractExpr extends AbstractInst {
         }
 
         // Ajout du décor
-        this.setType(expectedType);
+        setType(expectedType);
 
         if (expectedType.isFloat() && rtype.isInt()) {
             AbstractExpr convFloat = new ConvFloat(this);
             convFloat.verifyExpr(compiler, localEnv, currentClass);
-            convFloat.setLocation(this.getLocation());
+            convFloat.setLocation(getLocation());
             return convFloat;
         }
         return this;

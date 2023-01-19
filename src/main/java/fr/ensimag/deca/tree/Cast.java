@@ -34,15 +34,15 @@ public class Cast extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeExp = this.e.verifyExpr(compiler, localEnv, currentClass);
-        Type typeT = this.type.verifyType(compiler);
+        Type typeExp = e.verifyExpr(compiler, localEnv, currentClass);
+        Type typeT = type.verifyType(compiler);
 
         if (typeExp.isVoid() || (!typeExp.assignCompatible(typeT) && !typeT.assignCompatible(typeExp)))
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
                     + typeT.getName().getName() + "\"", getLocation());
 
         // Ajout du décor
-        this.setType(typeT);
+        setType(typeT);
         return typeT;
     }
 

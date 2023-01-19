@@ -20,21 +20,21 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
-        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
-        Location loc = this.getLocation();
+        Type typeLeft = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+        Location loc = getLocation();
 
-        if ((this.getOperatorName() == "==" || this.getOperatorName() == "!=") && typeLeft.isBoolean()) {
+        if ((getOperatorName() == "==" || getOperatorName() == "!=") && typeLeft.isBoolean()) {
             if (!typeRight.isBoolean())
                 throw new ContextualError("A boolean can only be compared to another boolean (rule 3.33)", loc);
-            this.setType(compiler.environmentType.BOOLEAN);
+            setType(compiler.environmentType.BOOLEAN);
             return compiler.environmentType.BOOLEAN;
         }
 
-        if ((this.getOperatorName() == "==" || this.getOperatorName() == "!=") && typeLeft.isClassOrNull()) {
+        if ((getOperatorName() == "==" || getOperatorName() == "!=") && typeLeft.isClassOrNull()) {
             if (!typeRight.isClassOrNull())
                 throw new ContextualError("A class (or null) can only be compared to another class (rule 3.33)", loc);
-            this.setType(compiler.environmentType.BOOLEAN);
+            setType(compiler.environmentType.BOOLEAN);
             return compiler.environmentType.BOOLEAN;
         }
 
@@ -62,7 +62,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
         }
 
         // Ajout du décor
-        this.setType(compiler.environmentType.BOOLEAN);
+        setType(compiler.environmentType.BOOLEAN);
         return compiler.environmentType.BOOLEAN;
     }
 }

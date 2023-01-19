@@ -52,7 +52,7 @@ public class ClassType extends Type {
 
     @Override
     public boolean sameType(Type otherType) {
-        return (otherType.isClass() && otherType.getName().getName() == this.getName().getName());
+        return (otherType.isClass() && otherType.getName().getName() == getName().getName());
     }
 
     /**
