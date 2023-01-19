@@ -7,6 +7,9 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -19,15 +22,17 @@ import java.util.List;
  */
 public class This extends AbstractExpr {
 
-    private final boolean impl;
+    private final boolean implicit;
 
-    public This(boolean impl) {
-        this.impl = impl;
+    public This(boolean implicit) {
+        this.implicit = implicit;
     }
+
+    private ClassDefinition currentClass;
 
     @Override
     public boolean getImpl() {
-        return impl;
+        return implicit;
     }
 
     @Override
@@ -37,15 +42,17 @@ public class This extends AbstractExpr {
         if (currentClass.getType().getName().getName() == "Object") {
             throw new ContextualError("This can only be used in a class (rule 3.43)", loc);
         }
+        this.currentClass = currentClass;
 
         this.setType(currentClass.getType());
         return currentClass.getType();
         // throw new UnsupportedOperationException("not yet implemented");
+
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        if (!impl)
+        if (!implicit)
             s.print("this");
     }
 
@@ -61,7 +68,14 @@ public class This extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // put pointer in the result register
+        if(resultRegister == null) {
+            compiler.addInstruction(new LOAD(currentClass.getDAddr(), Register.R1));
+            compiler.addInstruction(new PUSH(Register.R1));
+        }
+        else {
+            compiler.addInstruction(new LOAD(currentClass.getDAddr(), resultRegister));
+        }
     }
 
     @Override
