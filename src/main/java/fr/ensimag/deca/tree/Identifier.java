@@ -175,6 +175,11 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
+    public boolean irrelevant() {
+        return true;
+    }
+
+    @Override
     public boolean irrelevantable(){
         return true;
     }

@@ -69,6 +69,10 @@ public class ListInst extends TreeList<AbstractInst> {
 
     @Override
     public boolean irrelevant() {
-        //TODO
+        boolean result = false;
+        for (AbstractInst i : getList()) {
+            result |= i.irrelevant();
+        }
+        return result;
     }
 }

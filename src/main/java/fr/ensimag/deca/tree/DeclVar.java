@@ -98,9 +98,38 @@ public class DeclVar extends AbstractDeclVar {
 
     @Override
     public boolean irrelevant(){ 
-        if (initialization.hasInitialization()) 
-            currentValues.put(varName.getName(), ((Initialization) initialization).getExpression());
-        // todo : revoir
+        if (initialization.hasInitialization()) {
+            AbstractExpr expr = ((Initialization) initialization).getExpression();
+            if (expr.irrelevant()){
+                if (expr.getType().isFloat()) {
+                    Float rightIrrelevantdValue = expr.irrelevantFloat();
+                    if(rightIrrelevantdValue != null && expr.irrelevantable()) {
+                        FloatLiteral newFloat = new FloatLiteral(rightIrrelevantdValue);
+                        newFloat.setType(expr.getType());
+                        ((Initialization) initialization).setExpression(newFloat);
+                    }
+                }
+    
+                if (expr.getType().isInt()){
+                    Integer rightIrrelevantdValue = expr.irrelevantInt();
+                    if(rightIrrelevantdValue != null && expr.irrelevantable()) {
+                        IntLiteral newInt = new IntLiteral(rightIrrelevantdValue);
+                        newInt.setType(expr.getType());
+                        ((Initialization) initialization).setExpression(newInt);
+                    }
+                }
+    
+                if (expr.getType().isBoolean()){
+                    Boolean rightIrrelevantdValue = expr.irrelevantBool();
+                    if(rightIrrelevantdValue != null && expr.irrelevantable()) {
+                        BooleanLiteral newBool = new BooleanLiteral(rightIrrelevantdValue);
+                        newBool.setType(expr.getType());
+                        ((Initialization) initialization).setExpression(newBool);
+                    }
+                }
+            }
+        }
+        currentValues.put(varName.getName(), ((Initialization) initialization).getExpression());
         return false;
     }
 }

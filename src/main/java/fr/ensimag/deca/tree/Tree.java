@@ -302,12 +302,14 @@ public abstract class Tree {
         while(collapse()) {
             // rien
         }
-
         while(irrelevant()){
+
+            System.out.println("FIREEE");
             //rien
         }
+        
     }
-
+    
     /**
      * Check if the tree have irrelevant assignments.
      * Example : int a = 1; int b = a; b = 2; a = 3; // a = 1, b=a are irrelevant

@@ -62,6 +62,9 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         for (AbstractDeclField i : getList()) {
             i.verifyInitField(compiler, localEnv, currentClass);
         }
+    }
+
+
     @Override
     public boolean collapse() {
         boolean result = false;

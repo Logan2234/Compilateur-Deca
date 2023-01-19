@@ -37,8 +37,6 @@ public abstract class AbstractInitialization extends Tree {
      * Return true if there is an initialization
      * @return false by default, true if the class has an initialization
      */
-    public boolean hasInitialization(){
-        return false;
-    }
+    public abstract boolean hasInitialization();
 
 }
