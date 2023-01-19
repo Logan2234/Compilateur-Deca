@@ -23,9 +23,4 @@ public class VariableDefinition extends ExpDefinition {
     public boolean isExpression() {
         return true;
     }
-
-    @Override
-    public void spotRelatedDefs(AbstractProgram prog) {
-        // do nothing
-    }
 }

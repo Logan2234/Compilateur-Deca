@@ -89,14 +89,22 @@ public class Program extends AbstractProgram {
 
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
-        main.spotUsedVar(prog);
-        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+        boolean varSpotted = true;
+        while (varSpotted) {
+            varSpotted = this.main.spotUsedVar(prog);
+            varSpotted = varSpotted || this.classes.spotUsedVar(prog);
+        }
+        return varSpotted;
     }
 
-    @Override
-    public boolean removeUnusedVar() {
-        this.spotUsedVar(this); // browse the main program
-        boolean simplified = this.optimizeClasses();
+    /**
+     * Remove all useless variables (variables, classes, methods and fields from the list of
+     * classes and the main program
+     * @return true if the program have been simplified
+     */
+    private boolean removeUnusedVar() {
+            LOG.debug("Optimizing classes");
+            boolean simplified = this.optimizeClasses();
         if (this.main instanceof Main) {
             LOG.debug("Optimizing body of Main");
             Main mainNotEmpty = (Main)(this.main);
@@ -108,6 +116,16 @@ public class Program extends AbstractProgram {
             }
         }
         return simplified;
+    }
+
+    @Override
+    public void optimizeTree() {
+        boolean simplified = true;
+        while (simplified) {
+            this.resetSpottedVar();
+            this.spotUsedVar(this);
+            simplified = this.removeUnusedVar();
+        }
     }
 
     /**
@@ -238,9 +256,6 @@ public class Program extends AbstractProgram {
      * @return true if ListDeclClass has been simplified
      */
     private boolean optimizeClasses() {
-        // TODO remove useless methods, classes and fields (be carefull with methods and fields indexes)
-        // TODO simplify methods (be carefull with params simplification and params required for the call)
-        // TODO be carefull with override
         boolean simplified = false;
         Iterator<AbstractDeclClass> iterClasses = this.classes.iterator();
         while(iterClasses.hasNext()){
@@ -255,35 +270,32 @@ public class Program extends AbstractProgram {
             } 
 
             else {
-                // TODO remove don't remove overriding methods of used methods
                 /* remove useless methods */
-                // Iterator<AbstractDeclMethod> iterMethods = currentClass.getMethods().iterator();
-                // while(iterMethods.hasNext()){
-                //     DeclMethod method = (DeclMethod)iterMethods.next();
-                //     if (!method.getName().getDefinition().isUsed()) {
-                //         iterMethods.remove();
-                //         simplified = true;
-                //         LOG.debug("Remove method : " + method.getName().getDefinition().toString());
-                //     }
-                //     else if (method.getBody() instanceof MethodBody){
-                //         // TODO How to handle parameters ???
-                //         MethodBody body = (MethodBody) method.getBody();
-                //         LOG.debug("Optimizing body of : " + method.getName().getDefinition().toString());
-                //         this.optimizeBlock(body.getVars(), body.getInsts());
-                //     }
-                // }
+                Iterator<AbstractDeclMethod> iterMethods = currentClass.getMethods().iterator();
+                while(iterMethods.hasNext()){
+                    DeclMethod method = (DeclMethod)iterMethods.next();
+                    if (!method.getName().getDefinition().isUsed()) {
+                        iterMethods.remove();
+                        simplified = true;
+                        LOG.debug("Remove method : " + method.getName().getDefinition().toString());
+                    }
+                    else if (method.getBody() instanceof MethodBody){
+                        MethodBody body = (MethodBody) method.getBody();
+                        LOG.debug("Optimizing body of : " + method.getName().getDefinition().toString());
+                        this.optimizeBlock(body.getVars(), body.getInsts());
+                    }
+                }
 
-                // TODO remove don't remove overriding fields of used fields
                 /* remove useless fields */
-                // Iterator<AbstractDeclField> iterFields = currentClass.getFields().iterator();
-                // while(iterFields.hasNext()){
-                //     DeclField field= (DeclField)iterFields.next();
-                //     if (!field.getName().getDefinition().isUsed()) {
-                //         iterFields.remove();
-                //         simplified = true;
-                //         LOG.debug("Remove field : " + field.getName().getDefinition().toString());
-                //     }
-                // }
+                Iterator<AbstractDeclField> iterFields = currentClass.getFields().iterator();
+                while(iterFields.hasNext()){
+                    DeclField field= (DeclField)iterFields.next();
+                    if (!field.getName().getDefinition().isUsed()) {
+                        iterFields.remove();
+                        simplified = true;
+                        LOG.debug("Remove field : " + field.getName().getDefinition().toString());
+                    }
+                }
             }
         }
         return simplified;

@@ -79,10 +79,11 @@ public class ClassDefinition extends TypeDefinition {
     }
 
     @Override
-    public void spotRelatedDefs(AbstractProgram prog) {
+    public boolean spotRelatedDefs() {
         if (this.superClass != null) {
-            this.superClass.spotUsedVar(prog);
+            return this.superClass.spotUsedVar();
         }
+        return false;
     }
     
 }

@@ -17,16 +17,7 @@ public abstract class AbstractProgram extends Tree {
     public abstract void codeGenProgram(DecacCompiler compiler);
 
     /**
-     * Optimize the decorated tree until there is no simplification found
+     * Optimize the decorated tree until there is no more simplification found
      */
-    public void optimizeTree() {
-        while (removeUnusedVar());
-    }
-
-    /**
-     * Remove all unused variables from the tree
-     * 
-     * @return true if tree has been simplified
-     */
-    public abstract boolean removeUnusedVar();
+    public abstract void optimizeTree();
 }

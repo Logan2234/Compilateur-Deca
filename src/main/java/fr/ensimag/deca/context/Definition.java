@@ -140,23 +140,21 @@ public abstract class Definition {
 
     /**
      * Set to true its "used" attribute and the one of the defitions in relation with itself
+     * and explore related definitions
      * @param compiler
      */
-    public void spotUsedVar(AbstractProgram prog) {
+    public boolean spotUsedVar() {
         // prevent looping over methods
         if (!this.isUsed()) {
             this.setUsed();
-            // if (this.type.isClass()) {
-            //     ClassType classType = (ClassType)(this.type); // TODO check this, not useful anymore ?
-            //     classType.getDefinition().spotUsedVar(prog);
-            // }
-            this.spotRelatedDefs(prog);
+            return this.spotRelatedDefs();
         }
+        return false;
     }
 
     /**
-     * Set to true the "used" attribute of related definitions
+     * Set to true the "used" attribute of related definitions (super or containing class)
      */
-    public abstract void spotRelatedDefs(AbstractProgram prog);
+    public abstract boolean spotRelatedDefs();
 
 }

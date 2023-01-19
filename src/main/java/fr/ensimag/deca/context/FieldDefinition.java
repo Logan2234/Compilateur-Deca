@@ -58,7 +58,7 @@ public class FieldDefinition extends ExpDefinition {
     }
 
     @Override
-    public void spotRelatedDefs(AbstractProgram prog) {
-        this.containingClass.spotUsedVar(prog);
+    public boolean spotRelatedDefs() {
+        return this.containingClass.spotUsedVar();
     }
 }

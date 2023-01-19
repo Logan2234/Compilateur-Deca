@@ -30,9 +30,4 @@ public class ParamDefinition extends ExpDefinition {
         return true;
     }
 
-    @Override
-    public void spotRelatedDefs(AbstractProgram prog) {
-        // do nothing
-    }
-
 }
