@@ -26,7 +26,7 @@ public abstract class ExpDefinition extends Definition {
 
     @Override
     public boolean spotRelatedDefs() {
-        return false;
+        return super.spotRelatedDefs();
     }
 
 }

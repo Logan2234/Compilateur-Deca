@@ -319,6 +319,7 @@ public class Program extends AbstractProgram {
         Map<ClassDefinition,Set<Integer>> exploredMethods = new HashMap<ClassDefinition,Set<Integer>>();
         Set<DeclMethod> methodsToSpot = new HashSet<DeclMethod>();
         for (AbstractDeclClass c : this.classes.getList()) {
+            exploredMethods.put(((DeclClass)c).getName().getClassDefinition(),new HashSet<Integer>());
             for (AbstractDeclMethod m : ((DeclClass)c).getMethods().getList()) {
                 methodsToSpot.add((DeclMethod)m);
             }
@@ -336,9 +337,6 @@ public class Program extends AbstractProgram {
                     // if method used or (containing class used and override)
                     varSpotted = method.spotUsedVar() || varSpotted;
                     iter.remove();
-                    if (!exploredMethods.containsKey(containingClass)) {
-                        exploredMethods.put(containingClass,new HashSet<Integer>());
-                    }
                     exploredMethods.get(containingClass).add(methDef.getIndex());
                 }
             }
@@ -359,13 +357,10 @@ public class Program extends AbstractProgram {
         Set<FieldDefinition> fieldsToSpot = new HashSet<FieldDefinition>();
         for (AbstractDeclClass c : this.classes.getList()) {
             for (AbstractDeclField field : ((DeclClass)c).getFields().getList()) {
-
+                ClassDefinition containingClass = ((DeclClass)c).getName().getClassDefinition();                   
                 FieldDefinition fieldDef = ((DeclField)field).getName().getFieldDefinition();
+                usedFields.put(containingClass,new HashSet<Integer>());
                 if (fieldDef.isUsed()) {
-                    ClassDefinition containingClass = ((DeclClass)c).getName().getClassDefinition();                   
-                    if (!usedFields.containsKey(containingClass)) {
-                        usedFields.put(containingClass,new HashSet<Integer>());
-                    }
                     usedFields.get(containingClass).add(fieldDef.getIndex());
                 }
                 else {
@@ -375,11 +370,8 @@ public class Program extends AbstractProgram {
         }
         for (FieldDefinition fieldDef : fieldsToSpot) {
             if (fieldDef.isOverrideOfUsed(usedFields)) {
-                varSpotted = fieldDef.spotUsedVar();
                 ClassDefinition containingClass = fieldDef.getContainingClass();
-                if (!usedFields.containsKey(containingClass)) {
-                    usedFields.put(containingClass,new HashSet<Integer>());
-                }
+                varSpotted = fieldDef.spotUsedVar();
                 usedFields.get(containingClass).add(fieldDef.getIndex());
             }
         }

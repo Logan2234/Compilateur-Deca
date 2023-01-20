@@ -74,7 +74,7 @@ public class FieldDefinition extends ExpDefinition {
     public boolean isOverrideOfUsed(Map<ClassDefinition,Set<Integer>> exploredFields) {
         boolean res = false;
         ClassDefinition superClass = this.containingClass.getSuperClass();
-        while(superClass != null && !res && this.index<=superClass.getNumberOfMethods()) {
+        while(superClass != null && !res && this.index<=superClass.getNumberOfFields()) {
             res = exploredFields.get(superClass).contains(this.index);
             superClass = superClass.getSuperClass();
         }

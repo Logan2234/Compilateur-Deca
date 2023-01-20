@@ -27,6 +27,6 @@ public class TypeDefinition extends Definition {
 
     @Override
     public boolean spotRelatedDefs() {
-        return false;
+        return super.spotRelatedDefs();
     }
 }
