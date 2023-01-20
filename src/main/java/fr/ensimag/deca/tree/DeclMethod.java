@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.ReturnCheckFunc;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
@@ -11,6 +12,14 @@ import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -39,6 +48,8 @@ public class DeclMethod extends AbstractDeclMethod {
         this.body = body;
     }
 
+    private String className;
+
     @Override
     protected void verifyDeclMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
@@ -46,6 +57,9 @@ public class DeclMethod extends AbstractDeclMethod {
 
         Signature signature = params.verifyListDeclParam(compiler);
         MethodDefinition methodeDef;
+
+        // set the name of the class (hi lolo)
+        className = currentClass.getType().getName().getName();
 
         // Test de la méthode potentiellement existente dans la classe mère
         ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(methodName.getName());
@@ -123,6 +137,37 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
+    public String getMethodName() {
+        return methodName.getName().getName();
+    }
+
+    @Override
+    public void codeGenMethod(DecacCompiler compiler, String className) {
+        // set the labels for the returns
+        body.iter(new ReturnCheckFunc(className + "." + methodName.getName().getName()));
+        // set the daddr of the params
+        for(int i = 0; i < params.size(); i++) {
+            params.getList().get(i).SetDAddr(new RegisterOffset(-(3 + i), Register.LB));
+        }
+        // write down the label
+        compiler.addLabel(new Label("code." + className + "." + getMethodName()));
+        // let's create a context for the body so we can use addInstruction First 
+        compiler.newCodeContext();
+        // generate method body
+        body.codeGenMethod(compiler);
+        // label of end of method
+        compiler.addLabel(new Label("end." + className + "." + methodName.getName().getName()));
+        // save and restore context used registers 
+        for(GPRegister usedRegister : compiler.getAllContextUsedRegister()) {
+            compiler.addInstruction(new POP(usedRegister));
+            compiler.addInstructionFirst(new PUSH(usedRegister));
+        }
+        // end the context
+        compiler.endCodeContext();
+        // add return
+        compiler.addInstruction(new RTS());
+    }
+    
     public void spotUsedVar(AbstractProgram prog) {
         this.type.spotUsedVar(prog);
         this.body.spotUsedVar(prog);

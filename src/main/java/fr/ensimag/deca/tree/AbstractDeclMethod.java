@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 /**
  * Method declaration
@@ -49,4 +50,15 @@ public abstract class AbstractDeclMethod extends Tree {
     protected abstract void verifyMethodBody(DecacCompiler compiler, EnvironmentExp locaEnv,
             ClassDefinition currentClass) throws ContextualError;
 
+
+    /**
+     * Get the name of the method. Used to generate the vTable.
+     * @return
+     */
+    public abstract String getMethodName();
+    /**
+     * Code generation for the methods.
+     * @param compiler where we write the codes to.
+     */
+    public abstract void codeGenMethod(DecacCompiler compiler, String className);
 }

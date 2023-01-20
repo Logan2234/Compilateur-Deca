@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 // A FAIRE: étendre cette classe pour traiter la partie "avec objet" de Déca
 /**
@@ -55,6 +57,7 @@ public class EnvironmentType {
         signature.add(OBJECT);
         MethodDefinition method = new MethodDefinition(BOOLEAN, Location.BUILTIN, signature, 1);
         OBJECT.getDefinition().setNumberOfMethods(1);
+        OBJECT.getDefinition().setDAddr(new RegisterOffset(1, Register.GB));
         try {
             OBJECT.getDefinition().getMembers().declare(equals, method);
         } catch (DoubleDefException exception) {

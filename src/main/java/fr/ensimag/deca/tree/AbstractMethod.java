@@ -18,5 +18,15 @@ public abstract class AbstractMethod extends Tree {
     public abstract void verifyMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentclass,
             Type type) throws ContextualError;
 
-    public abstract void codeGenProgram(DecacCompiler compiler);
+    /**
+     * Generate the code for this method body.
+     * 
+     * @param compiler where we write the code to.
+     */
+    public abstract void codeGenMethod(DecacCompiler compiler);
+
+    /**
+     * Set the name of the class + method for the returns to know the labels.
+     */
+    public abstract void setReturnsNames(String name);
 }

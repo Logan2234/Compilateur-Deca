@@ -45,11 +45,6 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
-    public void codeGenProgram(DecacCompiler compiler) {
-        // TODO
-    }
-
-    @Override
     public void decompile(IndentPrintStream s) {
         s.println("{");
         s.indent();
@@ -72,6 +67,23 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
+    public void codeGenMethod(DecacCompiler compiler) {
+        // generate code for delcare variables
+        vars.codeGenDeclVar(compiler);
+        insts.codeGenListInst(compiler);
+    }
+
+    @Override
+    public void setReturnsNames(String name) {
+        System.out.print("setting method name : ");
+        System.out.println(name);
+        for(AbstractInst inst : insts.getList()) {
+            if(inst.isReturn()) {
+                inst.asReturn().setMethodClassName(name);
+            }
+        }
+    }
+    
     protected void spotUsedVar(AbstractProgram prog) {
         vars.spotUsedVar(prog);
         insts.spotUsedVar(prog);

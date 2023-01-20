@@ -63,7 +63,7 @@ public class DeclVar extends AbstractDeclVar {
         varName.getDefinition().setDAddr(register);
         // store the variable at the address now, using a push as we are declaring all
         // variables.
-        initialization.codeGenInit(compiler);
+        initialization.codeGenInit(compiler, type.getType(), register);
     }
 
     @Override

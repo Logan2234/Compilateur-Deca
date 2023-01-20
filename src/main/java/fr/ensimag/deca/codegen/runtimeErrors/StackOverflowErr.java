@@ -8,11 +8,11 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class StackOverflowErr extends AbstractRuntimeErr {
     public int errorId() {
-        return 1;
+        return 7;
     }
 
     public void codeGenErr(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR("Error : stack overflow."));
+        compiler.addInstruction(new WSTR("Error : Stack overflow."));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }

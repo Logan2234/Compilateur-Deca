@@ -22,37 +22,38 @@ import org.apache.commons.lang.Validate;
 public class Cast extends AbstractExpr {
 
     private AbstractIdentifier type;
-    private AbstractExpr e;
+    private AbstractExpr expression;
 
-    public Cast(AbstractIdentifier type, AbstractExpr e) {
+    public Cast(AbstractIdentifier type, AbstractExpr expression) {
         Validate.notNull(type);
-        Validate.notNull(e);
+        Validate.notNull(expression);
         this.type = type;
-        this.e = e;
+        this.expression = expression;
     }
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeExp = e.verifyExpr(compiler, localEnv, currentClass);
-        Type typeT = type.verifyType(compiler);
+        Location loc = this.getLocation();
+        Type typeExp = this.expression.verifyExpr(compiler, localEnv, currentClass);
+        Type typeT = this.type.verifyType(compiler);
 
         if (typeExp.isVoid() || (!typeExp.assignCompatible(typeT) && !typeT.assignCompatible(typeExp)))
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
                     + typeT.getName().getName() + "\"", getLocation());
         
         if (typeT.isInt() && typeExp.isFloat()){
-            ConvInt convint = new ConvInt(e);
-            convint.setLocation(e.getLocation());
+            ConvInt convint = new ConvInt(expression);
+            convint.setLocation(expression.getLocation());
             convint.verifyExpr(compiler, localEnv, currentClass);
-            e = convint;
+            expression = convint;
         }
         
         if (typeT.isFloat() && typeExp.isInt()){
-            ConvFloat convfloat = new ConvFloat(e);
-            convfloat.setLocation(e.getLocation());
+            ConvFloat convfloat = new ConvFloat(expression);
+            convfloat.setLocation(expression.getLocation());
             convfloat.verifyExpr(compiler, localEnv, currentClass);
-            e = convfloat;
+            expression = convfloat;
         }
             
         // Ajout du décor
@@ -65,36 +66,37 @@ public class Cast extends AbstractExpr {
         s.print("(");
         type.decompile(s);
         s.print(")(");
-        e.decompile(s);
+        expression.decompile(s);
         s.print(")");
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
         type.iter(f);
-        e.iter(f);
+        expression.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);
-        e.prettyPrint(s, prefix, true);
+        expression.prettyPrint(s, prefix, true);
     }
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // the conetxt told it was valid, only need to compute expression
+        expression.codeGenExpr(compiler, resultRegister);
     }
 
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
         this.type.spotUsedVar(prog);
-        this.e.spotUsedVar(prog);
+        this.expression.spotUsedVar(prog);
     }
 
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
-        this.e.addMethodCalls(foundMethodCalls);
+        this.expression.addMethodCalls(foundMethodCalls);
     }
 }

@@ -5,6 +5,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
@@ -53,60 +54,25 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister register) {
-        // if no result register, we must put the result on the stack.
-        boolean needNewRegister = register == null;
         // we still need a register for any binary op
-        GPRegister leftRegister = needNewRegister ? compiler.allocateRegister() : register;
-        boolean needRegisterSpace = leftRegister == null;
-        if(needRegisterSpace) {
-            // save on the stack R2
-            compiler.incrementContextUsedStack();
-            compiler.addInstruction(new PUSH(Register.getR(2)));
-            leftRegister = Register.getR(2);
-        }
+        GPRegister leftRegister = register == null ? compiler.allocateRegister() : register;
         // call the binary expression code on the given register and the address
         // load left operand in the result register
         leftOperand.codeGenExpr(compiler, leftRegister);
         // load the right operand
         GPRegister rightRegister = compiler.allocateRegister();
-        boolean needRightRegisterSpace = rightRegister == null;
-        // if right register is null, use R3
-        if(needRightRegisterSpace) {
-            // need to assert left register is not right register
-            if(leftRegister.getNumber() == 2) {
-                rightRegister = Register.getR(3);
-            }
-            else {
-                rightRegister = Register.getR(2);
-            }
-            compiler.incrementContextUsedStack();
-            compiler.addInstruction(new PUSH(rightRegister));
-        }
         rightOperand.codeGenExpr(compiler, rightRegister);
         // do the operation
         codeGenBinExp(compiler, leftRegister, rightRegister);
-        if(needRightRegisterSpace) {
-            // restor R3
-            compiler.increaseContextUsedStack(-1);
-            compiler.addInstruction(new POP(rightRegister));
-        }
-        else {
-            // free right register
-            compiler.freeRegister(rightRegister);
-        }
-        // restore R2 !
-        if(needRegisterSpace) {
-            compiler.increaseContextUsedStack(-1);
-            compiler.addInstruction(new POP(Register.getR(2)));
-        }
-        // if the original register is null, load the result on the stack
+        // free right register
+        compiler.freeRegister(rightRegister);
+        // if the original register is null, load the result on the stack (also need to free the register)
         if(register == null) {
+            // load the rsesult in R1 to free the register (free might pop the stack)
+            compiler.addInstruction(new LOAD(leftRegister, Register.R1));
+            compiler.freeRegister(leftRegister);
             compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(leftRegister));
-        }
-        // might want to free the allocated register
-        if(needNewRegister && !needRegisterSpace) {
-            compiler.freeRegister(leftRegister);
         }
     }
 

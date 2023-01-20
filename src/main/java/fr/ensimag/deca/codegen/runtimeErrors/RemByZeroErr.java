@@ -8,11 +8,11 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class RemByZeroErr extends AbstractRuntimeErr {
     public int errorId() {
-        return 4;
+        return 6;
     }
 
     public void codeGenErr(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR("Error : remainer by zero"));
+        compiler.addInstruction(new WSTR("Error : Remainer by zero"));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }

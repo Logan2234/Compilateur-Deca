@@ -46,4 +46,36 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         for (AbstractDeclClass c : getList())
             c.verifyClassBody(compiler);
     }
+
+    /**
+     * Generate the vTables for all the classes.
+     * 
+     * @param compiler where we write the instructions to.
+     */
+    public void initClassCodeGen(DecacCompiler compiler) {
+        for (AbstractDeclClass c : getList()) {
+            c.initClassCodeGen(compiler);
+        }
+    }
+
+    /**
+     * Generate the vTables for all the classes.
+     * @param compiler where we write the instructions to.
+     */
+    public void codeGenVTables(DecacCompiler compiler) {
+        for (AbstractDeclClass c : getList()) {
+            c.codeGenVTable(compiler);
+        }
+    }
+
+    /**
+     * Generates the methods code.
+     * 
+     * @param compiler where we write the code to.
+     */
+    public void codeGenClasses(DecacCompiler compiler) {
+        for (AbstractDeclClass c : getList()) {
+            c.codeGenClass(compiler);
+        }
+    }
 }

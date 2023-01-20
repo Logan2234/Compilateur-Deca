@@ -8,6 +8,12 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -63,8 +69,22 @@ public class Selection extends AbstractLValue {
     }
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
+        if(resultRegister == null) {
+            // we need a register
+            GPRegister register = compiler.allocateRegister();
+            obj.codeGenExpr(compiler, register);
+            // save in R1 because freeing the rsgister may pop the stack
+            compiler.addInstruction(new LOAD(new RegisterOffset(field.getDefinition().getDAddrOffsetOnly(), register), Register.R1));
+            compiler.freeRegister(register);
+            compiler.addInstruction(new PUSH(Register.R1));
+        }
+        else {
+            // put the object in the result register
+            obj.codeGenExpr(compiler, resultRegister);
+            // load the value of the field in it, and we're good to go
+            compiler.addInstruction(new LOAD(new RegisterOffset(field.getDefinition().getDAddrOffsetOnly(), resultRegister), resultRegister));
+        }
     }
 
     @Override
