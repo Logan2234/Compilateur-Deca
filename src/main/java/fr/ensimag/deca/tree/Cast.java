@@ -82,7 +82,7 @@ public class Cast extends AbstractExpr {
         expression.prettyPrint(s, prefix, true);
     }
 
-    @Override // TODO Virgile: see 11.1 tiret 4
+    @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // the conetxt told it was valid, only need to compute expression
         expression.codeGenExpr(compiler, resultRegister);

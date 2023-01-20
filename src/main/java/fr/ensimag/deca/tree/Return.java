@@ -46,7 +46,7 @@ public class Return extends AbstractInst {
         expression.verifyRValue(compiler, localEnv, currentClass, returnType);
     }
 
-    @Override // TODO Virgile: Erreur de l'absence de return dans une fonction renvoyant autre chose que void
+    @Override
     protected void codeGenInst(DecacCompiler compiler) {
         // load the result in R0, then branch to method end
         GPRegister register = compiler.allocateRegister();
