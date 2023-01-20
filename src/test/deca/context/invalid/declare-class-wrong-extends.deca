@@ -3,15 +3,11 @@
 //
 // Resultats:
 //    Erreur contextuelle   
-//    Ligne 15: The type "C" doesn't exist (rule 0.2)
+//    Ligne 13: The type "C" doesn't exist (rule 0.2)
 //
 // Historique:
 //    cree le 13/01/2023
 
-class A {
+class A {}
 
-}
-
-class B extends C {
-
-}
+class B extends C {}

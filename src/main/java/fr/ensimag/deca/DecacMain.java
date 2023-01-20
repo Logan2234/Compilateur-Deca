@@ -70,14 +70,12 @@ public class DecacMain {
             }
         } else {
             Set<File> treatedFiles = new HashSet<File>();
-            for (File source : options.getSourceFiles()) {
-                if (!treatedFiles.contains(source))
-                {
+            for (File source : options.getSourceFiles())
+                if (!treatedFiles.contains(source)) {
                     treatedFiles.add(source);
                     DecacCompiler compiler = new DecacCompiler(options, source);
                     error = compiler.compile();
                 }
-            }
         }
         System.exit(error ? 1 : 0);
     }

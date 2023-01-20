@@ -20,6 +20,7 @@ import java.util.List;
 public class Null extends AbstractExpr {
 
     public Null() {
+
     }
 
     @Override
@@ -32,7 +33,7 @@ public class Null extends AbstractExpr {
 
     @Override
     String prettyPrintNode() {
-        return "null";
+        return "Null";
     }
 
     @Override
@@ -64,5 +65,4 @@ public class Null extends AbstractExpr {
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
-
 }

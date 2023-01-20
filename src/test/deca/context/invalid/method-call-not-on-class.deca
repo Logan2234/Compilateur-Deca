@@ -3,7 +3,7 @@
 //
 // Resultats:
 //    Erreur Contextuelle
-//    Ligne 16: The object of the method call is not of type class (rule 3.71)
+//    Ligne 13: The object of the method call is not of type class (rule 3.71)
 //
 // Historique:
 //    cree le 16/01/2023

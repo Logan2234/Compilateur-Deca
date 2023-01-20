@@ -20,6 +20,5 @@ public abstract class AbstractLValue extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
-    // ? do all LValue have a definition ? looks like they do, so we need this. 
     public abstract Definition getDefinition();
 }

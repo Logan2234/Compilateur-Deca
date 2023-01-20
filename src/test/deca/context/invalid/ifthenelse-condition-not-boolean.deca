@@ -9,7 +9,5 @@
 //    cree le 12/01/2023
 
 {
-    if ("Hello") {
-    } else {
-    }
+    if ("Hello"){}
 }

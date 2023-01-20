@@ -66,41 +66,38 @@ public class Initialization extends AbstractInitialization {
         // call the code gen of the expression, and put it in the result register
         // get a register to store the result in.
         GPRegister register = compiler.allocateRegister();
-        if(register == null) {
+        if (register == null) {
             // save R2 on the stack
             compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.getR(2)));
             // use R2
             expression.codeGenExpr(compiler, Register.getR(2));
             // save the result on the stack, and restore R2
-            if(resultRegister == null) {
+            if (resultRegister == null) {
                 compiler.addInstruction(new LOAD(Register.getR(2), Register.R1));
-            }
-            else {
+            } else {
                 compiler.addInstruction(new STORE(Register.getR(2), resultRegister));
             }
             compiler.increaseContextUsedStack(-1);
             compiler.addInstruction(new POP(Register.getR(2)));
             // no stack size increment here, because we poped right before it
-            if(resultRegister == null) {
+            if (resultRegister == null) {
                 compiler.addInstruction(new PUSH(Register.R1));
             }
-        }
-        else {
+        } else {
             // get the expression to solve itself in the given register
             expression.codeGenExpr(compiler, register);
             // save the given register on the stack
             compiler.incrementContextUsedStack();
-            if(resultRegister == null) {
+            if (resultRegister == null) {
                 compiler.addInstruction(new PUSH(register));
-            }
-            else {
+            } else {
                 compiler.addInstruction(new STORE(register, resultRegister));
             }
             // free the register
             compiler.freeRegister(register);
         }
-        
+
     }
 
     @Override

@@ -61,13 +61,13 @@ public class DeclMethod extends AbstractDeclMethod {
         className = currentClass.getType().getName().getName();
 
         // Test de la méthode potentiellement existente dans la classe mère
-        ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(this.methodName.getName());
+        ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(methodName.getName());
         if (defExp != null) {
             // On cherche à savoir si c'est bien une méthode
             MethodDefinition motherMethod = defExp.asMethodDefinition("The name \"" + methodName.getName().getName()
-                    + "\" is already used for a field in the superclass (rule 2.7)", this.getLocation());
+                    + "\" is already used for a field in the superclass (rule 2.7)", getLocation());
             if (!motherMethod.getSignature().sameSignature(signature))
-                throw new ContextualError("The method \"" + this.methodName.getName().getName()
+                throw new ContextualError("The method \"" + methodName.getName().getName()
                         + "\" doesn't have the same signature as the method defined it the superclass (rule 2.7)",
                         getLocation());
 
@@ -85,18 +85,18 @@ public class DeclMethod extends AbstractDeclMethod {
                             "The return type is not the same as defined in the superclass (or not a subtype) (rule 2.7)",
                             getLocation());
             }
-            methodeDef = new MethodDefinition(type, this.getLocation(), signature, motherMethod.getIndex());
+            methodeDef = new MethodDefinition(type, getLocation(), signature, motherMethod.getIndex());
         } else {
             currentClass.incNumberOfMethods();
-            methodeDef = new MethodDefinition(type, this.getLocation(), signature, currentClass.getNumberOfMethods());
+            methodeDef = new MethodDefinition(type, getLocation(), signature, currentClass.getNumberOfMethods());
         }
         try {
-            localEnv.declare(this.methodName.getName(), methodeDef);
+            localEnv.declare(methodName.getName(), methodeDef);
             methodName.verifyExpr(compiler, localEnv, currentClass);
         } catch (DoubleDefException e) {
             throw new ContextualError(
                     "The method \"" + methodName.getName().getName() + "\" has already been declared (rule 2.6)",
-                    this.getLocation());
+                    getLocation());
         }
     }
 

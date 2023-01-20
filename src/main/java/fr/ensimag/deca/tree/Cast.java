@@ -26,8 +26,8 @@ import org.apache.commons.lang.Validate;
  */
 public class Cast extends AbstractExpr {
 
-    private final AbstractIdentifier type;
-    private final AbstractExpr e;
+    private AbstractIdentifier type;
+    private AbstractExpr e;
 
     public Cast(AbstractIdentifier type, AbstractExpr e) {
         Validate.notNull(type);
@@ -39,32 +39,31 @@ public class Cast extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Location loc = this.getLocation();
-        Type typeExp = this.e.verifyExpr(compiler, localEnv, currentClass);
-        Type typeT = this.type.verifyType(compiler);
+        Type typeExp = e.verifyExpr(compiler, localEnv, currentClass);
+        Type typeT = type.verifyType(compiler);
 
-        if (typeExp.isVoid()
-                || (!typeExp.assignCompatible(localEnv, typeT) && !typeT.assignCompatible(localEnv, typeExp))) {
+        if (typeExp.isVoid() || (!typeExp.assignCompatible(typeT) && !typeT.assignCompatible(typeExp)))
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
-                    + typeT.getName().getName() + "\"", loc);
+                    + typeT.getName().getName() + "\"", getLocation());
+        
+        if (typeT.isInt() && typeExp.isFloat()){
+            ConvInt convint = new ConvInt(e);
+            convint.setLocation(e.getLocation());
+            convint.verifyExpr(compiler, localEnv, currentClass);
+            e = convint;
         }
-
+        
+        if (typeT.isFloat() && typeExp.isInt()){
+            ConvFloat convfloat = new ConvFloat(e);
+            convfloat.setLocation(e.getLocation());
+            convfloat.verifyExpr(compiler, localEnv, currentClass);
+            e = convfloat;
+        }
+            
         // Ajout du décor
-        this.setType(typeT);
+        setType(typeT);
         return typeT;
     }
-
-    /**
-     * Check if the two types are compatible for the cast
-     * 
-     * @param localEnv the local environment
-     * @param typeExp  the type of the expression to cast
-     * @param typeT    the type of the expected cast
-     * @return true if the two types are compatible, false if not
-     * 
-     * @author Nils Depuille
-     * @date 12/01/2023
-     */
 
     @Override
     public void decompile(IndentPrintStream s) {

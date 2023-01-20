@@ -45,11 +45,11 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     public ListDeclMethod getMethods() {
-        return this.methods;
+        return methods;
     }
 
     public ListDeclField getFields() {
-        return this.fields;
+        return fields;
     }
 
     @Override
@@ -72,14 +72,14 @@ public class DeclClass extends AbstractDeclClass {
 
         if (def != null)
             throw new ContextualError("\"" + name.getName().getName() + "\" is already a type/class (rule 1.3)",
-                    this.getLocation());
-        if (!this.superIdentifier.verifyType(compiler).isClass())
+                    getLocation());
+        if (!superIdentifier.verifyType(compiler).isClass())
             throw new ContextualError("\"" + superIdentifier.getName().getName() + "\" is not a class (rule 1.3)",
-                    this.getLocation());
+                    getLocation());
 
-        ClassDefinition superClassDef = this.superIdentifier.getType().asClassType("Not a class type", getLocation())
+        ClassDefinition superClassDef = superIdentifier.getType().asClassType("Not a class type", getLocation())
                 .getDefinition();
-        ClassType classType = new ClassType(name.getName(), this.getLocation(), superClassDef);
+        ClassType classType = new ClassType(name.getName(), getLocation(), superClassDef);
         compiler.environmentType.set(name.getName(), classType.getDefinition());
 
         // Ajout du décor
@@ -88,21 +88,20 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClassMembers(DecacCompiler compiler) throws ContextualError {
-
         // On reprend les fields et methods de la classe mère
-        this.name.getType().asClassType(null, getLocation()).getDefinition().setNumberOfFields(
-                this.superIdentifier.getType().asClassType(null, getLocation()).getDefinition().getNumberOfFields());
-        this.name.getType().asClassType(null, getLocation()).getDefinition().setNumberOfMethods(
-                this.superIdentifier.getType().asClassType("null", getLocation()).getDefinition().getNumberOfMethods());
+        name.getType().asClassType(null, getLocation()).getDefinition().setNumberOfFields(
+                superIdentifier.getType().asClassType(null, getLocation()).getDefinition().getNumberOfFields());
+        name.getType().asClassType(null, getLocation()).getDefinition().setNumberOfMethods(
+                superIdentifier.getType().asClassType(null, getLocation()).getDefinition().getNumberOfMethods());
 
-        ClassDefinition def = this.name.getClassDefinition();
+        ClassDefinition def = name.getClassDefinition();
         fields.verifyListDeclField(compiler, def.getMembers(), def); // TODO: Vérifier la condition de la règle 2.3
         methods.verifyListDeclMethod(compiler, def.getMembers(), def);
     }
 
     @Override
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
-        ClassDefinition def = this.name.getClassDefinition();
+        ClassDefinition def = name.getClassDefinition();
         fields.verifyListInitField(compiler, def.getMembers(), def);
         methods.verifyListDeclMethodBody(compiler, def.getMembers(), def);
     }
@@ -113,8 +112,6 @@ public class DeclClass extends AbstractDeclClass {
         superIdentifier.prettyPrint(s, prefix, false);
         fields.prettyPrint(s, prefix, false);
         methods.prettyPrint(s, prefix, true);
-
-        // throw new UnsupportedOperationException("Not yet supported");
     }
 
     @Override
@@ -123,7 +120,6 @@ public class DeclClass extends AbstractDeclClass {
         superIdentifier.iter(f);
         fields.iter(f);
         methods.iter(f);
-        // throw new UnsupportedOperationException("Not yet supported");
     }
 
     @Override
@@ -191,6 +187,6 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     public AbstractIdentifier getName() {
-        return this.name;
+        return name;
     }
 }

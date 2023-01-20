@@ -28,8 +28,6 @@ public class This extends AbstractExpr {
         this.implicit = implicit;
     }
 
-    private ClassDefinition currentClass;
-
     @Override
     public boolean getImpl() {
         return implicit;
@@ -38,16 +36,11 @@ public class This extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Location loc = this.getLocation();
-        if (currentClass.getType().getName().getName() == "Object") {
-            throw new ContextualError("This can only be used in a class (rule 3.43)", loc);
-        }
-        this.currentClass = currentClass;
+        if (currentClass.getType().getName().getName() == "Object")
+            throw new ContextualError("This can only be used in a class (rule 3.43)", getLocation());
 
-        this.setType(currentClass.getType());
+        setType(currentClass.getType());
         return currentClass.getType();
-        // throw new UnsupportedOperationException("not yet implemented");
-
     }
 
     @Override
@@ -69,11 +62,10 @@ public class This extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // put pointer in the result register
-        if(resultRegister == null) {
+        if (resultRegister == null) {
             compiler.addInstruction(new LOAD(currentClass.getDAddr(), Register.R1));
             compiler.addInstruction(new PUSH(Register.R1));
-        }
-        else {
+        } else {
             compiler.addInstruction(new LOAD(currentClass.getDAddr(), resultRegister));
         }
     }
@@ -87,5 +79,4 @@ public class This extends AbstractExpr {
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
-
 }
