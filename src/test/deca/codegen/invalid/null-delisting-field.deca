@@ -1,0 +1,18 @@
+// Description:
+//    Déréférencement de null avec un field
+//
+// Resultats:
+//    Execution error
+//    Error : Null reference exception.
+//
+// Historique:
+//    cree le 20/01/2023
+
+class A {
+    int x;
+}
+
+{
+    A a;
+    a.x;
+}

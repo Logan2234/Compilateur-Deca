@@ -43,10 +43,10 @@ public class Return extends AbstractInst {
         if (returnType.isVoid())
             throw new ContextualError("Return cannot be used when method has void type (rule 3.24)", getLocation());
 
-                    expression.verifyRValue(compiler, localEnv, currentClass, returnType);
+        expression.verifyRValue(compiler, localEnv, currentClass, returnType);
     }
 
-    @Override
+    @Override // TODO Virgile: Erreur de l'absence de return dans une fonction renvoyant autre chose que void
     protected void codeGenInst(DecacCompiler compiler) {
         // load the result in R0, then branch to method end
         GPRegister register = compiler.allocateRegister();
@@ -54,7 +54,7 @@ public class Return extends AbstractInst {
         compiler.addInstruction(new LOAD(register, Register.R0));
         compiler.freeRegister(register);
         compiler.addInstruction(new BRA(new Label("end." + methodClassName)));
-        
+
     }
 
     @Override
