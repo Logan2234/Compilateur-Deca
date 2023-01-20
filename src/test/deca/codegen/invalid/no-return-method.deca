@@ -9,10 +9,10 @@
 //    cree le 20/01/2023
 
 class A {
-    int noReturn(){}
+    int withoutReturnEvenIfItNeeded(){}
 }
 
 {
-    //A a = new A();
-    a.noReturn();
+    A a = new A();
+    a.withoutReturnEvenIfItNeeded();
 }
