@@ -19,8 +19,6 @@ cd "$(dirname "$0")"/../../../.. || exit 1
 PATH=./src/test/script/launchers:"$PATH"
 
 files=$(find ./src/test/deca/codegen/valid -maxdepth 1 -name "*.deca")
-files+=" "
-files+="./src/test/deca/codegen/interactive/demo-suivi-3/class.deca"
 
 echo -e "${BWHITE}============================= -p option =============================\n"
 

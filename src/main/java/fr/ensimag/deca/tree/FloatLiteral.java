@@ -33,20 +33,17 @@ public class FloatLiteral extends AbstractExpr {
     private float value;
 
     public FloatLiteral(float value) {
-        Validate.isTrue(!Float.isInfinite(value),
-                "literal values cannot be infinite");
-        Validate.isTrue(!Float.isNaN(value),
-                "literal values cannot be NaN");
+        Validate.isTrue(!Float.isInfinite(value), "literal values cannot be infinite");
+        Validate.isTrue(!Float.isNaN(value), "literal values cannot be NaN");
         this.value = value;
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        this.setType(compiler.environmentType.FLOAT);
-        return compiler.environmentType.FLOAT;        
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        setType(compiler.environmentType.FLOAT);
+        return compiler.environmentType.FLOAT;
     }
-
 
     @Override
     public void decompile(IndentPrintStream s) {
@@ -71,10 +68,9 @@ public class FloatLiteral extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // load ourselves in the given register, or on the stack
-        if(resultRegister != null) {
+        if (resultRegister != null) {
             compiler.addInstruction(new LOAD(value, resultRegister));
-        }
-        else {
+        } else {
             // put it in R1 then on the stack
             compiler.addInstruction(new LOAD(value, Register.R1));
             compiler.incrementContextUsedStack();
@@ -86,10 +82,9 @@ public class FloatLiteral extends AbstractExpr {
     protected void codeGenPrint(DecacCompiler compiler, boolean hex) {
         // load ourselves in R1, then print it with WFLOAT
         compiler.addInstruction(new LOAD(value, Register.R1));
-        if(hex) {
+        if (hex) {
             compiler.addInstruction(new WFLOATX());
-        }
-        else {
+        } else {
             compiler.addInstruction(new WFLOAT());
         }
     }

@@ -15,6 +15,5 @@ class A {
 
 {
     A a = new A();
-    A b = new A();
-    b.equals(a);
+    a.equals(a);
 }

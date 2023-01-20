@@ -26,9 +26,8 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
      */
     void verifyListClass(DecacCompiler compiler) throws ContextualError {
         // LOG.debug("verify listClass: start");
-        for (AbstractDeclClass c : getList()) {
+        for (AbstractDeclClass c : getList())
             c.verifyClass(compiler);
-        }
         // LOG.debug("verify listClass: end");
     }
 
@@ -36,25 +35,52 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
      * Pass 2 of [SyntaxeContextuelle]
      */
     public void verifyListClassMembers(DecacCompiler compiler) throws ContextualError {
-        for (AbstractDeclClass c : getList()) {
+        for (AbstractDeclClass c : getList())
             c.verifyClassMembers(compiler);
-        }
     }
 
     /**
      * Pass 3 of [SyntaxeContextuelle]
      */
     public void verifyListClassBody(DecacCompiler compiler) throws ContextualError {
-        for (AbstractDeclClass c : getList()) {
+        for (AbstractDeclClass c : getList())
             c.verifyClassBody(compiler);
+    }
+
+    /**
+     * Generate the vTables for all the classes.
+     * 
+     * @param compiler where we write the instructions to.
+     */
+    public void initClassCodeGen(DecacCompiler compiler) {
+        for (AbstractDeclClass c : getList()) {
+            c.initClassCodeGen(compiler);
         }
     }
 
-    @Override
+    /**
+     * Generate the vTables for all the classes.
+     * @param compiler where we write the instructions to.
+     */
+    public void codeGenVTables(DecacCompiler compiler) {
+        for (AbstractDeclClass c : getList()) {
+            c.codeGenVTable(compiler);
+        }
+    }
+
+    /**
+     * Generates the methods code.
+     * 
+     * @param compiler where we write the code to.
+     */
+    public void codeGenClasses(DecacCompiler compiler) {
+        for (AbstractDeclClass c : getList()) {
+            c.codeGenClass(compiler);
+        }
+    }
+	@Override
     public boolean collapse() {
         return false;
         // TODO
     }
-
-
 }

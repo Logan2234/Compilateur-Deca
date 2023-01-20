@@ -17,7 +17,6 @@ public class Plus extends AbstractOpArith {
         super(leftOperand, rightOperand);
     }
 
-
     @Override
     protected String getOperatorName() {
         return "+";
@@ -28,7 +27,7 @@ public class Plus extends AbstractOpArith {
         // add
         compiler.addInstruction(new ADD(dVal, register));
         // check overflow
-        if(getType().isFloat() && compiler.getCompilerOptions().getRunTestChecks()) {
+        if (getType().isFloat() && compiler.getCompilerOptions().getRunTestChecks()) {
             OpOverflowErr error = new OpOverflowErr();
             compiler.useRuntimeError(error);
             compiler.addInstruction(new BOV(error.getErrorLabel()));

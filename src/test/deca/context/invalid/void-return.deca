@@ -3,11 +3,10 @@
 //
 // Resultats:
 //    Erreur contextuelle
-//    Ligne 14: Return cannot be used when method has void type (rule 3.24)
+//    Ligne 13: Return cannot be used when method has void type (rule 3.24)
 //
 // Historique:
 //    cree le 16/01/2023
-
 
 class A{
     void getX() {

@@ -12,7 +12,5 @@ class A{
 }
 
 class B extends A {
-    void getx(){
-        x;
-    }
+    int a = x;
 }

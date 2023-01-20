@@ -88,9 +88,8 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        for (TreeType i : getList()) {
+        for (TreeType i : getList())
             i.iter(f);
-        }
     }
 
     @Override

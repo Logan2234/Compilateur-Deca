@@ -20,11 +20,11 @@ PATH=./src/test/script/launchers:"$PATH"
 echo -e "${BWHITE}\n============================= -n option =============================\n"
 
 # Test avec le débordement arithmétique sur les flottants
-decac ./src/test/deca/codegen/valid/operation-binaire-divide.deca
-mv ./src/test/deca/codegen/valid/operation-binaire-divide.ass ./src/test/deca/codegen/valid/operation-binaire-divide-without-n.ass
-decac -n ./src/test/deca/codegen/valid/operation-binaire-divide.deca
+decac ./src/test/deca/codegen/invalid/opOverflow.deca
+mv ./src/test/deca/codegen/invalid/opOverflow.ass ./src/test/deca/codegen/invalid/opOverflow-without-n.ass
+decac -n ./src/test/deca/codegen/invalid/opOverflow.deca
 
-diff=$(diff ./src/test/deca/codegen/valid/operation-binaire-divide-without-n.ass ./src/test/deca/codegen/valid/operation-binaire-divide.ass)
+diff=$(diff ./src/test/deca/codegen/invalid/opOverflow-without-n.ass ./src/test/deca/codegen/invalid/opOverflow.ass)
 
 if echo $diff | grep -q "opOverflow"
 then
@@ -37,7 +37,24 @@ else
     fi
 fi
 
-rm ./src/test/deca/codegen/valid/operation-binaire-divide.ass
-rm ./src/test/deca/codegen/valid/operation-binaire-divide-without-n.ass
+# Test avec la division par 0
+decac ./src/test/deca/codegen/invalid/divide-by-zero.deca
+mv ./src/test/deca/codegen/invalid/divide-by-zero.ass ./src/test/deca/codegen/invalid/divide-by-zero-without-n.ass
+decac -n ./src/test/deca/codegen/invalid/divide-by-zero.deca
+
+diff=$(diff ./src/test/deca/codegen/invalid/divide-by-zero-without-n.ass ./src/test/deca/codegen/invalid/divide-by-zero.ass)
+
+if echo $diff | grep -q "divByZero"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -n removes Error.divByZero"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -n does not remove Error.divByZero"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+rm ./src/test/deca/codegen/invalid/*.ass
 
 # TODO: Les autres règles de 11.1 et 11.3

@@ -21,14 +21,13 @@ public class UnaryMinus extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type type = this.getOperand().verifyExpr(compiler, localEnv, currentClass);
-        Location loc = this.getLocation();
+        Type type = getOperand().verifyExpr(compiler, localEnv, currentClass);
 
         if (!type.isInt() && !type.isFloat())
-            throw new ContextualError("A unary minus is only followed by an int or a float (rule 3.37)", loc);
+            throw new ContextualError("A unary minus is only followed by an int or a float (rule 3.37)", getLocation());
 
         // Ajout du décor
-        this.setType(type);
+        setType(type);
         return type;
     }
 

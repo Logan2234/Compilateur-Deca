@@ -9,6 +9,8 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -48,22 +50,24 @@ public class DeclField extends AbstractDeclField {
         FieldDefinition def;
 
         // Si le nom existe déjà dans une classe parente
-        ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(this.fieldName.getName());
+        ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(fieldName.getName());
         if (defExp != null) {
             // On cherche à savoir si c'est bien un Field
             FieldDefinition motherField = defExp.asFieldDefinition("The name \"" + fieldName.getName().getName()
-                    + "\" is already used for a method in the superclass (rule 2.5)", this.getLocation());
-            def = new FieldDefinition(type, this.getLocation(), visib, currentClass, motherField.getIndex());
+                    + "\" is already used for a method in the superclass (rule 2.5)", getLocation());
+            def = new FieldDefinition(type, getLocation(), visib, currentClass, motherField.getIndex());
+        } else {
+            currentClass.incNumberOfFields();
+            def = new FieldDefinition(type, getLocation(), visib, currentClass, currentClass.getNumberOfFields());
         }
-        currentClass.incNumberOfFields();
-        def = new FieldDefinition(type, this.getLocation(), visib, currentClass, currentClass.getNumberOfFields());
+
         try {
-            localEnv.declare(this.fieldName.getName(), def);
+            localEnv.declare(fieldName.getName(), def);
             fieldName.verifyExpr(compiler, localEnv, currentClass);
         } catch (DoubleDefException e) {
             throw new ContextualError(
-                    "The field \"" + this.fieldName.getName().getName() + "\" has already been declared (rule 2.4)",
-                    this.getLocation());
+                    "The field \"" + fieldName.getName().getName() + "\" has already been declared (rule 2.4)",
+                    getLocation());
         }
     }
 
@@ -103,6 +107,18 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
+    public void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister) {
+        initialization.codeGenInit(compiler, type.getType(), resultRegister);
+    }
+
+    @Override
+    public void setFieldOffset(DecacCompiler compiler, int offset) {
+        fieldName.getDefinition().setDAddrOffsetOnly(offset);
+    }
+
+
+    protected void spotUsedVar(AbstractProgram prog) {
+        // do nothing
     protected boolean spotUsedVar() {
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
         return false;

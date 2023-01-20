@@ -3,12 +3,12 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
@@ -101,35 +101,24 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     public AbstractExpr verifyRValue(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type expectedType) throws ContextualError {
-        Type rtype = this.verifyExpr(compiler, localEnv, currentClass);
+        Type rtype = verifyExpr(compiler, localEnv, currentClass);
 
-        // Ajout du décor et renvoie du type
-        if (rtype.sameType(expectedType)) {
-            this.setType(type);
-            return this;
+        if (!expectedType.assignCompatible(rtype)) {
+            throw new ContextualError(
+                    "An assignation between a " + expectedType + " and a " + rtype + " is not possible (rule 3.32)",
+                    getLocation());
         }
 
-        if (expectedType.isFloat() && rtype.isInt()) // TODO: assignCompatible pour factoriser
-        {
+        // Ajout du décor
+        setType(expectedType);
+
+        if (expectedType.isFloat() && rtype.isInt()) {
             AbstractExpr convFloat = new ConvFloat(this);
             convFloat.verifyExpr(compiler, localEnv, currentClass);
-            convFloat.setLocation(this.getLocation());
+            convFloat.setLocation(getLocation());
             return convFloat;
         }
-
-        try {
-            ClassType expectedClassType = expectedType.asClassType("Not a class type", getLocation());
-            ClassType RClassType = rtype.asClassType("Not a class type", getLocation());
-            if (RClassType.isSubClassOf(expectedClassType)) {
-                this.setType(rtype);
-                return this;
-            }
-        } catch (ContextualError e) {
-        }
-
-        throw new ContextualError(
-                "An assignation between a " + expectedType + " and a " + rtype + " is not possible (rule 3.32)",
-                this.getLocation());
+        return this;
     }
 
     @Override
@@ -150,9 +139,9 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        this.verifyExpr(compiler, localEnv, currentClass);
-        if (!this.getType().isBoolean())
-            throw new ContextualError("The condition is not a boolean (rule 3.29)", this.getLocation());
+        verifyExpr(compiler, localEnv, currentClass);
+        if (!getType().isBoolean())
+            throw new ContextualError("The condition is not a boolean (rule 3.29)", getLocation());
     }
 
     /**
@@ -164,7 +153,10 @@ public abstract class AbstractExpr extends AbstractInst {
         // we can safely assume this is only called if the result is an integer or
         // float, with context check
         // so compute ourself in R1, then depending on our type display it !
-        codeGenExpr(compiler, Register.R1);
+        GPRegister register = compiler.allocateRegister();
+        codeGenExpr(compiler, register);
+        compiler.addInstruction(new LOAD(register, Register.R1));
+        compiler.freeRegister(register);
         if (type.isInt()) {
             compiler.addInstruction(new WINT());
         } else if (type.isFloat()) {
@@ -210,11 +202,14 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     /**
-     * Fin recursively all method calls and Reads in the expression and add them on top of the list
+     * Fin recursively all method calls and Reads in the expression and add them on
+     * top of the list
      * This method is used for optimizing the Program tree.
-     * Instructions should not be removed if they contains a MethodCall or a Read that could
+     * Instructions should not be removed if they contains a MethodCall or a Read
+     * that could
      * potentially print/read on stdin/stdout or change the state of an object.
      * It had the methods found on top of the list
+     * 
      * @param the list of MethodCalls and Reads ordered by order of apparition
      */
     protected abstract void addMethodCalls(List<AbstractExpr> foundMethodCalls);
@@ -222,8 +217,10 @@ public abstract class AbstractExpr extends AbstractInst {
     /**
      * Fin recursively all method calls and reads in the expression
      * This method is used for optimizing the Program tree.
-     * Instructions should not be removed if they contains a MethodCall or a Read that could
+     * Instructions should not be removed if they contains a MethodCall or a Read
+     * that could
      * potentially print/read on stdin/stdout or change the state of an object.
+     * 
      * @return the list of MethodCall ordered by order of apparition
      */
     protected final List<AbstractExpr> getMethodCalls() {

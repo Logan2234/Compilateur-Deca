@@ -2,8 +2,9 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
+import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
@@ -16,7 +17,11 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
@@ -27,7 +32,6 @@ import java.io.PrintStream;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
 
 /**
  * Deca Identifier
@@ -179,16 +183,16 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Definition def = localEnv.get(this.name);
-        Location loc = this.getLocation();
+        Definition def = localEnv.get(name);
+
         if (def == null)
-            throw new ContextualError("The identifier \"" + name.getName() + "\" doesn't exist (rule 0.1)", loc);
+            throw new ContextualError("The identifier \"" + name.getName() + "\" doesn't exist (rule 0.1)",
+                    getLocation());
 
         // Ajout du décor
         Type type = def.getType();
-        this.setDefinition(def);
-        this.setType(type);
-
+        setDefinition(def);
+        setType(type);
         return type;
     }
 
@@ -199,21 +203,15 @@ public class Identifier extends AbstractIdentifier {
      */
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
-        Type type;
         TypeDefinition def = compiler.environmentType.defOfType(name);
-        Location loc = getLocation();
 
-        try {
-            // Si le symbole n'est pas un type, on catch l'erreur pour envoyer une
-            // ContextualError
-            type = def.getType();
-        } catch (NullPointerException e) {
-            throw new ContextualError("The type \"" + name + "\" doesn't exist (rule 0.2)", loc);
-        }
+        if (def == null)
+            throw new ContextualError("The type \"" + name + "\" doesn't exist (rule 0.2)", getLocation());
 
         // Ajout du décor
-        this.setDefinition(def);
-        this.setType(type);
+        Type type = def.getType();
+        setDefinition(def);
+        setType(type);
         return type;
     }
 
@@ -272,18 +270,42 @@ public class Identifier extends AbstractIdentifier {
         }
     }
 
+    /**
+     * Generate the code that put the value in the register.
+     */
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        if (resultRegister == null) {
-            // put self value on the stack
-            // load self on R1, then push R1
-            compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
-            compiler.incrementContextUsedStack();
-            compiler.addInstruction(new PUSH(Register.R1));
-        } else {
-            // put self value in the result register
-            compiler.addInstruction(new LOAD(definition.getDAddr(), resultRegister));
+        // if it is a field, we need to first load the value on from the heap !
+        if(getDefinition().isField()) {
+            GPRegister classPointerRegister = compiler.allocateRegister();
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
+            compiler.addInstruction(new LOAD(new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister), classPointerRegister));
+            if (resultRegister == null) {
+                // put self value on the stack
+                // load self on R1, then push R1
+                compiler.addInstruction(new LOAD(classPointerRegister, Register.R1));
+                compiler.freeRegister(classPointerRegister);
+                compiler.incrementContextUsedStack();
+                compiler.addInstruction(new PUSH(Register.R1));
+            } else {
+                // put self value in the result register
+                compiler.addInstruction(new LOAD(classPointerRegister, resultRegister));
+                compiler.freeRegister(classPointerRegister);
+            }
         }
+        else {
+            if (resultRegister == null) {
+                // put self value on the stack
+                // load self on R1, then push R1
+                compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
+                compiler.incrementContextUsedStack();
+                compiler.addInstruction(new PUSH(Register.R1));
+            } else {
+                // put self value in the result register
+                compiler.addInstruction(new LOAD(definition.getDAddr(), resultRegister));
+            }
+        }
+
     }
 
     @Override

@@ -36,11 +36,6 @@ public class MethodAsmBody extends AbstractMethod {
     }
 
     @Override
-    public void codeGenProgram(DecacCompiler compiler) {
-        // TODO
-    }
-
-    @Override
     public void decompile(IndentPrintStream s) {
         s.print("asm(");
         code.decompile(s);
@@ -69,5 +64,14 @@ public class MethodAsmBody extends AbstractMethod {
     @Override
     protected boolean spotUsedVar() {
         return false;
+    }
+	@Override
+    public void codeGenMethod(DecacCompiler compiler) {
+        // todo : find a way to insert a string litteral in the code
+    }
+
+    @Override
+    public void setReturnsNames(String name) {
+        // useless here ?
     }
 }

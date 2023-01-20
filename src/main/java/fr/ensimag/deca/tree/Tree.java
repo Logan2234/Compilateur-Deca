@@ -341,4 +341,12 @@ public abstract class Tree {
         return true;
     }
     
+
+    public boolean isReturn() {
+        return false;
+    }
+
+    public Return asReturn() {
+        return null;
+    }
 }

@@ -1,14 +1,16 @@
 // Description:
-//    Test pseudo complet pour le test des classes
+//    Test pseudo complet pour le test des classes.
+//    Il test: DeclClass avec et sans Extends, DeclMethod avec et sans redefinition, 
+//             DeclField, Protected et Public, Return de fonctions, Instanceof, Cast
+//             MethodCall, New, Selection,
 //
 // Resultats:
-//    5.0
-//    5.0
+//    5.00000e+00
+//    5.00000e+00
 //    ok
 //
 // Historique:
 //    cree le 18/01/2023
-
 
 class A {
     protected int a;
@@ -56,5 +58,4 @@ class B extends A {
     else {
         println("ko");
     }
-
 }

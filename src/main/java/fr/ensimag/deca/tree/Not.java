@@ -4,6 +4,7 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.SEQ;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -24,14 +25,13 @@ public class Not extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type type = this.getOperand().verifyExpr(compiler, localEnv, currentClass);
-        Location loc = this.getLocation();
+        Type type = getOperand().verifyExpr(compiler, localEnv, currentClass);
 
         if (!type.isBoolean())
-            throw new ContextualError("A not is only followed by a boolean (rule 3.37)", loc);
+            throw new ContextualError("A not is only followed by a boolean (rule 3.37)", getLocation());
         
         // Ajout du décor
-        this.setType(type);
+        setType(type);
         return type;
     }
 
@@ -43,8 +43,8 @@ public class Not extends AbstractUnaryExpr {
     @Override
     public void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister) {
         // result expression is a bool and have been put in the register.
-        // let's add 0 and check eq ? if 1, than the result was 0 : 0 + 0 = 0, therefore previous was 0
-        compiler.addInstruction(new ADD(new ImmediateInteger(0), resulRegister));
+        // compare the result with zero, than check equality : true if it was false
+        compiler.addInstruction(new CMP(0, resulRegister));
         compiler.addInstruction(new SEQ(resulRegister));
     }
 
