@@ -116,10 +116,20 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
             return operand.irrelevant() && actualDico.containsKey(((Identifier) operand).getName());
         
         } else {
-            if (operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName())){
-                operand = currentValues.get(((Identifier) operand).getName());
+            boolean irrelevant = false;
+            if (operand.isSelection()){
+                AbstractExpr out = ((Selection) operand).returnIrrelevantFromSelection();
+                if (out != null) {
+                    operand = out;
+                    irrelevant = true;
+                }
             }
-            return operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName());
+            else if (operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName())) {
+                operand = currentValues.get(((Identifier) operand).getName());
+                irrelevant = true;
+            }
+
+            return irrelevant;
         }
     }
 

@@ -157,13 +157,33 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
             return (leftOperand.irrelevant() && actualDico.containsKey(((Identifier) getLeftOperand()).getName())) || (rightOperand.irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName()));
         
         } else { 
-            if (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName())) {
+            boolean irrelevantRight = false;
+            if (getRightOperand().isSelection()){
+                AbstractExpr out = ((Selection) getRightOperand()).returnIrrelevantFromSelection();
+                if (out != null) {
+                    setRightOperand(out);
+                    irrelevantRight = true;
+                }
+            }
+            else if (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName())) {
                 rightOperand = currentValues.get(((Identifier) getRightOperand()).getName());
+                irrelevantRight = true;
             }
-            if (getLeftOperand().irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) {
+
+            boolean irrelevantLeft = false;
+            if (getLeftOperand().isSelection()){
+                AbstractExpr out = ((Selection) getLeftOperand()).returnIrrelevantFromSelection();
+                if (out != null) {
+                    setLeftOperand(out);
+                    irrelevantLeft = true;
+                }
+            }
+            else if (getLeftOperand().irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) {
                 leftOperand = currentValues.get(((Identifier) getLeftOperand()).getName());
+                irrelevantLeft = true;
             }
-            return (leftOperand.irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) || (rightOperand.irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName()));
+
+            return irrelevantLeft || irrelevantRight;
         }
     } 
 
