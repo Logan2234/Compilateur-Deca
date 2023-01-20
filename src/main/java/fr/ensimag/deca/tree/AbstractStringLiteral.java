@@ -2,6 +2,9 @@ package fr.ensimag.deca.tree;
 
 import java.util.List;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
+
 /**
  *
  * @author gl03

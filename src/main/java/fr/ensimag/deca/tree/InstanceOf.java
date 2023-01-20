@@ -35,7 +35,7 @@ import org.apache.commons.lang.Validate;
  */
 public class InstanceOf extends AbstractExpr {
 
-    private AbstractExpr e;
+    private AbstractExpr expression;
     private final AbstractIdentifier type;
 
     public InstanceOf(AbstractExpr expression, AbstractIdentifier type) {
@@ -125,7 +125,7 @@ public class InstanceOf extends AbstractExpr {
         // We don't spotUsedVar on the class type.
         // If the class is not used elsewhere then the expression will be evaluated to false.
         boolean varSpotted = this.type.spotUsedVar();
-        return this.e.spotUsedVar() || varSpotted;
+        return this.expression.spotUsedVar() || varSpotted;
     }
 
     @Override
@@ -135,6 +135,6 @@ public class InstanceOf extends AbstractExpr {
     }
 
     public AbstractExpr getExpr() {
-        return this.e;
+        return this.expression;
     }
 }

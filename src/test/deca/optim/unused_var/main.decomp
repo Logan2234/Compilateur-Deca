@@ -2,6 +2,7 @@ class A extends Object {
 
 	int cos(int a){
 		return a;
+
 	}
 }
 
@@ -12,6 +13,7 @@ class B extends A {
 {
 	B b = new B();
 	readInt();
+	b.cos(3);
 	b.cos(2);
 	print(b.x);
 }

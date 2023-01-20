@@ -196,7 +196,8 @@ public class Program extends AbstractProgram {
         while(optimized) {
             optimized = false;
             // solve compile time known cases.
-            optimized = this.collapse() || optimized;
+            // TODO
+            //optimized = this.collapse() || optimized;
             optimized = this.removeUnusedVar() || optimized;
         }
     }

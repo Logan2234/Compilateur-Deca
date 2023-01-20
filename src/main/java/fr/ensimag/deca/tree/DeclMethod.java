@@ -183,10 +183,8 @@ public class DeclMethod extends AbstractDeclMethod {
         compiler.addInstruction(new RTS());
     }
     
-    public void spotUsedVar(AbstractProgram prog) {
-        this.type.spotUsedVar(prog);
-        this.body.spotUsedVar(prog);
-        this.methodName.spotUsedVar(prog);
+
+    @Override
     public boolean spotUsedVar() {
         boolean varSpotted = this.type.spotUsedVar();
         varSpotted = this.body.spotUsedVar() || varSpotted;

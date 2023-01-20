@@ -23,7 +23,7 @@ import org.apache.commons.lang.Validate;
  */
 public class Return extends AbstractInst {
     
-    private AbstractExpr e;
+    private AbstractExpr expression;
 
     public Return(AbstractExpr expression) {
         Validate.notNull(expression);
@@ -86,7 +86,7 @@ public class Return extends AbstractInst {
 
     @Override
     protected boolean spotUsedVar() {
-        return this.e.spotUsedVar();
+        return this.expression.spotUsedVar();
     }
 
     @Override

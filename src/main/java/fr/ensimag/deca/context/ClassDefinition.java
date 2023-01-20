@@ -1,5 +1,6 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
@@ -78,6 +79,7 @@ public class ClassDefinition extends TypeDefinition {
         this.superClass = superClass;
     }
 
+
     /**
      * location on the global pile of the vTable.
      */
@@ -97,18 +99,16 @@ public class ClassDefinition extends TypeDefinition {
      */
     public RegisterOffset getVTableAddr() {
         return this.vTableAddr;
-    @Override
-    public boolean spotRelatedDefs() {
-        boolean varSpotted = super.spotRelatedDefs();
-        if (this.superClass != null) {
-            return this.superClass.spotUsedVar() || varSpotted;
-        }
-        return varSpotted;
     }
     
     @Override
-    public void spotRelatedDefs(AbstractProgram prog) {
-        if (superClass != null)
-            superClass.spotUsedVar(prog);
+    public boolean spotRelatedDefs() {
+        if (this.superClass != null) {
+            this.superClass.spotUsedVar();
+            return this.superClass.spotUsedVar();
+        }
+        return false;
     }
+
+
 }
