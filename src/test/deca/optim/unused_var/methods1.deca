@@ -1,0 +1,32 @@
+// Description:
+//    remove methods
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 20/01/2023
+//
+class A {
+    int a;
+    void notUsed(){}
+    void used(){int a=0;}
+    B createB(){return new B();}
+}
+
+class B extends A {
+    // overriding methods should be kept
+    void used(){int a=1;}
+}
+
+// should be removed as C is not used despite the overriding method
+class C extends A {
+    void used(){int a=2;}
+}
+
+{
+    A a = new B();
+    A aa = a.createB();
+    a.used();
+    print(aa.x);
+}
