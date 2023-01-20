@@ -83,7 +83,10 @@ public class InstanceOf extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // compute the result of the expression (pointer to object) in a register.
-        expression.codeGenExpr(compiler, Register.R1);
+        GPRegister exprRegister = compiler.allocateRegister();
+        expression.codeGenExpr(compiler, exprRegister);
+        compiler.addInstruction(new LOAD(exprRegister, Register.R1));
+        compiler.freeRegister(exprRegister);
         // get a register to put the comparing value in 
         GPRegister register = resultRegister == null ? compiler.allocateRegister() : resultRegister;
         // put the comparing value in it
