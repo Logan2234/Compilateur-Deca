@@ -313,7 +313,7 @@ public class Identifier extends AbstractIdentifier {
         // do nothing
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
 }

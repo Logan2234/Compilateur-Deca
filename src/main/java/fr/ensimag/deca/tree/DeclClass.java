@@ -199,8 +199,8 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     @Override
-    public boolean factorised() {
-        return methods.factorised() || fields.factorised();
+    public boolean factorised(DecacCompiler compiler) {
+        return methods.factorised(compiler) || fields.factorised(compiler);
     }
     @Override
     public boolean collapse() {

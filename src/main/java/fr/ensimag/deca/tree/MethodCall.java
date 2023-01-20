@@ -144,7 +144,7 @@ public class MethodCall extends AbstractExpr {
         foundMethodCalls.add(this);
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
 }

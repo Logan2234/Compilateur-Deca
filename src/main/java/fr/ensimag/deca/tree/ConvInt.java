@@ -35,7 +35,7 @@ public class ConvInt extends AbstractUnaryExpr {
     }
 
     @Override
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         // TODO Auto-generated method stub
         return false;
     }

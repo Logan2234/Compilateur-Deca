@@ -92,7 +92,7 @@ public class Equals extends AbstractOpExactCmp {
     }
 
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
 }

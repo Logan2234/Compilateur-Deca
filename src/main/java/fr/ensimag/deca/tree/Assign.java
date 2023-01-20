@@ -83,7 +83,7 @@ public class Assign extends AbstractBinaryExpr {
         this.rightOperand.spotUsedVar(prog);
     }
     
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;
     }
     @Override 

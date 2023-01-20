@@ -30,7 +30,7 @@ public class LowerOrEqual extends AbstractOpIneq {
     }
 
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
     public boolean collapse() {

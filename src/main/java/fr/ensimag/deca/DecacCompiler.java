@@ -400,7 +400,7 @@ public class DecacCompiler {
                 if (compilerOptions.getOptimize()) {
                 prog.verifyProgram(this);
                 //prog.optimizeTree();
-                prog.factorised();
+                prog.factorised(this);
                 //prog.prettyPrint(System.out);
             }
             LOG.info("Writing deca file ...");

@@ -57,16 +57,16 @@ public class ListInst extends TreeList<AbstractInst> {
         }
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         // try to collapse each instruction into a list of instructions
         boolean facto = false;
         for (int i = 0; i < getList().size(); i++) {
             AbstractInst toFacto = getList().get(i);
-            if(toFacto.factorised()) {
+            if(toFacto.factorised(compiler)) {
                 facto = true;
                 // remove this inst, replace it with it's collapsed form
                 removeAt(i);
-                ListInst list = toFacto.factoInst();
+                ListInst list = toFacto.factoInst(compiler);
                 int size = list.size();
                 AbstractInst newInst = list.getList().get(size-1);
                 insert(newInst, i);

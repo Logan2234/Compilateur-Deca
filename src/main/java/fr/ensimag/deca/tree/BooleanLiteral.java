@@ -94,7 +94,7 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;
     }
     public Boolean collapseBool() {

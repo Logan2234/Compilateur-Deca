@@ -243,7 +243,7 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     @Override
-    public ListInst factoInst() {
+    public ListInst factoInst(DecacCompiler compiler) {
         // by default, return empty list of instructions. 
         return new ListInst();
         

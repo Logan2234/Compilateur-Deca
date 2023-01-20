@@ -109,7 +109,7 @@ public class While extends AbstractInst {
     }
     
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
 
@@ -142,7 +142,7 @@ public class While extends AbstractInst {
         return result;
     }
 
-    public ListInst factoInst() {
+    public ListInst factoInst(DecacCompiler compiler) {
         Boolean collapsedCond = condition.collapseBool();
         if(collapsedCond != null) {
             // if it's true, get out of block the body

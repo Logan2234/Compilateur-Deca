@@ -127,7 +127,7 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return true;   
     }
     

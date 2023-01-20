@@ -70,7 +70,7 @@ public class MethodAsmBody extends AbstractMethod {
     }
 
     @Override
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;
     }
     public boolean collapse() {

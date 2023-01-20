@@ -30,7 +30,7 @@ public class Lower extends AbstractOpIneq {
         compiler.addInstruction(new SLT(register));
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
     public boolean collapse() {

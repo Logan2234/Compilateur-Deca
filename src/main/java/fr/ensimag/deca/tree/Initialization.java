@@ -124,7 +124,7 @@ public class Initialization extends AbstractInitialization {
         return collapsing;
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;
     }
     

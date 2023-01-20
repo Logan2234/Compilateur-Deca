@@ -84,7 +84,7 @@ public class DeclParam extends AbstractDeclParam {
         return false;
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;
     }
 }

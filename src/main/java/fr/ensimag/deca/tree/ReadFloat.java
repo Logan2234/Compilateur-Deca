@@ -44,7 +44,7 @@ public class ReadFloat extends AbstractReadExpr {
         compiler.addInstruction(new RFLOAT());
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
 }

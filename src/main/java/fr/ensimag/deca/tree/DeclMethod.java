@@ -183,8 +183,8 @@ public class DeclMethod extends AbstractDeclMethod {
         return this.body;
     }
 
-    public boolean factorised() {
-        return body.factorised();
+    public boolean factorised(DecacCompiler compiler) {
+        return body.factorised(compiler);
     }
     
     public boolean collapse() {

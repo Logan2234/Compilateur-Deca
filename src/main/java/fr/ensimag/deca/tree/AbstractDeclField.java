@@ -56,7 +56,7 @@ public abstract class AbstractDeclField extends Tree {
      */
     public abstract void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister);
 
-        public abstract boolean factorised();
+        public abstract boolean factorised(DecacCompiler compiler);
 
     public abstract void setFieldOffset(DecacCompiler compiler, int offset);
 }

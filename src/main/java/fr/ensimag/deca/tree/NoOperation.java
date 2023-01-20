@@ -46,7 +46,7 @@ public class NoOperation extends AbstractInst {
         // do nothing
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
     public boolean collapse() {
@@ -60,7 +60,7 @@ public class NoOperation extends AbstractInst {
     }
     
     @Override
-    public ListInst factoInst() {
+    public ListInst factoInst(DecacCompiler compiler) {
         return new ListInst();
     }
 

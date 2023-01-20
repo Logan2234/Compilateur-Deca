@@ -114,7 +114,7 @@ public class IfThenElse extends AbstractInst {
         this.elseBranch.spotUsedVar(prog);
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
     public boolean collapse() {
@@ -122,7 +122,7 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    public ListInst factoInst() {
+    public ListInst factoInst(DecacCompiler compiler) {
         /*// try to collapse the condition
         Boolean collapsedCond = condition.collapseBool();
         if(collapsedCond != null) {

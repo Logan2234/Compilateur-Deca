@@ -6,6 +6,7 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.INT;
 import fr.ensimag.ima.pseudocode.instructions.MUL;
 
 /**
@@ -34,7 +35,7 @@ public class Multiply extends AbstractOpArith {
         }
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         if (leftOperand.isLiteral() ^ rightOperand.isLiteral()) {
             if (leftOperand.isLiteral() && leftOperand.getType().isInt()) {
                 if (((IntLiteral) leftOperand).getValue() < 10)
@@ -52,52 +53,44 @@ public class Multiply extends AbstractOpArith {
         return false;
     }
 
-    public ListInst factoInst() {
-        // Letter * number
-        if (rightOperand.isLiteral() && rightOperand.getType().isInt()) {
-            ListInst list = new ListInst();
-            
-            AbstractExpr leftbisoperand;
-            
-            if (leftOperand.isLiteral()) {
-                leftbisoperand = new IntLiteral(((IntLiteral) leftOperand).getValue());
-            } else {
-                leftbisoperand = new Identifier(((Identifier) leftOperand).getName());
-            }
-
-            if (((IntLiteral) rightOperand).getValue() == 2) {
-                leftbisoperand.setType(leftOperand.getType());
-                list.add(new Plus(leftOperand, leftbisoperand));
-                return list;
-            }
-
-            AbstractExpr left = new Plus(leftOperand, leftbisoperand);
-            for (int i = 0; i < ((IntLiteral) rightOperand).getValue() - 2; i++) {
-                list.add(new Plus(leftOperand, left));
-                left = new Plus(leftOperand, left);
-            }
-            return list;
+    private void factocarre(DecacCompiler compiler, AbstractExpr leftOperand, AbstractExpr rightOperand, ListInst list){
+        AbstractExpr leftbisoperand;
+        if (leftOperand.isLiteral()) {
+            leftbisoperand = new IntLiteral(((IntLiteral) leftOperand).getValue());
+        } else {
+            leftbisoperand = new Identifier(((Identifier) leftOperand).getName());
+            ((Identifier)leftbisoperand).setDefinition(((Identifier)leftOperand).getDefinition());
         }
+        
+        leftbisoperand.setType(leftOperand.getType());
+        if (((IntLiteral) rightOperand).getValue() == 2) {
+            Plus fin = new Plus(leftOperand, leftbisoperand);
+            fin.setType(compiler.environmentType.INT);
+            list.add(fin);
+        } else {
+            AbstractExpr left = new Plus(leftOperand, leftbisoperand);
+            ((Plus) left).setType(compiler.environmentType.INT);
+            for (int i = 0; i < ((IntLiteral) rightOperand).getValue() - 2; i++) {
+                Plus plus = new Plus(leftOperand, left);
+                ((Plus) plus).setType(compiler.environmentType.INT);
+                left = new Plus(leftOperand, left);
+                ((Plus) left).setType(compiler.environmentType.INT);
+                list.add(plus);
+            }
+        }
+    }
 
-        // Number * letter
+    public ListInst factoInst(DecacCompiler compiler) {
         ListInst list = new ListInst();
 
-        AbstractExpr rightbisoperand;
-            
-        if (rightOperand.isLiteral()) {
-            rightbisoperand = new IntLiteral(((IntLiteral) rightOperand).getValue());
-        } else {
-            rightbisoperand = new Identifier(((Identifier) rightOperand).getName());
-        }
-
-        if (((IntLiteral) leftOperand).getValue() == 2) {
-            list.add(new Plus(rightOperand, rightbisoperand));
-            return list;
-        }
-        AbstractExpr left = new Plus(rightOperand, rightbisoperand);
-        for (int i = 0; i < ((IntLiteral) leftOperand).getValue() - 2; i++) {
-            list.add(new Plus(rightOperand, left));
-            left = new Plus(rightOperand, left);
+        // Letter * number
+        if (rightOperand.isLiteral() && rightOperand.getType().isInt())
+            factocarre(compiler, leftOperand, rightOperand, list);
+        // number * Letter
+        else 
+            factocarre(compiler, rightOperand, leftOperand, list);
+        for (AbstractInst i : list.getList()) {
+            ((Plus) i).setType(compiler.environmentType.INT);
         }
         return list;
     }

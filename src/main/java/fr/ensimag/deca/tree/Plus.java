@@ -33,7 +33,7 @@ public class Plus extends AbstractOpArith {
             compiler.addInstruction(new BOV(error.getErrorLabel()));
         }
     }
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
 

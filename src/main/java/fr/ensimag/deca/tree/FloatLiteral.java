@@ -104,7 +104,7 @@ public class FloatLiteral extends AbstractExpr {
         // do nothing
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
     public Float collapseFloat() {

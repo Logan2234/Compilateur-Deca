@@ -91,7 +91,7 @@ public class NoInitialization extends AbstractInitialization {
         return false;
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;
     }
 }

@@ -36,5 +36,5 @@ public abstract class AbstractProgram extends Tree {
      * 
      * @return true if tree has been factorised
      */
-    public abstract boolean factorised();
+    public abstract boolean factorised(DecacCompiler compiler);
 }

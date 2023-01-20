@@ -309,7 +309,7 @@ public abstract class Tree {
      */
     public abstract boolean collapse();
 
-    public abstract boolean factorised();
+    public abstract boolean factorised(DecacCompiler compiler);
 
     /**
      * Collapse the boolean values known at compile time.

@@ -82,8 +82,8 @@ public class Main extends AbstractMain {
     }
 
     @Override
-    public boolean factorised() {
-        return declVariables.factorised() || insts.factorised();
+    public boolean factorised(DecacCompiler compiler) {
+        return declVariables.factorised(compiler) || insts.factorised(compiler);
     }
     
     public boolean collapse() {

@@ -54,7 +54,7 @@ public class Or extends AbstractOpBool {
         return null;
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
 }

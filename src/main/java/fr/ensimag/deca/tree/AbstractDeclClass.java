@@ -30,7 +30,7 @@ public abstract class AbstractDeclClass extends Tree {
     protected abstract void verifyClassBody(DecacCompiler compiler) throws ContextualError;
 
             
-        public abstract boolean factorised();
+        public abstract boolean factorised(DecacCompiler compiler);
     /**
      * Set up the class so the code generation is on valid objects.
      * @param compiler where we write the code to.

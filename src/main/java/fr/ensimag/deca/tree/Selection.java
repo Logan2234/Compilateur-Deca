@@ -126,7 +126,7 @@ public class Selection extends AbstractLValue {
         this.obj.addMethodCalls(foundMethodCalls);
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
 }

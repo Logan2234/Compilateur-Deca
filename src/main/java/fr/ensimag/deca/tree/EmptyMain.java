@@ -51,7 +51,7 @@ public class EmptyMain extends AbstractMain {
     }
 
     @Override
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;
     }
     public boolean collapse() {

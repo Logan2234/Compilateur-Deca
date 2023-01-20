@@ -48,7 +48,7 @@ public class Not extends AbstractUnaryExpr {
         compiler.addInstruction(new SEQ(resulRegister));
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
     public boolean collapse() {

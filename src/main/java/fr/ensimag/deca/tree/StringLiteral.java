@@ -76,7 +76,7 @@ public class StringLiteral extends AbstractStringLiteral {
     String prettyPrintNode() {
         return "StringLiteral (" + value + ")";
     }
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
 }

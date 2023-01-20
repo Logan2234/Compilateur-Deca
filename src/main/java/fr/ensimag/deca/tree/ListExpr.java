@@ -34,7 +34,7 @@ public class ListExpr extends TreeList<AbstractExpr> {
         return collapsed;
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;
     }
 }

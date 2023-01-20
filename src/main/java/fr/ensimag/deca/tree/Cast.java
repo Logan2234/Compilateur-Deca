@@ -100,7 +100,7 @@ public class Cast extends AbstractExpr {
         this.expression.addMethodCalls(foundMethodCalls);
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;
     }
 }

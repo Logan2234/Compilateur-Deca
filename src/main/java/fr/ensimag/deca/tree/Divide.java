@@ -51,7 +51,7 @@ public class Divide extends AbstractOpArith {
 
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
 

@@ -89,7 +89,7 @@ public class Return extends AbstractInst {
         this.expression.spotUsedVar(prog);
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
     public boolean collapse() {
@@ -104,7 +104,7 @@ public class Return extends AbstractInst {
     }
 
     @Override
-    public ListInst factoInst() {
+    public ListInst factoInst(DecacCompiler compiler) {
         ListInst result = new ListInst();
         result.add(this);
         return result;

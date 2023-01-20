@@ -36,7 +36,7 @@ public class ConvFloat extends AbstractUnaryExpr {
     }
 
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
     

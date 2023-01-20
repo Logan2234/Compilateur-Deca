@@ -23,5 +23,5 @@ public abstract class AbstractMain extends Tree {
      * 
      * @return true if the main has been factorised
      */
-    public abstract boolean factorised();
+    public abstract boolean factorised(DecacCompiler compiler);
 }

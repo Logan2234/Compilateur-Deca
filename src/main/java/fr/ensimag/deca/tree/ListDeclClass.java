@@ -58,9 +58,9 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         for (AbstractDeclClass c : getList()) {
-            if (c.factorised())
+            if (c.factorised(compiler))
                 return true;
         }
         return false;

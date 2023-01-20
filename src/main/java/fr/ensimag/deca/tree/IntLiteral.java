@@ -96,7 +96,7 @@ public class IntLiteral extends AbstractExpr {
         // do nothing
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
     public Integer collapseInt() {

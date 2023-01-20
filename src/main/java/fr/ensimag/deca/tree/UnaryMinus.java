@@ -42,7 +42,7 @@ public class UnaryMinus extends AbstractUnaryExpr {
         compiler.addInstruction(new OPP(resulRegister, resulRegister));
     }
 
-    public boolean factorised() {
+    public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
     public boolean collapse() {
