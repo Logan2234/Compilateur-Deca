@@ -41,6 +41,7 @@ public class Program extends AbstractProgram {
     }
     private ListDeclClass classes;
     private AbstractMain main;
+    private boolean optimized;
 
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
@@ -127,9 +128,13 @@ public class Program extends AbstractProgram {
     public void optimizeTree() {
         boolean simplified = true;
         while (simplified) {
-            // TODO this.resetSpottedVar();
+            if (this.optimized) {
+                this.iter(new ResetUsedVar());
+                this.optimized = false;
+            }
             this.spotUsedVar();
             simplified = this.removeUnusedVar();
+            this.optimized = true;
         }
     }
 

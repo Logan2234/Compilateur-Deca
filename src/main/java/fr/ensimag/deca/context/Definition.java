@@ -1,8 +1,6 @@
 package fr.ensimag.deca.context;
 
 import org.apache.log4j.Logger;
-
-import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
@@ -127,6 +125,7 @@ public abstract class Definition {
      * Reset the used attribute back to false
      */
     public void resetUsed() {
+        LOG.debug("Reset : "+ this.toString());
         this.used = false;
     }
 

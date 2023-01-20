@@ -2,8 +2,6 @@ package fr.ensimag.deca.context;
 
 import java.util.Map;
 import java.util.Set;
-
-import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.deca.tree.Visibility;
 
