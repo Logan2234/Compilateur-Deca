@@ -292,7 +292,30 @@ public abstract class Tree {
         }
     }
 
+    /**
+     * Tells if we are actually defining classes
+     */
+    public static boolean defClass = true;
+
+    /**
+     * Tells which class we are actually defining
+     */
+    public static Symbol actualClass;
+
+    /**
+     * Dictionary of the current values of the variables in the Main program
+     */
     public static HashMap<Symbol, AbstractExpr> currentValues = new HashMap<Symbol, AbstractExpr>();
+
+    /**
+     * Dictionary of the values defined by the class definition, before entering the Main program
+     */
+    public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> varModels = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
+
+    /*
+     * Dictionary of the values of a class, after have entered the Main program
+     */
+    public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> declaredClasses = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
 
     /**
      * Optimize the decorated tree.
@@ -313,6 +336,14 @@ public abstract class Tree {
      * @return if the class is a read expression.
      */
     public boolean isReadExpr() {
+        return false;
+    }
+
+    /**
+     * Check if the class is a "New" expression.
+     * @return if the class is a "New" expression.
+     */
+    public boolean isNew() {
         return false;
     }
     

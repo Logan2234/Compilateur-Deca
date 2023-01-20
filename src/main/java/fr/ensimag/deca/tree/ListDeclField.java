@@ -77,9 +77,16 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     @Override
     public boolean irrelevant() {
         boolean result = false;
-        for (AbstractDeclField i : getList()) {
-            result |= i.irrelevant();
+        AbstractDeclField expr;
+        
+        for (int i = 0; i < getList().size(); i++) {
+            expr = getList().get(i);
+            if (expr.irrelevant()){
+                result |= true;
+                set(i, expr);
+            }
         }
+
         return result;
     }
 }

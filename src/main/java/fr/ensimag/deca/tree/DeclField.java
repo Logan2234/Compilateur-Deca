@@ -9,7 +9,11 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
+import java.util.HashMap;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -111,7 +115,26 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public boolean irrelevant(){
-        initialization.irrelevant();
+        if (initialization.hasInitialization()) {
+            AbstractExpr expr = ((Initialization) initialization).getExpression();
+            HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
+
+            // if (expr.isNew()){
+            //     // TODO
+            //     return false;
+            // }
+
+            if (expr.irrelevant()){
+                ((Initialization) initialization).setExpression(actualDico.get(((Identifier) expr).getName()));
+            }
+            if (!expr.isReadExpr()){
+                actualDico.put(fieldName.getName(), ((Initialization) initialization).getExpression());
+    
+            } else if (actualDico.containsKey(fieldName.getName())){
+                actualDico.remove(fieldName.getName());
+            } 
+            varModels.put(actualClass, actualDico);
+        }
         return false;
     }
 }

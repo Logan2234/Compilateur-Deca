@@ -8,7 +8,11 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
+import java.util.HashMap;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -120,6 +124,10 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     public boolean irrelevant(){
+        defClass = true;
+        actualClass = name.getName();
+        System.out.println("Marc? " + actualClass.toString());
+        varModels.put(actualClass, new HashMap<Symbol, AbstractExpr>());
         fields.irrelevant();
         methods.irrelevant();
         return false;

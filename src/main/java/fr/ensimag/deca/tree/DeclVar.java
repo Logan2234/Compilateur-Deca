@@ -100,6 +100,12 @@ public class DeclVar extends AbstractDeclVar {
     public boolean irrelevant(){ 
         if (initialization.hasInitialization()) {
             AbstractExpr expr = ((Initialization) initialization).getExpression();
+
+            // if (expr.isNew()){
+            //     // TODO
+            //     return false;
+            // }
+
             if (expr.irrelevant()){
                 ((Initialization) initialization).setExpression(currentValues.get(((Identifier) expr).getName()));
             }

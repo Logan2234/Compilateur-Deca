@@ -41,7 +41,7 @@ public class New extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("new");
+        s.print("new ");
         classe.decompile(s);
         s.print("()");
     }
@@ -59,6 +59,11 @@ public class New extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         throw new UnsupportedOperationException("not yet implemented");
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
     }
 
 }

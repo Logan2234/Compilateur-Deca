@@ -58,7 +58,18 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
 
     @Override
     public boolean irrelevant(){
-        return false;
+        boolean result = false;
+        AbstractDeclClass expr;
+        
+        for (int i = 0; i < getList().size(); i++) {
+            expr = getList().get(i);
+            if (expr.irrelevant()){
+                result |= true;
+                set(i, expr);
+            }
+        }
+
+        return result;
     }
 
 
