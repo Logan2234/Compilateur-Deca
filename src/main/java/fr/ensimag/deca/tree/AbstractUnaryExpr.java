@@ -70,7 +70,6 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         }
         else {
             compiler.addInstruction(new LOAD(register, resultRegister));
-            compiler.freeRegister(register); // pops
         }
     }
 
