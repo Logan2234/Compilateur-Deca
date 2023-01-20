@@ -6,9 +6,11 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -47,7 +49,10 @@ public class Return extends AbstractInst {
     @Override // TODO Virgile: Erreur de l'absence de return dans une fonction renvoyant autre chose que void
     protected void codeGenInst(DecacCompiler compiler) {
         // load the result in R0, then branch to method end
-        expression.codeGenExpr(compiler, Register.R0);
+        GPRegister register = compiler.allocateRegister();
+        expression.codeGenExpr(compiler, register);
+        compiler.addInstruction(new LOAD(register, Register.R0));
+        compiler.freeRegister(register);
         compiler.addInstruction(new BRA(new Label("end." + methodClassName)));
 
     }

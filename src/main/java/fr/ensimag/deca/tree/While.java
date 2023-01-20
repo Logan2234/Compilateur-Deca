@@ -6,6 +6,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
@@ -57,8 +58,10 @@ public class While extends AbstractInst {
         // then add 0 to R1 to trigger flags : if EQ, then the expression was false :
         // branch to end block
         compiler.addLabel(blockLabel);
-        condition.codeGenExpr(compiler, Register.R1);
-        compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.R1));
+        GPRegister condRegister = compiler.allocateRegister();
+        condition.codeGenExpr(compiler, condRegister);
+        compiler.addInstruction(new CMP(new ImmediateInteger(0), condRegister));
+        compiler.freeRegister(condRegister);
         // branch to else flag if EQ, then if block
         compiler.addInstruction(new BEQ(endLabel));
         // main block

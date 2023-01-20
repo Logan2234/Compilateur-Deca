@@ -6,6 +6,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
@@ -62,8 +63,10 @@ public class IfThenElse extends AbstractInst {
         Label endLabel = new Label(label + ".end");
         // the if expression returns a bool. write it down in R1,
         // then compare 1 to R1 to trigger flags : if EQ, then the expression was false : branch to else block
-        condition.codeGenExpr(compiler, Register.R1);
-        compiler.addInstruction(new CMP(new ImmediateInteger(1), Register.R1));
+        GPRegister register = compiler.allocateRegister();
+        condition.codeGenExpr(compiler, register);
+        compiler.addInstruction(new CMP(new ImmediateInteger(1), register));
+        compiler.freeRegister(register);
         // branch to else flag if EQ, then if block
         compiler.addInstruction(new BLT(elseLabel)); // use bge as an bool is true if 1 or greater (should not be greater, but no so sure of me)
         thenBranch.codeGenListInst(compiler);
