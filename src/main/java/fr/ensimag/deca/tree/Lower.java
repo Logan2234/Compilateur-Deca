@@ -30,12 +30,9 @@ public class Lower extends AbstractOpIneq {
         compiler.addInstruction(new SLT(register));
     }
 
-    @Override
-<<<<<<< HEAD
     public boolean factorised() {
         return false;//TODO
     }
-=======
     public boolean collapse() {
         return getRightOperand().collapse() || getLeftOperand().collapse();
     }
@@ -79,5 +76,4 @@ public class Lower extends AbstractOpIneq {
         return null;
     }
 
->>>>>>> feature/optim
 }

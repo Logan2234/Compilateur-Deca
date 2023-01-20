@@ -30,7 +30,6 @@ public class Greater extends AbstractOpIneq {
         compiler.addInstruction(new SGT(register));
     }
 
-    @Override
     public boolean factorised() {
         return false;//TODO
     }

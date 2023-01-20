@@ -105,7 +105,7 @@ public class While extends AbstractInst {
         this.body.spotUsedVar(prog);
     }
     
-    @Override
+
     public boolean factorised() {
         return false;//TODO
     }
@@ -117,6 +117,29 @@ public class While extends AbstractInst {
 
     @Override
     public ListInst collapseInst() {
+        Boolean collapsedCond = condition.collapseBool();
+        if(collapsedCond != null) {
+            // if it's true, get out of block the body
+            if(collapsedCond) {
+                ListInst result = new ListInst();
+                for(AbstractInst i : body.getList()) {
+                    // ! dangerous ...
+                    // result.add(i);
+                }
+                result.add(this);
+                return result;
+            }
+            // if not, skip while
+            else {
+                return new ListInst();
+            }
+        }
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
+    }
+
+    public ListInst factoInst() {
         Boolean collapsedCond = condition.collapseBool();
         if(collapsedCond != null) {
             // if it's true, get out of block the body

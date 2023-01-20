@@ -107,7 +107,6 @@ public class Selection extends AbstractLValue {
         this.obj.addMethodCalls(foundMethodCalls);
     }
 
-    @Override
     public boolean factorised() {
         return false;//TODO
     }

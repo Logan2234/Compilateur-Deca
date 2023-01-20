@@ -309,6 +309,8 @@ public abstract class Tree {
      */
     public abstract boolean collapse();
 
+    public abstract boolean factorised();
+
     /**
      * Collapse the boolean values known at compile time.
      * if the expression cannot collapse, null is returned.
@@ -340,5 +342,10 @@ public abstract class Tree {
         // tells if we are at a terminal node or not. only true for litterals.
         return true;
     }
+
+    protected Boolean isLiteral() {
+        return false;
+    }
+
     
 }

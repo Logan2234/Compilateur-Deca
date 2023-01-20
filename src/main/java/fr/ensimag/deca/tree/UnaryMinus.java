@@ -43,12 +43,9 @@ public class UnaryMinus extends AbstractUnaryExpr {
         compiler.addInstruction(new OPP(resulRegister, resulRegister));
     }
 
-    @Override
-<<<<<<< HEAD
     public boolean factorised() {
         return false;//TODO
     }
-=======
     public boolean collapse() {
         return getOperand().collapse();
     }
@@ -79,5 +76,4 @@ public class UnaryMinus extends AbstractUnaryExpr {
         return null;
     }
 
->>>>>>> feature/optim
 }

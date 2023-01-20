@@ -244,4 +244,11 @@ public abstract class AbstractExpr extends AbstractInst {
         // expressions that can collapse will override this.
     }
 
+    @Override
+    public ListInst factoInst() {
+        // by default, return empty list of instructions. 
+        return new ListInst();
+        
+    }
+
 }

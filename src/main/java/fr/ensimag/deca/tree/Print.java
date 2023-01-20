@@ -18,7 +18,6 @@ public class Print extends AbstractPrint {
         return "";
     }
 
-    @Override
     public boolean factorised() {
         return false;//TODO
     }
@@ -28,6 +27,12 @@ public class Print extends AbstractPrint {
 
     @Override
     public ListInst collapseInst() {
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
+    }
+    @Override
+    public ListInst factoInst() {
         ListInst result = new ListInst();
         result.add(this);
         return result;

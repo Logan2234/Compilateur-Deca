@@ -66,4 +66,7 @@ public class NoInitialization extends AbstractInitialization {
         return false;
     }
 
+    public boolean factorised() {
+        return false;
+    }
 }

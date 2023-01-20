@@ -64,7 +64,6 @@ public class Return extends AbstractInst {
         this.e.spotUsedVar(prog);
     }
 
-    @Override
     public boolean factorised() {
         return false;//TODO
     }
@@ -74,6 +73,13 @@ public class Return extends AbstractInst {
 
     @Override
     public ListInst collapseInst() {
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
+    }
+
+    @Override
+    public ListInst factoInst() {
         ListInst result = new ListInst();
         result.add(this);
         return result;

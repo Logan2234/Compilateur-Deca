@@ -35,4 +35,8 @@ public class ListExpr extends TreeList<AbstractExpr> {
         }
         return collapsed;
     }
+
+    public boolean factorised() {
+        return false;
+    }
 }

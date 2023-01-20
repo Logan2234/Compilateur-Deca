@@ -24,6 +24,10 @@ public class StringLiteral extends AbstractStringLiteral {
     public String getValue() {
         return value;
     }
+    
+    protected Boolean isLiteral() {
+        return true;
+    }
 
     private String value;
 
@@ -70,7 +74,6 @@ public class StringLiteral extends AbstractStringLiteral {
     String prettyPrintNode() {
         return "StringLiteral (" + value + ")";
     }
-    @Override
     public boolean factorised() {
         return false;//TODO
     }

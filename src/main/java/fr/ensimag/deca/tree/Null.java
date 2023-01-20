@@ -65,7 +65,6 @@ public class Null extends AbstractExpr {
         // do nothing
     }
 
-    @Override
     public boolean factorised() {
         return false;//TODO
     }

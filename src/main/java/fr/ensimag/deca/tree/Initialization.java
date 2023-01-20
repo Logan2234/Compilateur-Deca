@@ -130,5 +130,9 @@ public class Initialization extends AbstractInitialization {
         }
         return collapsing;
     }
+
+    public boolean factorised() {
+        return false;
+    }
     
 }

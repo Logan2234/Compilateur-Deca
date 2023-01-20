@@ -35,7 +35,6 @@ public class Multiply extends AbstractOpArith {
         }
     }
 
-    @Override
     public boolean factorised() {
         if (leftOperand.isLiteral() ^ rightOperand.isLiteral()) {
             if (leftOperand.isLiteral() && leftOperand.getType().isInt())
@@ -52,6 +51,30 @@ public class Multiply extends AbstractOpArith {
         }
         return false;
     }
+
+    public ListInst factoInst() {
+        if (leftOperand.isLiteral() ^ rightOperand.isLiteral()) {
+            if (rightOperand.isLiteral() && rightOperand.getType().isInt())
+                if (((IntLiteral) leftOperand).getValue() < 4){
+                    ListInst list = new ListInst();
+                    list.add(new Plus(leftOperand,leftOperand));
+                    AbstractExpr left = new Identifier(new Plus(leftOperand,leftOperand));
+                    for (int i = 0; i <((IntLiteral) rightOperand).getValue(); i++){ 
+                        list.add(new Plus(leftOperand,leftOperand));
+                    }
+                    return true;
+                }
+            if (rightOperand.isLiteral() && leftOperand.getType().isFloat())
+                return false; // On ne developpe pas les floats en somme car il faudra dans tous les cas faire des additions donc pas optim
+            if (rightOperand.getType().isInt())
+                if (((IntLiteral) rightOperand).getValue() < 4)
+                        //Developper en somme
+                        return true;
+            return false;
+        }
+        return false;
+    }
+
     public boolean collapse() {
         return getLeftOperand().collapse() || getRightOperand().collapse();
     }

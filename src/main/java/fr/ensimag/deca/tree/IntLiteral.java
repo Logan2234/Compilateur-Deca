@@ -98,11 +98,13 @@ public class IntLiteral extends AbstractExpr {
         // do nothing
     }
 
-    @Override
     public boolean factorised() {
         return false;//TODO
     }
     public Integer collapseInt() {
+        return value;
+    }
+    public Integer factoInt() {
         return value;
     }
 
@@ -110,4 +112,9 @@ public class IntLiteral extends AbstractExpr {
     public boolean collapsable() {
         return false;
     }
+
+    protected Boolean isLiteral() {
+        return true;
+    }
+
 }

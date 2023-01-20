@@ -46,7 +46,6 @@ public class NoOperation extends AbstractInst {
         // do nothing
     }
 
-    @Override
     public boolean factorised() {
         return false;//TODO
     }
@@ -57,6 +56,11 @@ public class NoOperation extends AbstractInst {
 
     @Override
     public ListInst collapseInst() {
+        return new ListInst();
+    }
+    
+    @Override
+    public ListInst factoInst() {
         return new ListInst();
     }
 

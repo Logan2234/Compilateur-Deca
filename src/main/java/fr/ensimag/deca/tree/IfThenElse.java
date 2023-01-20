@@ -111,12 +111,30 @@ public class IfThenElse extends AbstractInst {
         this.elseBranch.spotUsedVar(prog);
     }
 
-    @Override
     public boolean factorised() {
         return false;//TODO
     }
     public boolean collapse() {
         return condition.collapse() || thenBranch.collapse() || elseBranch.collapse();
+    }
+
+    @Override
+    public ListInst factoInst() {
+        /*// try to collapse the condition
+        Boolean collapsedCond = condition.collapseBool();
+        if(collapsedCond != null) {
+            // we can collapse whole if block !
+            if(collapsedCond) {
+                return thenBranch;
+            }
+            else {
+                return elseBranch;
+            }
+        }*/
+        // I mean, sadly return ourself :(
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
     }
 
     @Override

@@ -54,8 +54,6 @@ public class Or extends AbstractOpBool {
         return null;
     }
 
-
-    @Override
     public boolean factorised() {
         return false;//TODO
     }

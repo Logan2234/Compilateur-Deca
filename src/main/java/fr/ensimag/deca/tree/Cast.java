@@ -99,7 +99,6 @@ public class Cast extends AbstractExpr {
         this.e.addMethodCalls(foundMethodCalls);
     }
 
-    @Override
     public boolean factorised() {
         return false;
     }

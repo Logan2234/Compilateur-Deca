@@ -34,7 +34,6 @@ public class And extends AbstractOpBool {
         compiler.addInstruction(new SHR(register));
     }
 
-    @Override
     public boolean factorised() {
         return false;
     }

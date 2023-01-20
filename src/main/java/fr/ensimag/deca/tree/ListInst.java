@@ -63,12 +63,13 @@ public class ListInst extends TreeList<AbstractInst> {
         boolean facto = false;
         for (int i = 0; i < getList().size(); i++) {
             AbstractInst toFacto = getList().get(i);
+            int nbPlus = toFacto.leftOperand;
             if(toFacto.factorised()) {
                 facto = true;
                 // remove this inst, replace it with it's collapsed form
                 removeAt(i);
                 int offset = 0;
-                for(AbstractInst newInst : toFacto.factorised().getList()) {
+                for(AbstractInst newInst : toFacto.factoInst().getList()) {
                     insert(newInst, i + offset);
                     offset ++;
                 }
@@ -97,4 +98,6 @@ public class ListInst extends TreeList<AbstractInst> {
         }
         return collapse;
     }
+
+    
 }

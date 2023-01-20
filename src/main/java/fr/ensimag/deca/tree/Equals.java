@@ -92,8 +92,6 @@ public class Equals extends AbstractOpExactCmp {
     }
 
 
-    
-    @Override
     public boolean factorised() {
         return false;//TODO
     }
