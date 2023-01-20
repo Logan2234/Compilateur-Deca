@@ -8,9 +8,9 @@
 //    cree le 20/01/2023
 //
 class A {
-    int a;
+    int x;
     void notUsed(){}
-    void used(){int a=0;}
+    void used(){int x=0;}
     B createB(){return new B();}
 }
 

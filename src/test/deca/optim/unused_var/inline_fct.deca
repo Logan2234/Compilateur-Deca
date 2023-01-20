@@ -8,7 +8,7 @@
 //    cree le 20/01/2023
 //
 class A {
-    int cos(x){return x;}
+    int cos(int x){return x;}
 }
 
 {
