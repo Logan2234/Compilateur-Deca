@@ -24,6 +24,4 @@ public class StringType extends Type {
     public boolean sameType(Type otherType) {
         return otherType.isString();
     }
-
-
 }

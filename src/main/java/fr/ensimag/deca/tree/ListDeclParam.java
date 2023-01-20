@@ -18,7 +18,7 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
     @Override
     public void decompile(IndentPrintStream s) {
         for (AbstractDeclParam i : getList()) {
-            if (!(getList().get(0).equals(i))) // ? Not sure if we have param1,param2,param3 ... at the end
+            if (!(getList().get(0).equals(i)))
                 s.print(", ");
 
             i.decompile(s);
@@ -43,18 +43,15 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
      */
     Signature verifyListDeclParam(DecacCompiler compiler) throws ContextualError {
         Signature signature = new Signature();
-        for (AbstractDeclParam i : getList()) {
+        for (AbstractDeclParam i : getList())
             signature.add(i.verifyDeclParam(compiler));
-        }
         return signature;
     }
 
     void verifyListParam(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        for (AbstractDeclParam i : getList()) {
+        for (AbstractDeclParam i : getList())
             i.verifyParam(compiler, localEnv, currentClass);
-        }
-
     }
     @Override
     public boolean collapse() {

@@ -71,6 +71,16 @@ public class MethodDefinition extends ExpDefinition {
         return false;
     }
 
+    private String methodName;
+
+    public void setName(String name) {
+        this.methodName = name;
+    }
+
+    public String getName() {
+        return this.methodName;
+    }
+
     @Override
     public void spotRelatedDefs(AbstractProgram prog) {
         assert(prog instanceof Program);
@@ -86,7 +96,7 @@ public class MethodDefinition extends ExpDefinition {
                 // (match the tree location of DeclMethod with the definition location of the current MethodDefinition)
                 // Each method as a different location
                 LOG.debug("Looking for the method");
-                if (this.getLocation() == method.getLocation()) {
+                if (getLocation() == method.getLocation()) {
                     LOG.debug("Methods matched");
                     // explore the body of the method to spot other useful variables
                     ((DeclMethod)(method)).spotUsedVar(prog);
@@ -104,6 +114,5 @@ public class MethodDefinition extends ExpDefinition {
                 // }
             }
         }
-
     }
 }

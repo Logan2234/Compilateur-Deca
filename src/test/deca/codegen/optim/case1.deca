@@ -1,0 +1,13 @@
+{
+    int a = 2 + 3;
+    int b = 3 * 4 + 2 * 3;
+    float c = 0.2 + 1;
+    float d = 3.4 / 2;
+    boolean e = true || false;
+    boolean f = !(false && true);
+    boolean g = false == (3 != 2);
+
+    while(false) {
+        println("Hello world");
+    }
+}

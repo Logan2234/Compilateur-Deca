@@ -24,6 +24,4 @@ public class FloatType extends Type {
     public boolean sameType(Type otherType) {
         return otherType.isFloat();
     }
-
-
 }

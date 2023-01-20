@@ -8,11 +8,11 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class DivByZeroErr extends AbstractRuntimeErr {
     public int errorId() {
-        return 3;
+        return 1;
     }
 
     public void codeGenErr(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR("Error : division by zero."));
+        compiler.addInstruction(new WSTR("Error : Division by zero."));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }

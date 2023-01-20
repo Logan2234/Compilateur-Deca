@@ -38,21 +38,20 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-
         Type type = this.type.verifyType(compiler);
 
         if (type.isVoid())
-            throw new ContextualError("A variable can't be void (rule 3.17)", this.getLocation());
+            throw new ContextualError("A variable can't be void (rule 3.17)", getLocation());
 
         try {
-            ExpDefinition def = new VariableDefinition(type, this.getLocation());
+            ExpDefinition def = new VariableDefinition(type, getLocation());
             initialization.verifyInitialization(compiler, type, localEnv, currentClass);
-            localEnv.declare(this.varName.getName(), def);
+            localEnv.declare(varName.getName(), def);
             varName.verifyExpr(compiler, localEnv, currentClass);
         } catch (DoubleDefException e) {
             throw new ContextualError(
-                "The variable \"" + this.varName.getName().getName() + "\" has already been declared (rule 3.17)",
-                this.getLocation());
+                    "The variable \"" + varName.getName().getName() + "\" has already been declared (rule 3.17)",
+                    getLocation());
         }
 
     }
@@ -64,7 +63,7 @@ public class DeclVar extends AbstractDeclVar {
         varName.getDefinition().setDAddr(register);
         // store the variable at the address now, using a push as we are declaring all
         // variables.
-        initialization.codeGenInit(compiler);
+        initialization.codeGenInit(compiler, type.getType(), register);
     }
 
     @Override
@@ -92,7 +91,8 @@ public class DeclVar extends AbstractDeclVar {
 
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
-        // We don't spotUsedVar() on the type (it may be a class) or the identifier as they are just declared.
+        // We don't spotUsedVar() on the type (it may be a class) or the identifier as
+        // they are just declared.
         this.initialization.spotUsedVar(prog);
     }
 

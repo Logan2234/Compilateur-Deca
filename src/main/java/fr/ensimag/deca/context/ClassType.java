@@ -52,25 +52,24 @@ public class ClassType extends Type {
 
     @Override
     public boolean sameType(Type otherType) {
-        return (otherType.isClass() && otherType.getName().getName() == this.getName().getName());
+        return (otherType.isClass() && otherType.getName().getName() == getName().getName());
     }
 
     /**
-     * Return true if potentialSuperClass is a superclass of this class.
+     * @param potentialSuperClass
+     * 
+     * @return true if potentialSuperClass is a superclass of this class.
      */
     public boolean isSubClassOf(ClassType potentialSuperClass) {
-        if (this.sameType(potentialSuperClass))
+        if (sameType(potentialSuperClass))
             return true;
 
-        ClassDefinition superclass = this.definition.getSuperClass();
+        ClassDefinition superclass = definition.getSuperClass();
         while (superclass != null) {
-            ClassType superClassType = superclass.getType();
-            if (superClassType.sameType(potentialSuperClass))
+            if (superclass.getType().sameType(potentialSuperClass))
                 return true;
             superclass = superclass.getSuperClass();
         }
-
         return false;
     }
-
 }

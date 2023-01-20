@@ -2,11 +2,9 @@
 //    déclare une nouvelle classe qui hérite de Object explicitement
 //
 // Resultats:
-//    //
+//
 //
 // Historique:
 //    cree le 13/01/2023
 
-class A extends Object {
-
-}
+class A extends Object {}

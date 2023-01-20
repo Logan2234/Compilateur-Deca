@@ -5,11 +5,9 @@ import org.apache.log4j.lf5.LogLevelFormatException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
-import fr.ensimag.ima.pseudocode.instructions.SEQ;
 import fr.ensimag.ima.pseudocode.instructions.SHR;
-import fr.ensimag.ima.pseudocode.instructions.SUB;
+import fr.ensimag.ima.pseudocode.instructions.SNE;
 
 /**
  *
@@ -31,7 +29,8 @@ public class And extends AbstractOpBool {
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
         // sum both bool as int and shift the result, should be 1
         compiler.addInstruction(new ADD(dval, register));
-        compiler.addInstruction(new SHR(register));
+        compiler.addInstruction(new SHR(register)); // raise flags for CMP #0, val
+        compiler.addInstruction(new SNE(register)); // so true if neq (false if eq)
     }
 
     public boolean factorised() {

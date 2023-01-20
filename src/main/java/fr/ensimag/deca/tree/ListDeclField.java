@@ -38,9 +38,8 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
      */
     void verifyListDeclField(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        for (AbstractDeclField i : getList()) {
+        for (AbstractDeclField i : getList())
             i.verifyDeclField(compiler, localEnv, currentClass);
-        }
     }
 
     /**
@@ -57,11 +56,10 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
      * @param currentClass
      *                     corresponds to "class" attribute (null in the main bloc).
      */
-    void verifyListInitField(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        for (AbstractDeclField i : getList()) {
+    void verifyListInitField(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        for (AbstractDeclField i : getList())
             i.verifyInitField(compiler, localEnv, currentClass);
-        }
     }
 
     public boolean factorised(){

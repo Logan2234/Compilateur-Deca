@@ -21,82 +21,83 @@ import org.apache.commons.lang.Validate;
  */
 public class Cast extends AbstractExpr {
 
-    private final AbstractIdentifier type;
-    private final AbstractExpr e;
+    private AbstractIdentifier type;
+    private AbstractExpr expression;
 
-    public Cast(AbstractIdentifier type, AbstractExpr e) {
+    public Cast(AbstractIdentifier type, AbstractExpr expression) {
         Validate.notNull(type);
-        Validate.notNull(e);
+        Validate.notNull(expression);
         this.type = type;
-        this.e = e;
+        this.expression = expression;
     }
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Location loc = this.getLocation();
-        Type typeExp = this.e.verifyExpr(compiler, localEnv, currentClass);
+        Type typeExp = this.expression.verifyExpr(compiler, localEnv, currentClass);
         Type typeT = this.type.verifyType(compiler);
 
-        if (typeExp.isVoid()
-                || (!typeExp.assignCompatible(localEnv, typeT) && !typeT.assignCompatible(localEnv, typeExp))) {
+        if (typeExp.isVoid() || (!typeExp.assignCompatible(typeT) && !typeT.assignCompatible(typeExp)))
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
-                    + typeT.getName().getName() + "\"", loc);
+                    + typeT.getName().getName() + "\"", getLocation());
+        
+        if (typeT.isInt() && typeExp.isFloat()){
+            ConvInt convint = new ConvInt(expression);
+            convint.setLocation(expression.getLocation());
+            convint.verifyExpr(compiler, localEnv, currentClass);
+            expression = convint;
         }
-
+        
+        if (typeT.isFloat() && typeExp.isInt()){
+            ConvFloat convfloat = new ConvFloat(expression);
+            convfloat.setLocation(expression.getLocation());
+            convfloat.verifyExpr(compiler, localEnv, currentClass);
+            expression = convfloat;
+        }
+            
         // Ajout du décor
-        this.setType(typeT);
+        setType(typeT);
         return typeT;
     }
-
-    /**
-     * Check if the two types are compatible for the cast
-     * 
-     * @param localEnv the local environment
-     * @param typeExp  the type of the expression to cast
-     * @param typeT    the type of the expected cast
-     * @return true if the two types are compatible, false if not
-     * 
-     * @author Nils Depuille
-     * @date 12/01/2023
-     */
 
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("(");
         type.decompile(s);
         s.print(")(");
-        e.decompile(s);
+        expression.decompile(s);
         s.print(")");
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
         type.iter(f);
-        e.iter(f);
+        expression.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);
-        e.prettyPrint(s, prefix, true);
+        expression.prettyPrint(s, prefix, true);
     }
 
-    @Override
+    @Override // TODO Virgile: see 11.1 tiret 4
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // the conetxt told it was valid, only need to compute expression
+        expression.codeGenExpr(compiler, resultRegister);
     }
 
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
         this.type.spotUsedVar(prog);
-        this.e.spotUsedVar(prog);
+        this.expression.spotUsedVar(prog);
     }
 
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
-        this.e.addMethodCalls(foundMethodCalls);
+        this.expression.addMethodCalls(foundMethodCalls);
     }
 
     public boolean factorised() {

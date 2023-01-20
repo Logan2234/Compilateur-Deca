@@ -3,12 +3,11 @@
 //
 // Resultats:
 //    Erreur contextuelle   
-//    Ligne 14: The field "x" has already been declared (rule 2.4)
+//    Ligne 12: The field "x" has already been declared (rule 2.4)
 //
 // Historique:
 //    cree le 16/01/2023
 
 class A {
-    int x;
-    int x;
+    int x, x;
 }

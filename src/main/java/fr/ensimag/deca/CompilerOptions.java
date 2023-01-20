@@ -95,6 +95,7 @@ public class CompilerOptions {
         // Note : -p and -v are incompatible.
 
         int arg_index = 0;
+
         // start by parsing options :
         while (arg_index < args.length) {
             String current_arg = args[arg_index];

@@ -28,15 +28,13 @@ public class ListInst extends TreeList<AbstractInst> {
      */
     public void verifyListInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type returnType) throws ContextualError {
-        for (AbstractInst i : getList()) {
+        for (AbstractInst i : getList())
             i.verifyInst(compiler, localEnv, currentClass, returnType);
-        }
     }
 
     public void codeGenListInst(DecacCompiler compiler) {
-        for (AbstractInst i : getList()) {
+        for (AbstractInst i : getList())
             i.codeGenInst(compiler);
-        }
     }
 
     @Override
@@ -50,7 +48,8 @@ public class ListInst extends TreeList<AbstractInst> {
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
         for (AbstractInst inst : this.getList()) {
-            // TODO avoid from a higher level in the class hierarchy for more spotUsedVar avoidance
+            // TODO avoid from a higher level in the class hierarchy for more spotUsedVar
+            // avoidance
             // TODO It requires to know if there is methodcall in the abstractexpr
             if (!(inst instanceof Identifier)) {
                 inst.spotUsedVar(prog);
