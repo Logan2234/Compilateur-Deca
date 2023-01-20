@@ -62,12 +62,14 @@ public class This extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // put pointer in the result register
-        if (resultRegister == null) {
-            compiler.addInstruction(new LOAD(currentClass.getDAddr(), Register.R1));
-            compiler.addInstruction(new PUSH(Register.R1));
-        } else {
-            compiler.addInstruction(new LOAD(currentClass.getDAddr(), resultRegister));
-        }
+        try {
+            if (resultRegister == null) {
+                compiler.addInstruction(new LOAD(getType().asClassType(null, getLocation()).getDefinition().getDAddr(), Register.R1));
+                compiler.addInstruction(new PUSH(Register.R1));
+            } else {
+                compiler.addInstruction(new LOAD(getType().asClassType(null, getLocation()).getDefinition().getDAddr(), resultRegister));
+            }
+        } catch (ContextualError e){}
     }
 
     @Override
