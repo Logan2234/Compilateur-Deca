@@ -1,0 +1,13 @@
+class A {
+    int x = 3;
+
+    void m1() {
+        print(this.x);
+    }
+}
+
+{
+    A a = new A();
+
+    a.m1();
+}
