@@ -12,7 +12,6 @@
 // Historique:
 //    cree le 18/01/2023
 
-/*
 class A {
     protected int a;
     float b = 0.0;
@@ -59,4 +58,4 @@ class B extends A {
     else {
         println("ko");
     }
-}*/
+}
