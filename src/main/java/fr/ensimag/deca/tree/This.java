@@ -2,12 +2,18 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
+import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
@@ -70,11 +76,20 @@ public class This extends AbstractExpr {
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // put pointer in the result register
         if(resultRegister == null) {
-            compiler.addInstruction(new LOAD(currentClass.getDAddr(), Register.R1));
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+            AbstractRuntimeErr error = new NullReferenceErr();
+            compiler.useRuntimeError(error);
+            compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
+            compiler.addInstruction(new BEQ(error.getErrorLabel()));
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
         }
         else {
-            compiler.addInstruction(new LOAD(currentClass.getDAddr(), resultRegister));
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), resultRegister));
+            AbstractRuntimeErr error = new NullReferenceErr();
+            compiler.useRuntimeError(error);
+            compiler.addInstruction(new CMP(new NullOperand(), resultRegister));
+            compiler.addInstruction(new BEQ(error.getErrorLabel()));
         }
     }
 

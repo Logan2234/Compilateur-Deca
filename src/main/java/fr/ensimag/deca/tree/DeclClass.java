@@ -126,6 +126,14 @@ public class DeclClass extends AbstractDeclClass {
         // throw new UnsupportedOperationException("Not yet supported");
     }
 
+    @Override 
+    public void initClassCodeGen(DecacCompiler compiler) {
+        // give each field it's offset before we generate any code
+        for(int i = 0; i < fields.size(); i++) {
+            fields.getList().get(i).setFieldOffset(compiler, i + 1);
+        }
+    }
+
     @Override
     public void codeGenVTable(DecacCompiler compiler) {
         // generate the vtable for that class.

@@ -16,10 +16,11 @@ import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.SEQ;
 import fr.ensimag.ima.pseudocode.instructions.SNE;
+
+import static org.mockito.ArgumentMatchers.nullable;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -34,13 +35,13 @@ import org.apache.commons.lang.Validate;
  */
 public class InstanceOf extends AbstractExpr {
 
-    private final AbstractExpr e;
+    private final AbstractExpr expression;
     private final AbstractIdentifier type;
 
-    public InstanceOf(AbstractExpr e, AbstractIdentifier type) {
-        Validate.notNull(e);
+    public InstanceOf(AbstractExpr expression, AbstractIdentifier type) {
+        Validate.notNull(expression);
         Validate.notNull(type);
-        this.e = e;
+        this.expression = expression;
         this.type = type;
     }
 
@@ -48,7 +49,7 @@ public class InstanceOf extends AbstractExpr {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Location loc = this.getLocation();
-        Type typeE = this.e.verifyExpr(compiler, localEnv, currentClass);
+        Type typeE = this.expression.verifyExpr(compiler, localEnv, currentClass);
         Type typeT = this.type.verifyType(compiler);
         if (!typeE.isClassOrNull() || !typeT.isClass()) {
             throw new ContextualError("instanceof argument has to be a class (rule 3.40)", loc);
@@ -62,7 +63,7 @@ public class InstanceOf extends AbstractExpr {
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("(");
-        e.decompile(s);
+        expression.decompile(s);
         s.print(" instanceof ");
         type.decompile(s);
         s.print(")");
@@ -70,27 +71,22 @@ public class InstanceOf extends AbstractExpr {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        e.iter(f);
+        expression.iter(f);
         type.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        e.prettyPrint(s, prefix, false);
+        expression.prettyPrint(s, prefix, false);
         type.prettyPrint(s, prefix, true);
     }
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // compute the result of the expression (pointer to object) in a register.
-        e.codeGenExpr(compiler, Register.R1);
+        expression.codeGenExpr(compiler, Register.R1);
         // get a register to put the comparing value in 
-        GPRegister register = compiler.allocateRegister();
-        boolean needRegisterSpace = register == null;
-        if(needRegisterSpace) {
-            compiler.addInstruction(new PUSH(Register.getR(3)));
-            register = Register.getR(2);
-        }
+        GPRegister register = resultRegister == null ? compiler.allocateRegister() : resultRegister;
         // put the comparing value in it
         compiler.addInstruction(new LEA(type.getDefinition().getDAddr(), register));
         // load the pointer to the class of the object in that same register
@@ -107,15 +103,12 @@ public class InstanceOf extends AbstractExpr {
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.R1), Register.R1));
         compiler.addInstruction(new BRA(new Label("instanceof.loop." + getLocation().toLabel())));
         compiler.addLabel(new Label("instanceof.end." + getLocation().toLabel()));
-        if(needRegisterSpace) {
-            // restore r2
-            compiler.addInstruction(new POP(Register.getR(2)));
-        }
-        else {
-            compiler.freeRegister(register);
-        }
+
         if(resultRegister == null) {
+            // free the registered allocated
+            compiler.freeRegister(register);
             // push result on the stack
+            compiler.increaseContextUsedStack(1);
             compiler.addInstruction(new PUSH(Register.R0));
         }
         else {
@@ -126,7 +119,7 @@ public class InstanceOf extends AbstractExpr {
 
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
-        this.e.spotUsedVar(prog);
+        this.expression.spotUsedVar(prog);
         // We don't spotUsedVar on the class type.
         // If the class is not used elsewhere then the expression will be evaluated to false.
     }
@@ -134,6 +127,6 @@ public class InstanceOf extends AbstractExpr {
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
-        this.e.addMethodCalls(foundMethodCalls);
+        this.expression.addMethodCalls(foundMethodCalls);
     }
 }

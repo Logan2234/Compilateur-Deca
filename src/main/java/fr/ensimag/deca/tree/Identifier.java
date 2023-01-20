@@ -18,7 +18,6 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
@@ -280,30 +279,19 @@ public class Identifier extends AbstractIdentifier {
         // if it is a field, we need to first load the value on from the heap !
         if(getDefinition().isField()) {
             GPRegister classPointerRegister = compiler.allocateRegister();
-            boolean needRegisterSpace = classPointerRegister == null;
-            if(needRegisterSpace) {
-                compiler.addInstruction(new PUSH(Register.getR(2)));
-                classPointerRegister = Register.getR(2);
-            }
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
             compiler.addInstruction(new LOAD(new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister), classPointerRegister));
             if (resultRegister == null) {
                 // put self value on the stack
                 // load self on R1, then push R1
                 compiler.addInstruction(new LOAD(classPointerRegister, Register.R1));
-                if(needRegisterSpace) {
-                    // restore R2
-                    compiler.addInstruction(new POP(Register.getR(2)));
-                }
+                compiler.freeRegister(classPointerRegister);
                 compiler.incrementContextUsedStack();
                 compiler.addInstruction(new PUSH(Register.R1));
             } else {
                 // put self value in the result register
                 compiler.addInstruction(new LOAD(classPointerRegister, resultRegister));
-                if(needRegisterSpace) {
-                    // restore R2
-                    compiler.addInstruction(new POP(Register.getR(2)));
-                }
+                compiler.freeRegister(classPointerRegister);
             }
         }
         else {

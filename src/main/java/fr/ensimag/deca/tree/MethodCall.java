@@ -113,21 +113,21 @@ public class MethodCall extends AbstractExpr {
         }
         // push the object on the stack
         obj.codeGenExpr(compiler, null);
-        // null reference exception
+        // call the bsr with the correct method adress
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
+        // null reference exception
         compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
         AbstractRuntimeErr error = new NullReferenceErr();
         compiler.useRuntimeError(error);
         compiler.addInstruction(new BEQ(error.getErrorLabel()));
-        // call the bsr with the correct method adress
-        // load the adress of the object on the stack : it is a pointer to the method table.
-        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
-        // then get the method with it's correct offset.
+        // go to the method table !
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.R1), Register.R1));
+        // then get the method with it's correct offset.
         // the offset is the index !
         compiler.addInstruction(new BSR(new RegisterOffset(meth.getMethodDefinition().getIndex(), Register.R1)));
         // if the method returned something, it is now in R0 ! put it as a result
         if(resultRegister == null) {
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R0));
         }
         else {

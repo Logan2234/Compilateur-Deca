@@ -29,6 +29,11 @@ public abstract class AbstractDeclClass extends Tree {
      */
     protected abstract void verifyClassBody(DecacCompiler compiler) throws ContextualError;
 
+    /**
+     * Set up the class so the code generation is on valid objects.
+     * @param compiler where we write the code to.
+     */
+    public abstract void initClassCodeGen(DecacCompiler compiler);
 
     /**
      * Generate the vTable for the given class.

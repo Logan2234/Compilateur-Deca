@@ -74,21 +74,11 @@ public class Selection extends AbstractLValue {
         if(resultRegister == null) {
             // we need a register
             GPRegister register = compiler.allocateRegister();
-            boolean needRegisterSpace = register == null;
-            if(needRegisterSpace) {
-                // push r2
-                compiler.addInstruction(new PUSH(Register.getR(2)));
-                register = Register.getR(2);
-            }
             obj.codeGenExpr(compiler, register);
-            if(needRegisterSpace) {
-                compiler.addInstruction(new LOAD(register, Register.R1));
-                compiler.addInstruction(new POP(Register.getR(2)));
-                compiler.addInstruction(new PUSH(Register.R1));
-            }
-            else {
-                compiler.addInstruction(new PUSH(register));
-            }
+            // save in R1 because freeing the rsgister may pop the stack
+            compiler.addInstruction(new LOAD(new RegisterOffset(field.getDefinition().getDAddrOffsetOnly(), register), Register.R1));
+            compiler.freeRegister(register);
+            compiler.addInstruction(new PUSH(Register.R1));
         }
         else {
             // put the object in the result register

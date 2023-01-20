@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.ReturnCheckFunc;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
@@ -143,7 +144,7 @@ public class DeclMethod extends AbstractDeclMethod {
     @Override
     public void codeGenMethod(DecacCompiler compiler, String className) {
         // set the labels for the returns
-        body.setReturnsNames(className + "." + methodName.getName().getName());
+        body.iter(new ReturnCheckFunc(className + "." + methodName.getName().getName()));
         // set the daddr of the params
         for(int i = 0; i < params.size(); i++) {
             params.getList().get(i).SetDAddr(new RegisterOffset(-(3 + i), Register.LB));
@@ -165,7 +166,8 @@ public class DeclMethod extends AbstractDeclMethod {
         compiler.endCodeContext();
         // add return
         compiler.addInstruction(new RTS());
-    } 
+    }
+    
     public void spotUsedVar(AbstractProgram prog) {
         this.type.spotUsedVar(prog);
         this.body.spotUsedVar(prog);

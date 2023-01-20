@@ -75,37 +75,34 @@ public class New extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         try {
-            boolean needRegisterSpace = resultRegister == null;
-            if(needRegisterSpace) {
-                // save R2
-                compiler.addInstruction(new PUSH(Register.getR(2)));
-                resultRegister = Register.getR(2);
-            }
+            GPRegister register = resultRegister == null ? compiler.allocateRegister() : resultRegister;
             // create an object on the heap, initialize it, return it in the result register
             // get the class we want to create
-            ClassType type = classe.getType().asClassType("null", getLocation());
+            ClassType type = classe.getType().asClassType("Unable to get as class type while generating code for 'new' statement", getLocation());
             compiler.addComment("New at line " + getLocation().getLine());
-            compiler.addInstruction(new NEW(new ImmediateInteger(type.getDefinition().getNumberOfFields() + 1), resultRegister));
+            compiler.addInstruction(new NEW(new ImmediateInteger(type.getDefinition().getNumberOfFields() + 1), register));
             // manage heap overflow error
             AbstractRuntimeErr error = new FullHeapErr();
             compiler.useRuntimeError(error);
             compiler.addInstruction(new BOV(error.getErrorLabel()));
             // set the pointer to the vtable
-            compiler.addInstruction(new LEA(classe.getClassDefinition().getDAddr(), Register.R0));
-            compiler.addInstruction(new STORE(Register.R0, new RegisterOffset(0, resultRegister)));
-            // we'll push the result before call anyway, so restore R2 now anyway
-            if(needRegisterSpace) {
-                compiler.addInstruction(new POP(Register.R0));
-            }
+            compiler.addInstruction(new LEA(classe.getClassDefinition().getDAddr(), Register.R1));
+            compiler.addInstruction(new STORE(Register.R1, new RegisterOffset(0, register)));
+            // call init ?
             compiler.addComment("call init");
-            // for calling init, the only param is the object : push it on the stack, than branch to init
-            compiler.addInstruction(new PUSH(resultRegister));
-            if(needRegisterSpace) {
-                // load R0 in R2 to finally restore it
-                compiler.addInstruction(new LOAD(Register.R0, Register.getR(2)));
+            if(resultRegister == null) {
+                compiler.addInstruction(new LOAD(register, Register.R1)); 
+                compiler.freeRegister(register);
+                compiler.incrementContextUsedStack();
+                compiler.addInstruction(new PUSH(Register.R1));
             }
+            else {
+                compiler.addInstruction(new PUSH(register));
+            }
+            // branch to init
             compiler.addInstruction(new BSR(new Label("init." + type.getName().getName())));
-            compiler.addInstruction(new POP(resultRegister));
+            // pop the result if we needed it in a register
+            compiler.addInstruction(new POP(resultRegister == null ? Register.R1 : resultRegister));
         }
         catch(ContextualError e) {
             throw new UnsupportedOperationException(e.toString());

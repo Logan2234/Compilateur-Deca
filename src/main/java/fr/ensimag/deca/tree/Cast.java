@@ -10,11 +10,10 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.io.PrintStream;
 import java.util.List;
-
-import javax.swing.plaf.synth.Region;
 
 import org.apache.commons.lang.Validate;
 
@@ -27,20 +26,20 @@ import org.apache.commons.lang.Validate;
 public class Cast extends AbstractExpr {
 
     private final AbstractIdentifier type;
-    private final AbstractExpr e;
+    private final AbstractExpr expression;
 
-    public Cast(AbstractIdentifier type, AbstractExpr e) {
+    public Cast(AbstractIdentifier type, AbstractExpr expression) {
         Validate.notNull(type);
-        Validate.notNull(e);
+        Validate.notNull(expression);
         this.type = type;
-        this.e = e;
+        this.expression = expression;
     }
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Location loc = this.getLocation();
-        Type typeExp = this.e.verifyExpr(compiler, localEnv, currentClass);
+        Type typeExp = this.expression.verifyExpr(compiler, localEnv, currentClass);
         Type typeT = this.type.verifyType(compiler);
 
         if (typeExp.isVoid()
@@ -71,42 +70,37 @@ public class Cast extends AbstractExpr {
         s.print("(");
         type.decompile(s);
         s.print(")(");
-        e.decompile(s);
+        expression.decompile(s);
         s.print(")");
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
         type.iter(f);
-        e.iter(f);
+        expression.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);
-        e.prettyPrint(s, prefix, true);
+        expression.prettyPrint(s, prefix, true);
     }
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        // at this point the context told the cast is valid.
-        // let's change the value of the vtable pointer to point to the given type.
-        e.codeGenExpr(compiler, Register.R1);
-        // R1 is now the object, get the pointer to the vtable
-        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.R1), Register.R1));
-        // load the new value in
-        compiler.addInstruction(new LOAD(type.getDefinition().getDAddr(), Register.R1));
+        // the conetxt told it was valid, only need to compute expression
+        expression.codeGenExpr(compiler, resultRegister);
     }
 
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
         this.type.spotUsedVar(prog);
-        this.e.spotUsedVar(prog);
+        this.expression.spotUsedVar(prog);
     }
 
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
-        this.e.addMethodCalls(foundMethodCalls);
+        this.expression.addMethodCalls(foundMethodCalls);
     }
 }

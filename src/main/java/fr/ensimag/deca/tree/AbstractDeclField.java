@@ -46,8 +46,10 @@ public abstract class AbstractDeclField extends Tree {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
 
-        /**
-         * Generates the code to initialize this field. This is similar to code gen init 
-         */
-        public abstract void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister);
+    /**
+     * Generates the code to initialize this field. This is similar to code gen init 
+     */
+    public abstract void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister);
+
+    public abstract void setFieldOffset(DecacCompiler compiler, int offset);
 }

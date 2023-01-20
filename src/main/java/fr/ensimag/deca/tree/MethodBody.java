@@ -75,6 +75,8 @@ public class MethodBody extends AbstractMethod {
 
     @Override
     public void setReturnsNames(String name) {
+        System.out.print("setting method name : ");
+        System.out.println(name);
         for(AbstractInst inst : insts.getList()) {
             if(inst.isReturn()) {
                 inst.asReturn().setMethodClassName(name);

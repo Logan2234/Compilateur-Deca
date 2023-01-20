@@ -297,4 +297,12 @@ public abstract class Tree {
      */
     protected abstract void spotUsedVar(AbstractProgram prog);
     
+
+    public boolean isReturn() {
+        return false;
+    }
+
+    public Return asReturn() {
+        return null;
+    }
 }

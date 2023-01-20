@@ -60,6 +60,8 @@ public class Program extends AbstractProgram {
 
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
+        // initialize code gen
+        classes.initClassCodeGen(compiler);
         // create the main context
         compiler.newGlobalCodeContext();
         // generate the vtables

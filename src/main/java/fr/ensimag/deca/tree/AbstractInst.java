@@ -44,12 +44,4 @@ public abstract class AbstractInst extends Tree {
     protected void decompileInst(IndentPrintStream s) {
         decompile(s);
     }
-
-    public boolean isReturn() {
-        return false;
-    }
-
-    public Return asReturn() {
-        return null;
-    }
 }

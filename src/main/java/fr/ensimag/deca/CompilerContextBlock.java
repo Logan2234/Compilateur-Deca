@@ -4,6 +4,8 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 /**
  * What we call a context block is a local environment of code generation.
@@ -13,10 +15,10 @@ public class CompilerContextBlock {
 
     public CompilerContextBlock(int maxRegNumber, boolean globalBase) {
         maxRegNumber = maxRegNumber - 2; // remove R0 and R1
-        availableRegisters = new boolean[maxRegNumber];
+        availableRegisters = new int[maxRegNumber];
         usedRegisters = new boolean[maxRegNumber];
         for(int i = 0; i < maxRegNumber; i++) {
-            availableRegisters[i] = true;
+            availableRegisters[i] = -1;
             usedRegisters[i] = false;
         }
         maxStackUseSize = 0;
@@ -31,11 +33,10 @@ public class CompilerContextBlock {
      */
     private boolean isGlobalBase;
     /**
-     * All the available registers.
-     * When generating code, we can ask what registers are used by previous calls.
-     * If null is returned, we can then save a register and restore it.
+     * All the available registers. -1 means the register is available, 
+     * 0 means it is taken, otherwise n > 0 means it have been pushed n times on the stack.
      */
-    private boolean[] availableRegisters;
+    private int[] availableRegisters;
     /**
      * All the registers that have been used for this context.
      * This allow to keep track of which registers to save / load on method calls. 
@@ -63,15 +64,31 @@ public class CompilerContextBlock {
      * 
      * @return the register we can use. Can be null if none are.
      */
-    public GPRegister allocateRegister() {
+    public GPRegister allocateRegister(DecacCompiler compiler) {
         for (int i = 0; i < availableRegisters.length; i++) {
-            if (availableRegisters[i]) {
-                availableRegisters[i] = false;
+            if (availableRegisters[i] < 0) {
+                // found a free register !
+                availableRegisters[i] += 1;
                 usedRegisters[i] = true;
                 return GPRegister.getR(i + 2);
             }
         }
-        return null;
+        // look for the least currently used register, save it and return it.
+        int minUsedReg = 0;
+        int minUsedValue = availableRegisters[minUsedReg];
+        for (int i = 1; i < availableRegisters.length; i++) {
+            if (availableRegisters[i] < minUsedValue) {
+                // set new min used reg
+                minUsedReg = i;
+                minUsedValue = availableRegisters[i];
+            }
+        }
+        // use the min used register !
+        GPRegister result = Register.getR(minUsedReg + 2);
+        availableRegisters[minUsedReg] += 1;
+        compiler.addInstruction(new PUSH(result));
+        increaseUsedStack(1);
+        return result;
     }
 
     /**
@@ -79,8 +96,17 @@ public class CompilerContextBlock {
      * 
      * @param register
      */
-    public void freeRegister(GPRegister register) {
-        availableRegisters[register.getNumber() - 2] = true;
+    public void freeRegister(DecacCompiler compiler, GPRegister register) {
+        if(availableRegisters[register.getNumber() - 2] > 0) {
+            // need to restore it !
+            compiler.addInstruction(new POP(register));
+            increaseUsedStack(-1);
+        }
+        // decrease it's free value
+        availableRegisters[register.getNumber() - 2] -= 1;
+        if(availableRegisters[register.getNumber() - 2] < -1) {
+            throw new UnsupportedOperationException("Register have been freed too many times !");
+        }
     }
 
     /**

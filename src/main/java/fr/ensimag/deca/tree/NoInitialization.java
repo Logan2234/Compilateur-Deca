@@ -70,7 +70,7 @@ public class NoInitialization extends AbstractInitialization {
             compiler.addInstruction(new LOAD(new NullOperand(), Register.R0));
         }
         else {
-            throw new UnsupportedOperationException("Not yet implemented !");
+            throw new UnsupportedOperationException("Default init not available for object " + type + " (at" + getLocation() + ").");
         }
         if(resultRegister == null) {
             compiler.incrementContextUsedStack();

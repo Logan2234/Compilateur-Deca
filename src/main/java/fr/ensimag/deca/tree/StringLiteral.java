@@ -52,6 +52,8 @@ public class StringLiteral extends AbstractStringLiteral {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister register) {
         // do nothing ? we can't store strings, if we are here it's a litteral string alone.
+        // throw new UnsupportedOperationException("Trying to resolve expression for a string litteral ?");
+        // ? can't let the exception, as '"string";' is a valid line of code.
     }
 
     @Override

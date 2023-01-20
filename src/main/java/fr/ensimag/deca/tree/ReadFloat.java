@@ -42,7 +42,6 @@ public class ReadFloat extends AbstractReadExpr {
     @Override
     protected void codeGenRead(DecacCompiler compiler) {
         compiler.addInstruction(new RFLOAT());
-        // todo : manage overflow
     }
 
 }

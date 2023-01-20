@@ -55,34 +55,17 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // as for binary exp, put expr in register then apply codeGenUnExpr
-        if (resultRegister != null) {
-            getOperand().codeGenExpr(compiler, resultRegister);
-            codeGenUnExpr(compiler, resultRegister);
-        } else {
-            // we need to put the result on the stack
-            // try to allocate a register to compute the result
-            GPRegister register = compiler.allocateRegister();
-            if (register != null) {
-                getOperand().codeGenExpr(compiler, resultRegister);
-                codeGenUnExpr(compiler, resultRegister);
-                compiler.incrementContextUsedStack();
-                compiler.addInstruction(new PUSH(register));
-                compiler.freeRegister(register);
-            } else {
-                // save R2
-                compiler.incrementContextUsedStack();
-                compiler.addInstruction(new PUSH(Register.getR(2)));
-                getOperand().codeGenExpr(compiler, Register.getR(2));
-                codeGenUnExpr(compiler, Register.getR(2));
-                // save the result in R1 (R1 <- R2)
-                compiler.addInstruction(new LOAD(Register.getR(2), Register.R1));
-                // restore r2
-                compiler.increaseContextUsedStack(-1);
-                compiler.addInstruction(new POP(Register.getR(2)));
-                // load the result on the stack
-                compiler.incrementContextUsedStack();
-                compiler.addInstruction(new PUSH(Register.R1));
-            }
+        GPRegister register  = resultRegister == null ? compiler.allocateRegister() : resultRegister;
+        // generate code for the expression in the register
+        getOperand().codeGenExpr(compiler, register);
+        // generate our code on the register containing the result
+        codeGenUnExpr(compiler, register);
+        // if original register was null, we allocated a register and we need to push result on the stack
+        if(resultRegister == null) {
+            // need to free result register and put the result on the stack
+            compiler.addInstruction(new LOAD(register, Register.R1));
+            compiler.freeRegister(register); // pops
+            compiler.addInstruction(new PUSH(Register.R1));
         }
     }
 

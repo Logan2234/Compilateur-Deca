@@ -9,9 +9,9 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.ADD;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 import java.io.PrintStream;
 
@@ -57,7 +57,7 @@ public class While extends AbstractInst {
         // then add 0 to R1 to trigger flags : if EQ, then the expression was false : branch to end block
         compiler.addLabel(blockLabel);
         condition.codeGenExpr(compiler, Register.R1);
-        compiler.addInstruction(new ADD(new ImmediateInteger(0), Register.R1));
+        compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.R1));
         // branch to else flag if EQ, then if block
         compiler.addInstruction(new BEQ(endLabel));
         // main block

@@ -184,7 +184,7 @@ public class DecacCompiler {
             throw new UnsupportedOperationException("No context for code generation.");
         }
         else {
-            return contextBlocks.get(contextBlocks.size() - 1).allocateRegister();
+            return contextBlocks.get(contextBlocks.size() - 1).allocateRegister(this);
         }
     }
 
@@ -198,7 +198,7 @@ public class DecacCompiler {
             throw new UnsupportedOperationException("No context for code generation.");
         }
         else {
-            contextBlocks.get(contextBlocks.size() - 1).freeRegister(register);
+            contextBlocks.get(contextBlocks.size() - 1).freeRegister(this, register);
         }
     }
 

@@ -106,11 +106,15 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister) {
-        fieldName.getDefinition().setDAddrOffsetOnly(resultRegister.getOffset());
         initialization.codeGenInit(compiler, type.getType(), resultRegister);
     }
 
-    
+    @Override
+    public void setFieldOffset(DecacCompiler compiler, int offset) {
+        fieldName.getDefinition().setDAddrOffsetOnly(offset);
+    }
+
+
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
