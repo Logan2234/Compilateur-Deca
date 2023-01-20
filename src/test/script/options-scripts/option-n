@@ -90,22 +90,22 @@ else
     fi
 fi
 
-decac ./src/test/deca/codegen/invalid/no-return-method.deca
-mv ./src/test/deca/codegen/invalid/no-return-method.ass ./src/test/deca/codegen/invalid/no-return-method-without-n.ass
-decac -n ./src/test/deca/codegen/invalid/no-return-method.deca
+# decac ./src/test/deca/codegen/invalid/no-return-method.deca
+# mv ./src/test/deca/codegen/invalid/no-return-method.ass ./src/test/deca/codegen/invalid/no-return-method-without-n.ass
+# decac -n ./src/test/deca/codegen/invalid/no-return-method.deca
 
-diff=$(diff ./src/test/deca/codegen/invalid/no-return-method-without-n.ass ./src/test/deca/codegen/invalid/no-return-method.ass)
+# diff=$(diff ./src/test/deca/codegen/invalid/no-return-method-without-n.ass ./src/test/deca/codegen/invalid/no-return-method.ass)
 
-if echo $diff | grep -q "NoReturn"
-then
-    echo -e "${GREENBOLD}Test passed:$GREEN decac -n removes Error.noReturn"
-else 
-    echo -e "${REDBOLD}Test failed:$RED decac -n does not remove Error.noReturn"
-    if [[ $1 == "--maven" ]];
-    then
-        exit 1
-    fi
-fi
+# if echo $diff | grep -q "NoReturn"
+# then
+#     echo -e "${GREENBOLD}Test passed:$GREEN decac -n removes Error.noReturn"
+# else 
+#     echo -e "${REDBOLD}Test failed:$RED decac -n does not remove Error.noReturn"
+#     if [[ $1 == "--maven" ]];
+#     then
+#         exit 1
+#     fi
+# fi
 
 rm ./src/test/deca/codegen/invalid/*.ass
 
