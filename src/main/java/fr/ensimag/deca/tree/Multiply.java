@@ -37,42 +37,46 @@ public class Multiply extends AbstractOpArith {
 
     public boolean factorised() {
         if (leftOperand.isLiteral() ^ rightOperand.isLiteral()) {
-            if (leftOperand.isLiteral() && leftOperand.getType().isInt())
+            if (leftOperand.isLiteral() && leftOperand.getType().isInt()){
                 if (((IntLiteral) leftOperand).getValue() < 4)
-                    //Developper en somme
                     return true;
+                return false;
+            }
             if (leftOperand.isLiteral() && leftOperand.getType().isFloat())
                 return false; // On ne developpe pas les floats en somme car il faudra dans tous les cas faire des additions donc pas optim
             if (rightOperand.getType().isInt())
+
                 if (((IntLiteral) rightOperand).getValue() < 4)
-                        //Developper en somme
                         return true;
-            return false;
         }
         return false;
     }
 
     public ListInst factoInst() {
-        if (leftOperand.isLiteral() ^ rightOperand.isLiteral()) {
-            if (rightOperand.isLiteral() && rightOperand.getType().isInt())
-                if (((IntLiteral) leftOperand).getValue() < 4){
-                    ListInst list = new ListInst();
-                    list.add(new Plus(leftOperand,leftOperand));
-                    AbstractExpr left = new Identifier(new Plus(leftOperand,leftOperand));
-                    for (int i = 0; i <((IntLiteral) rightOperand).getValue(); i++){ 
-                        list.add(new Plus(leftOperand,leftOperand));
-                    }
-                    return true;
-                }
-            if (rightOperand.isLiteral() && leftOperand.getType().isFloat())
-                return false; // On ne developpe pas les floats en somme car il faudra dans tous les cas faire des additions donc pas optim
-            if (rightOperand.getType().isInt())
-                if (((IntLiteral) rightOperand).getValue() < 4)
-                        //Developper en somme
-                        return true;
-            return false;
+        if (rightOperand.isLiteral() && rightOperand.getType().isInt()){
+            ListInst list = new ListInst();
+            if (((IntLiteral) rightOperand).getValue() == 2){
+                list.add(new Plus(leftOperand,leftOperand));
+                return list;
+            }
+            AbstractExpr left = new Plus(leftOperand,leftOperand);
+            for (int i = 0; i <((IntLiteral) rightOperand).getValue()-2; i++){ 
+                list.add(new Plus(leftOperand,left));
+                left = new Plus(leftOperand,left);
+            }
+            return list;
+            }               
+        ListInst list = new ListInst();
+        if (((IntLiteral) leftOperand).getValue() == 2){
+            list.add(new Plus(rightOperand,rightOperand));
+            return list;
         }
-        return false;
+        AbstractExpr left = new Plus(rightOperand,rightOperand);
+        for (int i = 0; i <((IntLiteral) leftOperand).getValue()-2; i++){ 
+            list.add(new Plus(rightOperand,left));
+            left = new Plus(rightOperand,left);
+        }
+        return list;
     }
 
     public boolean collapse() {

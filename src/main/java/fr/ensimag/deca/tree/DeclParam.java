@@ -78,4 +78,8 @@ public class DeclParam extends AbstractDeclParam {
     public boolean collapse() {
         return false;
     }
+
+    public boolean factorised() {
+        return false;
+    }
 }

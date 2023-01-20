@@ -82,7 +82,7 @@ public class Main extends AbstractMain {
 
     @Override
     public boolean factorised() {
-        return declVariables.factorised() && insts.factorised();
+        return declVariables.factorised() || insts.factorised();
     }
     
     public boolean collapse() {

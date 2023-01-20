@@ -227,7 +227,7 @@ public class Program extends AbstractProgram {
 
     @Override
     public boolean factorised() {
-        return classes.factorised() && main.factorised();
+        return classes.factorised() || main.factorised();
     }
     
     public boolean collapse() {

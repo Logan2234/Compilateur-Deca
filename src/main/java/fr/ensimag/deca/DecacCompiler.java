@@ -328,10 +328,12 @@ public class DecacCompiler {
             assert (prog.checkAllDecorations());
         }
 
-        if (compilerOptions.getCompileMode() != CompileMode.Verify) {
+        if (compilerOptions.getCompileMode() == CompileMode.Verify) {
             if (compilerOptions.getOptimize()){
                 prog.verifyProgram(this);
-                prog.optimizeTree();
+                //prog.optimizeTree();
+                prog.factorised();
+                //prog.prettyPrint(System.out);
             }
             LOG.info("Writing deca file ...");
             prog.decompile(out);
