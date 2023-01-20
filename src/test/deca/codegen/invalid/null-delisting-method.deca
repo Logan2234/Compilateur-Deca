@@ -1,0 +1,18 @@
+// Description:
+//    Déréférencement de null avec une méthode
+//
+// Resultats:
+//    Execution error
+//    Error : Null reference exception.
+//
+// Historique:
+//    cree le 20/01/2023
+
+class A {
+    void x(){}
+}
+
+{
+    A a;
+    a.x();
+}
