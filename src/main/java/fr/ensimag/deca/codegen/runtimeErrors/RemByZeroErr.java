@@ -8,7 +8,7 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class RemByZeroErr extends AbstractRuntimeErr {
     public int errorId() {
-        return 6;
+        return 7;
     }
 
     public void codeGenErr(DecacCompiler compiler) {
