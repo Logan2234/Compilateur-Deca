@@ -1,0 +1,20 @@
+// Description:
+//    Stack overflow avec appel récursif de fonction
+//
+// Resultats:
+//    Execution error
+//    Error : stack overflow.
+//
+// Historique:
+//    cree le 20/01/2023
+
+class A {
+    void recurse(){
+        recurse();
+    }
+}
+
+{
+    A a = new A();
+    a.recurse(); // TODO virgile: Erreur lancée par ima et pas toi
+}

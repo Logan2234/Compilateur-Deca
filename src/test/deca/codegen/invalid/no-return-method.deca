@@ -11,3 +11,8 @@
 class A {
     int noReturn(){}
 }
+
+{
+    A a = new A();
+    a.noReturn();
+}
