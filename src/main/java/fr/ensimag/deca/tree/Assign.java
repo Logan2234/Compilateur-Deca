@@ -8,6 +8,9 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
+
+import java.util.List;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -93,6 +96,16 @@ public class Assign extends AbstractBinaryExpr {
     protected boolean spotUsedVar() {
         // we don't spot leftOperand
         return this.rightOperand.spotUsedVar();
+    }
+
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
+        foundMethodCalls.add(this);
+    }
+
+    @Override
+    boolean isAssign() {
+        return true;
     }
     
     @Override 

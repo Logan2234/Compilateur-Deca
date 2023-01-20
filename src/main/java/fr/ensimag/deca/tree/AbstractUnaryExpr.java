@@ -96,8 +96,8 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
-        this.operand.addMethodCalls(foundMethodCalls);
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
+        this.operand.addUnremovableExpr(foundMethodCalls);
     }
 
 }

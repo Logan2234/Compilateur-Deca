@@ -1,0 +1,22 @@
+class A extends Object {
+
+	A createChild(){
+		return new A();
+
+	}
+}
+
+class B extends A {
+}
+
+{
+	A a = new A();
+	if ((a instanceof B)){
+		print("Error");
+	} else {
+	}
+	if ((a.createChild() instanceof B)){
+		print("Error");
+	} else {
+	}
+}

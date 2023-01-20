@@ -1,0 +1,21 @@
+class A extends Object {
+	int x;
+
+	void used(){
+	}
+
+	B createB(){
+		return new B();
+
+	}
+}
+
+class B extends A {
+}
+
+{
+	A a = new B();
+	A aa = a.createB();
+	a.used();
+	print(aa.x);
+}

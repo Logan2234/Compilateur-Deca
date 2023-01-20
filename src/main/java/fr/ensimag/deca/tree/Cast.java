@@ -96,8 +96,8 @@ public class Cast extends AbstractExpr {
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
-        this.expression.addMethodCalls(foundMethodCalls);
+        this.expression.addUnremovableExpr(foundMethodCalls);
     }
 }

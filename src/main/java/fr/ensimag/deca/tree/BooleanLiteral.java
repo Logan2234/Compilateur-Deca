@@ -84,7 +84,7 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
 

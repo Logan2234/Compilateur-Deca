@@ -35,7 +35,14 @@ public abstract class AbstractExpr extends AbstractInst {
         return false;
     }
 
-    /*
+    /**
+     * @return true if the expression is an assign
+     */
+    boolean isAssign() {
+        return false;
+    }
+
+    /**
      * Used by This class for telling if the This is implicit or not.
      * getImpl return false and it will be override by This class
      * 
@@ -212,7 +219,7 @@ public abstract class AbstractExpr extends AbstractInst {
      * 
      * @param the list of MethodCalls and Reads ordered by order of apparition
      */
-    protected abstract void addMethodCalls(List<AbstractExpr> foundMethodCalls);
+    protected abstract void addUnremovableExpr(List<AbstractExpr> foundMethodCalls);
 
     /**
      * Fin recursively all method calls and reads in the expression
@@ -223,9 +230,9 @@ public abstract class AbstractExpr extends AbstractInst {
      * 
      * @return the list of MethodCall ordered by order of apparition
      */
-    protected final List<AbstractExpr> getMethodCalls() {
+    protected final List<AbstractExpr> getUnremovableExpr() {
         List<AbstractExpr> foundMethodCalls = new LinkedList<AbstractExpr>();
-        this.addMethodCalls(foundMethodCalls);
+        this.addUnremovableExpr(foundMethodCalls);
         return foundMethodCalls;
     }
     

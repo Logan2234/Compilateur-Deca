@@ -1,0 +1,10 @@
+class A extends Object {
+
+	void useless_param(int x){
+	}
+}
+
+{
+	A a = new A();
+	a.useless_param(3);
+}

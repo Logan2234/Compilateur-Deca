@@ -72,7 +72,7 @@ public class TestPlusWithoutMock {
         }
 
         @Override
-        protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
             // TODO Auto-generated method stub  
         }
 

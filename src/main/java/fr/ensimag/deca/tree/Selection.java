@@ -142,8 +142,8 @@ public class Selection extends AbstractLValue {
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // the object could be obtained via a MethodCall
-        this.obj.addMethodCalls(foundMethodCalls);
+        this.obj.addUnremovableExpr(foundMethodCalls);
     }
 }

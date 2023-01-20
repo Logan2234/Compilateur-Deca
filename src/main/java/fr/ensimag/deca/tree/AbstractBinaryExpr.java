@@ -115,9 +115,9 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
-        this.leftOperand.addMethodCalls(foundMethodCalls);
-        this.rightOperand.addMethodCalls(foundMethodCalls);
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
+        this.leftOperand.addUnremovableExpr(foundMethodCalls);
+        this.rightOperand.addUnremovableExpr(foundMethodCalls);
     }
     
 }

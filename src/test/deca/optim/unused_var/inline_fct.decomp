@@ -1,0 +1,12 @@
+class A extends Object {
+
+	int cos(int x){
+		return x;
+
+	}
+}
+
+{
+	A a = new A();
+	print(a.cos(3));
+}

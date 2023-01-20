@@ -242,7 +242,7 @@ public class Program extends AbstractProgram {
                     if (decl.getVar().getDefinition().isUsed()) {
                         // the variable is used
                     } else if (decl.getInit() instanceof Initialization
-                            && !((Initialization)(decl.getInit())).getExpression().getMethodCalls().isEmpty()) {
+                            && !((Initialization)(decl.getInit())).getExpression().getUnremovableExpr().isEmpty()) {
                         // the variable is not used but is Initialized with a MethodCall
                     } else {
                         // the variable is not used and (not initialized or initialized with no methodCall)
@@ -291,8 +291,8 @@ public class Program extends AbstractProgram {
 
                 else if (inst instanceof AbstractExpr) {
                     AbstractExpr expr = (AbstractExpr)inst;
-                    List<AbstractExpr> methods = expr.getMethodCalls();
-                    if (methods.isEmpty()) {
+                    List<AbstractExpr> unremovableExpressions = expr.getUnremovableExpr();
+                    if (unremovableExpressions.isEmpty()) {
                         iterInst.remove();
                         simplified = true;
                         LOG.debug("Remove expr at "+inst.getLocation() + " : " + inst.getClass());
@@ -303,8 +303,8 @@ public class Program extends AbstractProgram {
                     }
                     else {
                         iterInst.remove();
-                        for (AbstractExpr methodCall : methods) {
-                            iterInst.add(methodCall); // add after the current instruction
+                        for (AbstractExpr expression : unremovableExpressions) {
+                            iterInst.add(expression); // add after the current instruction
                         }
                         simplified = true;
                         LOG.debug("Break expr at "+inst.getLocation() + " : " + inst.getClass());
@@ -321,11 +321,26 @@ public class Program extends AbstractProgram {
                     While while_ = (While)inst;
                     simplified = optimizeBlock(null, while_.getBody());
                     // We keep the while if the condition have a method call
-                    if (while_.getBody().isEmpty() && while_.getCondition().getMethodCalls().isEmpty()) {
-                        iterInst.remove();
-                        simplified = true;
-                        // the condition will be optimized at the next optimizeBlock call
-                        iterInst.add(while_.getCondition()); // add after the current instruction
+                    if (while_.getBody().isEmpty()) {
+                        List<AbstractExpr> unremovableExpressions = while_.getCondition().getUnremovableExpr();
+                        if (unremovableExpressions.isEmpty()) {
+                            iterInst.remove();
+                            simplified = true;
+                            // the condition will be optimized at the next optimizeBlock call
+                            iterInst.add(while_.getCondition()); // add after the current instruction
+                        }
+                        else {
+                            // check if there is only assigns (no Read or MethodCall)
+                            Iterator<AbstractExpr> iter = unremovableExpressions.iterator();
+                            AbstractExpr currentExpr = null; 
+                            while(iter.hasNext() && (currentExpr=iter.next()).isAssign()) {}
+                            if (!iter.hasNext() && currentExpr.isAssign()) {
+                                iterInst.remove();
+                                simplified = true;
+                                // the condition will be optimized at the next optimizeBlock call
+                                iterInst.add(while_.getCondition()); // add after the current instruction
+                            }
+                        }
                     }
                     if (simplified) LOG.debug("Optimize While at "+inst.getLocation() + " : " + inst.getClass());
                 }
