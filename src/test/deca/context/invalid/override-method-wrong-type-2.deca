@@ -11,9 +11,7 @@ class A {
     A get(){}
 }
 
-class B {
-
-}
+class B {}
 
 class C extends A {
     B get(){}

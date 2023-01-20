@@ -7,12 +7,9 @@
 // Historique:
 //    cree le 16/01/2023
 
-class A {
-
-}
+class A {}
 
 {
     A a = new A();
-    A b = new A();
-    b.equals(a);
+    a.equals(a);
 }

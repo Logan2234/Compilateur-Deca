@@ -67,5 +67,4 @@ public class Location implements Serializable {
     public String toLabel() {
         return (filename.substring(filename.lastIndexOf("/") + 1) + "." + line + "." + positionInLine).replaceAll("[^a-zA-Z0-9_.]", "");
     }
-
 }

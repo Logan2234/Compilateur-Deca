@@ -39,8 +39,7 @@ public class Return extends AbstractInst {
             Type returnType) throws ContextualError {
 
         if (returnType.isVoid())
-            throw new ContextualError("Return cannot be used when method has void type (rule 3.24)",
-                    this.getLocation());
+            throw new ContextualError("Return cannot be used when method has void type (rule 3.24)", getLocation());
 
                     expression.verifyRValue(compiler, localEnv, currentClass, returnType);
     }
@@ -58,8 +57,6 @@ public class Return extends AbstractInst {
         s.print("return ");
         expression.decompile(s);
         s.println(";");
-
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override

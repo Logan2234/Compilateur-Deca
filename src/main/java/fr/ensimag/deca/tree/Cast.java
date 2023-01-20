@@ -7,10 +7,6 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -25,8 +21,8 @@ import org.apache.commons.lang.Validate;
  */
 public class Cast extends AbstractExpr {
 
-    private final AbstractIdentifier type;
-    private final AbstractExpr expression;
+    private AbstractIdentifier type;
+    private AbstractExpr expression;
 
     public Cast(AbstractIdentifier type, AbstractExpr expression) {
         Validate.notNull(type);
@@ -42,28 +38,28 @@ public class Cast extends AbstractExpr {
         Type typeExp = this.expression.verifyExpr(compiler, localEnv, currentClass);
         Type typeT = this.type.verifyType(compiler);
 
-        if (typeExp.isVoid()
-                || (!typeExp.assignCompatible(localEnv, typeT) && !typeT.assignCompatible(localEnv, typeExp))) {
+        if (typeExp.isVoid() || (!typeExp.assignCompatible(typeT) && !typeT.assignCompatible(typeExp)))
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
-                    + typeT.getName().getName() + "\"", loc);
+                    + typeT.getName().getName() + "\"", getLocation());
+        
+        if (typeT.isInt() && typeExp.isFloat()){
+            ConvInt convint = new ConvInt(expression);
+            convint.setLocation(expression.getLocation());
+            convint.verifyExpr(compiler, localEnv, currentClass);
+            expression = convint;
         }
-
+        
+        if (typeT.isFloat() && typeExp.isInt()){
+            ConvFloat convfloat = new ConvFloat(expression);
+            convfloat.setLocation(expression.getLocation());
+            convfloat.verifyExpr(compiler, localEnv, currentClass);
+            expression = convfloat;
+        }
+            
         // Ajout du décor
-        this.setType(typeT);
+        setType(typeT);
         return typeT;
     }
-
-    /**
-     * Check if the two types are compatible for the cast
-     * 
-     * @param localEnv the local environment
-     * @param typeExp  the type of the expression to cast
-     * @param typeT    the type of the expected cast
-     * @return true if the two types are compatible, false if not
-     * 
-     * @author Nils Depuille
-     * @date 12/01/2023
-     */
 
     @Override
     public void decompile(IndentPrintStream s) {

@@ -8,7 +8,5 @@
 //    cree le 13/01/2023
 
 class A{
-    void get(){
-        
-    }
+    void get(){}
 }

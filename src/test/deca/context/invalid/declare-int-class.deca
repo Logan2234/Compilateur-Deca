@@ -8,6 +8,4 @@
 // Historique:
 //    cree le 13/01/2023
 
-class A extends int {
-
-}
+class A extends int {}

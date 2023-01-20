@@ -6,7 +6,7 @@
 //    Ligne 16: The object of the selection is not of type class (rule 3.65)
 //
 // Historique:
-//    cree le 16/01/2023
+//    cree le 13/01/2023
 
 {
     int a;

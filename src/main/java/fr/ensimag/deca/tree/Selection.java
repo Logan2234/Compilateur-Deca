@@ -45,8 +45,7 @@ public class Selection extends AbstractLValue {
         Type type = obj.verifyExpr(compiler, localEnv, currentClass);
 
         if (!type.isClass())
-            throw new ContextualError("The object of the selection is not of type class (rule 3.65)",
-                    this.getLocation());
+            throw new ContextualError("The object of the selection is not of type class (rule 3.65)", getLocation());
 
         EnvironmentExp exp = type.asClassType("Not a class type", getLocation()).getDefinition().getMembers();
         Type typeField = field.verifyExpr(compiler, exp, currentClass);
@@ -54,8 +53,8 @@ public class Selection extends AbstractLValue {
         Visibility vis = field.getFieldDefinition().getVisibility();
 
         // Ajout du décor
-        this.setType(typeField);
-        
+        setType(typeField);
+
         if (vis == Visibility.PUBLIC)
             return typeField;
 
@@ -63,9 +62,9 @@ public class Selection extends AbstractLValue {
         boolean bool2 = currentClassType.isSubClassOf(
                 field.getDefinition().asFieldDefinition("null", getLocation()).getContainingClass().getType());
 
-        if (!bool1 || !bool2) {
+        if (!bool1 || !bool2)
             throw new ContextualError("The variable is protected (rule 3.66)", getLocation());
-        }
+
         return typeField;
     }
 

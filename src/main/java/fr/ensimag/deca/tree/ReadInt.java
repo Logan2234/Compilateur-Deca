@@ -20,7 +20,7 @@ public class ReadInt extends AbstractReadExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        this.setType(compiler.environmentType.INT);
+        setType(compiler.environmentType.INT);
         return compiler.environmentType.INT;
     }
 
@@ -43,5 +43,4 @@ public class ReadInt extends AbstractReadExpr {
     protected void codeGenRead(DecacCompiler compiler) {
         compiler.addInstruction(new RINT());
     }
-
 }

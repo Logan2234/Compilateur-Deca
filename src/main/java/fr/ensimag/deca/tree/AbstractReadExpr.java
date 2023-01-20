@@ -30,9 +30,9 @@ public abstract class AbstractReadExpr extends AbstractExpr {
         compiler.useRuntimeError(error);
         compiler.addInstruction(new BOV(error.getErrorLabel()));
         // put R1 in the asked result
-        if(resultRegister != null) {
+        if (resultRegister != null)
             compiler.addInstruction(new LOAD(Register.R1, resultRegister));
-        }
+
         else {
             compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
@@ -41,10 +41,11 @@ public abstract class AbstractReadExpr extends AbstractExpr {
 
     /**
      * Generate the instruction to read a value and put it in R1.
+     * 
      * @param compiler Where we write the instructions to.
      */
     protected abstract void codeGenRead(DecacCompiler compiler);
-    
+
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing

@@ -1,13 +1,12 @@
 // Description:
-//    Condition de la règle 3.42 non respectée 
+//    Assign null a une variable 
 //
 // Resultats:
 //    Erreur Contextuelle
-//    Ligne 13: An assignation between a int and a null is not possible (rule 3.32)
+//    Ligne 12: An assignation between a int and a null is not possible (rule 3.32)
 //
 // Historique:
 //    cree le 16/01/2023
-
 
 {
     int a = null;

@@ -8,9 +8,9 @@
 //    cree le 16/01/2023
 
 class A {
-    A get(int a){}
+    float get(int a){}
 }
 
 class B extends A {
-    B get(int b){}
+    int get(int b){}
 }

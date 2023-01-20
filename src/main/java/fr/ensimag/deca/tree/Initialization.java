@@ -80,8 +80,6 @@ public class Initialization extends AbstractInitialization {
             // free the register
             compiler.freeRegister(register);
         }
-
-        
     }
 
     @Override

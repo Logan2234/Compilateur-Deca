@@ -3,12 +3,11 @@
 //
 // Resultats:
 //    Erreur contextuelle   
-//    Ligne 12 : The condition is not a boolean (rule 3.29)
+//    Ligne 12: The condition is not a boolean (rule 3.29)
 //
 // Historique:
 //    cree le 12/01/2023
 
 {
-    while ("Hello") {
-    }
+    while ("Hello"){}
 }

@@ -18,6 +18,7 @@ public class NoOperation extends AbstractInst {
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type returnType) throws ContextualError {
+        // nothing
     }
 
     @Override

@@ -10,6 +10,5 @@ import fr.ensimag.deca.context.Definition;
  */
 public abstract class AbstractLValue extends AbstractExpr {
 
-    // ? do all LValue have a definition ? looks like they do, so we need this. 
     public abstract Definition getDefinition();
 }

@@ -146,22 +146,22 @@ public abstract class Definition {
      * @return the used attribute
      */
     public boolean isUsed() {
-        return this.used;
+        return used;
     }
 
     /**
      * Reset the used attribute back to false
      */
     public void resetUsed() {
-        this.used = false;
+        used = false;
     }
 
     /*
      * Set the used attribute to true
      */
     public void setUsed() {
-        LOG.debug("Set to used : " + this.toString());
-        this.used = true;
+        LOG.debug("Set to used : " + toString());
+        used = true;
     }
 
     /**
@@ -170,13 +170,13 @@ public abstract class Definition {
      */
     public void spotUsedVar(AbstractProgram prog) {
         // prevent looping over methods
-        if (!this.isUsed()) {
-            this.setUsed();
+        if (!isUsed()) {
+            setUsed();
             // if (this.type.isClass()) {
             //     ClassType classType = (ClassType)(this.type); // TODO check this, not useful anymore ?
             //     classType.getDefinition().spotUsedVar(prog);
             // }
-            this.spotRelatedDefs(prog);
+            spotRelatedDefs(prog);
         }
     }
 
@@ -184,5 +184,4 @@ public abstract class Definition {
      * Set to true the "used" attribute of related definitions
      */
     public abstract void spotRelatedDefs(AbstractProgram prog);
-
 }

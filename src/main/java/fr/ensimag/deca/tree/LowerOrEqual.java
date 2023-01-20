@@ -28,5 +28,4 @@ public class LowerOrEqual extends AbstractOpIneq {
         compiler.addInstruction(new CMP(dVal, register));
         compiler.addInstruction(new SLE(register));
     }
-
 }

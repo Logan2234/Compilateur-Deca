@@ -24,14 +24,13 @@ public class Not extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type type = this.getOperand().verifyExpr(compiler, localEnv, currentClass);
-        Location loc = this.getLocation();
+        Type type = getOperand().verifyExpr(compiler, localEnv, currentClass);
 
         if (!type.isBoolean())
-            throw new ContextualError("A not is only followed by a boolean (rule 3.37)", loc);
+            throw new ContextualError("A not is only followed by a boolean (rule 3.37)", getLocation());
         
         // Ajout du décor
-        this.setType(type);
+        setType(type);
         return type;
     }
 

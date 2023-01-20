@@ -29,10 +29,9 @@ public abstract class AbstractDeclMethod extends Tree {
      *                     corresponds to the "class" attribute (null in the main
      *                     bloc).
      */
-    protected abstract void verifyDeclMethod(DecacCompiler compiler,
-    EnvironmentExp localEnv, ClassDefinition currentClass)
-    throws ContextualError;
-    
+    protected abstract void verifyDeclMethod(DecacCompiler compiler, EnvironmentExp localEnv,
+            ClassDefinition currentClass) throws ContextualError;
+
     /**
      * Implements non-terminal "decl_method" of [SyntaxeContextuelle] in pass 3
      * 

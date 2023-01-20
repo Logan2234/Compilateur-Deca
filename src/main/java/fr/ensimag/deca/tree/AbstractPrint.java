@@ -40,18 +40,16 @@ public abstract class AbstractPrint extends AbstractInst {
             Type returnType) throws ContextualError {
         for (AbstractExpr a : arguments.getList()) {
             Type type = a.verifyExpr(compiler, localEnv, currentClass);
-            if (!type.isInt() && !type.isFloat() && !type.isString()) {
+            if (!type.isInt() && !type.isFloat() && !type.isString())
                 throw new ContextualError("Arguments of a print can only be float, int or string (rules 3.31)",
                         a.getLocation());
-            }
         }
     }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        for (AbstractExpr a : getArguments().getList()) {
+        for (AbstractExpr a : getArguments().getList())
             a.codeGenPrint(compiler, getPrintHex());
-        }
     }
 
     private boolean getPrintHex() {
@@ -62,9 +60,8 @@ public abstract class AbstractPrint extends AbstractInst {
     public void decompile(IndentPrintStream s) {
         s.print("print");
         s.print(getSuffix());
-        if (getPrintHex()) {
+        if (getPrintHex())
             s.print("x");
-        }
         s.print("(");
         arguments.decompile(s);
         s.print(");");
