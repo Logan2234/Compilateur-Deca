@@ -267,6 +267,10 @@ public class DecacCompiler {
             throw new UnsupportedOperationException("No context for code generation.");
         }
         else {
+            // quick check everything is nice and good
+            if(!contextBlocks.get(contextBlocks.size() - 1).checkAllRegisterAreFree()) {
+                throw new UnsupportedOperationException("All registers have not been freed when ending a code context.");
+            }
             // append the program !
             if(contextBlocks.size() == 1) {
                 program.append(contextBlocks.get(contextBlocks.size() - 1).getProgram());

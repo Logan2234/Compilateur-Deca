@@ -82,9 +82,11 @@ public class New extends AbstractExpr {
             compiler.addComment("New at line " + getLocation().getLine());
             compiler.addInstruction(new NEW(new ImmediateInteger(type.getDefinition().getNumberOfFields() + 1), register));
             // manage heap overflow error
-            AbstractRuntimeErr error = new FullHeapErr();
-            compiler.useRuntimeError(error);
-            compiler.addInstruction(new BOV(error.getErrorLabel()));
+            if(compiler.getCompilerOptions().getRunTestChecks()) {
+                AbstractRuntimeErr error = new FullHeapErr();
+                compiler.useRuntimeError(error);
+                compiler.addInstruction(new BOV(error.getErrorLabel()));
+            }
             // set the pointer to the vtable
             compiler.addInstruction(new LEA(classe.getClassDefinition().getDAddr(), Register.R1));
             compiler.addInstruction(new STORE(Register.R1, new RegisterOffset(0, register)));
@@ -97,6 +99,7 @@ public class New extends AbstractExpr {
                 compiler.addInstruction(new PUSH(Register.R1));
             }
             else {
+                compiler.incrementContextUsedStack();
                 compiler.addInstruction(new PUSH(register));
             }
             // branch to init

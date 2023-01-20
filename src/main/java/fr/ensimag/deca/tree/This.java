@@ -70,19 +70,11 @@ public class This extends AbstractExpr {
         // put pointer in the result register
         if(resultRegister == null) {
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-            AbstractRuntimeErr error = new NullReferenceErr();
-            compiler.useRuntimeError(error);
-            compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
-            compiler.addInstruction(new BEQ(error.getErrorLabel()));
             compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
         }
         else {
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), resultRegister));
-            AbstractRuntimeErr error = new NullReferenceErr();
-            compiler.useRuntimeError(error);
-            compiler.addInstruction(new CMP(new NullOperand(), resultRegister));
-            compiler.addInstruction(new BEQ(error.getErrorLabel()));
         }
     }
 

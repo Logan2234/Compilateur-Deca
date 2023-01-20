@@ -2,6 +2,8 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
+import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
@@ -9,8 +11,11 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
@@ -74,14 +79,29 @@ public class Selection extends AbstractLValue {
             // we need a register
             GPRegister register = compiler.allocateRegister();
             obj.codeGenExpr(compiler, register);
-            // save in R1 because freeing the rsgister may pop the stack
+            // null reference test
+            if(compiler.getCompilerOptions().getRunTestChecks()) {
+                AbstractRuntimeErr error = new NullReferenceErr();
+                compiler.useRuntimeError(error);
+                compiler.addInstruction(new CMP(new NullOperand(), register));
+                compiler.addInstruction(new BEQ(error.getErrorLabel()));
+            }
+            // save in R1 because freeing the register may pop the stack
             compiler.addInstruction(new LOAD(new RegisterOffset(field.getDefinition().getDAddrOffsetOnly(), register), Register.R1));
             compiler.freeRegister(register);
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
         }
         else {
             // put the object in the result register
             obj.codeGenExpr(compiler, resultRegister);
+            // null reference test
+            if(compiler.getCompilerOptions().getRunTestChecks()) {
+                AbstractRuntimeErr error = new NullReferenceErr();
+                compiler.useRuntimeError(error);
+                compiler.addInstruction(new CMP(new NullOperand(), resultRegister));
+                compiler.addInstruction(new BEQ(error.getErrorLabel()));
+            }
             // load the value of the field in it, and we're good to go
             compiler.addInstruction(new LOAD(new RegisterOffset(field.getDefinition().getDAddrOffsetOnly(), resultRegister), resultRegister));
         }

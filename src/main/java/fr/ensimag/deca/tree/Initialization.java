@@ -73,6 +73,7 @@ public class Initialization extends AbstractInitialization {
             // free before pushing
             compiler.addInstruction(new LOAD(register, Register.R1));
             compiler.freeRegister(register);
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
         }
         else {

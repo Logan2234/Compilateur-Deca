@@ -71,7 +71,11 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
             // need to free result register and put the result on the stack
             compiler.addInstruction(new LOAD(register, Register.R1));
             compiler.freeRegister(register); // pops
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
+        }
+        else {
+            compiler.addInstruction(new LOAD(register, resultRegister));
         }
     }
 

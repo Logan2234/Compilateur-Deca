@@ -4,6 +4,9 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.ReturnCheckFunc;
+import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
+import fr.ensimag.deca.codegen.runtimeErrors.NoReturnErr;
+import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
@@ -16,9 +19,12 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -48,8 +54,6 @@ public class DeclMethod extends AbstractDeclMethod {
         this.body = body;
     }
 
-    private String className;
-
     @Override
     protected void verifyDeclMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
@@ -57,9 +61,6 @@ public class DeclMethod extends AbstractDeclMethod {
 
         Signature signature = params.verifyListDeclParam(compiler);
         MethodDefinition methodeDef;
-
-        // set the name of the class (hi lolo)
-        className = currentClass.getType().getName().getName();
 
         // Test de la méthode potentiellement existente dans la classe mère
         ExpDefinition defExp = currentClass.getSuperClass().getMembers().get(methodName.getName());
@@ -156,11 +157,25 @@ public class DeclMethod extends AbstractDeclMethod {
         // generate method body
         body.codeGenMethod(compiler);
         // label of end of method
+        // if the mehtod does not return void, no return error
+        if(!type.getType().isVoid()) {
+            AbstractRuntimeErr error = new NoReturnErr();
+            compiler.useRuntimeError(error);
+            compiler.addInstruction(new BRA(error.getErrorLabel()));
+        }
         compiler.addLabel(new Label("end." + className + "." + methodName.getName().getName()));
         // save and restore context used registers 
         for(GPRegister usedRegister : compiler.getAllContextUsedRegister()) {
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new POP(usedRegister));
             compiler.addInstructionFirst(new PUSH(usedRegister));
+        }
+        // add max stack use at the beginning
+        if(compiler.getCompilerOptions().getRunTestChecks()) {
+            AbstractRuntimeErr error = new StackOverflowErr();
+            compiler.useRuntimeError(error);
+            compiler.addInstructionFirst(new BOV(error.getErrorLabel()));
+            compiler.addInstructionFirst(new TSTO(compiler.getMaxStackUse()));
         }
         // end the context
         compiler.endCodeContext();
