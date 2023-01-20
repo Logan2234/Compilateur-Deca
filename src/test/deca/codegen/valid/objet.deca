@@ -17,6 +17,7 @@ class A {
     float b = 0.0;
 
     int getA(){
+        //TODO supprimer ce commentaire une fois que virgile a fix setA(a); // Pour rentrer dans le cas où resultRegister == null dans codeGenExpr de Identifier
         return a;
     }
 
