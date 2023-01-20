@@ -158,7 +158,7 @@ public class DeclMethod extends AbstractDeclMethod {
         body.codeGenMethod(compiler);
         // label of end of method
         // if the mehtod does not return void, no return error
-        if(!type.getType().isVoid()) {
+        if(!type.getType().isVoid() && compiler.getCompilerOptions().getRunTestChecks()) {
             AbstractRuntimeErr error = new NoReturnErr();
             compiler.useRuntimeError(error);
             compiler.addInstruction(new BRA(error.getErrorLabel()));
