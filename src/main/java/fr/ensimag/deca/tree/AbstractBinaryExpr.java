@@ -47,7 +47,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
             AbstractExpr rightOperand) {
         Validate.notNull(leftOperand, "left operand cannot be null");
         Validate.notNull(rightOperand, "right operand cannot be null");
-        //Validate.isTrue(leftOperand != rightOperand, "Sharing subtrees is forbidden"); //TODO Corriger ca dans multiply
+        Validate.isTrue(leftOperand != rightOperand, "Sharing subtrees is forbidden"); //TODO Corriger ca dans multiply
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
     }
