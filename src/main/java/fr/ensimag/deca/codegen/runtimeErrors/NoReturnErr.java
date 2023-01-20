@@ -13,12 +13,12 @@ public class NoReturnErr extends AbstractRuntimeErr {
     }
 
     public void codeGenErr(DecacCompiler compiler) {
-        compiler.addInstruction(new WSTR("Error : Stack overflow."));
+        compiler.addInstruction(new WSTR("Error : No return."));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }
 
     public Label getErrorLabel() {
-        return new Label("Error.stackOverflow");
+        return new Label("Error.noReturn");
     }
 }
