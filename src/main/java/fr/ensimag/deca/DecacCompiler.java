@@ -405,7 +405,7 @@ public class DecacCompiler {
                 prog.verifyProgram(this);
                 //prog.optimizeTree();
                 prog.factorised(this);
-                prog.prettyPrint(System.out);
+                //prog.prettyPrint(System.out);
             }
             LOG.info("Writing deca file ...");
             prog.decompile(out);

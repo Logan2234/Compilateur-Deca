@@ -74,5 +74,9 @@ public class UnaryMinus extends AbstractUnaryExpr {
         }
         return null;
     }
-
+    
+    @Override
+    public Boolean isLiteral(){
+        return getOperand().isLiteral();
+    }
 }

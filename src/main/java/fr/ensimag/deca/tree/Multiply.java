@@ -44,57 +44,58 @@ public class Multiply extends AbstractOpArith {
             if (leftOperand.isLiteral() && leftOperand.getType().isFloat())
                 return false; // On ne developpe pas les floats en somme car il faudra dans tous les cas faire
                               // des additions donc pas optim
-            if (rightOperand.getType().isInt()){
+            if (rightOperand.getType().isInt()) {
                 return true;
             }
         }
         return false;
     }
 
-    private void shift(DecacCompiler compiler, AbstractExpr left, AbstractExpr right, ListInst listPlus){
-        int value = ((IntLiteral) leftOperand).getValue();
+    private void shift(DecacCompiler compiler, AbstractExpr left, AbstractExpr right, ListInst listPlus) {
+        int value = ((IntLiteral) right).getValue();
         String[] nbbinaire = Integer.toBinaryString(value).split("");
         int[] binaire = new int[nbbinaire.length];
         ListInst list = new ListInst();
-        for (int i = 0; i < nbbinaire.length; i++){
-            binaire[i] = Integer.parseInt(nbbinaire[nbbinaire.length - 1 -i]);
-            if (binaire[i] == 1){
-                AbstractExpr puissance = new IntLiteral((int)Math.pow(2,i));
+        for (int i = 0; i < nbbinaire.length; i++) {
+            binaire[i] = Integer.parseInt(nbbinaire[nbbinaire.length - 1 - i]);
+            if (binaire[i] == 1) {
+                AbstractExpr puissance = new IntLiteral((int) Math.pow(2, i));
                 ((IntLiteral) puissance).setType(compiler.environmentType.INT);
-                AbstractExpr multiply = new Multiply(rightOperand, puissance);
+                AbstractExpr multiply = new Multiply(left, puissance);
                 ((Multiply) multiply).setType(compiler.environmentType.INT);
-                
+
                 list.add(multiply);
             }
         }
-        if (list.size() == 1){
-            listPlus.add(list.getList().get(0));;
-        }
-        else{
-            Plus plus = new Plus((AbstractExpr)list.getList().get(1),(AbstractExpr)list.getList().get(0));
+        if (list.size() == 1) {
+            listPlus.add(list.getList().get(0));
+            ;
+        } else {
+            Plus plus = new Plus((AbstractExpr) list.getList().get(1), (AbstractExpr) list.getList().get(0));
             listPlus.add(plus);
-            if (list.size() > 2){
-                for (int i = 2; i < list.size(); i++){
-                    Plus operand = new Plus((AbstractExpr)list.getList().get(i), (AbstractExpr)plus);
+            if (list.size() > 2) {
+                for (int i = 2; i < list.size(); i++) {
+                    Plus operand = new Plus((AbstractExpr) list.getList().get(i), (AbstractExpr) plus);
                     ((Plus) operand).setType(compiler.environmentType.INT);
-                    plus = new Plus((AbstractExpr)list.getList().get(i), (AbstractExpr)plus);
+                    plus = new Plus((AbstractExpr) list.getList().get(i), (AbstractExpr) plus);
                     ((Plus) plus).setType(compiler.environmentType.INT);
                     listPlus.add(operand);
                 }
             }
         }
-        //plus.add(list.getList().get(list.size()));
+        // plus.add(list.getList().get(list.size()));
     }
 
-    private void factocarre(DecacCompiler compiler, AbstractExpr leftOperand, AbstractExpr rightOperand, ListInst list){
+    private void factocarre(DecacCompiler compiler, AbstractExpr leftOperand, AbstractExpr rightOperand,
+            ListInst list) {
         AbstractExpr leftbisoperand;
         if (leftOperand.isLiteral()) {
             leftbisoperand = new IntLiteral(((IntLiteral) leftOperand).getValue());
         } else {
             leftbisoperand = new Identifier(((Identifier) leftOperand).getName());
-            ((Identifier)leftbisoperand).setDefinition(((Identifier)leftOperand).getDefinition());
+            ((Identifier) leftbisoperand).setDefinition(((Identifier) leftOperand).getDefinition());
         }
-        
+
         leftbisoperand.setType(leftOperand.getType());
         if (((IntLiteral) rightOperand).getValue() == 2) {
             Plus fin = new Plus(leftOperand, leftbisoperand);
@@ -119,13 +120,21 @@ public class Multiply extends AbstractOpArith {
         // Letter * number
         if (rightOperand.isLiteral() && rightOperand.getType().isInt())
             shift(compiler, leftOperand, rightOperand, list);
-        //factocarre(compiler, leftOperand, rightOperand, list);
+        // factocarre(compiler, leftOperand, rightOperand, list);
         // number * Letter
-        else 
-            shift(compiler, rightOperand, leftOperand,list);
-            //factocarre(compiler, rightOperand, leftOperand, list);
-        for (AbstractInst i : list.getList()) {
-            ((AbstractOpArith) i).setType(compiler.environmentType.INT);
+        else {
+            try {
+                int value = ((IntLiteral) (((UnaryMinus) leftOperand).getOperand())).getValue();
+                AbstractExpr leftBisOperand = new IntLiteral(value);
+                shift(compiler, rightOperand, leftBisOperand, list);
+                // new UnaryMinus(list)
+                ((UnaryMinus)leftOperand).setOperand((AbstractExpr)list.getList().get(list.size()-1));
+                list.add(leftOperand);
+                ((UnaryMinus) list.getList().get(list.size()-1)).setType(compiler.environmentType.INT);
+            } catch (ClassCastException e) {
+                shift(compiler, rightOperand, leftOperand, list);
+                ((AbstractOpArith) list.getList().get(list.size()-1)).setType(compiler.environmentType.INT);
+            }
         }
         return list;
     }
