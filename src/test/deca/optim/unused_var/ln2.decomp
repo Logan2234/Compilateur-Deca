@@ -1,17 +1,13 @@
-{
-	float g = 0.0;
-	float d = 1.0;
-	float m;
-	float fm;
-	while ((d >= (g + 1.1920929E-7))) {
-		(m = ((g + d) / 2.0));
-		(fm = ((m * ((m * ((m * ((m * ((m * ((m * ((m * (1.0 / 5040.0)) + (1.0 / 720.0))) + (1.0 / 120.0))) + (1.0 / 24.0))) + (1.0 / 6.0))) + (1.0 / 2.0))) + 1.0)) - (/* conv float */1)));
-		if ((fm > 0.0)){
-			(d = m);
-		} else {
-			(g = m);
-		}
-	}
-	print(g, " = ");
-	printlnx(g);
-}
+FATAL fr.ensimag.deca.DecacCompiler.compile(DecacCompiler.java:291) - Exception raised while compiling file /home/vianney/Documents/ENSIMAG/2A/Projet_GL/gl03/./src/test/deca/optim/unused_var/ln2.deca:
+java.lang.UnsupportedOperationException: Not yet implemented !
+	at fr.ensimag.deca.tree.Tree.collapseFloat(Tree.java:336)
+	at fr.ensimag.deca.tree.Plus.collapseFloat(Plus.java:51)
+	at fr.ensimag.deca.tree.GreaterOrEqual.collapseBool(GreaterOrEqual.java:59)
+	at fr.ensimag.deca.tree.While.collapseInst(While.java:116)
+	at fr.ensimag.deca.tree.ListInst.collapse(ListInst.java:71)
+	at fr.ensimag.deca.tree.Main.collapse(Main.java:87)
+	at fr.ensimag.deca.tree.Program.collapse(Program.java:407)
+	at fr.ensimag.deca.tree.Program.optimizeTree(Program.java:134)
+	at fr.ensimag.deca.DecacCompiler.doCompile(DecacCompiler.java:332)
+	at fr.ensimag.deca.DecacCompiler.compile(DecacCompiler.java:279)
+	at fr.ensimag.deca.DecacMain.main(DecacMain.java:78)

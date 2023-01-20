@@ -323,14 +323,12 @@ public class DecacCompiler {
 
         if (compilerOptions.getCompileMode() != CompileMode.ParseOnly || compilerOptions.getOptimize()) {
             assert (prog.checkAllLocations());
-
             prog.verifyProgram(this);
             assert (prog.checkAllDecorations());
         }
 
         if (compilerOptions.getCompileMode() != CompileMode.Verify) {
             if (compilerOptions.getOptimize()){
-                prog.verifyProgram(this);
                 prog.optimizeTree();
             }
             LOG.info("Writing deca file ...");

@@ -301,17 +301,7 @@ public abstract class Tree {
      * @return true if a used attribute has been set to true
      */
     protected abstract boolean spotUsedVar();
-    /**
-     * Optimize the decorated tree.
-     */
-    public void optimizeTree() {
-        // solve compile time known cases.
-        while(collapse()) {
-            // rien
-        }
-    }
-
-
+    
     /**
      * Check if the tree can collapse into a compile time known node.
      * This calls the collapse triggers on each nodes.

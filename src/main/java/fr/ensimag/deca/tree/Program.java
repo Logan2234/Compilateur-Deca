@@ -41,7 +41,7 @@ public class Program extends AbstractProgram {
     }
     private ListDeclClass classes;
     private AbstractMain main;
-    private boolean optimized;
+    private boolean spotted;
 
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
@@ -100,6 +100,7 @@ public class Program extends AbstractProgram {
             varSpotted = this.spotFromUsedMethods() || varSpotted;
         }
         varSpotted = this.spotOverridingFields() || varSpotted;
+        this.spotted = true;
         return varSpotted;
     }
 
@@ -108,7 +109,7 @@ public class Program extends AbstractProgram {
      * classes and the main program
      * @return true if the program have been simplified
      */
-    private boolean removeUnusedVar() {
+    private boolean doRemoveUnusedVar() {
         boolean simplified = this.optimizeClasses();
         if (this.main instanceof Main) {
             LOG.debug("Optimizing body of Main");
@@ -126,16 +127,34 @@ public class Program extends AbstractProgram {
 
     @Override
     public void optimizeTree() {
-        boolean simplified = true;
-        while (simplified) {
-            if (this.optimized) {
-                this.iter(new ResetUsedVar());
-                this.optimized = false;
-            }
-            this.spotUsedVar();
-            simplified = this.removeUnusedVar();
-            this.optimized = true;
+        boolean optimized = true;
+        while(optimized) {
+            optimized = false;
+            // solve compile time known cases.
+            optimized = this.collapse() || optimized;
+            optimized = this.removeUnusedVar() || optimized;
         }
+    }
+
+    /**
+     * Remove all unused variables from the program
+     * @return true if one or more variable have been removed
+     */
+    private boolean removeUnusedVar() {
+        if (this.spotted) {
+            this.resetSpottedVar();
+        }
+        this.spotUsedVar();
+        return this.doRemoveUnusedVar();
+    }
+
+    /**
+     * Reset the used attribute back to false for every Definition in the program
+     * Set back program's spotted attribute back to false 
+     */
+    private void resetSpottedVar() {
+        this.iter(new ResetUsedVar());
+        this.spotted = false;
     }
 
     /**
