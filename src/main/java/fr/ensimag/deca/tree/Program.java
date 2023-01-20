@@ -79,10 +79,12 @@ public class Program extends AbstractProgram {
         // add first the stack offset (addsp) as the amount of space we took on the stack in the main context
         compiler.addInstructionFirst(new ADDSP(new ImmediateInteger(compiler.readNextStackSpace().getOffset() - 1)));
         // stack overflow mangement
-        StackOverflowErr ovError = new StackOverflowErr();
-        compiler.useRuntimeError(ovError);
-        compiler.addInstructionFirst(new BOV(ovError.getErrorLabel()));
-        compiler.addInstructionFirst(new TSTO(compiler.getMaxStackUse()));
+        if(compiler.getCompilerOptions().getRunTestChecks()) {
+            StackOverflowErr ovError = new StackOverflowErr();
+            compiler.useRuntimeError(ovError);
+            compiler.addInstructionFirst(new BOV(ovError.getErrorLabel()));
+            compiler.addInstructionFirst(new TSTO(compiler.getMaxStackUse()));
+        }
         // generate class codes (need a quick context for this beautiful comments)
         compiler.newCodeContext();
         compiler.addComment("+--------------------------------------+ __o");

@@ -185,4 +185,13 @@ public class CompilerContextBlock {
         return program;
     }
 
+    public boolean checkAllRegisterAreFree() {
+        for(int i = 0; i < availableRegisters.length; i++) {
+            if(availableRegisters[i] != -1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

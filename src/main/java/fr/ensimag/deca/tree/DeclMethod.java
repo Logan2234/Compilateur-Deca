@@ -6,6 +6,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.ReturnCheckFunc;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.codegen.runtimeErrors.NoReturnErr;
+import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
@@ -18,10 +19,12 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -163,8 +166,16 @@ public class DeclMethod extends AbstractDeclMethod {
         compiler.addLabel(new Label("end." + className + "." + methodName.getName().getName()));
         // save and restore context used registers 
         for(GPRegister usedRegister : compiler.getAllContextUsedRegister()) {
+            compiler.incrementContextUsedStack();
             compiler.addInstruction(new POP(usedRegister));
             compiler.addInstructionFirst(new PUSH(usedRegister));
+        }
+        // add max stack use at the beginning
+        if(compiler.getCompilerOptions().getRunTestChecks()) {
+            AbstractRuntimeErr error = new StackOverflowErr();
+            compiler.useRuntimeError(error);
+            compiler.addInstructionFirst(new BOV(error.getErrorLabel()));
+            compiler.addInstructionFirst(new TSTO(compiler.getMaxStackUse()));
         }
         // end the context
         compiler.endCodeContext();

@@ -110,7 +110,7 @@ public class DeclField extends AbstractDeclField {
     public void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister) {
         initialization.codeGenInit(compiler, type.getType(), resultRegister);
     }
-    // TODO Virgile: see null-delisting-field.deca dans codegen/invalid (c'est géré pour les classes et pas les fields)
+
     @Override
     public void setFieldOffset(DecacCompiler compiler, int offset) {
         fieldName.getDefinition().setDAddrOffsetOnly(offset);
