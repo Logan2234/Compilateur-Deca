@@ -288,6 +288,19 @@ public abstract class Tree {
         }
     }
 
+    protected Boolean isLiteral() {
+        return false;
+    }
+
+    protected Boolean isIdentifier() {
+        return false;
+    }
+
+    /**
+     * Set to true the "used" attribute of definitions of used variables
+     * @return true if a used attribute has been set to true
+     */
+    protected abstract boolean spotUsedVar();
     /**
      * Optimize the decorated tree.
      */

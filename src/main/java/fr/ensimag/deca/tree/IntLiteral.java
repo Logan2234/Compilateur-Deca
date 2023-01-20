@@ -13,6 +13,7 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Integer literal
@@ -88,6 +89,13 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
     public Integer collapseInt() {
         return value;
     }

@@ -47,6 +47,7 @@ prog returns[AbstractProgram tree]
 main returns[AbstractMain tree]
     : /* epsilon */ {
             $tree = new EmptyMain();
+            $tree.setLocation(Location.BUILTIN);
         }
     | block {
             assert($block.decls != null);
@@ -292,7 +293,7 @@ eq_neq_expr returns[AbstractExpr tree]
             setLocation($tree, $NEQ);
         }
     ;
-// INSTANCEOF case not implemented
+
 inequality_expr returns[AbstractExpr tree]
     : e=sum_expr {
             assert($e.tree != null);
@@ -423,7 +424,9 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
-            $tree = new MethodCall(new This(true), $m.tree, $args.tree);
+            This _this = new This(true);
+            setLocation(_this, $m.start);
+            $tree = new MethodCall(_this, $m.tree, $args.tree);
             setLocation($tree, $m.start);
 
         }
@@ -514,8 +517,6 @@ ident returns[AbstractIdentifier tree]
     : IDENT {
             $tree = new Identifier(this.getDecacCompiler().createSymbol($IDENT.text));
             // the createSymbol methods add the Symbol to the table only if it is not already in it
-            //$tree = new Identifier(this.getDecacCompiler().symbolTable.create($IDENT.text));
-            // it seems to be equivalent but it is deeper in the class hierarchy
             setLocation($tree, $IDENT);
         }
     ;
@@ -551,6 +552,7 @@ class_extension returns[AbstractIdentifier tree]
     | /* epsilon */ {
             $tree = new Identifier(this.getDecacCompiler().createSymbol("Object"));
             // the createSymbol methods add the Symbol to the table only if it is not already in it
+            $tree.setLocation(Location.BUILTIN);
         }
     ;
 
@@ -627,6 +629,7 @@ decl_method returns[AbstractDeclMethod tree]
             assert($block.decls != null);
             assert($block.insts != null);
             AbstractMethod body = new MethodBody($block.decls, $block.insts);
+            setLocation(body,$block.start);
             $tree = new DeclMethod($type.tree, $ident.tree, $list_params.tree, body);
             setLocation($tree,$type.start);
         }
@@ -635,7 +638,10 @@ decl_method returns[AbstractDeclMethod tree]
             assert($ident.tree != null);
             assert($params.tree != null);
             assert($code.text != null);
-            AbstractMethod asmBody = new MethodAsmBody(new StringLiteral($code.text));
+            StringLiteral codeAsm = new StringLiteral($code.text);
+            setLocation(codeAsm,$code.start);
+            AbstractMethod asmBody = new MethodAsmBody(codeAsm);
+            setLocation(asmBody,$ASM);
             $tree = new DeclMethod($type.tree, $ident.tree, $list_params.tree, asmBody);
             setLocation($tree,$type.start);
         }

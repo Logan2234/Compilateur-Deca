@@ -1,0 +1,12 @@
+// Description:
+//    Cast un string en un int
+//
+// Resultats:
+//    Ligne 11: Unable to cast type "string" to "int"
+//
+// Historique:
+//    cree le 06/01/2023
+
+{
+    (int)("Je ne suis pas un entier");
+}

@@ -5,11 +5,12 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -38,8 +39,8 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         this.rightOperand = rightOperand;
     }
 
-    private AbstractExpr leftOperand;
-    private AbstractExpr rightOperand;
+    protected AbstractExpr leftOperand;
+    protected AbstractExpr rightOperand;
 
     public AbstractBinaryExpr(AbstractExpr leftOperand,
             AbstractExpr rightOperand) {
@@ -68,17 +69,29 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         leftOperand.codeGenExpr(compiler, leftRegister);
         // load the right operand
         GPRegister rightRegister = compiler.allocateRegister();
-        // if right register is null, the result will be on the stack
+        boolean needRightRegisterSpace = rightRegister == null;
+        // if right register is null, use R3
+        if(needRightRegisterSpace) {
+            // need to assert left register is not right register
+            if(leftRegister.getNumber() == 2) {
+                rightRegister = Register.getR(3);
+            }
+            else {
+                rightRegister = Register.getR(2);
+            }
+            compiler.incrementContextUsedStack();
+            compiler.addInstruction(new PUSH(rightRegister));
+        }
         rightOperand.codeGenExpr(compiler, rightRegister);
         // do the operation
-        codeGenBinExp(compiler, leftRegister, rightRegister == null ? new RegisterOffset(-1, Register.SP) : rightRegister);
-        if(rightRegister == null) {
-            // remove the value from the stack (we don't actually care were we put the result, it have been used already)
+        codeGenBinExp(compiler, leftRegister, rightRegister);
+        if(needRightRegisterSpace) {
+            // restor R3
             compiler.increaseContextUsedStack(-1);
-            compiler.addInstruction(new POP(Register.R0));
+            compiler.addInstruction(new POP(rightRegister));
         }
         else {
-            // free the right register
+            // free right register
             compiler.freeRegister(rightRegister);
         }
         // restore R2 !
@@ -127,5 +140,18 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         leftOperand.prettyPrint(s, prefix, false);
         rightOperand.prettyPrint(s, prefix, true);
     }
+    
+    @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.leftOperand.spotUsedVar();
+        varSpotted = this.rightOperand.spotUsedVar() || varSpotted;
+        return varSpotted;
+    }
 
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        this.leftOperand.addMethodCalls(foundMethodCalls);
+        this.rightOperand.addMethodCalls(foundMethodCalls);
+    }
+    
 }

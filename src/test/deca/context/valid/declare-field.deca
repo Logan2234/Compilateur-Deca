@@ -1,0 +1,12 @@
+// Description:
+//    Assign un field
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 14/01/2023
+
+class A{
+    int x = 0;
+}

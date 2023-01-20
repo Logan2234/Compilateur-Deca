@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -20,7 +21,7 @@ import org.apache.commons.lang.Validate;
  */
 public class New extends AbstractExpr {
 
-    private final AbstractIdentifier classe; 
+    private final AbstractIdentifier classe;
 
     public New(AbstractIdentifier classe) {
         Validate.notNull(classe);
@@ -28,14 +29,20 @@ public class New extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        Type type = this.classe.verifyType(compiler);
+        if (!type.isClass()) {
+            Location loc = this.getLocation();
+            throw new ContextualError("New is only for classes", loc);
+        }
+        this.setType(type);
+        return type;
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("new");
+        s.print("new ");
         classe.decompile(s);
         s.print("()");
     }
@@ -55,4 +62,13 @@ public class New extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
+    }
 }

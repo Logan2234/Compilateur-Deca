@@ -1,5 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import java.util.List;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
@@ -17,4 +19,13 @@ public abstract class AbstractStringLiteral extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
     
+    @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
+    }
 }

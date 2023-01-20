@@ -14,6 +14,8 @@ import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -48,7 +50,7 @@ public class FloatLiteral extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(java.lang.Float.toHexString(value));
+        s.print(java.lang.Float.toString(value));
     }
 
     @Override
@@ -98,6 +100,14 @@ public class FloatLiteral extends AbstractExpr {
     }
 
     @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
+    }
     public Float collapseFloat() {
         return value;
     }

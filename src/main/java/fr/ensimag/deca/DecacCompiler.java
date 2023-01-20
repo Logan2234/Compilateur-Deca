@@ -157,8 +157,10 @@ public class DecacCompiler {
     private boolean[] availableRegisters;
     /**
      * Stores the max reached stack size for each context (code block).
-     * We have one default context when the program starts, and more context with methods calls.
-     * Here, a block, or context, is for main program, ot methods, or classes initialization. 
+     * We have one default context when the program starts, and more context with
+     * methods calls.
+     * Here, a block, or context, is for main program, ot methods, or classes
+     * initialization.
      */
     private List<Integer> maxStackUseSize;
 
@@ -200,17 +202,17 @@ public class DecacCompiler {
     }
 
     /**
-     * Increase the size of the use stack of the block 
+     * Increase the size of the use stack of the block
+     * 
      * @param increment how much we want to increment the stack
      */
     public void increaseContextUsedStack(int increment) {
-        if(stackUsedSizes.size() == 0 || maxStackUseSize.size() == 0) {
+        if (stackUsedSizes.size() == 0 || maxStackUseSize.size() == 0) {
             throw new RuntimeException("No current context to incrment !");
-        }
-        else {
+        } else {
             int value = stackUsedSizes.get(stackUsedSizes.size() - 1) + increment;
             stackUsedSizes.set(stackUsedSizes.size() - 1, value);
-            if(value > maxStackUseSize.get(maxStackUseSize.size() - 1)) {
+            if (value > maxStackUseSize.get(maxStackUseSize.size() - 1)) {
                 maxStackUseSize.set(maxStackUseSize.size() - 1, value);
             }
         }
@@ -225,6 +227,7 @@ public class DecacCompiler {
 
     /**
      * finish the current context.
+     * 
      * @return the value of the max stack size of that context.
      */
     public int endCodeContext() {
@@ -238,11 +241,12 @@ public class DecacCompiler {
     public HashMap<Integer, AbstractRuntimeErr> usedErrors;
 
     /**
-     * Add an error to the used errors. They will then be generated at the end of the assembly code.
+     * Add an error to the used errors. They will then be generated at the end of
+     * the assembly code.
      */
     public void useRuntimeError(AbstractRuntimeErr error) {
         // check we are not using that error already
-        if(!usedErrors.containsKey(error.errorId())) {
+        if (!usedErrors.containsKey(error.errorId())) {
             usedErrors.put(error.errorId(), error);
         }
     }
@@ -310,6 +314,7 @@ public class DecacCompiler {
     private boolean doCompile(String sourceName, String destName, PrintStream out, PrintStream err)
             throws DecacFatalError, LocationException {
         AbstractProgram prog = doLexingAndParsing(sourceName, err);
+        assert (prog.checkAllLocations());
 
         if (prog == null) {
             LOG.info("Parsing failed");
@@ -325,9 +330,23 @@ public class DecacCompiler {
 
         if (compilerOptions.getCompileMode() != CompileMode.Verify) {
             if (compilerOptions.getOptimize()){
+                prog.verifyProgram(this);
                 prog.optimizeTree();
             }
-            if (compilerOptions.getCompileMode() != CompileMode.ParseOnly) {
+            LOG.info("Writing deca file ...");
+            prog.decompile(out);
+            LOG.info("Decompilation of " + sourceName + " successful.");
+        }
+
+        else {
+            prog.verifyProgram(this);
+            assert (prog.checkAllDecorations());
+            if (compilerOptions.getCompileMode() == CompileMode.Compile) {
+                if (compilerOptions.getOptimize()){
+                    LOG.info("Optimizing the tree...");
+                    prog.optimizeTree();
+                    LOG.info("Tree optimized...");
+                }
                 addComment("start main program");
                 prog.codeGenProgram(this);
                 addComment("end main program");

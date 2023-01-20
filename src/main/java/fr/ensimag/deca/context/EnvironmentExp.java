@@ -24,7 +24,7 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
  * @date 01/01/2023
  */
 public class EnvironmentExp {
-    EnvironmentExp parentEnvironment;
+    public EnvironmentExp parentEnvironment;
     private Map<Symbol, ExpDefinition> dico = new HashMap<>();
 
     public EnvironmentExp(EnvironmentExp parentEnvironment) {
@@ -41,15 +41,16 @@ public class EnvironmentExp {
      */
     public ExpDefinition get(Symbol key) {
         Map<Symbol, ExpDefinition> dico = this.dico;
+        EnvironmentExp current = this;
         while (dico != null) {
             if (dico.containsKey(key))
                 return dico.get(key);
-            if (this.parentEnvironment != null)
-                dico = this.parentEnvironment.dico;
-            else
+            if (current.parentEnvironment != null) {
+                current = current.parentEnvironment;
+                dico = current.dico;
+            } else
                 break;
         }
-        
         return null;
     }
 
@@ -74,5 +75,4 @@ public class EnvironmentExp {
             throw new DoubleDefException();
         dico.put(name, def);
     }
-
 }

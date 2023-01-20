@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -31,16 +32,40 @@ public class Cast extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        Location loc = this.getLocation();
+        Type typeExp = this.e.verifyExpr(compiler, localEnv, currentClass);
+        Type typeT = this.type.verifyType(compiler);
+
+        if (typeExp.isVoid()
+                || (!typeExp.assignCompatible(localEnv, typeT) && !typeT.assignCompatible(localEnv, typeExp))) {
+            throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
+                    + typeT.getName().getName() + "\"", loc);
+        }
+
+        // Ajout du décor
+        this.setType(typeT);
+        return typeT;
     }
+
+    /**
+     * Check if the two types are compatible for the cast
+     * 
+     * @param localEnv the local environment
+     * @param typeExp  the type of the expression to cast
+     * @param typeT    the type of the expected cast
+     * @return true if the two types are compatible, false if not
+     * 
+     * @author Nils Depuille
+     * @date 12/01/2023
+     */
 
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("(");
         type.decompile(s);
-        s.print(") (");
+        s.print(")(");
         e.decompile(s);
         s.print(")");
     }
@@ -62,4 +87,16 @@ public class Cast extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.type.spotUsedVar();
+        varSpotted = this.e.spotUsedVar() || varSpotted;
+        return varSpotted;
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // the expression could be obtained via a MethodCall
+        this.e.addMethodCalls(foundMethodCalls);
+    }
 }

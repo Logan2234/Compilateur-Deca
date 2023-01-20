@@ -7,35 +7,45 @@
 // Historique:
 //    cree le 04/01/2023
 //
-class A extends B {
+class A {
     protected int x;
+
     void setX(int a) {
         this.x = a;
-        return a;
+        return x;
     }
+
     protected int y;
-    void setY(int a) {
-        this.y = a;
+    boolean b = false;
+
+    int setY(int a) {
+        y = a;
+        setX(a);
+        return y;
     }
+
     int methodAsm(int x, boolean y)
         asm("
             code assembleur
             instruction
         ");
 }
-class X extends B {
-    void m()
-    {
+
+class B {
+    void m() {
         A a = new A();
         println(a.x);
     }
 }
 
 {
-    string test = "main";
+    int x = 1;
+    boolean y = false;
     A a = new A();
     B b = (B)(a);
     a.setX(3);
-    a.setX(true);
+    a.setY(true);
+    a.methodAsm(x,y);
     if (a instanceof X) {}
+    if (a == null) {}
 }

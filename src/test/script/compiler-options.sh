@@ -22,6 +22,10 @@ PATH=./src/test/script/options-scripts:"$PATH"
 if [[ $1 == "--maven" ]];
 then
     option-b --maven
+    if [ $? -ne 0 ]
+    then
+        exit 1
+    fi
 else
     option-b
 fi
@@ -29,6 +33,10 @@ fi
 if [[ $1 == "--maven" ]];
 then
     option-p --maven
+    if [ $? -ne 0 ]
+    then
+        exit 1
+    fi
 else
     option-p
 fi
@@ -36,8 +44,76 @@ fi
 if [[ $1 == "--maven" ]];
 then
     option-v --maven
+    if [ $? -ne 0 ]
+    then
+        exit 1
+    fi
 else
     option-v
 fi
 
-# TODO: Supprimer les fichiers inutiles .lis etc
+if [[ $1 == "--maven" ]];
+then
+    option-n --maven
+    if [ $? -ne 0 ]
+    then
+        exit 1
+    fi
+else
+    option-n
+fi
+
+if [[ $1 == "--maven" ]];
+then
+    option-r --maven
+    if [ $? -ne 0 ]
+    then
+        exit 1
+    fi
+else
+    option-r
+fi
+
+if [[ $1 == "--maven" ]];
+then
+    option-d --maven
+    if [ $? -ne 0 ]
+    then
+        exit 1
+    fi
+else
+    option-d
+fi
+
+if [[ $1 == "--maven" ]];
+then
+    option-parallel --maven
+    if [ $? -ne 0 ]
+    then
+        exit 1
+    fi
+else
+    option-parallel
+fi
+
+if [[ $1 == "--maven" ]];
+then
+    option-w --maven
+    if [ $? -ne 0 ]
+    then
+        exit 1
+    fi
+else
+    option-w
+fi
+
+if [[ $1 == "--maven" ]];
+then
+    other-cases --maven
+    if [ $? -ne 0 ]
+    then
+        exit 1
+    fi
+else
+    other-cases
+fi

@@ -1,0 +1,19 @@
+// Description:
+//    instanceOf doit être evalue a faux
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 11/01/2023
+//
+class A {}
+
+class B extends A {}
+
+{
+    A a = new A();
+    if(a instanceof B) {
+        print("Error");
+    }
+}

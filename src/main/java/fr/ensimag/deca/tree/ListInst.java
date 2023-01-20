@@ -48,6 +48,16 @@ public class ListInst extends TreeList<AbstractInst> {
     }
 
     @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = false;
+        for (AbstractInst inst : this.getList()) {
+            if (!(inst instanceof Identifier)) {
+                varSpotted = inst.spotUsedVar() || varSpotted;
+            }
+        }
+        return varSpotted;
+    }
+
     public boolean collapse() {
         // try to collapse each instruction into a list of instructions
         boolean collapse = false;

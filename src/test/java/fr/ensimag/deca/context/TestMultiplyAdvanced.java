@@ -1,15 +1,19 @@
 package fr.ensimag.deca.context;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.ConvFloat;
 import fr.ensimag.deca.tree.Multiply;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mock;
-import static org.mockito.Mockito.*;
-import org.mockito.MockitoAnnotations;
 
 /**
  * Test for the Plus node using mockito, using @Mock and @Before annotations.
@@ -32,7 +36,7 @@ public class TestMultiplyAdvanced {
     AbstractExpr floatexpr2;
 
     DecacCompiler compiler;
-    
+
     @BeforeEach
     public void setup() throws ContextualError {
         MockitoAnnotations.initMocks(this);

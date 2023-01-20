@@ -116,9 +116,6 @@ public class CompilerOptions {
                                 compileMode = CompileMode.ParseOnly;
                                 break;
                             }
-                            case ParseOnly: {
-                                /* ?? maybe throw don't repeat args exception ? */ break;
-                            }
                             case Verify: {
                                 throw new CLIException(
                                         "\u001B[31m/!\\ The option -p is not compatible with the -v option.\u001B[37m");
@@ -137,9 +134,6 @@ public class CompilerOptions {
                                 throw new CLIException(
                                         "\u001B[31m/!\\ The option -v is not compatible with the -p option.\u001B[37m");
                             }
-                            case Verify: {
-                                /* ?? maybe throw don't repeat args exception ? */ break;
-                            }
                         }
                         break;
                     }
@@ -153,13 +147,14 @@ public class CompilerOptions {
                             int registerNumber = Integer.parseInt(args[arg_index + 1]);
                             if (registerNumber < 4 || registerNumber > 16) {
                                 throw new CLIException(
-                                        "le nombre de registre à utiliser (spécifié avec -r) doit être compris entre 4 et 16.");
+                                        "\u001B[31m/!\\ The number of register must be between 4 and 16.\u001B[37m");
                             }
                             usedRegisterNumber = registerNumber;
+                            arg_index++;
                             break;
                         } catch (NumberFormatException e) {
                             throw new CLIException(
-                                    "L'option '-r' doit être suivie du nombre de registre à utiliser (compris entre 4 et 16).");
+                                    "\u001B[31m/!\\ The -r option must be followed by a number between 4 and 16.\u001B[37m");
                         }
                     }
                     case "-d": {
@@ -172,11 +167,14 @@ public class CompilerOptions {
                     }
                     case "-w": {
                         displayWarnings = true;
+                        break;
                     }
-
                     case "-o": {
                         optimize = true;
                         break;
+                    }
+                    default: {
+                        throw new CLIException("\u001B[31m/!\\ Unknown option\u001B[37m");
                     }
                 }
                 arg_index++;
@@ -194,6 +192,8 @@ public class CompilerOptions {
                 if (args[i].endsWith(".deca")) {
                     // read the file
                     sourceFiles.add(new File(args[i]));
+                } else {
+                    throw new CLIException("\u001B[31m/!\\ The file must be a .deca file.\u001B[37m");
                 }
             }
 
@@ -242,6 +242,5 @@ public class CompilerOptions {
         System.out.println("-o (optimize)            : optimize the code");
         System.out.println();
         System.out.println("Note : -p and -v are incompatible.");
-
     }
 }

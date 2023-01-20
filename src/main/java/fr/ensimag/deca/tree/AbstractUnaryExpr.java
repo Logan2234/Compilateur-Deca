@@ -9,6 +9,8 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -22,7 +24,9 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     public AbstractExpr getOperand() {
         return operand;
     }
+
     private AbstractExpr operand;
+
     public AbstractUnaryExpr(AbstractExpr operand) {
         Validate.notNull(operand);
         this.operand = operand;
@@ -35,7 +39,7 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
 
 
     protected abstract String getOperatorName();
-  
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("(");
@@ -57,22 +61,20 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // as for binary exp, put expr in register then apply codeGenUnExpr
-        if(resultRegister != null) {
+        if (resultRegister != null) {
             getOperand().codeGenExpr(compiler, resultRegister);
             codeGenUnExpr(compiler, resultRegister);
-        }
-        else {
+        } else {
             // we need to put the result on the stack
             // try to allocate a register to compute the result
             GPRegister register = compiler.allocateRegister();
-            if(register != null) {
+            if (register != null) {
                 getOperand().codeGenExpr(compiler, resultRegister);
                 codeGenUnExpr(compiler, resultRegister);
                 compiler.incrementContextUsedStack();
                 compiler.addInstruction(new PUSH(register));
                 compiler.freeRegister(register);
-            }
-            else {
+            } else {
                 // save R2
                 compiler.incrementContextUsedStack();
                 compiler.addInstruction(new PUSH(Register.getR(2)));
@@ -91,11 +93,24 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     }
 
     /**
-     * Generate the code for the unary expression, with the result regsiter being not null,
+     * Generate the code for the unary expression, with the result regsiter being
+     * not null,
      * and the expression being already computed and in the register.
-     * @param compiler Where we write the instructions to
-     * @param resulRegister not null. the expression have been computed and is in this register.
+     * 
+     * @param compiler      Where we write the instructions to
+     * @param resulRegister not null. the expression have been computed and is in
+     *                      this register.
      */
     public abstract void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister);
+    
+    @Override
+    protected boolean spotUsedVar() {
+        return this.operand.spotUsedVar();
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        this.operand.addMethodCalls(foundMethodCalls);
+    }
 
 }

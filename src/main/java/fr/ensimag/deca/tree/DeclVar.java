@@ -38,35 +38,35 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        type.verifyType(compiler);
 
-        Type type = this.type.getType();
-        
+        Type type = this.type.verifyType(compiler);
+
         if (type.isVoid())
-        throw new ContextualError("A variable can't be void (rule 3.17)", this.getLocation());
-        
+            throw new ContextualError("A variable can't be void (rule 3.17)", this.getLocation());
+
         try {
             ExpDefinition def = new VariableDefinition(type, this.getLocation());
+            initialization.verifyInitialization(compiler, type, localEnv, currentClass);
             localEnv.declare(this.varName.getName(), def);
-            varName.setDefinition(def);
-            varName.setType(type);
+            varName.verifyExpr(compiler, localEnv, currentClass);
+        } catch (DoubleDefException e) {
+            throw new ContextualError(
+                "The variable \"" + this.varName.getName().getName() + "\" has already been declared (rule 3.17)",
+                this.getLocation());
         }
-        catch (DoubleDefException e) {
-            throw new ContextualError("A variable \"" + this.varName.getName().getName() + "\" has already been declared (rule 3.17)", this.getLocation());
-        }
-        
-        initialization.verifyInitialization(compiler, type, localEnv, currentClass);
+
     }
 
     @Override
     public void codeGenDeclVar(DecacCompiler compiler, RegisterOffset register) {
-        // store the register in the definition of the variable, then assign it with the initialization.
+        // store the register in the definition of the variable, then assign it with the
+        // initialization.
         varName.getDefinition().setDAddr(register);
-        // store the variable at the address now, using a push as we are declaring all variables.
+        // store the variable at the address now, using a push as we are declaring all
+        // variables.
         initialization.codeGenInit(compiler);
     }
 
-    
     @Override
     public void decompile(IndentPrintStream s) {
         type.decompile(s);
@@ -91,6 +91,17 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
+    protected boolean spotUsedVar() {
+        // We don't spotUsedVar() on the type (it may be a class) or the identifier as they are just declared.
+        return this.initialization.spotUsedVar();
+    }
+
+    public AbstractIdentifier getVar() {
+        return this.varName;
+    }
+
+    public AbstractInitialization getInit() {
+        return this.initialization;
     public boolean collapse() {
         return initialization.collapse();
     }

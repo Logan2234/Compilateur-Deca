@@ -99,6 +99,11 @@ public class While extends AbstractInst {
         body.prettyPrint(s, prefix, true);
     }
 
+    @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.condition.spotUsedVar();
+        varSpotted = this.body.spotUsedVar() || varSpotted;
+        return varSpotted;
 
     @Override
     public boolean collapse() {

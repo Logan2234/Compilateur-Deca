@@ -1,0 +1,13 @@
+class A extends Object {
+}
+
+class B extends A {
+}
+
+{
+	A a = new A();
+	if ((a instanceof B)){
+		print("Error");
+	} else {
+	}
+}

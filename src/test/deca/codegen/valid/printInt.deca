@@ -1,13 +1,13 @@
 // Description:
-//    Print un int sans changer son type à string directement
+//    Print un int deux fois sans changer son type à string directement
 //
 // Resultats:
-//    42
+//    4242
 //
 // Historique:
 //    cree le 07/01/2023
 
 {
 	int i = 42;
-	println(i);
+	println(i, 42);
 }

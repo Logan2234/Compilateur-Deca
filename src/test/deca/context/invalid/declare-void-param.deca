@@ -1,0 +1,13 @@
+// Description:
+//    Déclare un paramètre de type void
+//
+// Resultats:
+//    Erreur contextuelle   
+//    Ligne 12: The parameter's type can't be void (rule 2.9)
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {
+    void set(void x){}
+}

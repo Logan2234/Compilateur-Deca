@@ -105,6 +105,24 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.condition.spotUsedVar();
+        varSpotted = this.thenBranch.spotUsedVar() || varSpotted;
+        varSpotted = this.elseBranch.spotUsedVar() || varSpotted;
+        return varSpotted;
+    }
+
+    public ListInst getThenInst() {
+        return this.thenBranch;
+    }
+
+    public ListInst getElseInst() {
+        return this.elseBranch;
+    }
+
+    public AbstractExpr getCondition() {
+        return this.condition;
+    }
     public boolean collapse() {
         return condition.collapse() || thenBranch.collapse() || elseBranch.collapse();
     }

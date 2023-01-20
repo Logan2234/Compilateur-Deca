@@ -9,6 +9,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Integer literal
@@ -22,11 +23,12 @@ public class Null extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        // Ajout du décor
+        setType(compiler.environmentType.NULL);
+        return compiler.environmentType.NULL;
     }
-
 
     @Override
     String prettyPrintNode() {
@@ -51,6 +53,16 @@ public class Null extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         throw new UnsupportedOperationException("not yet implemented");
+    }
+
+    @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
     }
 
 }

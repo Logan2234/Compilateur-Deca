@@ -1,0 +1,23 @@
+class A extends Object {
+
+	int cos(int a){
+		return a;
+	}
+}
+
+class B extends A {
+	int x;
+
+	int getX(){
+		(x = 2);
+		return x;
+	}
+}
+
+{
+	B b = new B();
+	readInt();
+	b.cos(2);
+	b.cos(3);
+	print(b.getX());
+}

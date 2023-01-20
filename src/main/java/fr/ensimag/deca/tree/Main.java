@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -29,8 +30,9 @@ public class Main extends AbstractMain {
         // LOG.debug("verify Main: start");
         // Création d'un EnvironnementExp vide
         EnvironmentExp localEnv = new EnvironmentExp(null);
-        declVariables.verifyListDeclVariable(compiler, localEnv, null);
-        insts.verifyListInst(compiler, localEnv, null, compiler.environmentType.VOID);
+        ClassDefinition object = new ClassDefinition(compiler.environmentType.OBJECT, getLocation(), null);
+        declVariables.verifyListDeclVariable(compiler, localEnv, object);
+        insts.verifyListInst(compiler, localEnv, object, compiler.environmentType.VOID);
         // LOG.debug("verify Main: end");
     }
 
@@ -65,6 +67,18 @@ public class Main extends AbstractMain {
     }
 
     @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = declVariables.spotUsedVar();
+        varSpotted = insts.spotUsedVar() || varSpotted;
+        return varSpotted;
+    }
+
+    public ListDeclVar getListDeclVar() {
+        return this.declVariables;
+    }
+
+    public ListInst getListInst() {
+        return this.insts;
     public boolean collapse() {
         // if either one of the declaration or instructions collapsed, we collapsed
         return declVariables.collapse() || insts.collapse();

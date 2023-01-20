@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Colors:
+RED='\033[0;31m'
+REDBOLD='\033[0;31;1m'
+GREENBOLD='\033[0;32;1m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+BWHITE='\033[1;37m'
+
+# On se place dans le répertoire du projet (quel que soit le
+# répertoire d'où est lancé le script) :
+cd "$(dirname "$0")"/../../../../ || exit 1
+
+PATH=./src/test/script/launchers:"$PATH"
+
+echo -e "${BWHITE}\n============================= -P option =============================\n"
+
+# files=$(find ./src/test/deca/context/valid -maxdepth 1 -name "*.deca")
+
+# for test in $files
+# do
+#     decac -P $test $test
+    echo -e "${GREENBOLD}TODO: Find a way to test this option efficiently."
+#     break
+# done

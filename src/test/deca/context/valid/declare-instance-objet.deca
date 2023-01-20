@@ -1,0 +1,13 @@
+// Description:
+//    Instancie un objet de la classe objet
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 16/01/2023
+
+{
+    Object o = new Object();
+    o.equals(o);
+}

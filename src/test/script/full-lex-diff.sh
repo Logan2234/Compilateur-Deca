@@ -24,6 +24,7 @@ RED='\033[0;31m'
 BGREEN='\033[1;32m'
 GREEN='\033[0;32m'
 BWHITE='\033[1;37m'
+NOCOLOR='\033[0m'
 
 # Stat var
 NB_TESTS=0
@@ -51,9 +52,9 @@ do
     if [ "$diff" = "" ]
     then
         ((NB_PASSED = NB_PASSED + 1))
-        echo -e "${BGREEN}Test passed ($NB_PASSED/$NB_TESTS): ${GREEN}$test"
+        echo -e "${BGREEN}Test passed ($NB_PASSED/$NB_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${GREEN} returns the same result as in the correction"
     else
-        echo -e "${BRED}Test failed ($NB_PASSED/$NB_TESTS): ${RED}$test"
+        echo -e "${BRED}Test failed ($NB_PASSED/$NB_TESTS): $NOCOLOR${test/.\/src\/test\/deca\//}${RED} does not return the same result as in the correction"
         if [[ $1 == "--maven" ]];
         then
             exit 1
@@ -69,9 +70,13 @@ if ((TEMP));
 then
     echo -e "\n${GREEN} Valid test passed: "
     printf %2.0f $VALID_PASSED_PERCENTAGE
-    echo "%"
+    echo -e "%\n"
 else
     echo -e "\n${RED} Valid test passed: "
     printf %2.0f $VALID_PASSED_PERCENTAGE
-    echo "%"
+    echo -e "%\n"
 fi
+
+rm ./src/test/deca/syntax/valid/provided/*.lis
+rm ./src/test/deca/syntax/invalid/provided/*.lis
+rm ./src/test/deca/syntax/invalid/lexer/*.lis

@@ -9,7 +9,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
-
+import java.util.List;
 
 /**
  * This statment
@@ -19,7 +19,7 @@ import java.io.PrintStream;
  */
 public class This extends AbstractExpr {
 
-    private final boolean impl; 
+    private final boolean impl;
 
     public This(boolean impl) {
         this.impl = impl;
@@ -31,14 +31,22 @@ public class This extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        Location loc = this.getLocation();
+        if (currentClass.getType().getName().getName() == "Object") {
+            throw new ContextualError("This can only be used in a class (rule 3.43)", loc);
+        }
+
+        this.setType(currentClass.getType());
+        return currentClass.getType();
+        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        if (!impl) s.print("this");
+        if (!impl)
+            s.print("this");
     }
 
     @Override
@@ -54,6 +62,16 @@ public class This extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         throw new UnsupportedOperationException("not yet implemented");
+    }
+
+    @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
     }
 
 }

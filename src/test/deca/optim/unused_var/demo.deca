@@ -1,0 +1,29 @@
+// ce fichier n'est pas un test mais une demo de l'optimisation "unused variables"
+
+class A {
+    int cos(int a) { return a;}
+}
+
+class B extends A {
+    int x;
+    int getX(){x=2;return x;}                    
+}
+
+class C {}
+
+{
+    int x,y;
+    int z = 2;
+
+    A a = new A();
+    B b = new B();
+    C c = new C();
+
+    x = readInt();
+    z = 2 + b.cos(2);
+    0 + b.cos(3);
+    42;
+    ;;
+ 
+    print(b.getX());
+}
