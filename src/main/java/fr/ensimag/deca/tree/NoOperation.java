@@ -45,6 +45,8 @@ public class NoOperation extends AbstractInst {
     protected boolean spotUsedVar() {
         return false;
     }
+
+    @Override
     public boolean collapse() {
         // TODO
         return false;

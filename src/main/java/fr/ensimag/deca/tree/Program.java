@@ -383,6 +383,7 @@ public class Program extends AbstractProgram {
         return varSpotted;
     }
 
+    @Override
     public boolean collapse() {
         return classes.collapse() || main.collapse();
     }

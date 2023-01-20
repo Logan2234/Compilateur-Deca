@@ -137,6 +137,9 @@ public class DeclMethod extends AbstractDeclMethod {
 
     public AbstractMethod getBody() {
         return this.body;
+    }
+
+    @Override
     public boolean collapse() {
         body.collapse();
         return false;

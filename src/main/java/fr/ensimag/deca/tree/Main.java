@@ -79,6 +79,9 @@ public class Main extends AbstractMain {
 
     public ListInst getListInst() {
         return this.insts;
+    }
+
+    @Override
     public boolean collapse() {
         // if either one of the declaration or instructions collapsed, we collapsed
         return declVariables.collapse() || insts.collapse();

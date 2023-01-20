@@ -123,6 +123,8 @@ public class IfThenElse extends AbstractInst {
     public AbstractExpr getCondition() {
         return this.condition;
     }
+
+    @Override
     public boolean collapse() {
         return condition.collapse() || thenBranch.collapse() || elseBranch.collapse();
     }

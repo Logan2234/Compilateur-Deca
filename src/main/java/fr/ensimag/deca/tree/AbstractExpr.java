@@ -230,6 +230,8 @@ public abstract class AbstractExpr extends AbstractInst {
         List<AbstractExpr> foundMethodCalls = new LinkedList<AbstractExpr>();
         this.addMethodCalls(foundMethodCalls);
         return foundMethodCalls;
+    }
+    
     @Override
     public boolean collapse() {
         // by default, return false. 

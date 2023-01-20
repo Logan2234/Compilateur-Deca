@@ -102,6 +102,9 @@ public class DeclVar extends AbstractDeclVar {
 
     public AbstractInitialization getInit() {
         return this.initialization;
+    }
+
+    @Override
     public boolean collapse() {
         return initialization.collapse();
     }

@@ -62,6 +62,9 @@ public class Return extends AbstractInst {
     @Override
     protected boolean spotUsedVar() {
         return this.e.spotUsedVar();
+    }
+
+    @Override
     public boolean collapse() {
         return false;
     }

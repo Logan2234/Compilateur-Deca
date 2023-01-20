@@ -96,6 +96,8 @@ public class IntLiteral extends AbstractExpr {
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
+    }
+    
     public Integer collapseInt() {
         return value;
     }

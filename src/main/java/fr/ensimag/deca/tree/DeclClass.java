@@ -125,6 +125,8 @@ public class DeclClass extends AbstractDeclClass {
     public AbstractIdentifier getName() {
         return this.name;
     }
+    
+    @Override
     public boolean collapse() {
         fields.collapse();
         methods.collapse();

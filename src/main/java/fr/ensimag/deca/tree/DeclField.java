@@ -111,6 +111,8 @@ public class DeclField extends AbstractDeclField {
     public AbstractIdentifier getName() {
         return this.fieldName;
     }
+
+    @Override
     public boolean collapse() {
         initialization.collapse();
         return false;

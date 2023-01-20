@@ -61,6 +61,8 @@ public class NoInitialization extends AbstractInitialization {
     protected boolean spotUsedVar() {
         return false;
     }
+    
+    @Override
     public boolean collapse() {
         // TODO
         return false;

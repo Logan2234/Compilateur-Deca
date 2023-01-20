@@ -92,6 +92,8 @@ public class Initialization extends AbstractInitialization {
     @Override
     protected boolean spotUsedVar() {
         return this.expression.spotUsedVar();
+    }
+    
     @Override 
     public boolean collapse(){
         boolean collapsing = false;

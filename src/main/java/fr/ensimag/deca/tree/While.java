@@ -104,6 +104,7 @@ public class While extends AbstractInst {
         boolean varSpotted = this.condition.spotUsedVar();
         varSpotted = this.body.spotUsedVar() || varSpotted;
         return varSpotted;
+    }
 
     @Override
     public boolean collapse() {
