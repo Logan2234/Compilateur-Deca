@@ -130,17 +130,25 @@ public class Assign extends AbstractBinaryExpr {
 
         } else {
 
+            if (getRightOperand().isSelection()){
+                AbstractExpr out = ((Selection) getRightOperand()).returnIrrelevantFromSelection();
+                if (out != null) setRightOperand(out);
+            }
             if (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName())){
                 setRightOperand((currentValues.get(((Identifier) getRightOperand()).getName())));
             }
             if (!getRightOperand().isReadExpr()){
-                currentValues.put(getLeftOperand().getName(), getRightOperand());
+                if (getLeftOperand().isSelection()) {((Selection) getLeftOperand()).putIrrelevantFromSelection(getRightOperand());}
+                else currentValues.put(getLeftOperand().getName(), getRightOperand());
 
-            } else if (currentValues.containsKey(getLeftOperand().getName())){
-                currentValues.remove(getLeftOperand().getName());
-            } 
+            } else if (getLeftOperand().isSelection()){
+                ((Selection) getLeftOperand()).erraseIrrelevantFromSelection();
+            }
+            else {
+                if (currentValues.containsKey(getLeftOperand().getName())) currentValues.remove(getLeftOperand().getName());
+            }
         }
-        return false;
+        return false; 
     }
 
     @Override

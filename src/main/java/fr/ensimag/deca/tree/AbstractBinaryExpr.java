@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
@@ -9,6 +10,8 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -140,14 +143,29 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
     @Override
     public boolean irrelevant() {
-        if (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName())) {
-            rightOperand = currentValues.get(((Identifier) getRightOperand()).getName());
+        if (defClass){
+
+            HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
+
+            if (getRightOperand().irrelevant() && actualDico.containsKey(((Identifier) getRightOperand()).getName())) {
+                rightOperand = actualDico.get(((Identifier) getRightOperand()).getName());
+            }
+            if (getLeftOperand().irrelevant() && actualDico.containsKey(((Identifier) getLeftOperand()).getName())) {
+                leftOperand = actualDico.get(((Identifier) getLeftOperand()).getName());
+            }
+            varModels.put(actualClass, actualDico);
+            return (leftOperand.irrelevant() && actualDico.containsKey(((Identifier) getLeftOperand()).getName())) || (rightOperand.irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName()));
+        
+        } else { 
+            if (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName())) {
+                rightOperand = currentValues.get(((Identifier) getRightOperand()).getName());
+            }
+            if (getLeftOperand().irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) {
+                leftOperand = currentValues.get(((Identifier) getLeftOperand()).getName());
+            }
+            return (leftOperand.irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) || (rightOperand.irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName()));
         }
-        if (getLeftOperand().irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) {
-            leftOperand = currentValues.get(((Identifier) getLeftOperand()).getName());
-        }
-        return (leftOperand.irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) || (rightOperand.irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName()));
-    }
+    } 
 
     @Override
     public boolean isReadExpr() {

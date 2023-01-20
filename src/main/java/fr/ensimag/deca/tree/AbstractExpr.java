@@ -212,6 +212,22 @@ public abstract class AbstractExpr extends AbstractInst {
         // expressions that can errase irrelevant expressions will override this.
     }
 
+    /**
+     * Function telling if the expression is a "This" instance
+     * @return id the expression is a "This" instance
+     */
+    public boolean isThis(){
+        return false;
+    }
+
+    /**
+     * Tells if the LValue is a "Selection" instance
+     * @return if the LValue is a "Selection" instance
+     */
+    public boolean isSelection(){
+        return false;
+    }
+
 
     @Override
     public boolean collapse() {

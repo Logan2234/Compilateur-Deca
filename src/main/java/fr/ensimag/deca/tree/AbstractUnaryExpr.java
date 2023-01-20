@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -9,6 +10,8 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -103,10 +106,21 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
 
     @Override
     public boolean irrelevant() {
-        if (operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName())){
-            operand = currentValues.get(((Identifier) operand).getName());
+        if (defClass){
+
+            HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
+            if (operand.irrelevant() && actualDico.containsKey(((Identifier) operand).getName())){
+                operand = actualDico.get(((Identifier) operand).getName());
+            }
+            varModels.put(actualClass, actualDico);
+            return operand.irrelevant() && actualDico.containsKey(((Identifier) operand).getName());
+        
+        } else {
+            if (operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName())){
+                operand = currentValues.get(((Identifier) operand).getName());
+            }
+            return operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName());
         }
-        return operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName());
     }
 
     @Override

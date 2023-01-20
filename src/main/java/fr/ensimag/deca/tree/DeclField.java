@@ -134,7 +134,7 @@ public class DeclField extends AbstractDeclField {
                 actualDico.remove(fieldName.getName());
             } 
             varModels.put(actualClass, actualDico);
-        }
+        }   
         return false;
     }
 }

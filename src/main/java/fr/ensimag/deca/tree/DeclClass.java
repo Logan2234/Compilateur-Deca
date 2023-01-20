@@ -126,7 +126,6 @@ public class DeclClass extends AbstractDeclClass {
     public boolean irrelevant(){
         defClass = true;
         actualClass = name.getName();
-        System.out.println("Marc? " + actualClass.toString());
         varModels.put(actualClass, new HashMap<Symbol, AbstractExpr>());
         fields.irrelevant();
         methods.irrelevant();

@@ -101,10 +101,16 @@ public class DeclVar extends AbstractDeclVar {
         if (initialization.hasInitialization()) {
             AbstractExpr expr = ((Initialization) initialization).getExpression();
 
-            // if (expr.isNew()){
-            //     // TODO
-            //     return false;
-            // }
+            if (expr.isNew()){
+                declaredClasses.put(varName.getName(), varModels.get(((New) expr).getClasse().getName()));
+                return false;
+            }
+
+            if (expr.isSelection()){
+                AbstractExpr out = ((Selection) expr).returnIrrelevantFromSelection();
+                if (out != null) ((Initialization) initialization).setExpression(out);
+                return false;
+            }
 
             if (expr.irrelevant()){
                 ((Initialization) initialization).setExpression(currentValues.get(((Identifier) expr).getName()));

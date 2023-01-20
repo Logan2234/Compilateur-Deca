@@ -63,4 +63,9 @@ public class This extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    public boolean isThis(){
+        return true;
+    }
+
 }

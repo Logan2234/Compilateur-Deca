@@ -11,6 +11,8 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -97,6 +99,31 @@ public class Selection extends AbstractLValue {
     @Override
     public Symbol getName() {
         return field.getName();
+    }
+
+    @Override
+    public boolean isSelection(){
+        return true;
+    }
+
+    public AbstractExpr returnIrrelevantFromSelection(){
+        if (obj.isThis()){
+            return currentValues.get(field.getName());
+        } else return declaredClasses.get(((Identifier) obj).getName()).get(field.getName());
+    }
+
+    public void putIrrelevantFromSelection(AbstractExpr e){
+        HashMap<Symbol, AbstractExpr> dico = declaredClasses.get(((Identifier) obj).getName());
+        dico.put(field.getName(), e);
+        declaredClasses.put(((Identifier) obj).getName(), dico);
+    }
+
+    public void erraseIrrelevantFromSelection(){
+        HashMap<Symbol, AbstractExpr> dico = declaredClasses.get(((Identifier) obj).getName());
+        if (dico.containsKey(field.getName())) {
+            dico.remove(field.getName());
+            declaredClasses.put(((Identifier) obj).getName(), dico);
+        }
     }
 
 }
