@@ -23,7 +23,7 @@ public class AssemblyOptimizer {
      * @param program The IMA program to optimize.
      */
     public static void Optimize(IMAProgram program) {
-        boolean keepOptimizing = true;
+        boolean keepOptimizing = false;
         while(keepOptimizing) {
             keepOptimizing = false;
             // replace known values

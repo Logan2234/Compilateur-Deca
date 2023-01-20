@@ -80,6 +80,11 @@ public class TestPlusWithoutMock {
         protected void spotUsedVar(AbstractProgram prog) {
             // TODO Auto-generated method stub
         }
+
+        @Override
+        public boolean factorised(DecacCompiler compiler) {
+            return false;
+        }
     }
 
     public void testType() throws ContextualError {

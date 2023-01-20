@@ -57,9 +57,11 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
             i.verifyDeclVar(compiler, localEnv, currentClass);
     }
 
+    @Override
     public boolean factorised(DecacCompiler compiler) {
         return false;
     }
+    
     @Override
     public boolean collapse() {
         // try to collapse each decl var
