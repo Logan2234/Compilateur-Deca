@@ -65,17 +65,4 @@ public class FieldDefinition extends ExpDefinition {
         return varSpotted;
     }
 
-    /**
-     * If the unspotted field is an override of a useful method, it may be dynamically useful.
-     * @return true if the method is an override of a used method
-     */
-    public boolean isOverrideOfUsed(Map<ClassDefinition,Set<Integer>> exploredFields) {
-        boolean res = false;
-        ClassDefinition superClass = this.containingClass.getSuperClass();
-        while(superClass != null && !res && this.index<=superClass.getNumberOfFields()) {
-            res = exploredFields.get(superClass).contains(this.index);
-            superClass = superClass.getSuperClass();
-        }
-        return res;
-    }
 }

@@ -5,6 +5,7 @@ import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
 import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
@@ -162,9 +163,9 @@ public class Program extends AbstractProgram {
         boolean varSpotted = true;
         while (varSpotted) {
             varSpotted = this.main.spotUsedVar();
-            varSpotted = this.spotFromUsedMethods() || varSpotted;
+            this.spotFromUsedMethods();
         }
-        varSpotted = this.spotOverridingFields() || varSpotted;
+        this.spotOverridingFields();
         this.spotted = true;
         return varSpotted;
     }
@@ -374,7 +375,6 @@ public class Program extends AbstractProgram {
 
     /**
      * Remove all useless classes, methods and fields
-     * 
      * @return true if ListDeclClass has been simplified
      */
     private boolean optimizeClasses() {
@@ -424,14 +424,16 @@ public class Program extends AbstractProgram {
     }
 
     /**
-     * Spot useful variables from used methods and spot methods overriding useful methods
-     * @return true if variables have been spotted
+     * Spot useful variables from used methods and spot methods overriding useful methods.
+     * At the beginning, some methods have already been spotted from the Main but their body
+     * have not been browsed yet for finding useful variables
      */
-    private boolean spotFromUsedMethods() {
-        boolean res = false;
-        boolean varSpotted = true;
+    private void spotFromUsedMethods() {
+        LOG.debug("===================== Spot from methods =====================");
 
         /* init */
+        // at the beginning, some methods are spotted from the Main but their body have not been browsed
+        // yet for finding other variables used
         Map<ClassDefinition,Set<Integer>> exploredMethods = new HashMap<ClassDefinition,Set<Integer>>();
         Set<DeclMethod> methodsToSpot = new HashSet<DeclMethod>();
         for (AbstractDeclClass c : this.classes.getList()) {
@@ -441,6 +443,10 @@ public class Program extends AbstractProgram {
             }
         }
 
+        /* spotting */
+        // When a method is spotted, its body is spotted and we may find other methods used.
+        // So we have to keep spotting until there is no more variable spotted
+        boolean varSpotted = true;
         while (varSpotted) {
             varSpotted = false;
 
@@ -451,47 +457,61 @@ public class Program extends AbstractProgram {
                 ClassDefinition containingClass = methDef.getContainingClass();
                 if (methDef.isUsed() || (containingClass.isUsed() && methDef.isOverrideOfUsed(exploredMethods))) {
                     // if method used or (containing class used and override)
-                    varSpotted = method.spotUsedVar() || varSpotted;
+                    varSpotted = method.spotUsedVar();
                     iter.remove();
                     exploredMethods.get(containingClass).add(methDef.getIndex());
                 }
             }
-            res = res || varSpotted;
         }
-        return res;
     }
 
     /**
-     * Spot fields overriding useful fields
-     * @return true if fields have been spotted
+     * Spot fields overriding useful fields.
+     * At the beginning, some methods have already been spotted from the Main
      */
-    private boolean spotOverridingFields() {
-        boolean varSpotted = true;
+    private void spotOverridingFields() {
+        LOG.debug("===================== Spot from fields =====================");
 
         /* init */
-        Map<ClassDefinition,Set<Integer>> usedFields = new HashMap<ClassDefinition,Set<Integer>>();
-        Set<FieldDefinition> fieldsToSpot = new HashSet<FieldDefinition>();
+        Map<Symbol,Set<ClassDefinition>> usedFields = new HashMap<Symbol,Set<ClassDefinition>>();
+        Set<DeclField> fieldsToSpot = new HashSet<DeclField>();
         for (AbstractDeclClass c : this.classes.getList()) {
+            DeclClass class_ = (DeclClass) c;
+            // if a class is not used, its fields won't be used anyway
+            if (!class_.getName().getDefinition().isUsed()) {continue;}
             for (AbstractDeclField field : ((DeclClass)c).getFields().getList()) {
-                ClassDefinition containingClass = ((DeclClass)c).getName().getClassDefinition();                   
                 FieldDefinition fieldDef = ((DeclField)field).getName().getFieldDefinition();
-                usedFields.put(containingClass,new HashSet<Integer>());
-                if (fieldDef.isUsed()) {
-                    usedFields.get(containingClass).add(fieldDef.getIndex());
+                
+                if (fieldDef.isUsed()){
+                    // add the class to the table
+                    Symbol symb = ((DeclField)field).getName().getName();
+                    if (!usedFields.containsKey(symb)) {
+                        usedFields.put(symb, new HashSet<ClassDefinition>());
+                    }
+                    usedFields.get(symb).add(fieldDef.getContainingClass());
                 }
                 else {
-                    fieldsToSpot.add(fieldDef);
+                    fieldsToSpot.add((DeclField)field);
                 }
             }
         }
-        for (FieldDefinition fieldDef : fieldsToSpot) {
-            if (fieldDef.isOverrideOfUsed(usedFields)) {
-                ClassDefinition containingClass = fieldDef.getContainingClass();
-                varSpotted = fieldDef.spotUsedVar();
-                usedFields.get(containingClass).add(fieldDef.getIndex());
+
+        /* spotting */
+        for (DeclField field : fieldsToSpot) {
+            Symbol symb = ((DeclField)field).getName().getName();
+            if (usedFields.containsKey(symb)) {
+                ClassDefinition containingClass = field.getName().getFieldDefinition().getContainingClass();
+                ClassDefinition currentClass = containingClass;
+                // check if override of used field
+                while (currentClass != null && !usedFields.get(symb).contains(currentClass)) {
+                    currentClass = currentClass.getSuperClass();
+                }
+                if (currentClass != null) {
+                    field.spotUsedVar();
+                    usedFields.get(symb).add(currentClass);
+                }
             }
         }
-        return varSpotted;
     }
 
     @Override

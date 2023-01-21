@@ -119,8 +119,8 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     protected boolean spotUsedVar() {
-        // We don't spotUsedVar() on classes. We spot them indirectly from the main
-        return false;
+        boolean varSpotted = this.type.spotUsedVar();
+        return this.fieldName.spotUsedVar() || varSpotted;
     }
 
     @Override
