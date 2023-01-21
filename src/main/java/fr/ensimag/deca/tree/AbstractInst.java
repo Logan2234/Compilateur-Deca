@@ -44,4 +44,11 @@ public abstract class AbstractInst extends Tree {
     protected void decompileInst(IndentPrintStream s) {
         decompile(s);
     }
+
+    /**
+     * Collapse instructions.
+     * It collapse to a list of instructions, because if blocks can collapse to one of the branches for example.
+     * @return
+     */
+    public abstract ListInst collapseInst();
 }

@@ -113,8 +113,8 @@ public class New extends AbstractExpr {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    protected boolean spotUsedVar() {
+        return false;
     }
 
     @Override

@@ -32,6 +32,12 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         this.operand = operand;
     }
 
+    public void setOperand(AbstractExpr operand){
+        Validate.notNull(operand);
+        this.operand = operand;
+    }
+
+
     protected abstract String getOperatorName();
 
     @Override
@@ -85,8 +91,8 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     public abstract void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister);
     
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.operand.spotUsedVar(prog);
+    protected boolean spotUsedVar() {
+        return this.operand.spotUsedVar();
     }
 
     @Override

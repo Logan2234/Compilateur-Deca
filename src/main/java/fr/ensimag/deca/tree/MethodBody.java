@@ -67,6 +67,18 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.vars.spotUsedVar();
+        varSpotted = this.insts.spotUsedVar() || varSpotted;
+        return varSpotted;
+    }
+
+    @Override
+    public boolean collapse() {
+        // TODO
+        return false;
+    }
+	@Override
     public void codeGenMethod(DecacCompiler compiler) {
         // generate code for delcare variables
         vars.codeGenDeclVar(compiler);
@@ -82,10 +94,5 @@ public class MethodBody extends AbstractMethod {
                 inst.asReturn().setMethodClassName(name);
             }
         }
-    }
-    
-    protected void spotUsedVar(AbstractProgram prog) {
-        vars.spotUsedVar(prog);
-        insts.spotUsedVar(prog);
     }
 }

@@ -81,17 +81,27 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
-    protected Boolean isLiteral() {
+    public boolean collapse() {
+        // every litteral can be trivialy solved.
         return true;
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    protected boolean spotUsedVar() {
+        return false;
     }
 
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
+    }
+    
+    public Integer collapseInt() {
+        return value;
+    }
+
+    @Override
+    public boolean collapsable() {
+        return false;
     }
 }

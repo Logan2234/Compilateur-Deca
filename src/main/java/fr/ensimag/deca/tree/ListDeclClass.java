@@ -78,4 +78,9 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
             c.codeGenClass(compiler);
         }
     }
+	@Override
+    public boolean collapse() {
+        return false;
+        // TODO
+    }
 }

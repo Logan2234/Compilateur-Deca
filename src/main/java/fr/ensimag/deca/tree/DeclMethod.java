@@ -87,10 +87,10 @@ public class DeclMethod extends AbstractDeclMethod {
                             "The return type is not the same as defined in the superclass (or not a subtype) (rule 2.7)",
                             getLocation());
             }
-            methodeDef = new MethodDefinition(type, getLocation(), signature, motherMethod.getIndex());
+            methodeDef = new MethodDefinition(type, this.getLocation(), signature, motherMethod.getIndex(), currentClass);
         } else {
             currentClass.incNumberOfMethods();
-            methodeDef = new MethodDefinition(type, getLocation(), signature, currentClass.getNumberOfMethods());
+            methodeDef = new MethodDefinition(type, this.getLocation(), signature, currentClass.getNumberOfMethods(), currentClass);
         }
         try {
             localEnv.declare(methodName.getName(), methodeDef);
@@ -183,11 +183,14 @@ public class DeclMethod extends AbstractDeclMethod {
         compiler.addInstruction(new RTS());
     }
     
-    public void spotUsedVar(AbstractProgram prog) {
-        this.type.spotUsedVar(prog);
-        this.body.spotUsedVar(prog);
-        this.methodName.spotUsedVar(prog);
+
+    @Override
+    public boolean spotUsedVar() {
+        boolean varSpotted = this.type.spotUsedVar();
+        varSpotted = this.body.spotUsedVar() || varSpotted;
+        varSpotted = this.methodName.spotUsedVar() || varSpotted;
         // we spot the param when they are used in the body
+        return varSpotted;
     }
 
     public AbstractIdentifier getName() {
@@ -196,5 +199,11 @@ public class DeclMethod extends AbstractDeclMethod {
 
     public AbstractMethod getBody() {
         return this.body;
+    }
+
+    @Override
+    public boolean collapse() {
+        body.collapse();
+        return false;
     }
 }

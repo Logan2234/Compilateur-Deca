@@ -1,0 +1,17 @@
+// Description:
+//    keep parameters
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 20/01/2023
+//
+class A {
+    void useless_param(int x){}
+}
+
+{
+    A a = new A();
+    a.useless_param(3);
+}

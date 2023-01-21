@@ -2,6 +2,10 @@ package fr.ensimag.deca.context;
 
 import fr.ensimag.deca.tree.*;
 import fr.ensimag.ima.pseudocode.Label;
+
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
@@ -42,6 +46,7 @@ public class MethodDefinition extends ExpDefinition {
     }
 
     private final Signature signature;
+    private ClassDefinition containingClass;
     private Label label;
     
     /**
@@ -51,14 +56,19 @@ public class MethodDefinition extends ExpDefinition {
      * @param signature List of arguments of the method
      * @param index Index of the method in the class. Starts from 0.
      */
-    public MethodDefinition(Type type, Location location, Signature signature, int index) {
+    public MethodDefinition(Type type, Location location, Signature signature, int index, ClassDefinition containingClass) {
         super(type, location);
         this.signature = signature;
+        this.containingClass = containingClass;
         this.index = index;
     }
 
     public Signature getSignature() {
         return signature;
+    }
+
+    public ClassDefinition getContainingClass() {
+        return this.containingClass;
     }
 
     @Override
@@ -82,37 +92,24 @@ public class MethodDefinition extends ExpDefinition {
     }
 
     @Override
-    public void spotRelatedDefs(AbstractProgram prog) {
-        assert(prog instanceof Program);
-        // the types of params are spotted at the methodCall and if the type of a param is a class
-        // then the class is spotted at the methodCall directly or indirectly by the subclass
-        // the return type could be a class but it is spotted in the body
-        for (AbstractDeclClass c : ((Program)prog).getClasses().getList()) {
-            assert(c instanceof DeclClass);
-            // TODO if (/* class is class or subclass */)
-            for (AbstractDeclMethod method : ((DeclClass)c).getMethods().getList()) {
-                assert(method instanceof DeclMethod);
-                // find the corresponding DeclMethod
-                // (match the tree location of DeclMethod with the definition location of the current MethodDefinition)
-                // Each method as a different location
-                LOG.debug("Looking for the method");
-                if (getLocation() == method.getLocation()) {
-                    LOG.debug("Methods matched");
-                    // explore the body of the method to spot other useful variables
-                    ((DeclMethod)(method)).spotUsedVar(prog);
-                    // spot the containing class
-                    ((DeclClass)c).getName().getClassDefinition().spotUsedVar(prog);
-                } 
-                // TODO
-                // if the dynamique type of the object calling the method is a subclass then the
-                // overriding methods should have been spotted
-                // else if (/*method == redéfinition */) { 
-                //     LOG.debug("Overriding method found");
-                //     // explore the body of the method to spot other useful variables
-                //     ((DeclMethod)(method)).spotUsedVar(prog);
-
-                // }
-            }
-        }
+    public boolean spotRelatedDefs() {
+        boolean varSpotted = super.spotRelatedDefs();
+        varSpotted = this.containingClass.spotUsedVar() || varSpotted;
+        return varSpotted;
     }
+
+    /**
+     * If the unspotted method is an override of a useful method, it may be dynamically useful.
+     * @return true if the method is an override of a used method
+     */
+    public boolean isOverrideOfUsed(Map<ClassDefinition,Set<Integer>> exploredMethods) {
+        boolean res = false;
+        ClassDefinition superClass = this.containingClass.getSuperClass();
+        while(superClass != null && !res && this.index<=superClass.getNumberOfMethods()) {
+            res = exploredMethods.get(superClass).contains(this.index);
+            superClass = superClass.getSuperClass();
+        }
+        return res;
+    }
+
 }

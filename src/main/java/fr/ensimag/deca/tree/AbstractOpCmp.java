@@ -65,4 +65,6 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
         setType(compiler.environmentType.BOOLEAN);
         return compiler.environmentType.BOOLEAN;
     }
+
+
 }

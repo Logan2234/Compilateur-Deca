@@ -1,0 +1,17 @@
+// Description:
+//    move the function
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 20/01/2023
+//
+class A {
+    int cos(int x){return x;}
+}
+
+{
+    A a = new A();
+    print(a.cos(3));
+}

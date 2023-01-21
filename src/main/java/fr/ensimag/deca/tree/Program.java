@@ -3,7 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
-import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
@@ -16,9 +16,13 @@ import fr.ensimag.ima.pseudocode.instructions.*;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -49,6 +53,7 @@ public class Program extends AbstractProgram {
 
     private ListDeclClass classes;
     private AbstractMain main;
+    private boolean spotted;
 
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
@@ -153,20 +158,69 @@ public class Program extends AbstractProgram {
     }
     
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        main.spotUsedVar(prog);
-        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    protected boolean spotUsedVar() {
+        boolean varSpotted = true;
+        while (varSpotted) {
+            varSpotted = this.main.spotUsedVar();
+            varSpotted = this.spotFromUsedMethods() || varSpotted;
+        }
+        varSpotted = this.spotOverridingFields() || varSpotted;
+        this.spotted = true;
+        return varSpotted;
+    }
+
+    /**
+     * Remove all useless variables (variables, classes, methods and fields from the list of
+     * classes and the main program
+     * @return true if the program have been simplified
+     */
+    private boolean doRemoveUnusedVar() {
+        boolean simplified = this.optimizeClasses();
+        if (this.main instanceof Main) {
+            LOG.debug("Optimizing body of Main");
+            Main mainNotEmpty = (Main)(this.main);
+            if(mainNotEmpty.getListDeclVar().isEmpty() && mainNotEmpty.getListInst().isEmpty()) {
+                this.main = new EmptyMain();
+                simplified = true;
+            } else {
+                simplified = this.optimizeBlock(((Main)this.main).getListDeclVar(),((Main)this.main).getListInst())
+                            || simplified;
+            }
+        }
+        return simplified;
     }
 
     @Override
-    public boolean removeUnusedVar() {
-        spotUsedVar(this); // browse the main program
-        boolean simplified = optimizeClasses();
-        if (main instanceof Main) {
-            LOG.debug("Optimizing body of Main");
-            simplified = simplified || optimizeBlock(((Main) main).getListDeclVar(), ((Main) main).getListInst());
+    public void optimizeTree() {
+        boolean optimized = true;
+        while(optimized) {
+            optimized = false;
+            // solve compile time known cases.
+            // TODO
+            //optimized = this.collapse() || optimized;
+            optimized = this.removeUnusedVar() || optimized;
         }
-        return simplified;
+    }
+
+    /**
+     * Remove all unused variables from the program
+     * @return true if one or more variable have been removed
+     */
+    private boolean removeUnusedVar() {
+        if (this.spotted) {
+            this.resetSpottedVar();
+        }
+        this.spotUsedVar();
+        return this.doRemoveUnusedVar();
+    }
+
+    /**
+     * Reset the used attribute back to false for every Definition in the program
+     * Set back program's spotted attribute back to false 
+     */
+    private void resetSpottedVar() {
+        this.iter(new ResetUsedVar());
+        this.spotted = false;
     }
 
     /**
@@ -176,72 +230,123 @@ public class Program extends AbstractProgram {
      * @return true if the block has been simplified
      */
     private boolean optimizeBlock(ListDeclVar listDecls, ListInst listInsts) {
-        boolean simplified = false;
-        /* remove useless declarations from the main */
-        Iterator<AbstractDeclVar> iterDecl = listDecls.iterator();
-        while (iterDecl.hasNext()) {
-            DeclVar decl = (DeclVar) iterDecl.next();
-            if (decl.getVar().getDefinition().isUsed()) {
-                // the variable is used
-            } else if (decl.getInit() instanceof Initialization
-                    && !((Initialization) (decl.getInit())).getExpression().getMethodCalls().isEmpty()) {
-                // the variable is not used but is Initialized with a MethodCall
-            } else {
-                // the variable is not used and (not initialized or initialized with no
-                // methodCall)
-                iterDecl.remove();
-                simplified = true;
-                LOG.debug("Remove the decl of " + decl.getVar().getDefinition().toString());
-            }
-        }
-
-        /* remove useless instructions form the main */
-        ListIterator<AbstractInst> iterInst = listInsts.iterator();
-        while (iterInst.hasNext()) {
-            AbstractInst inst = iterInst.next();
-
-            if ((inst instanceof Assign && !((Assign) inst).getLeftOperand().getDefinition().isUsed())
-                    || (inst instanceof AbstractExpr && !(inst instanceof Assign) && !(inst instanceof AbstractReadExpr)
-                            && !(inst instanceof MethodCall))) {
-                /*
-                 * The instruction can either be an assignation with a useless left operand or
-                 * an expression (but not a method call, a read or an assignement expression
-                 * with
-                 * a useful leftoperand).
-                 * 
-                 * In both cases we can remove the instruction but we have to keep the method
-                 * call
-                 * that appear in them because they can possibly change the state of an object
-                 * or
-                 * interact with the user.
-                 * 
-                 * The left operand of the assign could either be an Identifier or a Selection
-                 * The only difference is that the object of the Selection could be obtained via
-                 * a MethodCall but this MethodCall will be contained in the list bellow as
-                 * well.
-                 * 
-                 * Not treating the Reads and MethodCall prevents from looping on the
-                 * optimization
-                 * of the tree by setting simplified to true for no reason.
-                 */
-                List<AbstractExpr> methods = ((AbstractExpr) (inst)).getMethodCalls();
-                iterInst.remove();
-                LOG.debug("Remove expr at " + inst.getLocation() + " : " + inst.getClass());
-                for (AbstractExpr methodCall : methods) {
-                    // add after the current instruction
-                    iterInst.add(methodCall);
-                    LOG.debug("Add method call at " + inst.getLocation() + " : " + inst.getClass());
+        boolean res = false;
+        boolean simplified = true;
+        while (simplified) {
+            simplified = false;
+            /* remove useless declarations from the main */
+            if (listDecls != null) {
+                Iterator<AbstractDeclVar> iterDecl = listDecls.iterator();
+                while(iterDecl.hasNext()){
+                    DeclVar decl = (DeclVar) iterDecl.next();
+                    if (decl.getVar().getDefinition().isUsed()) {
+                        // the variable is used
+                    } else if (decl.getInit() instanceof Initialization
+                            && !((Initialization)(decl.getInit())).getExpression().getMethodCalls().isEmpty()) {
+                        // the variable is not used but is Initialized with a MethodCall
+                    } else {
+                        // the variable is not used and (not initialized or initialized with no methodCall)
+                        iterDecl.remove();
+                        simplified = true;
+                        LOG.debug("Remove the decl of "+decl.getVar().getDefinition().toString());
+                    }
                 }
-                simplified = true;
             }
 
-            else if (inst instanceof NoOperation) {
-                iterInst.remove();
-                simplified = true;
-                LOG.debug("Remove NoOp at " + inst.getLocation() + " : " + inst.getClass());
+            /* remove useless instructions form the main */
+            // the order of if statements is important
+            ListIterator<AbstractInst> iterInst = listInsts.iterator();
+            while(iterInst.hasNext()){
+                AbstractInst inst = iterInst.next();
+
+                if (inst instanceof MethodCall || inst instanceof AbstractReadExpr) {
+                    // keep it
+                    // prevents from looping by setting simplified to true in the AbstractExpr case
+                }
+
+                else if (inst instanceof Not) {
+                    iterInst.remove();
+                    iterInst.add(((Not)inst).getOperand()); // add after the current instruction
+                    simplified = true;
+                    LOG.debug("Break Not at "+inst.getLocation() + " : " + inst.getClass());
+                }
+
+                else if (inst instanceof InstanceOf) {
+                    iterInst.remove();
+                    iterInst.add(((InstanceOf)inst).getExpr()); // add after the current instruction
+                    simplified = true;
+                    LOG.debug("Break InstanceOf at "+inst.getLocation() + " : " + inst.getClass());
+                }
+
+                else if (inst instanceof Assign) {
+                    // don't group the if because it prevents from entering the next if
+                    Assign assign = (Assign)inst;
+                    if (!assign.getLeftOperand().getDefinition().isUsed()) {
+                        iterInst.remove();
+                        iterInst.add(assign.getRightOperand()); // add after the current instruction
+                        simplified = true;
+                        LOG.debug("Break Assign at "+inst.getLocation() + " : " + inst.getClass());
+                    }
+                }
+
+                else if (inst instanceof AbstractExpr) {
+                    AbstractExpr expr = (AbstractExpr)inst;
+                    List<AbstractExpr> methods = expr.getMethodCalls();
+                    if (methods.isEmpty()) {
+                        iterInst.remove();
+                        simplified = true;
+                        LOG.debug("Remove expr at "+inst.getLocation() + " : " + inst.getClass());
+                    }
+                    else if (expr.getType().isBoolean()) {
+                        // we cannot break the expression because for instance, the left operand
+                        // of an AND shouldn't be evaluated if the right operand is false
+                    }
+                    else {
+                        iterInst.remove();
+                        for (AbstractExpr methodCall : methods) {
+                            iterInst.add(methodCall); // add after the current instruction
+                        }
+                        simplified = true;
+                        LOG.debug("Break expr at "+inst.getLocation() + " : " + inst.getClass());
+                    }
+                }
+
+                else if (inst instanceof NoOperation) {
+                    iterInst.remove();
+                    simplified = true;
+                    LOG.debug("Remove NoOp at "+inst.getLocation() + " : " + inst.getClass());
+                }
+
+                else if (inst instanceof While) {
+                    While while_ = (While)inst;
+                    simplified = optimizeBlock(null, while_.getBody());
+                    // We keep the while if the condition have a method call
+                    if (while_.getBody().isEmpty() && while_.getCondition().getMethodCalls().isEmpty()) {
+                        iterInst.remove();
+                        simplified = true;
+                        // the condition will be optimized at the next optimizeBlock call
+                        iterInst.add(while_.getCondition()); // add after the current instruction
+                    }
+                    if (simplified) LOG.debug("Optimize While at "+inst.getLocation() + " : " + inst.getClass());
+                }
+
+                else if (inst instanceof IfThenElse){
+                    IfThenElse ifThenElse = (IfThenElse)inst;
+                    simplified = optimizeBlock(null, ((IfThenElse)inst).getThenInst());
+                    simplified = optimizeBlock(null, ((IfThenElse)inst).getElseInst())
+                                || simplified;
+                    if (ifThenElse.getThenInst().isEmpty() && ifThenElse.getElseInst().isEmpty()) {
+                        iterInst.remove();
+                        simplified = true;
+                        // the condition will be optimized at the next optimizeBlock call
+                        iterInst.add(ifThenElse.getCondition()); // add after the current instruction
+                    }
+                    if (simplified) LOG.debug("Optimize if at "+inst.getLocation() + " : " + inst.getClass());
+                }
+                res = res || simplified;
             }
         }
-        return simplified;
+        return res;
     }
 
     /**
@@ -250,11 +355,6 @@ public class Program extends AbstractProgram {
      * @return true if ListDeclClass has been simplified
      */
     private boolean optimizeClasses() {
-        // TODO remove useless methods, classes and fields (be carefull with methods and
-        // fields indexes)
-        // TODO simplify methods (be carefull with params simplification and params
-        // required for the call)
-        // TODO be carefull with override
         boolean simplified = false;
         Iterator<AbstractDeclClass> iterClasses = this.classes.iterator();
         while (iterClasses.hasNext()) {
@@ -269,39 +369,110 @@ public class Program extends AbstractProgram {
             }
 
             else {
-                // TODO remove don't remove overriding methods of used methods
                 /* remove useless methods */
-                // Iterator<AbstractDeclMethod> iterMethods =
-                // currentClass.getMethods().iterator();
-                // while(iterMethods.hasNext()){
-                // DeclMethod method = (DeclMethod)iterMethods.next();
-                // if (!method.getName().getDefinition().isUsed()) {
-                // iterMethods.remove();
-                // simplified = true;
-                // LOG.debug("Remove method : " + method.getName().getDefinition().toString());
-                // }
-                // else if (method.getBody() instanceof MethodBody){
-                // // TODO How to handle parameters ???
-                // MethodBody body = (MethodBody) method.getBody();
-                // LOG.debug("Optimizing body of : " +
-                // method.getName().getDefinition().toString());
-                // this.optimizeBlock(body.getVars(), body.getInsts());
-                // }
-                // }
+                Iterator<AbstractDeclMethod> iterMethods = currentClass.getMethods().iterator();
+                while(iterMethods.hasNext()){
+                    DeclMethod method = (DeclMethod)iterMethods.next();
+                    if (!method.getName().getDefinition().isUsed()) {
+                        iterMethods.remove();
+                        simplified = true;
+                        LOG.debug("Remove method : " + method.getName().getDefinition().toString());
+                    }
+                    else if (method.getBody() instanceof MethodBody){
+                        MethodBody body = (MethodBody) method.getBody();
+                        LOG.debug("Optimizing body of : " + method.getName().getDefinition().toString());
+                        this.optimizeBlock(body.getVars(), body.getInsts());
+                    }
+                }
 
-                // TODO remove don't remove overriding fields of used fields
                 /* remove useless fields */
-                // Iterator<AbstractDeclField> iterFields = currentClass.getFields().iterator();
-                // while(iterFields.hasNext()){
-                // DeclField field= (DeclField)iterFields.next();
-                // if (!field.getName().getDefinition().isUsed()) {
-                // iterFields.remove();
-                // simplified = true;
-                // LOG.debug("Remove field : " + field.getName().getDefinition().toString());
-                // }
-                // }
+                Iterator<AbstractDeclField> iterFields = currentClass.getFields().iterator();
+                while(iterFields.hasNext()){
+                    DeclField field= (DeclField)iterFields.next();
+                    if (!field.getName().getDefinition().isUsed()) {
+                        iterFields.remove();
+                        simplified = true;
+                        LOG.debug("Remove field : " + field.getName().getDefinition().toString());
+                    }
+                }
             }
         }
         return simplified;
+    }
+
+    /**
+     * Spot useful variables from used methods and spot methods overriding useful methods
+     * @return true if variables have been spotted
+     */
+    private boolean spotFromUsedMethods() {
+        boolean res = false;
+        boolean varSpotted = true;
+
+        /* init */
+        Map<ClassDefinition,Set<Integer>> exploredMethods = new HashMap<ClassDefinition,Set<Integer>>();
+        Set<DeclMethod> methodsToSpot = new HashSet<DeclMethod>();
+        for (AbstractDeclClass c : this.classes.getList()) {
+            exploredMethods.put(((DeclClass)c).getName().getClassDefinition(),new HashSet<Integer>());
+            for (AbstractDeclMethod m : ((DeclClass)c).getMethods().getList()) {
+                methodsToSpot.add((DeclMethod)m);
+            }
+        }
+
+        while (varSpotted) {
+            varSpotted = false;
+
+            Iterator<DeclMethod> iter = methodsToSpot.iterator();
+            while (iter.hasNext()) {
+                DeclMethod method = iter.next();
+                MethodDefinition methDef= method.getName().getMethodDefinition();
+                ClassDefinition containingClass = methDef.getContainingClass();
+                if (methDef.isUsed() || (containingClass.isUsed() && methDef.isOverrideOfUsed(exploredMethods))) {
+                    // if method used or (containing class used and override)
+                    varSpotted = method.spotUsedVar() || varSpotted;
+                    iter.remove();
+                    exploredMethods.get(containingClass).add(methDef.getIndex());
+                }
+            }
+            res = res || varSpotted;
+        }
+        return res;
+    }
+
+    /**
+     * Spot fields overriding useful fields
+     * @return true if fields have been spotted
+     */
+    private boolean spotOverridingFields() {
+        boolean varSpotted = true;
+
+        /* init */
+        Map<ClassDefinition,Set<Integer>> usedFields = new HashMap<ClassDefinition,Set<Integer>>();
+        Set<FieldDefinition> fieldsToSpot = new HashSet<FieldDefinition>();
+        for (AbstractDeclClass c : this.classes.getList()) {
+            for (AbstractDeclField field : ((DeclClass)c).getFields().getList()) {
+                ClassDefinition containingClass = ((DeclClass)c).getName().getClassDefinition();                   
+                FieldDefinition fieldDef = ((DeclField)field).getName().getFieldDefinition();
+                usedFields.put(containingClass,new HashSet<Integer>());
+                if (fieldDef.isUsed()) {
+                    usedFields.get(containingClass).add(fieldDef.getIndex());
+                }
+                else {
+                    fieldsToSpot.add(fieldDef);
+                }
+            }
+        }
+        for (FieldDefinition fieldDef : fieldsToSpot) {
+            if (fieldDef.isOverrideOfUsed(usedFields)) {
+                ClassDefinition containingClass = fieldDef.getContainingClass();
+                varSpotted = fieldDef.spotUsedVar();
+                usedFields.get(containingClass).add(fieldDef.getIndex());
+            }
+        }
+        return varSpotted;
+    }
+
+    @Override
+    public boolean collapse() {
+        return classes.collapse() || main.collapse();
     }
 }

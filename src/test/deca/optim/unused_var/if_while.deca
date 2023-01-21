@@ -1,0 +1,26 @@
+// Description:
+//    instanceOf in the right cases
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 20/01/2023
+//
+
+{
+    boolean x;
+
+    // removed
+    if (true) {}
+
+    // not simplified by unused_var
+    if (true) {
+        print("Error");
+    }
+
+    // keep the assignement
+    if(x = true) {
+        print("Error");
+    }
+}

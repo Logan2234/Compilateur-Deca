@@ -75,4 +75,26 @@ public class IMAProgram {
     public void addFirst(Instruction i, String comment) {
         addFirst(new Line(null, i, comment));
     }
+
+    public LinkedList<AbstractLine> getLines() {
+        return lines;
+    }
+
+    public AbstractLine getLine(int at) {
+        return lines.get(at);
+    }
+
+    public int size() {
+        return lines.size();
+    }
+
+    public void replaceInstructionAt(Instruction instruction, String comment, int at) {
+        Line newLine = new Line(instruction);
+        newLine.setComment(comment);
+        lines.set(at, newLine);
+    }
+
+    public void removeLine(int at) {
+        lines.remove(at);
+    }
 }

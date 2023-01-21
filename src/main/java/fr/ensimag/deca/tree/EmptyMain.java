@@ -45,8 +45,14 @@ public class EmptyMain extends AbstractMain {
         // leaf node => nothing to do
     }
 
+	@Override
+    public boolean collapse() {
+        // this main is empty : cannot collapse further.
+        return false;
+    }
+
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    protected boolean spotUsedVar() {
+        return false;
     }
 }

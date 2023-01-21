@@ -93,8 +93,29 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        for (TreeType tree : getList())
-            tree.spotUsedVar(prog);
+    protected boolean spotUsedVar() {
+        boolean varSpotted = false;
+        for (TreeType tree : getList()) {
+            varSpotted = tree.spotUsedVar() || varSpotted;
+        }
+        return varSpotted;
     }
+    
+    /**
+     * Added to modify lists of insts for otpim.
+     * @param node the node to insert in the array
+     * @param at where we want to insert it
+     */
+    protected void insert(TreeType node, int at) {
+        list.add(at, node);
+    }
+
+    /**
+     * Added to modify lists of insts for otpim.
+     * @param at the index of the element to remove.
+     */
+    protected void removeAt(int at) {
+        list.remove(at);
+    }
+
 }

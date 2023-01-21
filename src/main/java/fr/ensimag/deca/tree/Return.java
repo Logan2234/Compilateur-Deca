@@ -22,8 +22,8 @@ import org.apache.commons.lang.Validate;
  * @date 09/01/2023
  */
 public class Return extends AbstractInst {
-
-    private final AbstractExpr expression;
+    
+    private AbstractExpr expression;
 
     public Return(AbstractExpr expression) {
         Validate.notNull(expression);
@@ -85,7 +85,19 @@ public class Return extends AbstractInst {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.expression.spotUsedVar(prog);
+    protected boolean spotUsedVar() {
+        return this.expression.spotUsedVar();
+    }
+
+    @Override
+    public boolean collapse() {
+        return false;
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
     }
 }

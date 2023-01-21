@@ -131,6 +131,23 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     @Override
+    protected boolean spotUsedVar() {
+        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+        return false;
+    }
+
+    public AbstractIdentifier getName() {
+        return name;
+    }
+    
+    @Override
+    public boolean collapse() {
+        fields.collapse();
+        methods.collapse();
+        return false;
+    }
+
+    @Override
     public void codeGenVTable(DecacCompiler compiler) {
         // generate the vtable for that class.
         // get the VTable addr
@@ -185,16 +202,6 @@ public class DeclClass extends AbstractDeclClass {
             method.codeGenMethod(compiler, name.getName().getName());
             compiler.endCodeContext();
         }
-
-
     }
 
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
-        // We don't spotUsedVar() on classes. We spot them indirectly from the main
-    }
-
-    public AbstractIdentifier getName() {
-        return name;
-    }
 }

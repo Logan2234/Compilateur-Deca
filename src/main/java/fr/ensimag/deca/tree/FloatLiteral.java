@@ -90,17 +90,26 @@ public class FloatLiteral extends AbstractExpr {
     }
 
     @Override
-    protected Boolean isLiteral() {
+    public boolean collapse() {
         return true;
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    protected boolean spotUsedVar() {
+        return false;
     }
 
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
+    public Float collapseFloat() {
+        return value;
+    }
+
+    @Override
+    public boolean collapsable() {
+        return false;
+    }
+
 }

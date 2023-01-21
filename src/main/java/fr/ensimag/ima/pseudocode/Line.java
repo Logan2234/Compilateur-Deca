@@ -93,4 +93,15 @@ public class Line extends AbstractLine {
     public Label getLabel() {
         return label;
     }
+
+    @Override
+    public boolean isInstruction() {
+        return instruction != null;
+    }
+
+    @Override
+    public Instruction asInstruction() {
+        return instruction;
+    }
+
 }

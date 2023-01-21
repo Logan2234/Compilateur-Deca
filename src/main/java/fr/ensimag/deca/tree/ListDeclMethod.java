@@ -62,4 +62,14 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
         for (AbstractDeclMethod i : getList())
             i.verifyMethodBody(compiler, localEnv, currentClass);
     }
+
+    @Override
+    public boolean collapse() {
+        boolean result = false;
+        for(AbstractDeclMethod i : getList()) {
+            result |= i.collapse();
+        }
+        return result;
+    }
+
 }

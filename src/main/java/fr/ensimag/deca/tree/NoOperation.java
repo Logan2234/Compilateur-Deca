@@ -42,7 +42,19 @@ public class NoOperation extends AbstractInst {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    protected boolean spotUsedVar() {
+        return false;
     }
+
+    @Override
+    public boolean collapse() {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        return new ListInst();
+    }
+
 }

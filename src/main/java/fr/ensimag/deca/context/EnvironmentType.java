@@ -55,7 +55,7 @@ public class EnvironmentType {
         Symbol equals = compiler.createSymbol("equals");
         Signature signature = new Signature();
         signature.add(OBJECT);
-        MethodDefinition method = new MethodDefinition(BOOLEAN, Location.BUILTIN, signature, 1);
+        MethodDefinition method = new MethodDefinition(BOOLEAN, Location.BUILTIN, signature, 1, OBJECT.getDefinition());
         OBJECT.getDefinition().setNumberOfMethods(1);
         OBJECT.getDefinition().setDAddr(new RegisterOffset(1, Register.GB));
         try {

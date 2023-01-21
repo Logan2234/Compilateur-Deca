@@ -79,6 +79,7 @@ public class ClassDefinition extends TypeDefinition {
         this.superClass = superClass;
     }
 
+
     /**
      * location on the global pile of the vTable.
      */
@@ -101,8 +102,13 @@ public class ClassDefinition extends TypeDefinition {
     }
     
     @Override
-    public void spotRelatedDefs(AbstractProgram prog) {
-        if (superClass != null)
-            superClass.spotUsedVar(prog);
+    public boolean spotRelatedDefs() {
+        if (this.superClass != null) {
+            this.superClass.spotUsedVar();
+            return this.superClass.spotUsedVar();
+        }
+        return false;
     }
+
+
 }

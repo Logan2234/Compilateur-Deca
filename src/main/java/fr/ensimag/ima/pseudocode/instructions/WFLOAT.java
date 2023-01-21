@@ -8,5 +8,8 @@ import fr.ensimag.ima.pseudocode.NullaryInstruction;
  * @date 01/01/2023
  */
 public class WFLOAT extends NullaryInstruction {
-
+    @Override
+    public boolean usesRegister(int regNum) {
+        return regNum == 1;
+    }
 }

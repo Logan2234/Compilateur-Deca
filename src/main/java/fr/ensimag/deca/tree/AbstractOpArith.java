@@ -53,4 +53,5 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         setType(typeLeft);
         return typeLeft;
     }
+
 }

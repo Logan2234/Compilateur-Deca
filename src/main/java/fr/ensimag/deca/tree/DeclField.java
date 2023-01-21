@@ -117,12 +117,19 @@ public class DeclField extends AbstractDeclField {
     }
 
 
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    @Override
+    protected boolean spotUsedVar() {
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
+        return false;
     }
 
     public AbstractIdentifier getName() {
         return this.fieldName;
+    }
+
+    @Override
+    public boolean collapse() {
+        initialization.collapse();
+        return false;
     }
 }

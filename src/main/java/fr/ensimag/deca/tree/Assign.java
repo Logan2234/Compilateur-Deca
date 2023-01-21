@@ -88,9 +88,38 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
+    protected boolean spotUsedVar() {
         // we don't spot leftOperand
-        this.rightOperand.spotUsedVar(prog);
+        return this.rightOperand.spotUsedVar();
     }
     
+    @Override 
+    public boolean collapse() {
+        if(getRightOperand().collapse()) {
+            if(getRightOperand().getType().isBoolean()) {
+                // try to collapse to bool expr
+                Boolean collapsedValue = getRightOperand().collapseBool();
+                if(collapsedValue != null) {
+                    setRightOperand(new BooleanLiteral(collapsedValue));
+                }
+            }
+            else if(getRightOperand().getType().isInt()) {
+                // try to collapse to a int expr
+                Integer collapsedValue = getRightOperand().collapseInt();
+                if(collapsedValue != null) {
+                    setRightOperand(new IntLiteral(collapsedValue));
+                }
+            }
+            else if(getRightOperand().getType().isFloat()) {
+                // try to collapse to a float
+                Float collapsedValue = getRightOperand().collapseFloat();
+                if(collapsedValue != null) {
+                    setRightOperand(new FloatLiteral(collapsedValue));
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
 }

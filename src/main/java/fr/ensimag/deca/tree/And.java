@@ -1,5 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import org.apache.log4j.lf5.LogLevelFormatException;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -27,7 +29,33 @@ public class And extends AbstractOpBool {
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
         // sum both bool as int and shift the result, should be 1
         compiler.addInstruction(new ADD(dval, register));
-        compiler.addInstruction(new SHR(register)); // raise flags for CMP #0, val
-        compiler.addInstruction(new SNE(register)); // so true if neq (false if eq)
+        compiler.addInstruction(new SHR(register));
     }
+
+    @Override
+    public boolean collapse() {
+        return getRightOperand().collapse() || getLeftOperand().collapse();
+    }
+
+    @Override
+    public Boolean collapseBool() {
+        Boolean rightCollapsedValue = getRightOperand().collapseBool();
+        if(rightCollapsedValue != null && getRightOperand().collapsable()) {
+            BooleanLiteral newBool = new BooleanLiteral(rightCollapsedValue);
+            newBool.setType(getType());
+            setRightOperand(newBool);
+        }
+        Boolean leftCollapsedValue = getLeftOperand().collapseBool();
+        if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
+            BooleanLiteral newBool = new BooleanLiteral(leftCollapsedValue);
+            newBool.setType(getType());
+            setLeftOperand(newBool);
+        }
+        if(rightCollapsedValue != null && leftCollapsedValue != null) {
+            return rightCollapsedValue && leftCollapsedValue;
+        }
+        return null;
+    }
+
+
 }

@@ -3,8 +3,6 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
-import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
@@ -17,11 +15,8 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.BEQ;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
@@ -308,13 +303,24 @@ public class Identifier extends AbstractIdentifier {
 
     }
 
+
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.definition.spotUsedVar(prog);
+    public boolean collapse() {
+        return false;
+    }
+
+    @Override
+    protected boolean spotUsedVar() {
+        return this.definition.spotUsedVar();
     }
 
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
+    }
+
+    @Override
+    protected Boolean isIdentifier() {
+        return true;
     }
 }

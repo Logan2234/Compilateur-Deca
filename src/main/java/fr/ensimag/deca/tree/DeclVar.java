@@ -90,10 +90,9 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // We don't spotUsedVar() on the type (it may be a class) or the identifier as
-        // they are just declared.
-        this.initialization.spotUsedVar(prog);
+    protected boolean spotUsedVar() {
+        // We don't spotUsedVar() on the type (it may be a class) or the identifier as they are just declared.
+        return this.initialization.spotUsedVar();
     }
 
     public AbstractIdentifier getVar() {
@@ -102,5 +101,10 @@ public class DeclVar extends AbstractDeclVar {
 
     public AbstractInitialization getInit() {
         return this.initialization;
+    }
+
+    @Override
+    public boolean collapse() {
+        return initialization.collapse();
     }
 }

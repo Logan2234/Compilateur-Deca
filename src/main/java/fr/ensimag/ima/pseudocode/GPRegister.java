@@ -20,4 +20,14 @@ public class GPRegister extends Register {
         super(name);
         this.number = number;
     }
+
+    @Override
+    public boolean isGpRegister() {
+        return true;
+    }
+
+    @Override
+    public GPRegister asGpRegister() {
+        return this;
+    }
 }

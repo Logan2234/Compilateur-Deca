@@ -72,12 +72,18 @@ public class DeclParam extends AbstractDeclParam {
         paramName.prettyPrint(s, prefix, true);
     }
 
-    @Override
-    public void SetDAddr(RegisterOffset dAddr) {
-        paramName.getDefinition().setDAddr(dAddr);
+	@Override
+	public boolean collapse() {
+        return false;
     }
 
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+
+	@Override
+    public void SetDAddr(RegisterOffset dAddr) {
+        paramName.getDefinition().setDAddr(dAddr);
     }
 }

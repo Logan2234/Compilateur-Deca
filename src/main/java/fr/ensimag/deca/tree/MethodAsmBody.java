@@ -56,7 +56,17 @@ public class MethodAsmBody extends AbstractMethod {
         code.prettyPrintChildren(s, prefix);
     }
 
+	@Override
+    public boolean collapse() {
+        // TODO
+        return false;
+    }
+
     @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+	@Override
     public void codeGenMethod(DecacCompiler compiler) {
         compiler.add(new UserAsmBlock(code.getValue()));
     }
@@ -64,9 +74,5 @@ public class MethodAsmBody extends AbstractMethod {
     @Override
     public void setReturnsNames(String name) {
         // useless here ?
-    }
-    
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
     }
 }

@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.SEQ;
@@ -45,5 +46,23 @@ public class Not extends AbstractUnaryExpr {
         // compare the result with zero, than check equality : true if it was false
         compiler.addInstruction(new CMP(0, resulRegister));
         compiler.addInstruction(new SEQ(resulRegister));
+    }
+
+    @Override
+    public boolean collapse() {
+        return getOperand().collapse();
+    }
+
+    @Override
+    public Boolean collapseBool() {
+        Boolean collapsedValue = getOperand().collapseBool();
+        if(collapsedValue != null) {
+            Type oldType = getOperand().getType();
+            BooleanLiteral newBool = new BooleanLiteral(collapsedValue);
+            newBool.setType(oldType);
+            setOperand(newBool);
+            return !collapsedValue;
+        }
+        return null;
     }
 }

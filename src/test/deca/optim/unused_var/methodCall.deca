@@ -9,9 +9,11 @@
 //
 class A {
     int cos(int x){return x;}
+    boolean bool(){return true;}
 }
 
 {
+    boolean b;
     // should remove "60" only
     int x = 60 + readInt();
     A a = new A();
@@ -25,4 +27,9 @@ class A {
     // should keep the method call only
     a.cos(3);
     45*3 + a.cos(3)+ 2 - a.cos(3);
+
+    // keep the whole expression (and not just the methodCall)
+    // as we don't know if it will be completelly evaluated
+    b = false || a.bool();
+
 }

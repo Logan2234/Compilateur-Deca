@@ -108,9 +108,49 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.condition.spotUsedVar(prog);
-        this.thenBranch.spotUsedVar(prog);
-        this.elseBranch.spotUsedVar(prog);
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.condition.spotUsedVar();
+        varSpotted = this.thenBranch.spotUsedVar() || varSpotted;
+        varSpotted = this.elseBranch.spotUsedVar() || varSpotted;
+        return varSpotted;
     }
+
+    public ListInst getThenInst() {
+        return this.thenBranch;
+    }
+
+    public ListInst getElseInst() {
+        return this.elseBranch;
+    }
+
+    public AbstractExpr getCondition() {
+        return this.condition;
+    }
+
+    @Override
+    public boolean collapse() {
+        return condition.collapse() || thenBranch.collapse() || elseBranch.collapse();
+    }
+
+    @Override
+    public ListInst collapseInst() {
+        // try to collapse the condition
+        Boolean collapsedCond = condition.collapseBool();
+        if(collapsedCond != null) {
+            // we can collapse whole if block !
+            if(collapsedCond) {
+                return thenBranch;
+            }
+            else {
+                return elseBranch;
+            }
+        }
+        // I mean, sadly return ourself :(
+        ListInst result = new ListInst();
+        result.add(this);
+        return result;
+    }
+
+
+
 }
