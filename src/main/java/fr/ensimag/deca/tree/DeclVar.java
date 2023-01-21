@@ -10,6 +10,9 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.RegisterOffset;
@@ -101,9 +104,24 @@ public class DeclVar extends AbstractDeclVar {
         if (this.varName.getDefinition().isUsed()) {
             return this;
         }
-        if (this.initialization.getExpression() == null
-            || this.initialization.getExpression().getUnremovableExpr().isEmpty()) {
+        if (this.initialization.getExpression() == null){
             return null;
+        }
+        List<AbstractExpr> listExpr = this.initialization.getExpression().getUnremovableExpr();
+        if (listExpr.isEmpty()) {
+            return null;
+        }
+        if (this.type.getDefinition().getType().isInt() || this.type.getDefinition().getType().isFloat()) {
+            Iterator<AbstractExpr> iter = listExpr.iterator();
+            AbstractExpr expr = iter.next();
+            Location loc = expr.getLocation();
+            while (iter.hasNext()) {
+                loc = expr.getLocation();
+                expr = new Plus(expr, iter.next());
+                expr.setLocation(loc);
+            }
+            this.initialization = new Initialization(expr);
+            this.initialization.setLocation(loc);
         }
         return this;
     }
