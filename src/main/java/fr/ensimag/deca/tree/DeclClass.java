@@ -11,6 +11,7 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
@@ -171,11 +172,22 @@ public class DeclClass extends AbstractDeclClass {
         compiler.newCodeContext();
         compiler.addLabel(new Label("init." + name.getName().getName()));
         // the location of the object to init is at -2(LB).
+        // call parent init
+        if(superIdentifier.getName().getName() != "Object") {
+            compiler.addInstruction(new BRA(new Label("init." + superIdentifier.getName().getName())));
+        }
         // let's load the daddr on R1 !
         compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+        // get the size of the whole parent structure
+        int parentClassSize = 0;
+        ClassDefinition parentDef = superIdentifier.getClassDefinition();
+        while(parentDef != null) {
+            parentClassSize += parentDef.getNumberOfFields();
+            parentDef = parentDef.getSuperClass();
+        } 
         // for each field, compute it and store it at its offset
         for(int i = 0; i < fields.size(); i++) {
-            fields.getList().get(i).codeGenField(compiler, new RegisterOffset(i + 1, Register.R1));
+            fields.getList().get(i).codeGenField(compiler, new RegisterOffset(i + 1 + parentClassSize, Register.R1));
         }
         compiler.addInstruction(new RTS());
         compiler.endCodeContext();
@@ -185,8 +197,6 @@ public class DeclClass extends AbstractDeclClass {
             method.codeGenMethod(compiler, name.getName().getName());
             compiler.endCodeContext();
         }
-
-
     }
 
     protected void spotUsedVar(AbstractProgram prog) {
