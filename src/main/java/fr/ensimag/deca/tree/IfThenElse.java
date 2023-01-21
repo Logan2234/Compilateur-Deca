@@ -24,7 +24,7 @@ import org.apache.commons.lang.Validate;
  */
 public class IfThenElse extends AbstractInst {
 
-    private final AbstractExpr condition;
+    private AbstractExpr condition;
     private final ListInst thenBranch;
     private ListInst elseBranch;
 
@@ -110,7 +110,19 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    public boolean irrelevant(){ // todo revisar
+    public boolean irrelevant(){ 
+
+        if (condition.irrelevant() || condition.isSelection()){
+            if (condition.isSelection()){
+                AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection();
+                if (out != null) {
+                    condition = out;
+                }
+            }
+            else {
+                condition = currentValues.get(((Identifier) condition).getName());
+            }
+        }
         return condition.irrelevant() || thenBranch.irrelevant() || elseBranch.irrelevant();
     }
 
