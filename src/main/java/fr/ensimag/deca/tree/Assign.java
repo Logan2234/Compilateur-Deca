@@ -69,8 +69,6 @@ public class Assign extends AbstractBinaryExpr {
             }
         }
         else {
-            // compute right expression in the register
-            this.getRightOperand().codeGenExpr(compiler, register);
             compiler.addInstruction(new STORE(register, getLeftOperand().getDefinition().getDAddr()));
             if(resulRegister == null) {
                 compiler.incrementContextUsedStack();
