@@ -37,6 +37,4 @@ public abstract class AbstractDeclVar extends Tree {
      * @param offset The register offset, so a DAddr, where the variable will be registered.
      */
     public abstract void codeGenDeclVar(DecacCompiler compiler, RegisterOffset register);
-
-    public abstract void factoInst(DecacCompiler compiler);
 }

@@ -80,11 +80,8 @@ public class DeclParam extends AbstractDeclParam {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
-    public boolean collapse() {
-        return false;
-    }
 
-    public boolean factorised(DecacCompiler compiler) {
+    public boolean collapse() {
         return false;
     }
 }

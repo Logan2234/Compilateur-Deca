@@ -99,13 +99,12 @@ public class Plus extends AbstractOpArith {
         }
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        //return getLeftOperand().factorised(compiler) || getRightOperand().factorised(compiler); // C'est pas censé être ca ?
-        List idLeft = new ArrayList();
-        boolean bool1 = addId(idLeft, leftOperand);
-        boolean bool2 = addId(idLeft, rightOperand);
-        return bool1 || bool2;
-    }
+    // public boolean factorised(DecacCompiler compiler) {
+        // List idLeft = new ArrayList();
+        // boolean bool1 = addId(idLeft, leftOperand);
+        // boolean bool2 = addId(idLeft, rightOperand);
+        // return bool1 || bool2;
+    // }
 
     private void addInst(DecacCompiler compiler, ListInst list, AbstractExpr leftOperand, AbstractExpr rightOperand, Identifier toSimplified){
         Identifier sideway = null;
@@ -124,45 +123,43 @@ public class Plus extends AbstractOpArith {
         }
     }
 
-    // public ListInst factoInst(DecacCompiler compiler) {
-    //     ListInst list = new ListInst();
-    //     // Identifier toSimplified = null;
-    //     //Il y a encore des operations a gauche
-    //     // Map<Identifier, Integer> map = new HashMap();
-    //     // addMap(map, this);
+    // public AbstractInst factoInst(DecacCompiler compiler) {
+        // AbstractInst list = null;
+        // Map<Identifier, Integer> map = new HashMap();
+        // addMap(map, this);
 
-    //     // if (map.size() == 1) {
-    //     //     for (Map.Entry<Identifier, Integer> entry : map.entrySet()) {
-    //     //         Identifier key = entry.getKey();
-    //     //         Integer value = entry.getValue();
-    //     //         AbstractExpr puissance = new IntLiteral(value);
-    //     //         list.add(new Multiply(key, puissance));
-    //     //     }
-    //     // } else {
-    //     //     AbstractExpr nbGauche = new IntLiteral((Integer)map.values().toArray()[0]);
-    //     //     Multiply multiplyLeft = new Multiply((AbstractExpr)map.keySet().toArray()[0], nbGauche);
-    //     //     ((Multiply) multiplyLeft).setType(compiler.environmentType.INT);
-    //     //     AbstractExpr nbRight = new IntLiteral((Integer)map.values().toArray()[1]);
-    //     //     Multiply multiplyRight = new Multiply((AbstractExpr)map.keySet().toArray()[1], nbRight);
-    //     //     ((Multiply) multiplyRight).setType(compiler.environmentType.INT);
-    //     //     AbstractExpr plus = new Plus(multiplyLeft, multiplyRight);
-    //     //     ((Plus)plus).setType(compiler.environmentType.INT);
-    //     //     list.add(plus);
-    //     //     if (map.size() > 2) {
-    //     //         for (int i = 2; i < map.size(); i++) {
-    //     //             AbstractExpr nb = new IntLiteral((Integer)map.values().toArray()[i]);
-    //     //             Multiply multiply = new Multiply((AbstractExpr)map.keySet().toArray()[i], nb);
-    //     //             Plus operand = new Plus((AbstractExpr) multiply, (AbstractExpr) plus);
-    //     //             ((Plus) operand).setType(compiler.environmentType.INT);
-    //     //             plus = new Plus((AbstractExpr) multiply, (AbstractExpr) plus);
-    //     //             ((Plus) plus).setType(compiler.environmentType.INT);
-    //     //             list.add(operand);
-    //     //         }
-    //     //     }
-    //     // }
-    //     // addInst(compiler, list, leftOperand, rightOperand, toSimplified);
-    //     list.add(this);
-    //     return list;
+        // if (map.size() == 1) {
+        //     for (Map.Entry<Identifier, Integer> entry : map.entrySet()) {
+        //         Identifier key = entry.getKey();
+        //         Integer value = entry.getValue();
+        //         AbstractExpr puissance = new IntLiteral(value);
+        //         list.add(new Multiply(key, puissance));
+        //     }
+        // } else {
+        //     AbstractExpr nbGauche = new IntLiteral((Integer)map.values().toArray()[0]);
+        //     Multiply multiplyLeft = new Multiply((AbstractExpr)map.keySet().toArray()[0], nbGauche);
+        //     ((Multiply) multiplyLeft).setType(compiler.environmentType.INT);
+        //     AbstractExpr nbRight = new IntLiteral((Integer)map.values().toArray()[1]);
+        //     Multiply multiplyRight = new Multiply((AbstractExpr)map.keySet().toArray()[1], nbRight);
+        //     ((Multiply) multiplyRight).setType(compiler.environmentType.INT);
+        //     AbstractExpr plus = new Plus(multiplyLeft, multiplyRight);
+        //     ((Plus)plus).setType(compiler.environmentType.INT);
+        //     list.add(plus);
+        //     if (map.size() > 2) {
+        //         for (int i = 2; i < map.size(); i++) {
+        //             AbstractExpr nb = new IntLiteral((Integer)map.values().toArray()[i]);
+        //             Multiply multiply = new Multiply((AbstractExpr)map.keySet().toArray()[i], nb);
+        //             Plus operand = new Plus((AbstractExpr) multiply, (AbstractExpr) plus);
+        //             ((Plus) operand).setType(compiler.environmentType.INT);
+        //             plus = new Plus((AbstractExpr) multiply, (AbstractExpr) plus);
+        //             ((Plus) plus).setType(compiler.environmentType.INT);
+        //             list.add(operand);
+        //         }
+        //     }
+        // }
+        // addInst(compiler, list, leftOperand, rightOperand, toSimplified);
+        // list.add(this);
+        //return list;
     // }
 
     @Override

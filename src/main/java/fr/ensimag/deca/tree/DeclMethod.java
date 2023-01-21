@@ -201,6 +201,13 @@ public class DeclMethod extends AbstractDeclMethod {
     public boolean factorised(DecacCompiler compiler) {
         return body.factorised(compiler);
     }
+
+    @Override
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        body.factoInst(compiler);
+        return null;
+    }
+
     
     public boolean collapse() {
         body.collapse();

@@ -129,8 +129,9 @@ public class Initialization extends AbstractInitialization {
         return expression.factorised(compiler);
     }
     
-    public void factoInst(DecacCompiler compiler){
-        expression.factoInst(compiler);
+    public AbstractInst factoInst(DecacCompiler compiler){
+        expression = (AbstractExpr)expression.factoInst(compiler);
+        return null;
     }
 
 }

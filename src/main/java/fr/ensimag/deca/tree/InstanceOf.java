@@ -131,8 +131,4 @@ public class InstanceOf extends AbstractExpr {
         // the expression could be obtained via a MethodCall
         this.expression.addMethodCalls(foundMethodCalls);
     }
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
 }

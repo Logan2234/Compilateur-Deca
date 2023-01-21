@@ -63,13 +63,15 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
             i.verifyMethodBody(compiler, localEnv, currentClass);
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        for (AbstractDeclMethod i : getList()) {
-            if (i.factorised(compiler))
-                return true;
-        }
-        return false;
+    @Override
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        for (AbstractDeclMethod method : getList())
+            if (method.factorised(compiler))
+                method.factoInst(compiler);
+        return null;
     }
+
+
     @Override
     public boolean collapse() {
         boolean result = false;

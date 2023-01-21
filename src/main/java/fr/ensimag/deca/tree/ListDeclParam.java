@@ -61,8 +61,4 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
         }
         return result;
     }
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;
-    }
 }

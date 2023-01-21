@@ -114,15 +114,13 @@ public class While extends AbstractInst {
     }
 
     @Override
-    public ListInst factoInst(DecacCompiler compiler) {
-        ListInst list = condition.factoInst(compiler);
-        condition = ((AbstractExpr)list.getList().get(list.getList().size() - 1));
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        condition.factoInst(compiler);
         
         if (body.factorised(compiler))
             body.factoInst(compiler);
-        
-        list.add(this);
-        return list;
+
+        return null;
     }
 
     @Override

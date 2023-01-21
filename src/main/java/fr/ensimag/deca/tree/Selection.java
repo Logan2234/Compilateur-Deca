@@ -145,8 +145,4 @@ public class Selection extends AbstractLValue {
         // the object could be obtained via a MethodCall
         this.obj.addMethodCalls(foundMethodCalls);
     }
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
 }

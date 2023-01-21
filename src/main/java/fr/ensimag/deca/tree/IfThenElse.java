@@ -62,13 +62,15 @@ public class IfThenElse extends AbstractInst {
         Label elseLabel = new Label(label + ".else");
         Label endLabel = new Label(label + ".end");
         // the if expression returns a bool. write it down in R1,
-        // then compare 1 to R1 to trigger flags : if EQ, then the expression was false : branch to else block
+        // then compare 1 to R1 to trigger flags : if EQ, then the expression was false
+        // : branch to else block
         GPRegister register = compiler.allocateRegister();
         condition.codeGenExpr(compiler, register);
         compiler.addInstruction(new CMP(new ImmediateInteger(1), register));
         compiler.freeRegister(register);
         // branch to else flag if EQ, then if block
-        compiler.addInstruction(new BLT(elseLabel)); // use bge as an bool is true if 1 or greater (should not be greater, but no so sure of me)
+        compiler.addInstruction(new BLT(elseLabel)); // use bge as an bool is true if 1 or greater (should not be
+                                                     // greater, but no so sure of me)
         thenBranch.codeGenListInst(compiler);
         compiler.addInstruction(new BRA(endLabel));
         // else flag to branch to, and else block
@@ -117,51 +119,29 @@ public class IfThenElse extends AbstractInst {
     public boolean factorised(DecacCompiler compiler) {
         return condition.factorised(compiler) || thenBranch.factorised(compiler) || elseBranch.factorised(compiler);
     }
+
     public boolean collapse() {
         return condition.collapse() || thenBranch.collapse() || elseBranch.collapse();
     }
 
-    // @Override
-    // public ListInst factoInst(DecacCompiler compiler) {
-    //     // try to collapse the condition
-    //     Boolean collapsedCond = condition.collapseBool();
-    //     if(collapsedCond != null) {
-    //         // we can collapse whole if block !
-    //         if(collapsedCond) {
-    //             return thenBranch;
-    //         }
-    //         else {
-    //             return elseBranch;
-    //         }
-    //     }
-    //     // I mean, sadly return ourself :(
-    //     ListInst result = new ListInst();
-    //     result.add(this);
-    //     return result;
-    // }
-
     @Override
-    public ListInst factoInst(DecacCompiler compiler) {
-        ListInst list = condition.factoInst(compiler);
-        condition = ((AbstractExpr)list.getList().get(list.getList().size() - 1));
-        
-        thenBranch.factorised(compiler);
-        elseBranch.factorised(compiler);
-        
-        list.add(this);
-        return list;
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        condition.factoInst(compiler);
+        thenBranch.factoInst(compiler);
+        elseBranch.factoInst(compiler);
+
+        return null;
     }
 
     @Override
     public ListInst collapseInst() {
         // try to collapse the condition
         Boolean collapsedCond = condition.collapseBool();
-        if(collapsedCond != null) {
+        if (collapsedCond != null) {
             // we can collapse whole if block !
-            if(collapsedCond) {
+            if (collapsedCond) {
                 return thenBranch;
-            }
-            else {
+            } else {
                 return elseBranch;
             }
         }
@@ -170,7 +150,5 @@ public class IfThenElse extends AbstractInst {
         result.add(this);
         return result;
     }
-
-
 
 }

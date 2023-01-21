@@ -306,15 +306,14 @@ public class Program extends AbstractProgram {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler) {
-        if (main.factorised(compiler))
-            main.factoInst(compiler);
-        // if (classes.factorised(compiler))
-        //     classes.factoInst(compiler);
-        return true;
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        main.factoInst(compiler);
+        classes.factoInst(compiler);
+        return null;
     }
-    
+        
     public boolean collapse() {
         return classes.collapse() || main.collapse();
     }
+
 }

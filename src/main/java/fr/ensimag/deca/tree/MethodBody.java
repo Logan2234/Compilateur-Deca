@@ -91,7 +91,14 @@ public class MethodBody extends AbstractMethod {
 
     @Override
     public boolean factorised(DecacCompiler compiler){
-        return insts.factorised(compiler);
+        return vars.factorised(compiler) || insts.factorised(compiler);
+    }
+
+    @Override
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        vars.factoInst(compiler);
+        insts.factoInst(compiler);
+        return null;
     }
 
     @Override

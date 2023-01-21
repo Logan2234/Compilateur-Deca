@@ -87,9 +87,4 @@ public class This extends AbstractExpr {
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
-
 }

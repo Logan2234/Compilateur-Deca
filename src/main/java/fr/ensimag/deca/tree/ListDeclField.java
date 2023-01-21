@@ -62,14 +62,14 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
             i.verifyInitField(compiler, localEnv, currentClass);
     }
 
-    public boolean factorised(DecacCompiler compiler){
-        for (AbstractDeclField i : getList()) {
-            if (i.factorised(compiler))
-                return true;
-        }
-        return false;
+    @Override
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        for (AbstractDeclField field : getList())
+            if (field.factorised(compiler))
+                field.factoInst(compiler);
+        return null;
     }
-    
+
     @Override
     public boolean collapse() {
         boolean result = false;

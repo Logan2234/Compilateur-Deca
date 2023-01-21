@@ -42,18 +42,6 @@ public class UnaryMinus extends AbstractUnaryExpr {
         compiler.addInstruction(new OPP(resulRegister, resulRegister));
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return getOperand().factorised(compiler);
-    }
-
-    @Override
-    public ListInst factoInst(DecacCompiler compiler) {
-        ListInst list = getOperand().factoInst(compiler);
-        setOperand((AbstractExpr)list.getList().get(list.getList().size() - 1));
-        list.add(this);
-        return list;
-    }
-
     public boolean collapse() {
         return getOperand().collapse();
     }

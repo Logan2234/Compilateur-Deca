@@ -8,6 +8,8 @@ import java.util.ListIterator;
 
 import org.apache.commons.lang.Validate;
 
+import fr.ensimag.deca.DecacCompiler;
+
 /**
  *
  * @author gl03
@@ -115,4 +117,11 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
         list.remove(at);
     }
 
+    @Override
+    public boolean factorised(DecacCompiler compiler) {
+        for (TreeType t : list)
+            if (t.factorised(compiler))
+                return true;
+        return false;
+    }
 }

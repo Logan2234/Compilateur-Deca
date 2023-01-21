@@ -33,11 +33,4 @@ public class ConvInt extends AbstractUnaryExpr {
     public void codeGenUnExpr(DecacCompiler compiler, GPRegister resultRegister) {
         compiler.addInstruction(new INT(resultRegister, resultRegister));
     }
-
-    @Override
-    public boolean factorised(DecacCompiler compiler) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
 }

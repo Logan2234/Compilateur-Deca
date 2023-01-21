@@ -88,10 +88,8 @@ public abstract class AbstractPrint extends AbstractInst {
     }
 
     @Override
-    public ListInst factoInst(DecacCompiler compiler) {
+    public AbstractInst factoInst(DecacCompiler compiler) {
         arguments.factoInst(compiler);
-        ListInst list = new ListInst();
-        list.add(this);
-        return list;
+        return this;
     }
 }

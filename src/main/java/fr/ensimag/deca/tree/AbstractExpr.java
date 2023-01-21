@@ -242,12 +242,6 @@ public abstract class AbstractExpr extends AbstractInst {
         // expressions that can collapse will override this.
     }
 
-    @Override
-    public ListInst factoInst(DecacCompiler compiler) {
-        // by default, return empty list of instructions. 
-        return new ListInst(); // TODO
-    }
-
     protected void shift(DecacCompiler compiler, AbstractExpr left, AbstractExpr right, ListInst listPlus) {
         int value = ((IntLiteral) right).getValue();
         String[] nbbinaire = Integer.toBinaryString(value).split("");
@@ -269,6 +263,7 @@ public abstract class AbstractExpr extends AbstractInst {
             ;
         } else {
             Plus plus = new Plus((AbstractExpr) list.getList().get(1), (AbstractExpr) list.getList().get(0));
+            plus.setType(compiler.environmentType.INT);
             listPlus.add(plus);
             if (list.size() > 2) {
                 for (int i = 2; i < list.size(); i++) {

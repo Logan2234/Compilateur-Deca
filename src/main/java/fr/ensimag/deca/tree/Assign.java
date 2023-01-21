@@ -91,11 +91,10 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    public ListInst factoInst(DecacCompiler compiler) {
-        ListInst list = getRightOperand().factoInst(compiler);
-        setRightOperand((AbstractExpr)list.getList().get(list.getList().size() - 1));
-        list.add(this);
-        return list;
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        AbstractInst list = getRightOperand().factoInst(compiler);
+        setRightOperand((AbstractExpr)list);
+        return null;
     }
 
     @Override 

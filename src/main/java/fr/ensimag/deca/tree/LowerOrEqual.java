@@ -29,10 +29,6 @@ public class LowerOrEqual extends AbstractOpIneq {
         compiler.addInstruction(new SLE(register));
     }
 
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
     public boolean collapse() {
         return getRightOperand().collapse() || getLeftOperand().collapse();
     }

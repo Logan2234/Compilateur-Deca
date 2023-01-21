@@ -94,6 +94,17 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     protected void spotUsedVar(AbstractProgram prog) {
         this.operand.spotUsedVar(prog);
     }
+    
+    @Override
+    public boolean factorised(DecacCompiler compiler) {
+        return getOperand().factorised(compiler);
+    }
+    
+    @Override
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        setOperand((AbstractExpr)getOperand().factoInst(compiler));
+        return this;
+    }
 
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {

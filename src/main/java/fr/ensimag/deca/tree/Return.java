@@ -23,7 +23,7 @@ import org.apache.commons.lang.Validate;
  */
 public class Return extends AbstractInst {
 
-    private final AbstractExpr expression;
+    private AbstractExpr expression;
 
     public Return(AbstractExpr expression) {
         Validate.notNull(expression);
@@ -89,9 +89,6 @@ public class Return extends AbstractInst {
         this.expression.spotUsedVar(prog);
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
     public boolean collapse() {
         return false;
     }
@@ -104,9 +101,13 @@ public class Return extends AbstractInst {
     }
 
     @Override
-    public ListInst factoInst(DecacCompiler compiler) {
-        ListInst result = new ListInst();
-        result.add(this);
-        return result;
+    public boolean factorised(DecacCompiler compiler){
+        return expression.factorised(compiler);
+    }
+
+    @Override
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        expression = (AbstractExpr)expression.factoInst(compiler);
+        return this;
     }
 }

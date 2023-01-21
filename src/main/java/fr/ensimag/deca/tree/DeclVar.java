@@ -113,7 +113,8 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    public void factoInst(DecacCompiler compiler){
+    public AbstractInst factoInst(DecacCompiler compiler){
         initialization.factoInst(compiler);
+        return null;
     }
 }

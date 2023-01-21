@@ -104,25 +104,16 @@ public class FloatLiteral extends AbstractExpr {
         // do nothing
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
     public Float collapseFloat() {
         return value;
     }
 
-    public Float factoFloat() {
-        return value;
-    }
-    
     protected Boolean isLiteral() {
         return true;
     }
-
 
     @Override
     public boolean collapsable() {
         return false;
     }
-
 }

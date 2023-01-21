@@ -61,48 +61,34 @@ public class ListInst extends TreeList<AbstractInst> {
         }
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        // try to collapse each instruction into a list of instructions
-        boolean facto = false;
+    public AbstractInst factoInst(DecacCompiler compiler) {
         for (int i = 0; i < getList().size(); i++) {
-            AbstractInst toFacto = getList().get(i);
-            if(toFacto.factorised(compiler))
-                facto = true;
-                // remove this inst, replace it with it's collapsed form
-                // removeAt(i);
-                // ListInst list = toFacto.factoInst(compiler);
-                // AbstractInst newInst = list.getList().get(list.size()-1);
-                // insert(newInst, i);
+            if (getList().get(i).factorised(compiler)) {
+                AbstractInst inst = getList().get(i).factoInst(compiler);
+                if (inst != null)
+                    set(i, inst);
+            }
         }
-        return facto;
+        return null;
     }
-
-    public ListInst factoInst(DecacCompiler compiler) {
-        for (AbstractInst i : getList())
-            i.factoInst(compiler);
-        return new ListInst();
-    }
-
-
 
     public boolean collapse() {
         // try to collapse each instruction into a list of instructions
         boolean collapse = false;
         for (int i = 0; i < getList().size(); i++) {
             AbstractInst toCollapse = getList().get(i);
-            if(toCollapse.collapse()) {
+            if (toCollapse.collapse()) {
                 collapse = true;
                 // remove this inst, replace it with it's collapsed form
                 removeAt(i);
                 int offset = 0;
-                for(AbstractInst newInst : toCollapse.collapseInst().getList()) {
+                for (AbstractInst newInst : toCollapse.collapseInst().getList()) {
                     insert(newInst, i + offset);
-                    offset ++;
+                    offset++;
                 }
             }
         }
         return collapse;
     }
 
-    
 }

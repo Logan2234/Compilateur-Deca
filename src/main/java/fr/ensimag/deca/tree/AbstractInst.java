@@ -51,6 +51,4 @@ public abstract class AbstractInst extends Tree {
      * @return
      */
     public abstract ListInst collapseInst();
-
-    public abstract ListInst factoInst(DecacCompiler compiler);
 }

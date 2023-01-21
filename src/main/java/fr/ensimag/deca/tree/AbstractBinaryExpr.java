@@ -115,15 +115,12 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
     @Override
-    public ListInst factoInst(DecacCompiler compiler) {
-        ListInst listLeft = leftOperand.factoInst(compiler);
-        ListInst listRight = rightOperand.factoInst(compiler);
-        leftOperand = ((AbstractExpr) listLeft.getList().get(listLeft.getList().size() - 1));
-        rightOperand = ((AbstractExpr) listRight.getList().get(listRight.getList().size() - 1));
-
-        ListInst list = new ListInst();
-        list.add(this);
-        return list;
+    public AbstractInst factoInst(DecacCompiler compiler) {
+        if (leftOperand.factorised(compiler))
+            leftOperand = ((AbstractExpr) leftOperand.factoInst(compiler));
+        if (rightOperand.factorised(compiler))
+            rightOperand = ((AbstractExpr) rightOperand.factoInst(compiler));
+        return this;
     }
 
     @Override

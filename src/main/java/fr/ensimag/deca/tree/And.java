@@ -33,9 +33,6 @@ public class And extends AbstractOpBool {
         compiler.addInstruction(new SNE(register)); // so true if neq (false if eq)
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return false;
-    }
     public boolean collapse() {
         return getRightOperand().collapse() || getLeftOperand().collapse();
     }
@@ -59,6 +56,4 @@ public class And extends AbstractOpBool {
         }
         return null;
     }
-
-
 }
