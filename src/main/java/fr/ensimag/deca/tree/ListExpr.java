@@ -42,10 +42,18 @@ public class ListExpr extends TreeList<AbstractExpr> {
         AbstractExpr expr;
         for (int i = 0; i < getList().size(); i++) {
             expr = getList().get(i);
-            if (expr.irrelevant()){
+            if (expr.irrelevant() || expr.isSelection()){
                 result |= true;
-                if (defClass) {set(i, varModels.get(actualClass).get(((Identifier) expr).getName()));}
-                else set(i, currentValues.get(((Identifier) expr).getName()));
+                if (expr.isSelection()){
+                    AbstractExpr out = ((Selection) expr).returnIrrelevantFromSelection();
+                    if (out != null) {
+                        set(i, out);
+                    }
+                }
+                else {
+                    if (defClass) {set(i, varModels.get(actualClass).get(((Identifier) expr).getName()));}
+                    else set(i, currentValues.get(((Identifier) expr).getName()));
+                }
             }
         }
         return result;

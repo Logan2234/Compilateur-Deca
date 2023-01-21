@@ -162,7 +162,6 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
                 AbstractExpr out = ((Selection) getRightOperand()).returnIrrelevantFromSelection();
                 if (out != null) {
                     setRightOperand(out);
-                    irrelevantRight = getRightOperand().isSelection();
                 }
                 if (getRightOperand().isSelection()) irrelevantRight = ((Selection) getRightOperand()).isKnown();
             }
@@ -176,7 +175,6 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
                 AbstractExpr out = ((Selection) getLeftOperand()).returnIrrelevantFromSelection();
                 if (out != null) {
                     setLeftOperand(out);
-                    irrelevantLeft = getLeftOperand().isSelection();
                 }
                 if (getLeftOperand().isSelection()) irrelevantLeft = ((Selection) getLeftOperand()).isKnown();
             }
