@@ -124,6 +124,7 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     public boolean irrelevant(){
+        declaredClasses.clear();
         defClass = true;
         actualClass = name.getName();
         varModels.put(actualClass, new HashMap<Symbol, AbstractExpr>());

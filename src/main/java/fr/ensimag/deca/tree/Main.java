@@ -74,6 +74,7 @@ public class Main extends AbstractMain {
 
     @Override
     public boolean irrelevant(){
+        declaredClasses.clear();
         defClass = false;
         return declVariables.irrelevant() || insts.irrelevant();
     }

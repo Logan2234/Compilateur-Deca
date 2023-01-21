@@ -107,9 +107,16 @@ public class Selection extends AbstractLValue {
     }
 
     public AbstractExpr returnIrrelevantFromSelection(){
-        if (obj.isThis()){
-            return currentValues.get(field.getName());
-        } else return declaredClasses.get(((Identifier) obj).getName()).get(field.getName());
+        if (defClass) {
+            if (obj.isThis()){
+                return varModels.get(actualClass).get(field.getName());
+            } else return declaredClasses.get(((Identifier) obj).getName()).get(field.getName());
+        }
+        else {
+            if (obj.isThis()){
+                return currentValues.get(field.getName());
+            } else return declaredClasses.get(((Identifier) obj).getName()).get(field.getName());
+        }
     }
 
     public void putIrrelevantFromSelection(AbstractExpr e){

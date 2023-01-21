@@ -119,10 +119,16 @@ public class DeclField extends AbstractDeclField {
             AbstractExpr expr = ((Initialization) initialization).getExpression();
             HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
 
-            // if (expr.isNew()){
-            //     // TODO
-            //     return false;
-            // }
+            if (expr.isNew()){
+                declaredClasses.put(fieldName.getName(), varModels.get(((New) expr).getClasse().getName()));
+                return false;
+            }
+
+            if (expr.isSelection()){
+                AbstractExpr out = ((Selection) expr).returnIrrelevantFromSelection();
+                if (out != null) ((Initialization) initialization).setExpression(out);
+                return false;
+            }
 
             if (expr.irrelevant()){
                 ((Initialization) initialization).setExpression(actualDico.get(((Identifier) expr).getName()));

@@ -117,15 +117,24 @@ public class Assign extends AbstractBinaryExpr {
         if (defClass){
 
             HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
+            if (getRightOperand().isSelection()){
+                AbstractExpr out = ((Selection) getRightOperand()).returnIrrelevantFromSelection();
+                if (out != null) setRightOperand(out);
+            }
             if (getRightOperand().irrelevant() && actualDico.containsKey(((Identifier) getRightOperand()).getName())){
                 setRightOperand((actualDico.get(((Identifier) getRightOperand()).getName())));
             }
-            if (!getRightOperand().isReadExpr()){
-                actualDico.put(getLeftOperand().getName(), getRightOperand());
 
-            } else if (actualDico.containsKey(getLeftOperand().getName())){
-                actualDico.remove(getLeftOperand().getName());
-            } 
+            if (!getRightOperand().isReadExpr()){
+                if (getLeftOperand().isSelection()) {((Selection) getLeftOperand()).putIrrelevantFromSelection(getRightOperand());}
+                else actualDico.put(getLeftOperand().getName(), getRightOperand());
+
+            } else if (getLeftOperand().isSelection()){
+                ((Selection) getLeftOperand()).erraseIrrelevantFromSelection();
+            } else {
+                if (currentValues.containsKey(getLeftOperand().getName())) actualDico.remove(getLeftOperand().getName());
+            }
+            
             varModels.put(actualClass, actualDico);
 
         } else {
@@ -143,8 +152,7 @@ public class Assign extends AbstractBinaryExpr {
 
             } else if (getLeftOperand().isSelection()){
                 ((Selection) getLeftOperand()).erraseIrrelevantFromSelection();
-            }
-            else {
+            } else {
                 if (currentValues.containsKey(getLeftOperand().getName())) currentValues.remove(getLeftOperand().getName());
             }
         }
