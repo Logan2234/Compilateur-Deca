@@ -118,7 +118,8 @@ public class While extends AbstractInst {
         ListInst list = condition.factoInst(compiler);
         condition = ((AbstractExpr)list.getList().get(list.getList().size() - 1));
         
-        body.factorised(compiler);
+        if (body.factorised(compiler))
+            body.factoInst(compiler);
         
         list.add(this);
         return list;
