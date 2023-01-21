@@ -6,16 +6,16 @@ class A extends Object {
 	}
 }
 
-class B extends A {
+class C extends A {
 }
 
 {
 	A a = new A();
-	if ((a instanceof B)){
+	if (false){
 		print("Error");
 	} else {
 	}
-	if ((a.createChild() instanceof B)){
+	if ((a.createChild() instanceof C)){
 		print("Error");
 	} else {
 	}

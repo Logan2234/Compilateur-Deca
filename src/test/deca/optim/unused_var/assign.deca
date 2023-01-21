@@ -8,9 +8,10 @@
 //    cree le 17/01/2023
 //
 {
-    // x useless but assign
+    // x useless mais assign
     int y;
     int x = (y=2);
+    // z supprimé
     int z=2;
     x=3;
 

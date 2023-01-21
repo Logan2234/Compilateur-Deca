@@ -9,6 +9,7 @@
 //
 class A {
     int x=1;
+    // w et z useless
     int w,y,z;
     void useY(){}
 }

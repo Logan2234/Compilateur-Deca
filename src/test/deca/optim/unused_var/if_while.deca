@@ -18,15 +18,11 @@
         print("Error");
     }
 
-    if (true) {
-        print("Error");
-    }
-
     // keep the condition only
     if ((x=true) && false && (x=false)) {
     }
 
-    // keep the condition only
+    // remove
     while ((x=true) && false && (x=false)) {
     }
 

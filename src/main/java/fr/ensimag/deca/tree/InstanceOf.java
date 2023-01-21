@@ -121,10 +121,13 @@ public class InstanceOf extends AbstractExpr {
 
     @Override
     protected boolean spotUsedVar() {
-        // TODO evaluate to false if class not used and don't spot the right hand side
-        // We don't spotUsedVar on the class type.
+        boolean varSpotted = false;
+        // We don't spotUsedVar on the class type by default
         // If the class is not used elsewhere then the expression will be evaluated to false.
-        boolean varSpotted = this.type.spotUsedVar();
+        if (!this.expression.getUnremovableExpr().isEmpty()) {
+            // we cannot remove the instanceof so we have to spot the type
+            varSpotted = this.type.spotUsedVar() || varSpotted;
+        }
         return this.expression.spotUsedVar() || varSpotted;
     }
 
