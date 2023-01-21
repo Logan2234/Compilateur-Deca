@@ -58,7 +58,12 @@ public class Multiply extends AbstractOpArith {
                 return false; // On ne developpe pas les floats en somme car il faudra dans tous les cas faire
                               // des additions donc pas optim
             if (rightOperand.getType().isInt()) {
-                int value = ((IntLiteral) rightOperand).getValue();
+                int value;
+                try {
+                    value = ((IntLiteral)((UnaryMinus)rightOperand).getOperand()).getValue();
+                } catch (ClassCastException c) {
+                    value = ((IntLiteral) rightOperand).getValue();
+                }
                 String[] nbbinaire = Integer.toBinaryString(value).split("");
                 int[] binaire = new int[nbbinaire.length];
                 int poids = 0;

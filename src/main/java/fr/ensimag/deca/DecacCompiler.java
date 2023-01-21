@@ -403,9 +403,9 @@ public class DecacCompiler {
         if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
                 if (compilerOptions.getOptimize()) {
                 prog.verifyProgram(this);
-                //prog.optimizeTree();
+                prog.optimizeTree();
                 prog.factoInst(this);
-                prog.prettyPrint(System.out);
+                // prog.prettyPrint(System.out);
             }
             LOG.info("Writing deca file ...");
             prog.decompile(out);
