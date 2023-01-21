@@ -321,4 +321,12 @@ public class Identifier extends AbstractIdentifier {
     public boolean factorised(DecacCompiler compiler) {
         return false;//TODO
     }
+
+    @Override
+    public ListInst factoInst(DecacCompiler compiler) {
+        ListInst list = new ListInst();
+        list.add(this);
+        return list;
+    }
+
 }

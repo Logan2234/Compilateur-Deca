@@ -40,7 +40,7 @@ public class Cast extends AbstractExpr {
 
         if (typeExp.isVoid() || (!typeExp.assignCompatible(typeT) && !typeT.assignCompatible(typeExp)))
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
-                    + typeT.getName().getName() + "\"", getLocation());
+                    + typeT.getName().getName() + "\" (rule 3.39)", getLocation());
         
         if (typeT.isInt() && typeExp.isFloat()){
             ConvInt convint = new ConvInt(expression);

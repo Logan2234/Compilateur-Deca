@@ -25,9 +25,9 @@ import org.apache.commons.lang.Validate;
  */
 public class IfThenElse extends AbstractInst {
 
-    private final AbstractExpr condition;
-    private final ListInst thenBranch;
-    private final ListInst elseBranch;
+    private AbstractExpr condition;
+    private ListInst thenBranch;
+    private ListInst elseBranch;
 
     public IfThenElse(AbstractExpr condition, ListInst thenBranch, ListInst elseBranch) {
         Validate.notNull(condition);
@@ -115,29 +115,41 @@ public class IfThenElse extends AbstractInst {
     }
 
     public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
+        return condition.factorised(compiler) || thenBranch.factorised(compiler) || elseBranch.factorised(compiler);
     }
     public boolean collapse() {
         return condition.collapse() || thenBranch.collapse() || elseBranch.collapse();
     }
 
+    // @Override
+    // public ListInst factoInst(DecacCompiler compiler) {
+    //     // try to collapse the condition
+    //     Boolean collapsedCond = condition.collapseBool();
+    //     if(collapsedCond != null) {
+    //         // we can collapse whole if block !
+    //         if(collapsedCond) {
+    //             return thenBranch;
+    //         }
+    //         else {
+    //             return elseBranch;
+    //         }
+    //     }
+    //     // I mean, sadly return ourself :(
+    //     ListInst result = new ListInst();
+    //     result.add(this);
+    //     return result;
+    // }
+
     @Override
     public ListInst factoInst(DecacCompiler compiler) {
-        /*// try to collapse the condition
-        Boolean collapsedCond = condition.collapseBool();
-        if(collapsedCond != null) {
-            // we can collapse whole if block !
-            if(collapsedCond) {
-                return thenBranch;
-            }
-            else {
-                return elseBranch;
-            }
-        }*/
-        // I mean, sadly return ourself :(
-        ListInst result = new ListInst();
-        result.add(this);
-        return result;
+        ListInst list = condition.factoInst(compiler);
+        condition = ((AbstractExpr)list.getList().get(list.getList().size() - 1));
+        
+        thenBranch.factorised(compiler);
+        elseBranch.factorised(compiler);
+        
+        list.add(this);
+        return list;
     }
 
     @Override

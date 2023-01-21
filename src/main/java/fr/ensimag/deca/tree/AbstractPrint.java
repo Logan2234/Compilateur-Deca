@@ -81,4 +81,17 @@ public abstract class AbstractPrint extends AbstractInst {
     protected void spotUsedVar(AbstractProgram prog) {
         this.arguments.spotUsedVar(prog);
     }
+
+    @Override
+    public boolean factorised(DecacCompiler compiler) {
+        return arguments.factorised(compiler);
+    }
+
+    @Override
+    public ListInst factoInst(DecacCompiler compiler) {
+        arguments.factoInst(compiler);
+        ListInst list = new ListInst();
+        list.add(this);
+        return list;
+    }
 }

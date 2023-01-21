@@ -245,8 +245,41 @@ public abstract class AbstractExpr extends AbstractInst {
     @Override
     public ListInst factoInst(DecacCompiler compiler) {
         // by default, return empty list of instructions. 
-        return new ListInst();
-        
+        return new ListInst(); // TODO
     }
 
+    protected void shift(DecacCompiler compiler, AbstractExpr left, AbstractExpr right, ListInst listPlus) {
+        int value = ((IntLiteral) right).getValue();
+        String[] nbbinaire = Integer.toBinaryString(value).split("");
+        int[] binaire = new int[nbbinaire.length];
+        ListInst list = new ListInst();
+        for (int i = 0; i < nbbinaire.length; i++) {
+            binaire[i] = Integer.parseInt(nbbinaire[nbbinaire.length - 1 - i]);
+            if (binaire[i] == 1) {
+                AbstractExpr puissance = new IntLiteral((int) Math.pow(2, i));
+                ((IntLiteral) puissance).setType(compiler.environmentType.INT);
+                AbstractExpr multiply = new Multiply(left, puissance);
+                ((Multiply) multiply).setType(compiler.environmentType.INT);
+            
+                list.add(multiply);
+            }
+        }
+        if (list.size() == 1) {
+            listPlus.add(list.getList().get(0));
+            ;
+        } else {
+            Plus plus = new Plus((AbstractExpr) list.getList().get(1), (AbstractExpr) list.getList().get(0));
+            listPlus.add(plus);
+            if (list.size() > 2) {
+                for (int i = 2; i < list.size(); i++) {
+                    Plus operand = new Plus((AbstractExpr) list.getList().get(i), (AbstractExpr) plus);
+                    ((Plus) operand).setType(compiler.environmentType.INT);
+                    plus = new Plus((AbstractExpr) list.getList().get(i), (AbstractExpr) plus);
+                    ((Plus) plus).setType(compiler.environmentType.INT);
+                    listPlus.add(operand);
+                }
+            }
+        }
+        // plus.add(list.getList().get(list.size()));
+    }
 }

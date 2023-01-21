@@ -107,7 +107,13 @@ public class DeclVar extends AbstractDeclVar {
         return initialization.collapse();
     }
 
+    @Override
     public boolean factorised(DecacCompiler compiler) {
-        return false;
+        return initialization.factorised(compiler);
+    }
+
+    @Override
+    public void factoInst(DecacCompiler compiler){
+        initialization.factoInst(compiler);
     }
 }

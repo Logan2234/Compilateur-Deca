@@ -47,7 +47,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
             AbstractExpr rightOperand) {
         Validate.notNull(leftOperand, "left operand cannot be null");
         Validate.notNull(rightOperand, "right operand cannot be null");
-        Validate.isTrue(leftOperand != rightOperand, "Sharing subtrees is forbidden"); //TODO Corriger ca dans multiply
+        Validate.isTrue(leftOperand != rightOperand, "Sharing subtrees is forbidden"); // TODO Corriger ca dans multiply
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
     }
@@ -66,8 +66,9 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         codeGenBinExp(compiler, leftRegister, rightRegister);
         // free right register
         compiler.freeRegister(rightRegister);
-        // if the original register is null, load the result on the stack (also need to free the register)
-        if(register == null) {
+        // if the original register is null, load the result on the stack (also need to
+        // free the register)
+        if (register == null) {
             // load the rsesult in R1 to free the register (free might pop the stack)
             compiler.addInstruction(new LOAD(leftRegister, Register.R1));
             compiler.freeRegister(leftRegister);
@@ -77,12 +78,13 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
     /**
-     * do the binary operation between the given register and the given DVal. 
+     * do the binary operation between the given register and the given DVal.
+     * 
      * @param compiler Where we write the instructions.
-     * @param register Not null : contains one of the operands, and where we put the result.
+     * @param register Not null : contains one of the operands, and where we put the
+     *                 result.
      */
     public abstract void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dVal);
-
 
     @Override
     public void decompile(IndentPrintStream s) {
@@ -106,7 +108,24 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         leftOperand.prettyPrint(s, prefix, false);
         rightOperand.prettyPrint(s, prefix, true);
     }
-    
+
+    @Override
+    public boolean factorised(DecacCompiler compiler) {
+        return leftOperand.factorised(compiler) || rightOperand.factorised(compiler);
+    }
+
+    @Override
+    public ListInst factoInst(DecacCompiler compiler) {
+        ListInst listLeft = leftOperand.factoInst(compiler);
+        ListInst listRight = rightOperand.factoInst(compiler);
+        leftOperand = ((AbstractExpr) listLeft.getList().get(listLeft.getList().size() - 1));
+        rightOperand = ((AbstractExpr) listRight.getList().get(listRight.getList().size() - 1));
+
+        ListInst list = new ListInst();
+        list.add(this);
+        return list;
+    }
+
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
         this.leftOperand.spotUsedVar(prog);
@@ -118,5 +137,5 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         this.leftOperand.addMethodCalls(foundMethodCalls);
         this.rightOperand.addMethodCalls(foundMethodCalls);
     }
-    
+
 }

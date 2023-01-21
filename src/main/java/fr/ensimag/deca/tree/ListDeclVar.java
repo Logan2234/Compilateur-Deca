@@ -26,12 +26,14 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
     }
 
     /**
-     * Code generatio to declare all variables. 
-     * This also keep track of the number of variables, and assign to each of them a DAddr to keep track of where they are.
+     * Code generatio to declare all variables.
+     * This also keep track of the number of variables, and assign to each of them a
+     * DAddr to keep track of where they are.
+     * 
      * @param compiler Where we write our instructions to.
      */
     public void codeGenDeclVar(DecacCompiler compiler) {
-        for(AbstractDeclVar i : getList()) {
+        for (AbstractDeclVar i : getList()) {
             // create the DAddr that references the variable
             i.codeGenDeclVar(compiler, compiler.getNextStackSpace());
         }
@@ -57,16 +59,24 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
             i.verifyDeclVar(compiler, localEnv, currentClass);
     }
 
-    @Override
     public boolean factorised(DecacCompiler compiler) {
+        for (AbstractDeclVar var : getList())
+            if (var.factorised(compiler))
+                return true;
         return false;
     }
-    
+
+    public ListInst factoInst(DecacCompiler compiler) {
+        for (AbstractDeclVar var : getList())
+            var.factoInst(compiler);
+        return new ListInst();
+    }
+
     @Override
     public boolean collapse() {
         // try to collapse each decl var
         boolean collapsed = false;
-        for(AbstractDeclVar i : getList()) {
+        for (AbstractDeclVar i : getList()) {
             collapsed |= i.collapse();
         }
         return collapsed;

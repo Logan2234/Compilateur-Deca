@@ -37,81 +37,36 @@ public class Multiply extends AbstractOpArith {
 
     public boolean factorised(DecacCompiler compiler) {
         if (leftOperand.isLiteral() ^ rightOperand.isLiteral()) {
+            
             if (leftOperand.isLiteral() && leftOperand.getType().isInt()) {
-
-                return true;
+                int value = ((IntLiteral) leftOperand).getValue();
+                String[] nbbinaire = Integer.toBinaryString(value).split("");
+                int[] binaire = new int[nbbinaire.length];
+                int poids = 0;
+                for (int i = 0; i < nbbinaire.length; i++) {
+                    binaire[i] = Integer.parseInt(nbbinaire[nbbinaire.length - 1 - i]);
+                    if (binaire[i] == 1) 
+                        poids++;   
+                }
+                return (poids<=5);
             }
             if (leftOperand.isLiteral() && leftOperand.getType().isFloat())
                 return false; // On ne developpe pas les floats en somme car il faudra dans tous les cas faire
                               // des additions donc pas optim
             if (rightOperand.getType().isInt()) {
-                return true;
+                int value = ((IntLiteral) rightOperand).getValue();
+                String[] nbbinaire = Integer.toBinaryString(value).split("");
+                int[] binaire = new int[nbbinaire.length];
+                int poids = 0;
+                for (int i = 0; i < nbbinaire.length; i++) {
+                    binaire[i] = Integer.parseInt(nbbinaire[nbbinaire.length - 1 - i]);
+                    if (binaire[i] == 1) 
+                        poids++;   
+                }
+                return (poids<=5);
             }
         }
         return false;
-    }
-
-    private void shift(DecacCompiler compiler, AbstractExpr left, AbstractExpr right, ListInst listPlus) {
-        int value = ((IntLiteral) right).getValue();
-        String[] nbbinaire = Integer.toBinaryString(value).split("");
-        int[] binaire = new int[nbbinaire.length];
-        ListInst list = new ListInst();
-        for (int i = 0; i < nbbinaire.length; i++) {
-            binaire[i] = Integer.parseInt(nbbinaire[nbbinaire.length - 1 - i]);
-            if (binaire[i] == 1) {
-                AbstractExpr puissance = new IntLiteral((int) Math.pow(2, i));
-                ((IntLiteral) puissance).setType(compiler.environmentType.INT);
-                AbstractExpr multiply = new Multiply(left, puissance);
-                ((Multiply) multiply).setType(compiler.environmentType.INT);
-
-                list.add(multiply);
-            }
-        }
-        if (list.size() == 1) {
-            listPlus.add(list.getList().get(0));
-            ;
-        } else {
-            Plus plus = new Plus((AbstractExpr) list.getList().get(1), (AbstractExpr) list.getList().get(0));
-            listPlus.add(plus);
-            if (list.size() > 2) {
-                for (int i = 2; i < list.size(); i++) {
-                    Plus operand = new Plus((AbstractExpr) list.getList().get(i), (AbstractExpr) plus);
-                    ((Plus) operand).setType(compiler.environmentType.INT);
-                    plus = new Plus((AbstractExpr) list.getList().get(i), (AbstractExpr) plus);
-                    ((Plus) plus).setType(compiler.environmentType.INT);
-                    listPlus.add(operand);
-                }
-            }
-        }
-        // plus.add(list.getList().get(list.size()));
-    }
-
-    private void factocarre(DecacCompiler compiler, AbstractExpr leftOperand, AbstractExpr rightOperand,
-            ListInst list) {
-        AbstractExpr leftbisoperand;
-        if (leftOperand.isLiteral()) {
-            leftbisoperand = new IntLiteral(((IntLiteral) leftOperand).getValue());
-        } else {
-            leftbisoperand = new Identifier(((Identifier) leftOperand).getName());
-            ((Identifier) leftbisoperand).setDefinition(((Identifier) leftOperand).getDefinition());
-        }
-
-        leftbisoperand.setType(leftOperand.getType());
-        if (((IntLiteral) rightOperand).getValue() == 2) {
-            Plus fin = new Plus(leftOperand, leftbisoperand);
-            fin.setType(compiler.environmentType.INT);
-            list.add(fin);
-        } else {
-            AbstractExpr left = new Plus(leftOperand, leftbisoperand);
-            ((Plus) left).setType(compiler.environmentType.INT);
-            for (int i = 0; i < ((IntLiteral) rightOperand).getValue() - 2; i++) {
-                Plus plus = new Plus(leftOperand, left);
-                ((Plus) plus).setType(compiler.environmentType.INT);
-                left = new Plus(leftOperand, left);
-                ((Plus) left).setType(compiler.environmentType.INT);
-                list.add(plus);
-            }
-        }
     }
 
     public ListInst factoInst(DecacCompiler compiler) {
@@ -119,10 +74,21 @@ public class Multiply extends AbstractOpArith {
 
         // Letter * number
         if (rightOperand.isLiteral() && rightOperand.getType().isInt())
-            shift(compiler, leftOperand, rightOperand, list);
-        // factocarre(compiler, leftOperand, rightOperand, list);
+            try {
+                int value = ((IntLiteral) (((UnaryMinus) rightOperand).getOperand())).getValue();
+                AbstractExpr rightBisOperand = new IntLiteral(value);
+                shift(compiler, rightBisOperand, leftOperand, list);
+                // new UnaryMinus(list)
+                ((UnaryMinus)rightOperand).setOperand((AbstractExpr)list.getList().get(list.size()-1));
+                list.add(rightOperand);
+                ((UnaryMinus) list.getList().get(list.size()-1)).setType(compiler.environmentType.INT);
+            } catch (ClassCastException e) {
+                shift(compiler, leftOperand, rightOperand, list);
+                ((AbstractOpArith) list.getList().get(list.size()-1)).setType(compiler.environmentType.INT);
+            }
+
         // number * Letter
-        else {
+        else if (leftOperand.isLiteral() && rightOperand.getType().isInt()){
             try {
                 int value = ((IntLiteral) (((UnaryMinus) leftOperand).getOperand())).getValue();
                 AbstractExpr leftBisOperand = new IntLiteral(value);
@@ -133,8 +99,12 @@ public class Multiply extends AbstractOpArith {
                 ((UnaryMinus) list.getList().get(list.size()-1)).setType(compiler.environmentType.INT);
             } catch (ClassCastException e) {
                 shift(compiler, rightOperand, leftOperand, list);
-                ((AbstractOpArith) list.getList().get(list.size()-1)).setType(compiler.environmentType.INT);
+                this.setLeftOperand(((AbstractOpArith) list.getList().get(list.size()-1)).getLeftOperand());
+                this.setRightOperand(((AbstractOpArith) list.getList().get(list.size()-1)).getRightOperand());
             }
+        }
+        else {
+            return super.factoInst(compiler);
         }
         return list;
     }

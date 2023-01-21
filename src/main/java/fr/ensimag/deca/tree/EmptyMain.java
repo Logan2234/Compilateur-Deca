@@ -54,6 +54,12 @@ public class EmptyMain extends AbstractMain {
     public boolean factorised(DecacCompiler compiler) {
         return false;
     }
+
+    @Override
+    public void factoInst(DecacCompiler compiler){
+        // Nothing
+    }
+    
     public boolean collapse() {
         // this main is empty : cannot collapse further.
         return false;

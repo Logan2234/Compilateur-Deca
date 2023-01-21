@@ -28,13 +28,27 @@ public class ListExpr extends TreeList<AbstractExpr> {
     public boolean collapse() {
         // try to collapse each decl var
         boolean collapsed = false;
-        for(AbstractExpr i : getList()) {
+        for (AbstractExpr i : getList()) {
             collapsed |= i.collapse();
         }
         return collapsed;
     }
 
+    @Override
     public boolean factorised(DecacCompiler compiler) {
+        for (AbstractExpr i : getList())
+            if (i.factorised(compiler)){
+                return true;
+            }
         return false;
+    }
+
+    public ListInst factoInst(DecacCompiler compiler) {
+        for (int i = 0; i < getList().size(); i++) {
+            AbstractExpr elem = getList().get(i);
+            ListInst list = elem.factoInst(compiler);
+            this.set(i, (AbstractExpr)list.getList().get(list.size() - 1));
+        }
+        return null;
     }
 }

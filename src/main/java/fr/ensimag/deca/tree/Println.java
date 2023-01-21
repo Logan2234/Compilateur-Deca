@@ -29,22 +29,12 @@ public class Println extends AbstractPrint {
         return "ln";
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
     public boolean collapse() {
         return false;
     }
 
     @Override
     public ListInst collapseInst() {
-        ListInst result = new ListInst();
-        result.add(this);
-        return result;
-    }
-
-    @Override
-    public ListInst factoInst(DecacCompiler compiler) {
         ListInst result = new ListInst();
         result.add(this);
         return result;

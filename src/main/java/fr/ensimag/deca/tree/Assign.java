@@ -9,6 +9,9 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
+
+import java.util.List;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -84,8 +87,17 @@ public class Assign extends AbstractBinaryExpr {
     }
     
     public boolean factorised(DecacCompiler compiler) {
-        return false;
+        return getRightOperand().factorised(compiler);
     }
+
+    @Override
+    public ListInst factoInst(DecacCompiler compiler) {
+        ListInst list = getRightOperand().factoInst(compiler);
+        setRightOperand((AbstractExpr)list.getList().get(list.getList().size() - 1));
+        list.add(this);
+        return list;
+    }
+
     @Override 
     public boolean collapse() {
         if(getRightOperand().collapse()) {

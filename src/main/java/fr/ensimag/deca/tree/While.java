@@ -110,7 +110,18 @@ public class While extends AbstractInst {
     
 
     public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
+        return condition.factorised(compiler) || body.factorised(compiler);
+    }
+
+    @Override
+    public ListInst factoInst(DecacCompiler compiler) {
+        ListInst list = condition.factoInst(compiler);
+        condition = ((AbstractExpr)list.getList().get(list.getList().size() - 1));
+        
+        body.factorised(compiler);
+        
+        list.add(this);
+        return list;
     }
 
     @Override
@@ -120,29 +131,6 @@ public class While extends AbstractInst {
 
     @Override
     public ListInst collapseInst() {
-        Boolean collapsedCond = condition.collapseBool();
-        if(collapsedCond != null) {
-            // if it's true, get out of block the body
-            if(collapsedCond) {
-                ListInst result = new ListInst();
-                for(AbstractInst i : body.getList()) {
-                    // ! dangerous ...
-                    // result.add(i);
-                }
-                result.add(this);
-                return result;
-            }
-            // if not, skip while
-            else {
-                return new ListInst();
-            }
-        }
-        ListInst result = new ListInst();
-        result.add(this);
-        return result;
-    }
-
-    public ListInst factoInst(DecacCompiler compiler) {
         Boolean collapsedCond = condition.collapseBool();
         if(collapsedCond != null) {
             // if it's true, get out of block the body

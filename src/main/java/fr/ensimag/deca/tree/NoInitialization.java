@@ -91,7 +91,13 @@ public class NoInitialization extends AbstractInitialization {
         return false;
     }
 
+    @Override
     public boolean factorised(DecacCompiler compiler) {
         return false;
+    }
+
+    @Override
+    public void factoInst(DecacCompiler compiler){
+        // Nothing
     }
 }

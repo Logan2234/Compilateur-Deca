@@ -83,11 +83,18 @@ public class Main extends AbstractMain {
 
     @Override
     public boolean factorised(DecacCompiler compiler) {
-        return insts.factorised(compiler) || declVariables.factorised(compiler);
+        return declVariables.factorised(compiler) || insts.factorised(compiler);
     }
+
+	@Override
+	public void factoInst(DecacCompiler compiler) {
+        declVariables.factoInst(compiler);
+        insts.factoInst(compiler);
+	}
     
     public boolean collapse() {
         // if either one of the declaration or instructions collapsed, we collapsed
         return declVariables.collapse() || insts.collapse();
     }
+
 }

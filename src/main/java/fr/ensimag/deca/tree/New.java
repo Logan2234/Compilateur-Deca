@@ -49,7 +49,7 @@ public class New extends AbstractExpr {
         Type type = classe.verifyType(compiler);
 
         if (!type.isClass())
-            throw new ContextualError("New is only for classes", getLocation());
+            throw new ContextualError("New is only for classes (rule 3.42)", getLocation());
 
         setType(type);
         return type;

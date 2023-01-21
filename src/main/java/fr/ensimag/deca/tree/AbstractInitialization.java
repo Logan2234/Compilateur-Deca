@@ -34,5 +34,5 @@ public abstract class AbstractInitialization extends Tree {
      * @param compiler Where we write the code.
      */
     public abstract void codeGenInit(DecacCompiler compiler, Type objectType, RegisterOffset resultRegister);
-
+    public abstract void factoInst(DecacCompiler compiler);
 }

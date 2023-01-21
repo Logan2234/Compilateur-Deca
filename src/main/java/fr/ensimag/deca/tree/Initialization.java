@@ -126,7 +126,11 @@ public class Initialization extends AbstractInitialization {
     }
 
     public boolean factorised(DecacCompiler compiler) {
-        return false;
+        return expression.factorised(compiler);
     }
     
+    public void factoInst(DecacCompiler compiler){
+        expression.factoInst(compiler);
+    }
+
 }
