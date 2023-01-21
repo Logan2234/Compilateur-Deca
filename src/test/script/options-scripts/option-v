@@ -10,7 +10,9 @@ BWHITE='\033[1;37m'
 
 # Test the -v option. Checks that no error is thrown when using the option
 # on a contextually valid .deca file but does throw an error when used on an
-# invalid .deca file.
+# invalid .deca file. 
+# 
+# ALMOST SIMILAR TO FULL-CONTEXT
 
 # On se place dans le répertoire du projet (quel que soit le
 # répertoire d'où est lancé le script) :
@@ -41,8 +43,8 @@ files=$(find ./src/test/deca/context/invalid -maxdepth 1 -name "*.deca")
 
 for test in $files
 do
-    decac -v "$test" > /dev/null 2>&1
-    if [ "$?" -ne 0 ]
+    
+    if decac -v "$test" 2>&1 | grep -q "$test:*:*"
     then
         echo -e "${GREENBOLD}Test passed: $NOCOLOR${test/.\/src\/test\/deca\//}${GREEN} returns a correct error"
     else
