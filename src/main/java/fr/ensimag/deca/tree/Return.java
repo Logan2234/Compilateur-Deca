@@ -73,6 +73,17 @@ public class Return extends AbstractInst {
 
     @Override
     public boolean irrelevant(){
+        if (e.irrelevant() || e.isSelection()){
+            if (e.isSelection()){
+                AbstractExpr out = ((Selection) e).returnIrrelevantFromSelection();
+                if (out != null) {
+                    e = out;
+                }
+            }
+            else {
+                e = currentValues.get(((Identifier) e).getName());
+            }
+        }
         return e.irrelevant();
     }
 }

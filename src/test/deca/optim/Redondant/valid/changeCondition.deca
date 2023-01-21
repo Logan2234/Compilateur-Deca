@@ -1,5 +1,5 @@
 // Description:
-//    On teste si la condition change bien de valeur si on l'a défini avant
+//    On teste si la condition du if change bien de valeur si on l'a défini avant
 //
 // Resultats:
 //    ok mais la décompilation doit être : 
