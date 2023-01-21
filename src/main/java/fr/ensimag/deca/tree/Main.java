@@ -68,10 +68,9 @@ public class Main extends AbstractMain {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        boolean varSpotted = declVariables.spotUsedVar();
-        varSpotted = insts.spotUsedVar() || varSpotted;
-        return varSpotted;
+    protected void spotUsedVar() {
+        this.declVariables.spotUsedVar();
+        this.insts.spotUsedVar();
     }
     
     @Override

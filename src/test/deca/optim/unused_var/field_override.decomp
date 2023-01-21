@@ -3,6 +3,7 @@ class A extends Object {
 }
 
 class B extends A {
+	int x;
 }
 
 {

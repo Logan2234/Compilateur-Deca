@@ -298,9 +298,8 @@ public abstract class Tree {
 
     /**
      * Set to true the "used" attribute of definitions of used variables
-     * @return true if a used attribute has been set to true
      */
-    protected abstract boolean spotUsedVar();
+    protected abstract void spotUsedVar();
 
     /**
      * Only keep the right hand side of useless assignements and evaluates

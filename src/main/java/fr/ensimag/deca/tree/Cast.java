@@ -89,10 +89,9 @@ public class Cast extends AbstractExpr {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        boolean varSpotted = this.type.spotUsedVar();
-        varSpotted = this.expression.spotUsedVar() || varSpotted;
-        return varSpotted;
+    protected void spotUsedVar() {
+        this.type.spotUsedVar();
+        this.expression.spotUsedVar();
     }
 
     @Override

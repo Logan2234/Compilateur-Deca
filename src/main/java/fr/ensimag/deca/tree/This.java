@@ -79,8 +79,8 @@ public class This extends AbstractExpr {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        return false;
+    protected void spotUsedVar() {
+        // do nothing
     }
 
     @Override

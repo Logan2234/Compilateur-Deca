@@ -50,14 +50,12 @@ public class ListInst extends TreeList<AbstractInst> {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        boolean varSpotted = false;
+    protected void spotUsedVar() {
         for (AbstractInst inst : this.getList()) {
             if (!(inst instanceof Identifier)) {
-                varSpotted = inst.spotUsedVar() || varSpotted;
+                inst.spotUsedVar();
             }
         }
-        return varSpotted;
     }
 
     @Override

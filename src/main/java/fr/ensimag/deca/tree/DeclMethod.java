@@ -185,12 +185,11 @@ public class DeclMethod extends AbstractDeclMethod {
     
 
     @Override
-    public boolean spotUsedVar() {
-        boolean varSpotted = this.type.spotUsedVar();
-        varSpotted = this.body.spotUsedVar() || varSpotted;
-        varSpotted = this.methodName.spotUsedVar() || varSpotted;
+    public void spotUsedVar() {
+        this.type.spotUsedVar();
+        this.body.spotUsedVar();
+        this.methodName.spotUsedVar();
         // we spot the param when they are used in the body
-        return varSpotted;
     }
 
     @Override

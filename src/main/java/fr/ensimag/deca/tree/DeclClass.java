@@ -131,9 +131,8 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     @Override
-    protected boolean spotUsedVar() {
+    protected void spotUsedVar() {
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
-        return false;
     }
 
     @Override

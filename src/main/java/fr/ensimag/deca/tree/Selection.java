@@ -135,10 +135,9 @@ public class Selection extends AbstractLValue {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        boolean varSpotted = this.obj.spotUsedVar();
-        varSpotted = this.field.spotUsedVar() || varSpotted;
-        return varSpotted;
+    protected void spotUsedVar() {
+        this.obj.spotUsedVar();
+        this.field.spotUsedVar();
     }
 
     @Override

@@ -67,10 +67,9 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        boolean varSpotted = this.vars.spotUsedVar();
-        varSpotted = this.insts.spotUsedVar() || varSpotted;
-        return varSpotted;
+    protected void spotUsedVar() {
+        this.vars.spotUsedVar();
+        this.insts.spotUsedVar();
     }
 
     @Override

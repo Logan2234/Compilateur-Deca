@@ -83,10 +83,10 @@ public class NoInitialization extends AbstractInitialization {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        return false;
+    protected void spotUsedVar() {
+        // do nothing
     }
-
+    
     @Override
     protected Tree simplify() {
         return this;

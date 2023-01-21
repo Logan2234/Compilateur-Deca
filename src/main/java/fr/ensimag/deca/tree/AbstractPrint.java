@@ -80,8 +80,8 @@ public abstract class AbstractPrint extends AbstractInst {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        return this.arguments.spotUsedVar();
+    protected void spotUsedVar() {
+        this.arguments.spotUsedVar();
     }
 
     @Override

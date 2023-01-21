@@ -85,8 +85,8 @@ public class Return extends AbstractInst {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        return this.expression.spotUsedVar();
+    protected void spotUsedVar() {
+        this.expression.spotUsedVar();
     }
 
     @Override

@@ -47,10 +47,10 @@ public abstract class AbstractReadExpr extends AbstractExpr {
     protected abstract void codeGenRead(DecacCompiler compiler);
 
     @Override
-    protected boolean spotUsedVar() {
-        return false;
+    protected void spotUsedVar() {
+        // do nothing
     }
-
+    
     @Override
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         foundMethodCalls.add(this);
