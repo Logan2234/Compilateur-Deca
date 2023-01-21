@@ -109,11 +109,23 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         if (defClass){
 
             HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
-            if (operand.irrelevant() && actualDico.containsKey(((Identifier) operand).getName())){
-                operand = actualDico.get(((Identifier) operand).getName());
+
+            boolean irrelevant = false;
+            if (operand.isSelection()){
+                AbstractExpr out = ((Selection) operand).returnIrrelevantFromSelection();
+                if (out != null) {
+                    operand = out;
+                }
+                if (operand.isSelection()) irrelevant = ((Selection) operand).isKnown();
             }
+            else if (operand.irrelevant() && actualDico.containsKey(((Identifier) operand).getName())) {
+                operand = actualDico.get(((Identifier) operand).getName());
+                irrelevant = true;
+            }
+
             varModels.put(actualClass, actualDico);
-            return operand.irrelevant() && actualDico.containsKey(((Identifier) operand).getName());
+            return irrelevant || (!operand.isSelection() && 
+            (operand.irrelevant() && actualDico.containsKey(((Identifier) operand).getName())));
         
         } else {
             boolean irrelevant = false;
@@ -121,15 +133,16 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
                 AbstractExpr out = ((Selection) operand).returnIrrelevantFromSelection();
                 if (out != null) {
                     operand = out;
-                    irrelevant = true;
                 }
+                if (operand.isSelection()) irrelevant = ((Selection) operand).isKnown();
             }
             else if (operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName())) {
                 operand = currentValues.get(((Identifier) operand).getName());
                 irrelevant = true;
             }
 
-            return irrelevant;
+            return irrelevant || (!operand.isSelection() && 
+            (operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName())));
         }
     }
 
