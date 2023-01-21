@@ -130,6 +130,8 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     public boolean irrelevant(){
+        currentValues.clear();
+        
         body.irrelevant();
         return false;
     }

@@ -133,4 +133,17 @@ public class Selection extends AbstractLValue {
         }
     }
 
+    public boolean isKnown(){
+        if (defClass) {
+            if (obj.isThis()){
+                return varModels.get(actualClass).containsKey(field.getName());
+            } else return declaredClasses.get(((Identifier) obj).getName()).containsKey(field.getName());
+        }
+        else {
+            if (obj.isThis()){
+                return currentValues.containsKey(field.getName());
+            } else return declaredClasses.get(((Identifier) obj).getName()).containsKey(field.getName());
+        }
+    }
+
 }
