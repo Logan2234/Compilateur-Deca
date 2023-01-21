@@ -29,8 +29,8 @@ public class DeclClass extends AbstractDeclClass {
 
     final private AbstractIdentifier name;
     final private AbstractIdentifier superIdentifier;
-    final private ListDeclField fields;
-    final private ListDeclMethod methods;
+    private ListDeclField fields;
+    private ListDeclMethod methods;
 
     public DeclClass(AbstractIdentifier name, AbstractIdentifier superIdentifier, ListDeclField fields,
             ListDeclMethod methods) {
@@ -134,6 +134,16 @@ public class DeclClass extends AbstractDeclClass {
     protected boolean spotUsedVar() {
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
         return false;
+    }
+
+    @Override
+    protected Tree simplify() {
+        if (!this.name.getDefinition().isUsed()) {
+            return null;
+        }
+        this.fields = (ListDeclField)this.fields.simplify();
+        this.methods = (ListDeclMethod)this.methods.simplify();
+        return this;
     }
 
     public AbstractIdentifier getName() {

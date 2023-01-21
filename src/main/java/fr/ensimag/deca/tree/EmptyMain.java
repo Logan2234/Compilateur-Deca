@@ -55,4 +55,9 @@ public class EmptyMain extends AbstractMain {
     protected boolean spotUsedVar() {
         return false;
     }
+
+    @Override
+    protected Tree simplify() {
+        return this;
+    }
 }

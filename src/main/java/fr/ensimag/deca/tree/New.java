@@ -114,7 +114,7 @@ public class New extends AbstractExpr {
 
     @Override
     protected boolean spotUsedVar() {
-        return false;
+        return this.classe.spotUsedVar();
     }
 
     @Override

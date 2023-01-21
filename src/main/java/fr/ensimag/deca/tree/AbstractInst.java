@@ -51,4 +51,5 @@ public abstract class AbstractInst extends Tree {
      * @return
      */
     public abstract ListInst collapseInst();
+
 }

@@ -96,6 +96,12 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     }
 
     @Override
+    protected Tree simplify() {
+        this.operand = (AbstractExpr)this.operand.simplify();
+        return this;
+    }
+
+    @Override
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         this.operand.addUnremovableExpr(foundMethodCalls);
     }

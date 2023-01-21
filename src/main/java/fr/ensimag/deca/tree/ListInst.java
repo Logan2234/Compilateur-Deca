@@ -1,6 +1,10 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+
+import java.util.List;
+import java.util.ListIterator;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -54,6 +58,41 @@ public class ListInst extends TreeList<AbstractInst> {
             }
         }
         return varSpotted;
+    }
+
+    @Override
+    protected Tree simplify() {
+        ListIterator<AbstractInst> iter = this.iterator();
+        while(iter.hasNext()) {
+            AbstractInst tree = (AbstractInst)iter.next().simplify();
+            // we have to remove first because it may be a new tree
+            iter.remove();
+            if (tree == null) {
+                // keep it removed
+            }
+            else if (tree instanceof AbstractExpr) {
+                AbstractExpr expr = (AbstractExpr)tree;
+                List<AbstractExpr> unremovableExpressions = expr.getUnremovableExpr();
+                if (unremovableExpressions.isEmpty()) {
+                    // don't add the expression
+                }
+                else if (expr.getType().isBoolean()) {
+                    // replace the expression as it is
+                    iter.add(tree);
+                    // we cannot break the expression because for instance, the left operand
+                    // of an AND shouldn't be evaluated if the right operand is false
+                }
+                else {
+                    for (AbstractExpr expression : unremovableExpressions) {
+                        iter.add(expression); // add after the current instruction
+                    }
+                }
+            }
+            else {
+                iter.add(tree);
+            }
+        }
+        return this;
     }
 
     public boolean collapse() {

@@ -22,6 +22,7 @@ import org.apache.commons.lang.Validate;
  */
 public class Initialization extends AbstractInitialization {
 
+    @Override
     public AbstractExpr getExpression() {
         return expression;
     }
@@ -86,6 +87,12 @@ public class Initialization extends AbstractInitialization {
     @Override
     protected boolean spotUsedVar() {
         return this.expression.spotUsedVar();
+    }
+
+    @Override
+    protected Tree simplify() {
+        this.expression = (AbstractExpr)this.expression.simplify();
+        return this;
     }
     
     @Override 

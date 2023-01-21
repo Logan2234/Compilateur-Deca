@@ -33,7 +33,7 @@ import org.apache.commons.lang.Validate;
  */
 public class Selection extends AbstractLValue {
 
-    private final AbstractExpr obj;
+    private AbstractExpr obj;
     private final AbstractIdentifier field;
 
     public Selection(AbstractExpr obj, AbstractIdentifier field) {
@@ -139,6 +139,12 @@ public class Selection extends AbstractLValue {
         boolean varSpotted = this.obj.spotUsedVar();
         varSpotted = this.field.spotUsedVar() || varSpotted;
         return varSpotted;
+    }
+
+    @Override
+    protected Tree simplify() {
+        this.obj = (AbstractExpr)this.obj.simplify();
+        return this;
     }
 
     @Override

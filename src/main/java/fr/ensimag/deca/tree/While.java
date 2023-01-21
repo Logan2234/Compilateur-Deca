@@ -17,6 +17,8 @@ import fr.ensimag.ima.pseudocode.instructions.CMP;
 import java.io.PrintStream;
 import java.util.List;
 
+import javax.swing.text.html.HTMLDocument.Iterator;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -107,6 +109,20 @@ public class While extends AbstractInst {
         boolean varSpotted = this.condition.spotUsedVar();
         varSpotted = this.body.spotUsedVar() || varSpotted;
         return varSpotted;
+    }
+
+    @Override
+    protected Tree simplify() {
+        this.condition = (AbstractExpr) this.condition.simplify();
+        this.body = (ListInst) this.body.simplify();
+        if (!this.body.isEmpty()) {
+            return this;
+        }
+        List<AbstractExpr> unremovableExpressions = this.condition.getUnremovableExpr();
+        if (unremovableExpressions.isEmpty()) {
+            return null;
+        } 
+        return this;
     }
 
     @Override

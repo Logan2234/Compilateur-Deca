@@ -7,8 +7,6 @@
 		print("Error");
 	} else {
 	}
-	(((x = true) && false) && (x = false));
-	(((x = true) && false) && (x = false));
-	while ((((x = true) && false) && (readInt() == 1))) {
+	while (((true && false) && (readInt() == 1))) {
 	}
 }

@@ -33,9 +33,9 @@ import org.apache.commons.lang.Validate;
  */
 public class MethodCall extends AbstractExpr {
 
-    private final AbstractExpr obj;
+    private AbstractExpr obj;
     private final AbstractIdentifier meth;
-    private final ListExpr params;
+    private ListExpr params;
 
     public MethodCall(AbstractExpr obj, AbstractIdentifier meth, ListExpr params) {
         Validate.notNull(meth);
@@ -145,6 +145,13 @@ public class MethodCall extends AbstractExpr {
         varSpotted = this.meth.spotUsedVar() || varSpotted;
         varSpotted = this.params.spotUsedVar() || varSpotted;
         return varSpotted;
+    }
+
+    @Override
+    protected Tree simplify() {
+        this.obj = (AbstractExpr)this.obj.simplify();
+        this.params = (ListExpr)this.params.simplify();
+        return this;
     }
 
     @Override

@@ -250,4 +250,12 @@ public abstract class AbstractExpr extends AbstractInst {
         // expressions that can collapse will override this.
     }
 
+    /**
+     * Return the tree as it is which is the default behavior
+     */
+    @Override
+    protected Tree simplify() {
+        return this;
+    }
+
 }

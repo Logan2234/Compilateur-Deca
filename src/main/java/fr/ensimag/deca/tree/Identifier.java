@@ -314,6 +314,11 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
+    protected Tree simplify() {
+        return this;
+    }
+
+    @Override
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }

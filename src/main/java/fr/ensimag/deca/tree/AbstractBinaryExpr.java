@@ -115,6 +115,13 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
     @Override
+    protected Tree simplify() {
+        this.leftOperand = (AbstractExpr)this.leftOperand.simplify();
+        this.rightOperand = (AbstractExpr)this.rightOperand.simplify();
+        return this;
+    }
+
+    @Override
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         this.leftOperand.addUnremovableExpr(foundMethodCalls);
         this.rightOperand.addUnremovableExpr(foundMethodCalls);

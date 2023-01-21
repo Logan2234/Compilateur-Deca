@@ -24,7 +24,7 @@ public class DeclVar extends AbstractDeclVar {
 
     final private AbstractIdentifier type;
     final private AbstractIdentifier varName;
-    final private AbstractInitialization initialization;
+    private AbstractInitialization initialization;
 
     public DeclVar(AbstractIdentifier type, AbstractIdentifier varName, AbstractInitialization initialization) {
         Validate.notNull(type);
@@ -93,6 +93,19 @@ public class DeclVar extends AbstractDeclVar {
     protected boolean spotUsedVar() {
         // We don't spotUsedVar() on the type (it may be a class) or the identifier as they are just declared.
         return this.initialization.spotUsedVar();
+    }
+
+    @Override
+    protected Tree simplify() {
+        this.initialization = (AbstractInitialization)this.initialization.simplify();
+        if (this.varName.getDefinition().isUsed()) {
+            return this;
+        }
+        if (this.initialization.getExpression() == null
+            || this.initialization.getExpression().getUnremovableExpr().isEmpty()) {
+            return null;
+        }
+        return this;
     }
 
     public AbstractIdentifier getVar() {

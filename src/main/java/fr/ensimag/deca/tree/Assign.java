@@ -99,6 +99,15 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
+    protected Tree simplify() {
+        this.rightOperand = (AbstractExpr)this.rightOperand.simplify();
+        if (!this.getLeftOperand().getDefinition().isUsed()) {
+            return this.rightOperand;
+        }
+        return this;
+    }
+
+    @Override
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         foundMethodCalls.add(this);
     }

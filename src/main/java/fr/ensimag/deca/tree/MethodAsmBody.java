@@ -65,6 +65,12 @@ public class MethodAsmBody extends AbstractMethod {
     protected boolean spotUsedVar() {
         return false;
     }
+
+    @Override
+    protected Tree simplify() {
+        return this;
+    }
+    
 	@Override
     public void codeGenMethod(DecacCompiler compiler) {
         // todo : find a way to insert a string litteral in the code

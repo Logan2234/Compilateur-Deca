@@ -40,7 +40,7 @@ public class DeclMethod extends AbstractDeclMethod {
     final private AbstractIdentifier type;
     final private AbstractIdentifier methodName;
     final private ListDeclParam params;
-    final private AbstractMethod body;
+    private AbstractMethod body;
 
     public DeclMethod(AbstractIdentifier type, AbstractIdentifier methodName, ListDeclParam params,
             AbstractMethod body) {
@@ -192,6 +192,16 @@ public class DeclMethod extends AbstractDeclMethod {
         // we spot the param when they are used in the body
         return varSpotted;
     }
+
+    @Override
+    protected Tree simplify() {
+        if (!this.methodName.getDefinition().isUsed()) {
+            return null;
+        }
+        this.body = (AbstractMethod)this.body.simplify();
+        return this;
+    }
+
 
     public AbstractIdentifier getName() {
         return this.methodName;

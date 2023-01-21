@@ -25,7 +25,7 @@ public class DeclField extends AbstractDeclField {
     final private Visibility visib;
     final private AbstractIdentifier type;
     final private AbstractIdentifier fieldName;
-    final private AbstractInitialization initialization;
+    private AbstractInitialization initialization;
 
     public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization,
             Visibility visib) {
@@ -121,6 +121,15 @@ public class DeclField extends AbstractDeclField {
     protected boolean spotUsedVar() {
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
         return false;
+    }
+
+    @Override
+    protected Tree simplify() {
+        if (!this.fieldName.getDefinition().isUsed()) {
+            return null;
+        }
+        this.initialization = (AbstractInitialization)this.initialization.simplify();
+        return this;
     }
 
     public AbstractIdentifier getName() {

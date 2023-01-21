@@ -73,6 +73,13 @@ public class Main extends AbstractMain {
         varSpotted = insts.spotUsedVar() || varSpotted;
         return varSpotted;
     }
+    
+    @Override
+    protected Tree simplify() {
+        this.declVariables = (ListDeclVar)this.declVariables.simplify();
+        this.insts = (ListInst)this.insts.simplify();
+        return this;
+    }
 
     public ListDeclVar getListDeclVar() {
         return declVariables;

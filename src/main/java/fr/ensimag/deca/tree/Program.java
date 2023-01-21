@@ -169,6 +169,13 @@ public class Program extends AbstractProgram {
         return varSpotted;
     }
 
+    @Override
+    protected Tree simplify() {
+        this.classes = (ListDeclClass) this.classes.simplify();
+        this.main = (AbstractMain) this.main.simplify();
+        return this;
+    }
+
     /**
      * Remove all useless variables (variables, classes, methods and fields from the list of
      * classes and the main program
@@ -211,7 +218,8 @@ public class Program extends AbstractProgram {
             this.resetSpottedVar();
         }
         this.spotUsedVar();
-        return this.doRemoveUnusedVar();
+        this.simplify();
+        return false; //this.doRemoveUnusedVar();
     }
 
     /**

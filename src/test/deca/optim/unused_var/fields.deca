@@ -10,19 +10,16 @@
 class A {
     int x=1;
     int w,y,z;
-    void useY(){
-        this.z=3;
-        print(y);
-    }
+    void useY(){}
 }
 
 class B extends A {
     protected int x=2;
-    void use(){this.useY();}
+    void useY(){this.z=3; print(y);}
 }
 
 {
-    B b = new B();
+    A b = new B();
     print(b.x);
-    b.use();
+    b.useY();
 }

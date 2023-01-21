@@ -1,0 +1,15 @@
+class A extends Object {
+	int x = 1;
+
+	void useY(){
+	}
+}
+
+class B extends A {
+}
+
+{
+	A b = new B();
+	print(b.x);
+	b.useY();
+}

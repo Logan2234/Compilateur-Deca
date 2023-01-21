@@ -100,6 +100,19 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
         }
         return varSpotted;
     }
+
+    @Override
+    protected Tree simplify() {
+        ListIterator<TreeType> iter = this.iterator();
+        while(iter.hasNext()) {
+            TreeType tree = (TreeType)iter.next().simplify();
+            iter.remove();
+            if (tree != null) {
+                iter.add(tree);
+            }
+        }
+        return this;
+    }
     
     /**
      * Added to modify lists of insts for otpim.

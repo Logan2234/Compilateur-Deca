@@ -47,6 +47,11 @@ public class NoOperation extends AbstractInst {
     }
 
     @Override
+    protected Tree simplify() {
+        return null;
+    }
+
+    @Override
     public boolean collapse() {
         // TODO
         return false;

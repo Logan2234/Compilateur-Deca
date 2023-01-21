@@ -96,6 +96,12 @@ public class Cast extends AbstractExpr {
     }
 
     @Override
+    protected Tree simplify() {
+        this.expression = (AbstractExpr)this.expression.simplify();
+        return this;
+    }
+
+    @Override
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
         this.expression.addUnremovableExpr(foundMethodCalls);

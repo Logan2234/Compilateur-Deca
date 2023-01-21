@@ -74,6 +74,13 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
+    protected Tree simplify() {
+        this.vars = (ListDeclVar)this.vars.simplify();
+        this.insts = (ListInst)this.insts.simplify();
+        return this;
+    }
+
+    @Override
     public boolean collapse() {
         // TODO
         return false;

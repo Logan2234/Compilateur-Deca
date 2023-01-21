@@ -129,6 +129,17 @@ public class InstanceOf extends AbstractExpr {
     }
 
     @Override
+    protected Tree simplify() {
+        if (!this.type.getClassDefinition().isUsed()) {
+            BooleanLiteral bool = new BooleanLiteral(false);
+            bool.setLocation(this.getLocation());
+            return bool; 
+        }
+        this.expression = (AbstractExpr)this.expression.simplify();
+        return this;
+    }
+
+    @Override
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
         this.expression.addUnremovableExpr(foundMethodCalls);

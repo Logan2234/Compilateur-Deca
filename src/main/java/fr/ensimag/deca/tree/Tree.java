@@ -301,6 +301,14 @@ public abstract class Tree {
      * @return true if a used attribute has been set to true
      */
     protected abstract boolean spotUsedVar();
+
+    /**
+     * Only keep the right hand side of useless assignements and evaluates
+     * to false the expressions "a instanceof B" when B is unused
+     * @return the simplified expression
+     */
+    protected abstract Tree simplify();
+
     
     /**
      * Check if the tree can collapse into a compile time known node.

@@ -82,6 +82,11 @@ public class DeclParam extends AbstractDeclParam {
         return false;
     }
 
+    @Override
+    protected Tree simplify() {
+        return this;
+    }
+
 	@Override
     public void SetDAddr(RegisterOffset dAddr) {
         paramName.getDefinition().setDAddr(dAddr);

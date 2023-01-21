@@ -86,7 +86,17 @@ public class NoInitialization extends AbstractInitialization {
     protected boolean spotUsedVar() {
         return false;
     }
+
+    @Override
+    protected Tree simplify() {
+        return this;
+    }
     
+    @Override
+    protected AbstractExpr getExpression() {
+        return null;
+    }
+
     @Override
     public boolean collapse() {
         // TODO

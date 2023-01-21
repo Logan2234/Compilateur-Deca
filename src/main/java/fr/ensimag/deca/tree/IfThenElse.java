@@ -25,9 +25,9 @@ import org.apache.commons.lang.Validate;
  */
 public class IfThenElse extends AbstractInst {
 
-    private final AbstractExpr condition;
-    private final ListInst thenBranch;
-    private final ListInst elseBranch;
+    private AbstractExpr condition;
+    private ListInst thenBranch;
+    private ListInst elseBranch;
 
     public IfThenElse(AbstractExpr condition, ListInst thenBranch, ListInst elseBranch) {
         Validate.notNull(condition);
@@ -113,6 +113,17 @@ public class IfThenElse extends AbstractInst {
         varSpotted = this.thenBranch.spotUsedVar() || varSpotted;
         varSpotted = this.elseBranch.spotUsedVar() || varSpotted;
         return varSpotted;
+    }
+
+    @Override
+    protected Tree simplify() {
+        this.condition = (AbstractExpr) this.condition.simplify();
+        this.thenBranch = (ListInst) this.thenBranch.simplify();
+        this.elseBranch = (ListInst) this.elseBranch.simplify();
+        if (this.thenBranch.isEmpty() && this.elseBranch.isEmpty()) {
+            return this.condition;
+        }
+        return this;
     }
 
     public ListInst getThenInst() {

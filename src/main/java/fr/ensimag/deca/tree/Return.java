@@ -90,6 +90,12 @@ public class Return extends AbstractInst {
     }
 
     @Override
+    protected Tree simplify() {
+        this.expression = (AbstractExpr)this.expression.simplify();
+        return this;
+    }
+
+    @Override
     public boolean collapse() {
         return false;
     }
