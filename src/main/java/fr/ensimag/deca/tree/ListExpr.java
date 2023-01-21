@@ -51,8 +51,7 @@ public class ListExpr extends TreeList<AbstractExpr> {
                     }
                 }
                 else {
-                    if (defClass) {set(i, varModels.get(actualClass).get(((Identifier) expr).getName()));}
-                    else set(i, currentValues.get(((Identifier) expr).getName()));
+                    set(i, currentValues.get(((Identifier) expr).getName()));
                 }
             }
         }

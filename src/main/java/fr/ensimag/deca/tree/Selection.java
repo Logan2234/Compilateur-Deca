@@ -110,7 +110,12 @@ public class Selection extends AbstractLValue {
         if (defClass) {
             if (obj.isThis()){
                 return varModels.get(actualClass).get(field.getName());
-            } else return declaredClasses.get(((Identifier) obj).getName()).get(field.getName());
+            } else {
+                if (!obj.isSelection())
+                    if (declaredClassesInMethod.containsKey(((Identifier) obj).getName())) {return declaredClassesInMethod.get(((Identifier) obj).getName()).get(field.getName());}
+                    else return declaredClasses.get(((Identifier) obj).getName()).get(field.getName());
+                else return null;
+            }
         }
         else {
             if (obj.isThis()){
@@ -125,6 +130,12 @@ public class Selection extends AbstractLValue {
         declaredClasses.put(((Identifier) obj).getName(), dico);
     }
 
+    public void putIrrelevantFromSelectionInMethod(AbstractExpr e){
+        HashMap<Symbol, AbstractExpr> dico = declaredClassesInMethod.get(((Identifier) obj).getName());
+        dico.put(field.getName(), e);
+        declaredClassesInMethod.put(((Identifier) obj).getName(), dico);
+    }
+
     public void erraseIrrelevantFromSelection(){
         HashMap<Symbol, AbstractExpr> dico = declaredClasses.get(((Identifier) obj).getName());
         if (dico.containsKey(field.getName())) {
@@ -133,11 +144,27 @@ public class Selection extends AbstractLValue {
         }
     }
 
+    public void erraseIrrelevantFromSelectionInMethod(){
+        HashMap<Symbol, AbstractExpr> dico = declaredClassesInMethod.get(((Identifier) obj).getName());
+        if (dico.containsKey(field.getName())) {
+            dico.remove(field.getName());
+            declaredClassesInMethod.put(((Identifier) obj).getName(), dico);
+        }
+    }
+
+    public void erraseIrrelevant(){
+        if (defMethod) erraseIrrelevantFromSelectionInMethod(); else erraseIrrelevantFromSelection();
+    }
+
+    public void putIrrelevant(AbstractExpr e){
+        if (defMethod) putIrrelevantFromSelectionInMethod(e); else putIrrelevantFromSelection(e);
+    }
+
     public boolean isKnown(){
         if (defClass) {
             if (obj.isThis()){
                 return varModels.get(actualClass).containsKey(field.getName());
-            } else return declaredClasses.get(((Identifier) obj).getName()).containsKey(field.getName());
+            } else return declaredClasses.get(((Identifier) obj).getName()).containsKey(field.getName()) || declaredClassesInMethod.get(((Identifier) obj).getName()).containsKey(field.getName());
         }
         else {
             if (obj.isThis()){

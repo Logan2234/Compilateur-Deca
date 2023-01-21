@@ -102,7 +102,8 @@ public class DeclVar extends AbstractDeclVar {
             AbstractExpr expr = ((Initialization) initialization).getExpression();
 
             if (expr.isNew()){
-                declaredClasses.put(varName.getName(), varModels.get(((New) expr).getClasse().getName()));
+                if (defMethod){declaredClassesInMethod.put(varName.getName(), varModels.get(((New) expr).getClasse().getName()));}
+                else declaredClasses.put(varName.getName(), varModels.get(((New) expr).getClasse().getName()));
                 return false;
             }
 

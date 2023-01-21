@@ -110,7 +110,7 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    public boolean irrelevant(){
+    public boolean irrelevant(){ // todo revisar
         return condition.irrelevant() || thenBranch.irrelevant() || elseBranch.irrelevant();
     }
 

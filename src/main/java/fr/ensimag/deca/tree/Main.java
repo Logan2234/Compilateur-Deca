@@ -74,6 +74,7 @@ public class Main extends AbstractMain {
 
     @Override
     public boolean irrelevant(){
+        defMethod = false;
         currentValues.clear();
         declaredClasses.clear();
         defClass = false;

@@ -79,6 +79,6 @@ public class MethodBody extends AbstractMethod {
 
     @Override
     public boolean irrelevant() {
-        return false;
+        return vars.irrelevant() || insts.irrelevant();
     }
 }

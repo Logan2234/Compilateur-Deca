@@ -155,7 +155,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
                 }
                 if (getRightOperand().isSelection()) irrelevantRight = ((Selection) getRightOperand()).isKnown();
             }
-            else if (getRightOperand().irrelevant() && actualDico.containsKey(((Identifier) getRightOperand()).getName())) {
+            else if (getRightOperand().irrelevant() && actualDico.containsKey(((Identifier) getRightOperand()).getName())) {    
                 rightOperand = actualDico.get(((Identifier) getRightOperand()).getName());
                 irrelevantRight = (getRightOperand().irrelevant() && actualDico.containsKey(((Identifier) getRightOperand()).getName()));
             }

@@ -1,0 +1,52 @@
+// Description:
+//    Je vais voir si mon optim marche
+//
+// Resultats:
+//    ok mais on doit avoir la décompilation suivante
+//
+//class A extends Object {
+//	public int a = 0;
+//	public int algo = ((0 + 0) + 42);
+//
+//}
+//class B extends Object {
+//	public int b = 1;
+//	public A test = new A();
+//	public int c = (1 + ((0 + 0) + 42));
+//	public int d = 0;
+//	void m(int c){
+//		int e = 1;
+//		(c = 3);
+//		print((1 + ((0 + 0) + 42)));
+//		print(3);
+//	
+//}
+//
+//}
+////{
+//}
+// Historique:
+//    cree le 21/01/2023
+
+class A {
+    int a = 0;
+    int algo = a + a + 42;
+}
+
+class B {
+    int b = 1;
+    A test = new A();
+    int c = b + test.algo;
+    int d = test.a;
+    void m(int c){
+        int e = b;
+        c = 3;
+        print(this.c);
+        print(c);
+    }
+}
+
+
+{
+
+}

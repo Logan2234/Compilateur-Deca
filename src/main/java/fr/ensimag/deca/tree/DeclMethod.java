@@ -11,7 +11,11 @@ import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
+import java.util.HashMap;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -130,7 +134,21 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     public boolean irrelevant(){
+        defMethod = true;
         currentValues.clear();
+        paramMethod.clear(); 
+        declaredClassesInMethod.clear();
+        for (Symbol field : declaredClasses.keySet()){
+            declaredClassesInMethod.put(field, declaredClasses.get(field));
+        }
+        for (AbstractDeclParam param : params.getList()) {
+            paramMethod.add(((DeclParam) param).getSymbolFromParamName());
+        }
+        for (Symbol field : varModels.get(actualClass).keySet()){
+            if (!paramMethod.contains(field)){
+                currentValues.put(field, varModels.get(actualClass).get(field));
+            }
+        }
         
         body.irrelevant();
         return false;

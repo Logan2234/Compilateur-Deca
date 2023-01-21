@@ -8,6 +8,8 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -298,6 +300,11 @@ public abstract class Tree {
     public static boolean defClass = true;
 
     /**
+     * Tells if we are actually defining methods
+     */
+    public static boolean defMethod = false;
+
+    /**
      * Tells which class we are actually defining
      */
     public static Symbol actualClass;
@@ -316,6 +323,16 @@ public abstract class Tree {
      * Dictionary of the values of a class, after have entered the Main program
      */
     public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> declaredClasses = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
+
+    /**
+     * Parameters of the method we are currently defining
+     */
+    public static Set<Symbol> paramMethod = new HashSet<Symbol>();
+
+    /**
+     * Dictionary of the values of a class in the method we are currently defining
+     */
+    public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> declaredClassesInMethod = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
 
     /**
      * Optimize the decorated tree.

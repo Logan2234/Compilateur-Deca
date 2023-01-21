@@ -8,6 +8,8 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -27,6 +29,10 @@ public class DeclParam extends AbstractDeclParam {
         Validate.notNull(paramName);
         this.type = type;
         this.paramName = paramName;
+    }
+
+    public Symbol getSymbolFromParamName(){
+        return this.paramName.getName();
     }
 
     @Override

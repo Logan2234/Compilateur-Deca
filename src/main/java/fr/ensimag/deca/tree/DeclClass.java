@@ -124,6 +124,7 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     public boolean irrelevant(){
+        defMethod = false;
         declaredClasses.clear();
         defClass = true;
         actualClass = name.getName();
