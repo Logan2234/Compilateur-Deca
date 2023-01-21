@@ -1,0 +1,20 @@
+// Description:
+//    Heap overflow
+//
+// Resultats:
+//    Execution error
+//    Error : Heap overflow.
+//
+// Historique:
+//    cree le 20/01/2023
+
+class A {
+
+}
+
+{
+    A a;
+    while (true){
+        a = new A();
+    }
+}

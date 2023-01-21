@@ -14,7 +14,6 @@ import fr.ensimag.deca.tree.Location;
 
 public abstract class Type {
 
-
     /**
      * True if this and otherType represent the same type (in the case of
      * classes, this means they represent the same class).
@@ -75,9 +74,24 @@ public abstract class Type {
      * Can be seen as a cast, but throws an explicit contextual error when the
      * cast fails.
      */
-    public ClassType asClassType(String errorMessage, Location l)
-            throws ContextualError {
+    public ClassType asClassType(String errorMessage, Location l) throws ContextualError {
         throw new ContextualError(errorMessage, l);
     }
 
+    public Boolean assignCompatible(Type type2) {
+        if (this.sameType(type2))
+            return true;
+
+        if (this.isFloat() && type2.isInt())
+            return true;
+
+        try {
+            ClassType class1 = asClassType(null, null);
+            ClassType class2 = type2.asClassType(null, null);
+            if (class2.isSubClassOf(class1))
+                return true;
+        } catch (ContextualError e) {
+        }
+        return false;
+    }
 }

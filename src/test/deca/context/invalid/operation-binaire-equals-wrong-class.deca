@@ -2,14 +2,12 @@
 //    Test 3.33 fail avec equals avec une string et un objet d'une classe
 //
 // Resultats:
-//    Ligne 16 : Equals ne s'utilise qu'avec des int, des float, des booléens ou des classes.
+//    Ligne 14: A class (or null) can only be compared to another class (rule 3.33)
 //
 // Historique:
 //    cree le 06/01/2023
 
-class A{
-
-}
+class A{}
 
 {
     A a;

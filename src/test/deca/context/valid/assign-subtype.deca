@@ -1,0 +1,17 @@
+// Description:
+//    Assign un subtype
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A{}
+
+class B extends A{}
+
+{
+    A a;
+    a = new B();
+}

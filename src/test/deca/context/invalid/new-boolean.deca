@@ -1,0 +1,11 @@
+// Description:
+//    Utilisation de new pour créer un boolean
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 10 : New is only for classes
+//
+
+{
+    new boolean();
+}

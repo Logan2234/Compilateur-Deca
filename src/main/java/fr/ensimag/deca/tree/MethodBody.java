@@ -1,12 +1,15 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
+
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
  * Method Body Statement
@@ -15,17 +18,18 @@ import org.apache.log4j.Logger;
  * @date 05/01/2023
  */
 public class MethodBody extends AbstractMethod {
-    
+
     public MethodBody(ListDeclVar vars, ListInst insts) {
         Validate.notNull(vars);
         Validate.notNull(insts);
         this.vars = vars;
         this.insts = insts;
     }
+
     private ListDeclVar vars;
     private ListInst insts;
     
-    public ListDeclVar vars() {
+    public ListDeclVar getVars() {
         return vars;
     }
 
@@ -34,37 +38,61 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
-    public void verifyProgram(DecacCompiler compiler) throws ContextualError {
-        //TODO
-    }
-
-    @Override
-    public void codeGenProgram(DecacCompiler compiler) {
-       //TODO
+    public void verifyMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentclass, Type type)
+            throws ContextualError {
+        vars.verifyListDeclVariable(compiler, localEnv, currentclass);
+        insts.verifyListInst(compiler, localEnv, currentclass, type);
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("{");
+        s.println("{");
+        s.indent();
         vars.decompile(s);
         insts.decompile(s);
+        s.unindent();
         s.print("}");
     }
-    
-    @Override 
+
+    @Override
     protected void iterChildren(TreeFunction f) {
         vars.iterChildren(f);
         insts.iterChildren(f);
     }
-    @Override //? Is it necessary ?
+
+    @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        vars.prettyPrintChildren(s, prefix);
-        insts.prettyPrintChildren(s, prefix);
+        vars.prettyPrint(s, prefix, false);
+        insts.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.vars.spotUsedVar();
+        varSpotted = this.insts.spotUsedVar() || varSpotted;
+        return varSpotted;
     }
 
     @Override
     public boolean collapse() {
         // TODO
         return false;
+    }
+	@Override
+    public void codeGenMethod(DecacCompiler compiler) {
+        // generate code for delcare variables
+        vars.codeGenDeclVar(compiler);
+        insts.codeGenListInst(compiler);
+    }
+
+    @Override
+    public void setReturnsNames(String name) {
+        System.out.print("setting method name : ");
+        System.out.println(name);
+        for(AbstractInst inst : insts.getList()) {
+            if(inst.isReturn()) {
+                inst.asReturn().setMethodClassName(name);
+            }
+        }
     }
 }

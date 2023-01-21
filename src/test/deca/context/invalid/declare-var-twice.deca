@@ -1,0 +1,13 @@
+// Description:
+//    Condition de la règle 3.17 non respectée
+//
+// Resultats:
+//    Erreur contextuelle
+//    Ligne 10: A variable "i" has already been declared (rule 3.17)
+//
+// Historique:
+//    cree le 15/01/2023
+
+{
+    int i, i;
+}

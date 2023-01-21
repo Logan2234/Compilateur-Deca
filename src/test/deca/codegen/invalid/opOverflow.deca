@@ -1,0 +1,13 @@
+// Description:
+//    Division par 0.0
+//
+// Resultats:
+//    Execution error
+//    Error : floating point number operation overflow
+//
+// Historique:
+//    cree le 15/01/2023
+
+{
+        1/0.0;
+}

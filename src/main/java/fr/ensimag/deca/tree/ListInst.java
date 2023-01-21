@@ -28,15 +28,13 @@ public class ListInst extends TreeList<AbstractInst> {
      */
     public void verifyListInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type returnType) throws ContextualError {
-        for (AbstractInst i : getList()) {
+        for (AbstractInst i : getList())
             i.verifyInst(compiler, localEnv, currentClass, returnType);
-        }
     }
 
     public void codeGenListInst(DecacCompiler compiler) {
-        for (AbstractInst i : getList()) {
+        for (AbstractInst i : getList())
             i.codeGenInst(compiler);
-        }
     }
 
     @Override
@@ -48,6 +46,16 @@ public class ListInst extends TreeList<AbstractInst> {
     }
 
     @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = false;
+        for (AbstractInst inst : this.getList()) {
+            if (!(inst instanceof Identifier)) {
+                varSpotted = inst.spotUsedVar() || varSpotted;
+            }
+        }
+        return varSpotted;
+    }
+
     public boolean collapse() {
         // try to collapse each instruction into a list of instructions
         boolean collapse = false;

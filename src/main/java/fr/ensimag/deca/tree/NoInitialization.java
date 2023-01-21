@@ -7,8 +7,13 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 import java.io.PrintStream;
 
@@ -24,6 +29,7 @@ public class NoInitialization extends AbstractInitialization {
     @Override
     protected void verifyInitialization(DecacCompiler compiler, Type t, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
+        // nothing
     }
 
     /**
@@ -50,13 +56,37 @@ public class NoInitialization extends AbstractInitialization {
     }
 
     @Override
-    public void codeGenInit(DecacCompiler compiler) {
+    public void codeGenInit(DecacCompiler compiler, Type type, RegisterOffset resultRegister) {
         // push a zero to the stack : LOAD #0 R0; PUSH R0;
-        compiler.addInstruction(new LOAD(0, Register.R0));
-        compiler.incrementContextUsedStack();
-        compiler.addInstruction(new PUSH(Register.R0));
+        if(type.isInt()) {
+            compiler.addInstruction(new LOAD(new ImmediateInteger(0), Register.R0));
+        }
+        else if(type.isFloat()) {
+            compiler.addInstruction(new LOAD(new ImmediateFloat(0), Register.R0));
+        }
+        else if(type.isBoolean()) {
+            compiler.addInstruction(new LOAD(new ImmediateInteger(0), Register.R0));
+        }
+        else if(type.isClass()) {
+            compiler.addInstruction(new LOAD(new NullOperand(), Register.R0));
+        }
+        else {
+            throw new UnsupportedOperationException("Default init not available for object " + type + " (at" + getLocation() + ").");
+        }
+        if(resultRegister == null) {
+            compiler.incrementContextUsedStack();
+            compiler.addInstruction(new PUSH(Register.R0));
+        }
+        else {
+            compiler.addInstruction(new STORE(Register.R0, resultRegister));
+        }
     }
 
+    @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+    
     @Override
     public boolean collapse() {
         // TODO

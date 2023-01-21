@@ -1,0 +1,59 @@
+#include "PlayerAndEnemy.deca"
+
+{
+	boolean play = true;
+	Player player = new Player();
+	Enemy enemy = new Enemy();
+
+	int choice;
+
+	player.Player(60, 170.5);
+	enemy.Enemy(80, 210.2);
+
+	while (play){
+		println("What do you want to do ?");
+		println("1. Attack");
+		println("2. Move");
+		println("3. Get stats (as player)");
+		println("4. Get stats (as entity)");
+		println("5. Get stats of the enemy");
+		println("6. Quit");
+		println("");
+		choice = readInt();
+
+		if (choice == 6){
+			play = false;
+			println("Bye!");
+		}
+
+		else if (choice == 5){
+			enemy.stats();
+		}
+
+		else if (choice == 4){
+			(Entity)(player).stats();
+		}
+
+		else if (choice == 3){
+			player.stats();
+		}
+
+		else if (choice == 2){
+			println("An enemy attacked you! ");
+			player.getHurt(enemy.getDamage());
+			if (player.getVie() <= 0){
+				play = false;
+				println("Game over!");
+			}
+		}
+
+		else if (choice == 1){
+			println("You attack the enemy! ");
+			enemy.getHurt(player.getDamage());
+		}
+
+		else {
+			println("Not a correct answer");
+		}
+	}
+}

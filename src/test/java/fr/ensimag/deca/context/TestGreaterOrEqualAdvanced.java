@@ -36,7 +36,7 @@ public class TestGreaterOrEqualAdvanced {
     AbstractExpr floatexpr2;
 
     DecacCompiler compiler;
-    
+
     @BeforeEach
     public void setup() throws ContextualError {
         MockitoAnnotations.initMocks(this);
@@ -59,7 +59,7 @@ public class TestGreaterOrEqualAdvanced {
 
     @Test
     public void testIntFloat() throws ContextualError {
-        GreaterOrEqual t = new  GreaterOrEqual(intexpr1, floatexpr1);
+        GreaterOrEqual t = new GreaterOrEqual(intexpr1, floatexpr1);
         // check the result
         assertTrue(t.verifyExpr(compiler, null, null).isBoolean());
         // ConvFloat should have been inserted on the right side
@@ -72,7 +72,7 @@ public class TestGreaterOrEqualAdvanced {
 
     @Test
     public void testFloatInt() throws ContextualError {
-        GreaterOrEqual t = new  GreaterOrEqual(floatexpr1, intexpr1);
+        GreaterOrEqual t = new GreaterOrEqual(floatexpr1, intexpr1);
         // check the result
         assertTrue(t.verifyExpr(compiler, null, null).isBoolean());
         // ConvFloat should have been inserted on the right side
@@ -81,5 +81,15 @@ public class TestGreaterOrEqualAdvanced {
         // check that the mocks have been called properly.
         verify(intexpr1).verifyExpr(compiler, null, null);
         verify(floatexpr1).verifyExpr(compiler, null, null);
+    }
+
+    @Test
+    public void testFloatFloat() throws ContextualError {
+        GreaterOrEqual t = new GreaterOrEqual(floatexpr1, floatexpr2);
+        // check the result
+        assertTrue(t.verifyExpr(compiler, null, null).isBoolean());
+        // check that the mocks have been called properly.
+        verify(floatexpr1).verifyExpr(compiler, null, null);
+        verify(floatexpr2).verifyExpr(compiler, null, null);
     }
 }

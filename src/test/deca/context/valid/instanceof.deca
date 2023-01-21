@@ -1,0 +1,15 @@
+// Description:
+//    Instance of avec un objet d'une classe
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {}
+
+{
+    A a;
+    a instanceof A;
+}

@@ -6,12 +6,13 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.ADD;
-import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BLT;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -26,7 +27,7 @@ public class IfThenElse extends AbstractInst {
 
     private final AbstractExpr condition;
     private final ListInst thenBranch;
-    private ListInst elseBranch;
+    private final ListInst elseBranch;
 
     public IfThenElse(AbstractExpr condition, ListInst thenBranch, ListInst elseBranch) {
         Validate.notNull(condition);
@@ -40,32 +41,34 @@ public class IfThenElse extends AbstractInst {
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
             Type returnType) throws ContextualError {
-        this.condition.verifyCondition(compiler, localEnv, currentClass);
-        this.thenBranch.verifyListInst(compiler, localEnv, currentClass, returnType);
-        this.elseBranch.verifyListInst(compiler, localEnv, currentClass, returnType);
+        condition.verifyCondition(compiler, localEnv, currentClass);
+        thenBranch.verifyListInst(compiler, localEnv, currentClass, returnType);
+        elseBranch.verifyListInst(compiler, localEnv, currentClass, returnType);
     }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        // we need something like : 
+        // we need something like :
         // if not condition, jump to else block
         // if block
-        //      [...]
-        //      jump to end
+        // [...]
+        // jump to end
         // else block
-        //      [...]
+        // [...]
         // end
-        
+
         // need a unique label for our name.
         String label = "IF." + getLocation().toLabel();
         Label elseLabel = new Label(label + ".else");
         Label endLabel = new Label(label + ".end");
         // the if expression returns a bool. write it down in R1,
-        // then add 0 to R1 to trigger flags : if EQ, then the expression was false : branch to else block
-        condition.codeGenExpr(compiler, Register.R1);
-        compiler.addInstruction(new ADD(new ImmediateInteger(0), Register.R1));
+        // then compare 1 to R1 to trigger flags : if EQ, then the expression was false : branch to else block
+        GPRegister register = compiler.allocateRegister();
+        condition.codeGenExpr(compiler, register);
+        compiler.addInstruction(new CMP(new ImmediateInteger(1), register));
+        compiler.freeRegister(register);
         // branch to else flag if EQ, then if block
-        compiler.addInstruction(new BEQ(elseLabel));
+        compiler.addInstruction(new BLT(elseLabel)); // use bge as an bool is true if 1 or greater (should not be greater, but no so sure of me)
         thenBranch.codeGenListInst(compiler);
         compiler.addInstruction(new BRA(endLabel));
         // else flag to branch to, and else block
@@ -102,6 +105,26 @@ public class IfThenElse extends AbstractInst {
         condition.prettyPrint(s, prefix, false);
         thenBranch.prettyPrint(s, prefix, false);
         elseBranch.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.condition.spotUsedVar();
+        varSpotted = this.thenBranch.spotUsedVar() || varSpotted;
+        varSpotted = this.elseBranch.spotUsedVar() || varSpotted;
+        return varSpotted;
+    }
+
+    public ListInst getThenInst() {
+        return this.thenBranch;
+    }
+
+    public ListInst getElseInst() {
+        return this.elseBranch;
+    }
+
+    public AbstractExpr getCondition() {
+        return this.condition;
     }
 
     @Override

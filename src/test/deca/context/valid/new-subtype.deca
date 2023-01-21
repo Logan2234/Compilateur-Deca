@@ -1,0 +1,17 @@
+// Description:
+//    Test de new avec une assignation subtype
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 14/01/2023
+
+
+class A {}
+
+class B extends A {}
+
+{
+    A a = new B();
+}

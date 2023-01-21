@@ -65,7 +65,6 @@ public class Location implements Serializable {
      * @return A unique string through the compilation pipeline that can be used as a label.
      */
     public String toLabel() {
-        return filename.substring(filename.lastIndexOf("/") + 1) + "." + line + "." + positionInLine;
+        return (filename.substring(filename.lastIndexOf("/") + 1) + "." + line + "." + positionInLine).replaceAll("[^a-zA-Z0-9_.]", "");
     }
-
 }

@@ -1,0 +1,12 @@
+// Description:
+//    Déclare une méthode simple void avec un paramètre
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A{
+    void get(int i){}
+}

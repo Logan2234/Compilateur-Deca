@@ -24,36 +24,33 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
-        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
-        Location loc = this.getLocation();
+        Type typeLeft = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
 
         if (!typeLeft.isInt() && !typeLeft.isFloat())
             throw new ContextualError(
-                    "The left operand of an arithmetical operation has to be an int or a float (rule 3.33)", loc);
+                    "The left operand of an arithmetical operation has to be an int or a float (rule 3.33)", getLocation());
 
         if (!typeRight.isInt() && !typeRight.isFloat())
             throw new ContextualError(
-                    "The right operand of an arithmetical operation has to be an int or a float (rule 3.33)", loc);
+                    "The right operand of an arithmetical operation has to be an int or a float (rule 3.33)", getLocation());
 
         // Ajout du décor et renvoie du type
-        if (typeLeft.isFloat() || typeRight.isFloat()) {
-            ConvFloat convFloat;
-            if (typeLeft.isInt()) {
-                convFloat = new ConvFloat(this.getLeftOperand());
-                this.setLeftOperand(convFloat);
-                convFloat.setType(compiler.environmentType.FLOAT);
-            } else if (typeRight.isInt()) {
-                convFloat = new ConvFloat(this.getRightOperand());
-                this.setRightOperand(convFloat);
-                convFloat.setType(compiler.environmentType.FLOAT);
-            }
-            this.setType(compiler.environmentType.FLOAT);
-            return compiler.environmentType.FLOAT;
+        if (typeLeft.isFloat() && typeRight.isInt()) {
+            ConvFloat convFloat = new ConvFloat(getRightOperand());
+            convFloat.verifyExpr(compiler, localEnv, currentClass);
+            convFloat.setLocation(getRightOperand().getLocation());
+            setRightOperand(convFloat);
+        } else if (typeRight.isFloat() && typeLeft.isInt()) {
+            ConvFloat convFloat = new ConvFloat(getLeftOperand());
+            convFloat.verifyExpr(compiler, localEnv, currentClass);
+            convFloat.setLocation(getLeftOperand().getLocation());
+            setLeftOperand(convFloat);
+            typeLeft = typeRight;
         }
 
         // Ajout du décor
-        this.setType(typeLeft);
+        setType(typeLeft);
         return typeLeft;
     }
 

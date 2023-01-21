@@ -1,0 +1,16 @@
+// Description:
+//    Condition de la règle 0.1 non respectée 
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 15: The identifier "x" doesn't exist (rule 0.1)
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A{}
+
+{
+    A a = new A();
+    a.x;
+}

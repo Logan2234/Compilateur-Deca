@@ -20,7 +20,7 @@ public class ReadFloat extends AbstractReadExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        this.setType(compiler.environmentType.FLOAT);
+        setType(compiler.environmentType.FLOAT);
         return compiler.environmentType.FLOAT;
     }
 
@@ -42,7 +42,5 @@ public class ReadFloat extends AbstractReadExpr {
     @Override
     protected void codeGenRead(DecacCompiler compiler) {
         compiler.addInstruction(new RFLOAT());
-        // todo : manage overflow
     }
-
 }

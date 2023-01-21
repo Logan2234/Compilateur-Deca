@@ -1,0 +1,13 @@
+// Description:
+//    Déclare une classe qui a déjà été déclarée
+//
+// Resultats:
+//    Erreur contextuelle   
+//    Ligne 13: The type "C" doesn't exist (rule 0.2)
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A {}
+
+class B extends C {}

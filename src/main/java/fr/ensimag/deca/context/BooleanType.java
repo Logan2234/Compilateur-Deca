@@ -25,6 +25,4 @@ public class BooleanType extends Type {
     public boolean sameType(Type otherType) {
         return otherType.isBoolean();
     }
-
-
 }

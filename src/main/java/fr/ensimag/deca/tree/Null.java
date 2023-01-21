@@ -7,8 +7,13 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Integer literal
@@ -19,18 +24,20 @@ import java.io.PrintStream;
 public class Null extends AbstractExpr {
 
     public Null() {
+
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        // Ajout du décor
+        setType(compiler.environmentType.NULL);
+        return compiler.environmentType.NULL;
     }
-
 
     @Override
     String prettyPrintNode() {
-        return "null";
+        return "Null";
     }
 
     @Override
@@ -50,7 +57,24 @@ public class Null extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        throw new UnsupportedOperationException("not yet implemented");
+        if(resultRegister == null) {
+            // push null immediate on the stack
+            compiler.addInstruction(new LOAD(new NullOperand(), Register.R1));
+            compiler.incrementContextUsedStack();
+            compiler.addInstruction(new PUSH(Register.R1));
+        }
+        else {
+            compiler.addInstruction(new LOAD(new NullOperand(), resultRegister));
+        }
     }
 
+    @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
+    }
 }

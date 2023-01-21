@@ -24,6 +24,4 @@ public class IntType extends Type {
     public boolean sameType(Type otherType) {
         return otherType.isInt();
     }
-
-
 }

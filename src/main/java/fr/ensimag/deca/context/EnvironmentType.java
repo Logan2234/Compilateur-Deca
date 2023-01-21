@@ -1,10 +1,14 @@
 package fr.ensimag.deca.context;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+
 import java.util.HashMap;
 import java.util.Map;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 // A FAIRE: étendre cette classe pour traiter la partie "avec objet" de Déca
 /**
@@ -16,9 +20,9 @@ import fr.ensimag.deca.tree.Location;
  */
 public class EnvironmentType {
     public EnvironmentType(DecacCompiler compiler) {
-        
+
         envTypes = new HashMap<Symbol, TypeDefinition>();
-        
+
         Symbol intSymb = compiler.createSymbol("int");
         INT = new IntType(intSymb);
         envTypes.put(intSymb, new TypeDefinition(INT, Location.BUILTIN));
@@ -38,7 +42,26 @@ public class EnvironmentType {
         Symbol stringSymb = compiler.createSymbol("string");
         STRING = new StringType(stringSymb);
         // not added to envTypes, it's not visible for the user.
-        
+
+        Symbol Null = compiler.createSymbol("null");
+        NULL = new NullType(Null);
+        envTypes.put(Null, new TypeDefinition(NULL, Location.BUILTIN));
+
+        Symbol object = compiler.createSymbol("Object");
+        OBJECT = new ClassType(object, Location.BUILTIN, null);
+        envTypes.put(object, OBJECT.getDefinition());
+
+        // Rajouter la fonction EQUALS
+        Symbol equals = compiler.createSymbol("equals");
+        Signature signature = new Signature();
+        signature.add(OBJECT);
+        MethodDefinition method = new MethodDefinition(BOOLEAN, Location.BUILTIN, signature, 1, OBJECT.getDefinition());
+        OBJECT.getDefinition().setNumberOfMethods(1);
+        OBJECT.getDefinition().setDAddr(new RegisterOffset(1, Register.GB));
+        try {
+            OBJECT.getDefinition().getMembers().declare(equals, method);
+        } catch (DoubleDefException exception) {
+        }
     }
 
     private final Map<Symbol, TypeDefinition> envTypes;
@@ -47,9 +70,15 @@ public class EnvironmentType {
         return envTypes.get(s);
     }
 
-    public final VoidType    VOID;
-    public final IntType     INT;
-    public final FloatType   FLOAT;
-    public final StringType  STRING;
+    public void set(Symbol s, TypeDefinition def) {
+        envTypes.put(s, def);
+    }
+
+    public final VoidType VOID;
+    public final IntType INT;
+    public final FloatType FLOAT;
+    public final StringType STRING;
     public final BooleanType BOOLEAN;
+    public final ClassType OBJECT;
+    public final NullType NULL;
 }

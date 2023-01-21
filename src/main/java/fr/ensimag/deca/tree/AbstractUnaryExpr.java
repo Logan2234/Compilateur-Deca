@@ -9,6 +9,8 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -22,7 +24,9 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     public AbstractExpr getOperand() {
         return operand;
     }
+
     private AbstractExpr operand;
+
     public AbstractUnaryExpr(AbstractExpr operand) {
         Validate.notNull(operand);
         this.operand = operand;
@@ -35,7 +39,7 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
 
 
     protected abstract String getOperatorName();
-  
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("(");
@@ -57,45 +61,43 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // as for binary exp, put expr in register then apply codeGenUnExpr
-        if(resultRegister != null) {
-            getOperand().codeGenExpr(compiler, resultRegister);
-            codeGenUnExpr(compiler, resultRegister);
+        GPRegister register  = resultRegister == null ? compiler.allocateRegister() : resultRegister;
+        // generate code for the expression in the register
+        getOperand().codeGenExpr(compiler, register);
+        // generate our code on the register containing the result
+        codeGenUnExpr(compiler, register);
+        // if original register was null, we allocated a register and we need to push result on the stack
+        if(resultRegister == null) {
+            // need to free result register and put the result on the stack
+            compiler.addInstruction(new LOAD(register, Register.R1));
+            compiler.freeRegister(register); // pops
+            compiler.incrementContextUsedStack();
+            compiler.addInstruction(new PUSH(Register.R1));
         }
         else {
-            // we need to put the result on the stack
-            // try to allocate a register to compute the result
-            GPRegister register = compiler.allocateRegister();
-            if(register != null) {
-                getOperand().codeGenExpr(compiler, resultRegister);
-                codeGenUnExpr(compiler, resultRegister);
-                compiler.incrementContextUsedStack();
-                compiler.addInstruction(new PUSH(register));
-                compiler.freeRegister(register);
-            }
-            else {
-                // save R2
-                compiler.incrementContextUsedStack();
-                compiler.addInstruction(new PUSH(Register.getR(2)));
-                getOperand().codeGenExpr(compiler, Register.getR(2));
-                codeGenUnExpr(compiler, Register.getR(2));
-                // save the result in R1 (R1 <- R2)
-                compiler.addInstruction(new LOAD(Register.getR(2), Register.R1));
-                // restore r2
-                compiler.increaseContextUsedStack(-1);
-                compiler.addInstruction(new POP(Register.getR(2)));
-                // load the result on the stack
-                compiler.incrementContextUsedStack();
-                compiler.addInstruction(new PUSH(Register.R1));
-            }
+            compiler.addInstruction(new LOAD(register, resultRegister));
         }
     }
 
     /**
-     * Generate the code for the unary expression, with the result regsiter being not null,
+     * Generate the code for the unary expression, with the result regsiter being
+     * not null,
      * and the expression being already computed and in the register.
-     * @param compiler Where we write the instructions to
-     * @param resulRegister not null. the expression have been computed and is in this register.
+     * 
+     * @param compiler      Where we write the instructions to
+     * @param resulRegister not null. the expression have been computed and is in
+     *                      this register.
      */
     public abstract void codeGenUnExpr(DecacCompiler compiler, GPRegister resulRegister);
+    
+    @Override
+    protected boolean spotUsedVar() {
+        return this.operand.spotUsedVar();
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        this.operand.addMethodCalls(foundMethodCalls);
+    }
 
 }

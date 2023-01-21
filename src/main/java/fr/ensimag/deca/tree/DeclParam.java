@@ -1,11 +1,15 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -28,9 +32,25 @@ public class DeclParam extends AbstractDeclParam {
     }
 
     @Override
-    protected void verifyDeclParam(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+    protected Type verifyDeclParam(DecacCompiler compiler) throws ContextualError {
+        Type type = this.type.verifyType(compiler);
+        if (type.isVoid())
+            throw new ContextualError("The parameter's type can't be void (rule 2.9)", getLocation());
+        return type;
+    }
+
+    @Override
+    protected void verifyParam(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
+        try {
+            ParamDefinition def = new ParamDefinition(this.type.getType(), getLocation());
+            localEnv.declare(paramName.getName(), def);
+            paramName.verifyExpr(compiler, localEnv, currentClass);
+        } catch (DoubleDefException e) {
+            throw new ContextualError(
+                    "The parameter \"" + paramName.getName().getName() + "\" has already been declared (rule 3.12)",
+                    getLocation());
+        }
     }
 
     @Override
@@ -52,8 +72,18 @@ public class DeclParam extends AbstractDeclParam {
         paramName.prettyPrint(s, prefix, true);
     }
 
-    @Override
-    public boolean collapse() {
+	@Override
+	public boolean collapse() {
         return false;
+    }
+
+    @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+
+	@Override
+    public void SetDAddr(RegisterOffset dAddr) {
+        paramName.getDefinition().setDAddr(dAddr);
     }
 }

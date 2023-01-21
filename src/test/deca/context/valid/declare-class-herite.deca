@@ -1,0 +1,12 @@
+// Description:
+//    déclare une nouvelle classe qui hérite d'une autre
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A {}
+
+class B extends A {}

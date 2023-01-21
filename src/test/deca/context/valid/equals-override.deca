@@ -1,0 +1,19 @@
+// Description:
+//    Utilisation de equals de la classe object avec override
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 16/01/2023
+
+class A {
+    boolean equals(Object o){
+        return true;
+    }
+}
+
+{
+    A a = new A();
+    a.equals(a);
+}

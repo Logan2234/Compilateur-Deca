@@ -1,0 +1,24 @@
+// Description:
+//    tests de programme avec Read et Print
+//    syntaxiquement correct
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 16/01/2023
+//
+
+{
+    int x;
+    float y;
+    string s = "monString";
+    x = ReadInt();
+    y = ReadFloat();
+    print(x);
+    println(y);
+    printx(x);
+    printlnx(y);
+    print(s);
+    print("Hello");
+}

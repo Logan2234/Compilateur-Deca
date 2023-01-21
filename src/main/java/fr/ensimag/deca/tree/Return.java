@@ -6,6 +6,12 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -17,43 +23,70 @@ import org.apache.commons.lang.Validate;
  */
 public class Return extends AbstractInst {
     
-    private AbstractExpr e;
+    private AbstractExpr expression;
 
-    public Return(AbstractExpr e) {
-        Validate.notNull(e);
-        this.e = e;
+    public Return(AbstractExpr expression) {
+        Validate.notNull(expression);
+        this.expression = expression;
     }
-    
+
+    private String methodClassName;
+
+    public void setMethodClassName(String name) {
+        this.methodClassName = name;
+    }
+
     @Override
-    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass, Type returnType)
-            throws ContextualError {
-                throw new UnsupportedOperationException("not yet implemented");
+    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
+            Type returnType) throws ContextualError {
+
+        if (returnType.isVoid())
+            throw new ContextualError("Return cannot be used when method has void type (rule 3.24)", getLocation());
+
+        expression.verifyRValue(compiler, localEnv, currentClass, returnType);
     }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // load the result in R0, then branch to method end
+        GPRegister register = compiler.allocateRegister();
+        expression.codeGenExpr(compiler, register);
+        compiler.addInstruction(new LOAD(register, Register.R0));
+        compiler.freeRegister(register);
+        compiler.addInstruction(new BRA(new Label("end." + methodClassName)));
+
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("return ");
-        e.decompile(s);
+        expression.decompile(s);
         s.println(";");
-
-        //throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
-    protected
-    void iterChildren(TreeFunction f) {
-        e.iter(f);
+    protected void iterChildren(TreeFunction f) {
+        expression.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        e.prettyPrint(s, prefix, true);
+        expression.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    public boolean isReturn() {
+        return true;
+    }
+
+    @Override
+    public Return asReturn() {
+        return this;
+    }
+
+    @Override
+    protected boolean spotUsedVar() {
+        return this.expression.spotUsedVar();
     }
 
     @Override

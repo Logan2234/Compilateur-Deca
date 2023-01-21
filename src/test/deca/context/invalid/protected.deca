@@ -1,0 +1,18 @@
+// Description:
+//    Tentative d'accès d'une variable protected
+//
+// Resultats:
+//    Erreur Contextuelle
+//    Ligne 17: The variable is protected (rule 3.66)
+//
+// Historique:
+//    cree le 14/01/2023
+
+class A{
+    protected int x = 3;
+}
+
+class B{
+    A a = new A();
+    int b = a.x;
+}

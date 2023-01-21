@@ -1,0 +1,21 @@
+// Description:
+//    Assign not a subtype
+//
+// Resultats:
+//    //
+//
+// Historique:
+//    cree le 06/01/2023
+
+class A{
+
+}
+
+class B{
+
+}
+
+{
+    A a;
+    a = new B();
+}

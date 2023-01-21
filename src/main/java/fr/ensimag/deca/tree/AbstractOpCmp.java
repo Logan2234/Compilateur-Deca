@@ -20,22 +20,23 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        Type typeLeft = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
-        Type typeRight = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
-        Location loc = this.getLocation();
+        Type typeLeft = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type typeRight = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+        Location loc = getLocation();
 
-        if (typeLeft.isBoolean()) {
-            if (!typeRight.isBoolean()) {
-                throw new ContextualError(
-                        "The right operand of a boolean operation has to be a boolean (rule 3.33)",
-                        loc);
-            }
-            this.setType(typeLeft);
-            return typeLeft;
+        if ((getOperatorName() == "==" || getOperatorName() == "!=") && typeLeft.isBoolean()) {
+            if (!typeRight.isBoolean())
+                throw new ContextualError("A boolean can only be compared to another boolean (rule 3.33)", loc);
+            setType(compiler.environmentType.BOOLEAN);
+            return compiler.environmentType.BOOLEAN;
         }
 
-        // TODO: Il manque le cas ou on veut comparer T1 et / ou T2 est null ou
-        // type_class(_)
+        if ((getOperatorName() == "==" || getOperatorName() == "!=") && typeLeft.isClassOrNull()) {
+            if (!typeRight.isClassOrNull())
+                throw new ContextualError("A class (or null) can only be compared to another class (rule 3.33)", loc);
+            setType(compiler.environmentType.BOOLEAN);
+            return compiler.environmentType.BOOLEAN;
+        }
 
         if (!typeLeft.isInt() && !typeLeft.isFloat())
             throw new ContextualError(
@@ -46,20 +47,22 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
                     "The right operand of a comparaison operation has to be an int or a float (rule 3.33)", loc);
 
         ConvFloat convFloat;
-        if (typeLeft.isFloat() && typeRight.isInt()){
-            convFloat = new ConvFloat(this.getLeftOperand());
-            this.setRightOperand(convFloat);
-            convFloat.setType(compiler.environmentType.FLOAT);
+        if (typeLeft.isFloat() && typeRight.isInt()) {
+            convFloat = new ConvFloat(getRightOperand());
+            convFloat.verifyExpr(compiler, localEnv, currentClass);
+            convFloat.setLocation(getRightOperand().getLocation());
+            setRightOperand(convFloat);
         }
-        
-        else if (typeLeft.isInt() && typeRight.isFloat()){
-            convFloat = new ConvFloat(this.getLeftOperand());
-            this.setLeftOperand(convFloat);
-            convFloat.setType(compiler.environmentType.FLOAT);    
+
+        else if (typeLeft.isInt() && typeRight.isFloat()) {
+            convFloat = new ConvFloat(getLeftOperand());
+            convFloat.verifyExpr(compiler, localEnv, currentClass);
+            convFloat.setLocation(getLeftOperand().getLocation());
+            setLeftOperand(convFloat);
         }
 
         // Ajout du décor
-        this.setType(compiler.environmentType.BOOLEAN);
+        setType(compiler.environmentType.BOOLEAN);
         return compiler.environmentType.BOOLEAN;
     }
 

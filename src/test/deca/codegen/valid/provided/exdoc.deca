@@ -1,27 +1,24 @@
 // Description:
-//    champs et methodes simples
+//    tests de programme syntaxiquement correct.
 //
 // Resultats:
-//    a.getX() = 1
+//    pas d'erreur
 //
 // Historique:
-//    cree le 01/01/2023
-
-// Un exemple de programme Deca
+//    cree le 04/01/2023
 
 class A {
-   protected int x ;
-   int getX() {
-      return x ;
-   }
-   void setX(int x) {
-      this.x = x ;
-   }
+    protected int x ;
+    int getX() {
+        return x ;
+    }
+    void setX(int x) {
+        this.x = x ;
+    }
 }
 
 {
-   A a = new A() ;
-
-   a.setX(1) ;
-   println("a.getX() = ", a.getX()) ;
+    A a = new A() ;
+    a.setX(1) ;
+    println("a.getX() = ", a.getX()) ;
 }

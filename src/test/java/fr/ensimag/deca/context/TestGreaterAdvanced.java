@@ -1,15 +1,19 @@
 package fr.ensimag.deca.context;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.ConvFloat;
 import fr.ensimag.deca.tree.Greater;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mock;
-import static org.mockito.Mockito.*;
-import org.mockito.MockitoAnnotations;
 
 /**
  * Test for the Plus node using mockito, using @Mock and @Before annotations.
@@ -32,7 +36,7 @@ public class TestGreaterAdvanced {
     AbstractExpr floatexpr2;
 
     DecacCompiler compiler;
-    
+
     @BeforeEach
     public void setup() throws ContextualError {
         MockitoAnnotations.initMocks(this);
@@ -77,5 +81,15 @@ public class TestGreaterAdvanced {
         // check that the mocks have been called properly.
         verify(intexpr1).verifyExpr(compiler, null, null);
         verify(floatexpr1).verifyExpr(compiler, null, null);
+    }
+
+    @Test
+    public void testFloatFloat() throws ContextualError {
+        Greater t = new Greater(floatexpr1, floatexpr2);
+        // check the result
+        assertTrue(t.verifyExpr(compiler, null, null).isBoolean());
+        // check that the mocks have been called properly.
+        verify(floatexpr1).verifyExpr(compiler, null, null);
+        verify(floatexpr2).verifyExpr(compiler, null, null);
     }
 }

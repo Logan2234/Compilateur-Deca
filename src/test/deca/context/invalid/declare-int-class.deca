@@ -1,0 +1,11 @@
+// Description:
+//    Déclare une classe qui étend de int
+//
+// Resultats:
+//    Erreur contextuelle   
+//    Ligne 11: "int" is not a class (rule 1.3)
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A extends int {}

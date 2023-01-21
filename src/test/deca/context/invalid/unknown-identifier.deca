@@ -1,9 +1,12 @@
 // Description:
-//    Condition de la règle 0.1 non respectée, en essayant d'affecter une valeur a cquelque chose qui n'existe pas
+//    Condition de la règle 0.1 non respectée, en essayant d'affecter une valeur a quelque chose qui n'existe pas
 //
 // Resultats:
 //    Erreur contextuelle
-//    Ligne 9 : The variable x doesn't exist (rule 0.1)
+//    Ligne 12: The variable x doesn't exist (rule 0.1)
+//
+// Historique:
+//    cree le 14/01/2023
 
 {
     x = 1;

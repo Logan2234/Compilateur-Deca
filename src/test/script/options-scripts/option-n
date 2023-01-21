@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Colors:
+RED='\033[0;31m'
+REDBOLD='\033[0;31;1m'
+GREENBOLD='\033[0;32;1m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+BWHITE='\033[1;37m'
+
+# Test the -n option. Checks that some optimizations are made
+# when using this command as it does not return verify some errors. 
+
+# On se place dans le répertoire du projet (quel que soit le
+# répertoire d'où est lancé le script) :
+cd "$(dirname "$0")"/../../../../ || exit 1
+
+PATH=./src/test/script/launchers:"$PATH"
+
+echo -e "${BWHITE}\n============================= -n option =============================\n"
+
+# Test avec le débordement arithmétique sur les flottants
+decac ./src/test/deca/codegen/invalid/opOverflow.deca
+mv ./src/test/deca/codegen/invalid/opOverflow.ass ./src/test/deca/codegen/invalid/opOverflow-without-n.ass
+decac -n ./src/test/deca/codegen/invalid/opOverflow.deca
+
+diff=$(diff ./src/test/deca/codegen/invalid/opOverflow-without-n.ass ./src/test/deca/codegen/invalid/opOverflow.ass)
+
+if echo $diff | grep -q "opOverflow"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -n removes Error.opOverflow"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -n does not remove Error.opOverflow"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+# Test avec la division par 0
+decac ./src/test/deca/codegen/invalid/divide-by-zero.deca
+mv ./src/test/deca/codegen/invalid/divide-by-zero.ass ./src/test/deca/codegen/invalid/divide-by-zero-without-n.ass
+decac -n ./src/test/deca/codegen/invalid/divide-by-zero.deca
+
+diff=$(diff ./src/test/deca/codegen/invalid/divide-by-zero-without-n.ass ./src/test/deca/codegen/invalid/divide-by-zero.ass)
+
+if echo $diff | grep -q "divByZero"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -n removes Error.divByZero"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -n does not remove Error.divByZero"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+rm ./src/test/deca/codegen/invalid/*.ass
+
+# TODO: Les autres règles de 11.1 et 11.3

@@ -24,4 +24,9 @@ public abstract class ExpDefinition extends Definition {
         super(type, location);
     }
 
+    @Override
+    public boolean spotRelatedDefs() {
+        return super.spotRelatedDefs();
+    }
+
 }

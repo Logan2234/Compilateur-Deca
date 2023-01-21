@@ -5,11 +5,13 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -38,8 +40,8 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         this.rightOperand = rightOperand;
     }
 
-    private AbstractExpr leftOperand;
-    private AbstractExpr rightOperand;
+    protected AbstractExpr leftOperand;
+    protected AbstractExpr rightOperand;
 
     public AbstractBinaryExpr(AbstractExpr leftOperand,
             AbstractExpr rightOperand) {
@@ -52,48 +54,25 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister register) {
-        // if no result register, we must put the result on the stack.
-        boolean needNewRegister = register == null;
         // we still need a register for any binary op
-        GPRegister leftRegister = needNewRegister ? compiler.allocateRegister() : register;
-        boolean needRegisterSpace = leftRegister == null;
-        if(needRegisterSpace) {
-            // save on the stack R2
-            compiler.incrementContextUsedStack();
-            compiler.addInstruction(new PUSH(Register.getR(2)));
-            leftRegister = Register.getR(2);
-        }
+        GPRegister leftRegister = register == null ? compiler.allocateRegister() : register;
         // call the binary expression code on the given register and the address
         // load left operand in the result register
         leftOperand.codeGenExpr(compiler, leftRegister);
         // load the right operand
         GPRegister rightRegister = compiler.allocateRegister();
-        // if right register is null, the result will be on the stack
         rightOperand.codeGenExpr(compiler, rightRegister);
         // do the operation
-        codeGenBinExp(compiler, leftRegister, rightRegister == null ? new RegisterOffset(-1, Register.SP) : rightRegister);
-        if(rightRegister == null) {
-            // remove the value from the stack (we don't actually care were we put the result, it have been used already)
-            compiler.increaseContextUsedStack(-1);
-            compiler.addInstruction(new POP(Register.R0));
-        }
-        else {
-            // free the right register
-            compiler.freeRegister(rightRegister);
-        }
-        // restore R2 !
-        if(needRegisterSpace) {
-            compiler.increaseContextUsedStack(-1);
-            compiler.addInstruction(new POP(Register.getR(2)));
-        }
-        // if the original register is null, load the result on the stack
+        codeGenBinExp(compiler, leftRegister, rightRegister);
+        // free right register
+        compiler.freeRegister(rightRegister);
+        // if the original register is null, load the result on the stack (also need to free the register)
         if(register == null) {
+            // load the rsesult in R1 to free the register (free might pop the stack)
+            compiler.addInstruction(new LOAD(leftRegister, Register.R1));
+            compiler.freeRegister(leftRegister);
             compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(leftRegister));
-        }
-        // might want to free the allocated register
-        if(needNewRegister && !needRegisterSpace) {
-            compiler.freeRegister(leftRegister);
         }
     }
 
@@ -127,5 +106,18 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         leftOperand.prettyPrint(s, prefix, false);
         rightOperand.prettyPrint(s, prefix, true);
     }
+    
+    @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = this.leftOperand.spotUsedVar();
+        varSpotted = this.rightOperand.spotUsedVar() || varSpotted;
+        return varSpotted;
+    }
 
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        this.leftOperand.addMethodCalls(foundMethodCalls);
+        this.rightOperand.addMethodCalls(foundMethodCalls);
+    }
+    
 }

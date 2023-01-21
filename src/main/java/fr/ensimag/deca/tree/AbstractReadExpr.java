@@ -1,5 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import java.util.List;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.InvalidReadErr;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -28,9 +30,9 @@ public abstract class AbstractReadExpr extends AbstractExpr {
         compiler.useRuntimeError(error);
         compiler.addInstruction(new BOV(error.getErrorLabel()));
         // put R1 in the asked result
-        if(resultRegister != null) {
+        if (resultRegister != null)
             compiler.addInstruction(new LOAD(Register.R1, resultRegister));
-        }
+
         else {
             compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R1));
@@ -39,9 +41,18 @@ public abstract class AbstractReadExpr extends AbstractExpr {
 
     /**
      * Generate the instruction to read a value and put it in R1.
+     * 
      * @param compiler Where we write the instructions to.
      */
     protected abstract void codeGenRead(DecacCompiler compiler);
 
+    @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
 
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        foundMethodCalls.add(this);
+    }
 }

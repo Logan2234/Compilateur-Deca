@@ -12,6 +12,7 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Boolean literal
@@ -32,20 +33,19 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
         // Ajout du décor
-        this.setType(compiler.environmentType.BOOLEAN);
+        setType(compiler.environmentType.BOOLEAN);
         return compiler.environmentType.BOOLEAN;
     }
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
-        if(resultRegister != null) {
+        if (resultRegister != null) {
             // put it in the result register
             compiler.addInstruction(new LOAD(value ? 1 : 0, resultRegister));
-        }
-        else {
+        } else {
             // push it on the stack
             compiler.addInstruction(new LOAD(value ? 1 : 0, Register.R1));
             compiler.incrementContextUsedStack();
@@ -76,6 +76,16 @@ public class BooleanLiteral extends AbstractExpr {
     @Override
     public boolean collapse() {
         return true;
+    }
+
+    @Override
+    protected boolean spotUsedVar() {
+        return false;
+    }
+
+    @Override
+    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
     }
 
     @Override

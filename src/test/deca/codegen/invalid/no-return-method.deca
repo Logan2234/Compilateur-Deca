@@ -1,0 +1,18 @@
+// Description:
+//    pas de return dans une méthode de type différent de void
+//
+// Resultats:
+//    Execution error
+//    Error : floating point number operation overflow
+//
+// Historique:
+//    cree le 20/01/2023
+
+class A {
+    int noReturn(){}
+}
+
+{
+    A a = new A();
+    a.noReturn();
+}

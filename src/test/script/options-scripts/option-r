@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Colors:
+RED='\033[0;31m'
+REDBOLD='\033[0;31;1m'
+GREENBOLD='\033[0;32;1m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+BWHITE='\033[1;37m'
+
+# On se place dans le répertoire du projet (quel que soit le
+# répertoire d'où est lancé le script) :
+cd "$(dirname "$0")"/../../../../ || exit 1
+
+PATH=./src/test/script/launchers:"$PATH"
+
+echo -e "${BWHITE}\n============================= -r option =============================\n"
+test="./src/test/deca/codegen/valid/16-reg.deca"
+
+for i in {16..4}
+do
+    decac -r $i $test 2> /dev/null
+    if cat ./src/test/deca/codegen/valid/16-reg.ass | grep -q "R$i"
+    then
+        echo -e "${REDBOLD}Test failed:$RED decac -r not implemented correctly"
+        if [[ $1 == "--maven" ]];
+        then
+            exit 1
+        fi
+    else 
+        if [ $i -eq 16 ]
+        then
+            echo -e "${GREENBOLD}Test passed:$GREEN decac -r $i uses all registers"
+        else if [ $i -eq 15 ]
+        then
+            echo -e "${GREENBOLD}Test passed:$GREEN decac -r $i does not use registers R$i"
+        else
+            echo -e "${GREENBOLD}Test passed:$GREEN decac -r $i does not use registers R$i and higher registers"
+        fi 
+        fi
+    fi
+done
+
+decac -r 3 $test 2> /dev/null > /dev/null
+
+if [ "$?" -ne 0 ]
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -r 3 returns an error"
+else
+    echo -e "${REDBOLD}Test failed:$RED decac -r not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+decac -r 17 $test 2> /dev/null > /dev/null
+
+if [ "$?" -ne 0 ]
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -r 17 returns an error"
+else
+    echo -e "${REDBOLD}Test failed:$RED decac -r not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+decac -r $test 2> /dev/null > /dev/null
+
+if [ "$?" -ne 0 ]
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -r <file> returns an error"
+else
+    echo -e "${REDBOLD}Test failed:$RED decac -r not implemented correctly"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+rm ./src/test/deca/codegen/valid/16-reg.ass

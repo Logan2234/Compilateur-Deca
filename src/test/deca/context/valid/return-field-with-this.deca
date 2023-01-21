@@ -1,0 +1,15 @@
+// Description:
+//    Déclare une méthode qui retourne un field
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 13/01/2023
+
+class A{
+    int x = 3;
+    int instruction(int x){
+        return this.x;
+    }
+}

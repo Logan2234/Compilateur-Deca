@@ -29,6 +29,4 @@ public class NullType extends Type {
     public boolean isClassOrNull() {
         return true;
     }
-
-
 }

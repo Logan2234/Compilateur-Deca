@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -14,9 +15,10 @@ import org.apache.log4j.Logger;
  */
 public class Main extends AbstractMain {
     private static final Logger LOG = Logger.getLogger(Main.class);
-    
+
     private ListDeclVar declVariables;
     private ListInst insts;
+
     public Main(ListDeclVar declVariables, ListInst insts) {
         Validate.notNull(declVariables);
         Validate.notNull(insts);
@@ -29,8 +31,9 @@ public class Main extends AbstractMain {
         // LOG.debug("verify Main: start");
         // Création d'un EnvironnementExp vide
         EnvironmentExp localEnv = new EnvironmentExp(null);
-        declVariables.verifyListDeclVariable(compiler, localEnv, null);
-        insts.verifyListInst(compiler, localEnv, null, compiler.environmentType.VOID);
+        ClassDefinition object = new ClassDefinition(compiler.environmentType.OBJECT, getLocation(), null);
+        declVariables.verifyListDeclVariable(compiler, localEnv, object);
+        insts.verifyListInst(compiler, localEnv, object, compiler.environmentType.VOID);
         // LOG.debug("verify Main: end");
     }
 
@@ -41,7 +44,7 @@ public class Main extends AbstractMain {
         compiler.addComment("Beginning of main instructions:");
         insts.codeGenListInst(compiler);
     }
-    
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.println("{");
@@ -57,11 +60,26 @@ public class Main extends AbstractMain {
         declVariables.iter(f);
         insts.iter(f);
     }
- 
+
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         declVariables.prettyPrint(s, prefix, false);
         insts.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    protected boolean spotUsedVar() {
+        boolean varSpotted = declVariables.spotUsedVar();
+        varSpotted = insts.spotUsedVar() || varSpotted;
+        return varSpotted;
+    }
+
+    public ListDeclVar getListDeclVar() {
+        return declVariables;
+    }
+
+    public ListInst getListInst() {
+        return insts;
     }
 
     @Override
