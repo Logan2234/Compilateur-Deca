@@ -10,6 +10,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.UserAsmBlock;
 
 /**
  * Method asm Body Statement
@@ -57,7 +58,7 @@ public class MethodAsmBody extends AbstractMethod {
 
     @Override
     public void codeGenMethod(DecacCompiler compiler) {
-        // todo : find a way to insert a string litteral in the code
+        compiler.add(new UserAsmBlock(code.getValue()));
     }
 
     @Override
