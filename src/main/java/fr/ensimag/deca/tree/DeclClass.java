@@ -3,19 +3,26 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
+import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -127,7 +134,7 @@ public class DeclClass extends AbstractDeclClass {
     public void initClassCodeGen(DecacCompiler compiler) {
         // give each field it's offset before we generate any code
         for(int i = 0; i < fields.size(); i++) {
-            fields.getList().get(i).setFieldOffset(compiler, i + 1);
+            fields.getList().get(i).setFieldOffset(compiler, i + 1 + superIdentifier.getClassDefinition().getNumberOfFields());
         }
     }
 
@@ -169,25 +176,35 @@ public class DeclClass extends AbstractDeclClass {
         compiler.addComment("========== Class " + name.getName() + " ==========");
         // generate the methods code
         // init func, we need a context for it
-        compiler.newCodeContext();
         compiler.addLabel(new Label("init." + name.getName().getName()));
+        compiler.newCodeContext();
         // the location of the object to init is at -2(LB).
         // call parent init
         if(superIdentifier.getName().getName() != "Object") {
-            compiler.addInstruction(new BRA(new Label("init." + superIdentifier.getName().getName())));
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+            compiler.addInstruction(new PUSH(Register.R1));
+            compiler.addInstruction(new BSR(new Label("init." + superIdentifier.getName().getName())));
+            compiler.addInstruction(new POP(Register.R1));
         }
         // let's load the daddr on R1 !
         compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-        // get the size of the whole parent structure
-        int parentClassSize = 0;
-        ClassDefinition parentDef = superIdentifier.getClassDefinition();
-        while(parentDef != null) {
-            parentClassSize += parentDef.getNumberOfFields();
-            parentDef = parentDef.getSuperClass();
-        } 
         // for each field, compute it and store it at its offset
         for(int i = 0; i < fields.size(); i++) {
-            fields.getList().get(i).codeGenField(compiler, new RegisterOffset(i + 1 + parentClassSize, Register.R1));
+            fields.getList().get(i).codeGenField(compiler, new RegisterOffset(i + 1 + superIdentifier.getClassDefinition().getNumberOfFields(), Register.R1));
+        }
+        // save and restore all register used by context
+        // save and restore context used registers 
+        for(GPRegister usedRegister : compiler.getAllContextUsedRegister()) {
+            compiler.incrementContextUsedStack();
+            compiler.addInstruction(new POP(usedRegister));
+            compiler.addInstructionFirst(new PUSH(usedRegister));
+        }
+        // add max stack use at the beginning
+        if(compiler.getCompilerOptions().getRunTestChecks()) {
+            AbstractRuntimeErr error = new StackOverflowErr();
+            compiler.useRuntimeError(error);
+            compiler.addInstructionFirst(new BOV(error.getErrorLabel()));
+            compiler.addInstructionFirst(new TSTO(compiler.getMaxStackUse()));
         }
         compiler.addInstruction(new RTS());
         compiler.endCodeContext();
