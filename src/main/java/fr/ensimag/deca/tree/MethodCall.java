@@ -147,9 +147,9 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    protected Tree simplify() {
-        this.obj = (AbstractExpr)this.obj.simplify();
-        this.params = (ListExpr)this.params.simplify();
+    protected Tree removeUnusedVar() {
+        this.obj = (AbstractExpr)this.obj.removeUnusedVar();
+        this.params = (ListExpr)this.params.removeUnusedVar();
         return this;
     }
 

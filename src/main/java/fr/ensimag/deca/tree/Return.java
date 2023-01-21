@@ -90,8 +90,8 @@ public class Return extends AbstractInst {
     }
 
     @Override
-    protected Tree simplify() {
-        this.expression = (AbstractExpr)this.expression.simplify();
+    protected Tree removeUnusedVar() {
+        this.expression = (AbstractExpr)this.expression.removeUnusedVar();
         return this;
     }
 

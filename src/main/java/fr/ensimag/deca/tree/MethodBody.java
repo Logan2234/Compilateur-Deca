@@ -73,9 +73,9 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
-    protected Tree simplify() {
-        this.vars = (ListDeclVar)this.vars.simplify();
-        this.insts = (ListInst)this.insts.simplify();
+    protected Tree removeUnusedVar() {
+        this.vars = (ListDeclVar)this.vars.removeUnusedVar();
+        this.insts = (ListInst)this.insts.removeUnusedVar();
         return this;
     }
 

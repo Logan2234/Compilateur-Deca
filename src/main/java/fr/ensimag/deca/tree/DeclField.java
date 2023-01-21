@@ -124,11 +124,11 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    protected Tree simplify() {
+    protected Tree removeUnusedVar() {
         if (!this.fieldName.getDefinition().isUsed()) {
             return null;
         }
-        this.initialization = (AbstractInitialization)this.initialization.simplify();
+        this.initialization = (AbstractInitialization)this.initialization.removeUnusedVar();
         return this;
     }
 

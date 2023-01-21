@@ -141,8 +141,8 @@ public class Selection extends AbstractLValue {
     }
 
     @Override
-    protected Tree simplify() {
-        this.obj = (AbstractExpr)this.obj.simplify();
+    protected Tree removeUnusedVar() {
+        this.obj = (AbstractExpr)this.obj.removeUnusedVar();
         return this;
     }
 

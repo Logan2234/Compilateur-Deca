@@ -83,7 +83,7 @@ public class DeclParam extends AbstractDeclParam {
     }
 
     @Override
-    protected Tree simplify() {
+    protected Tree removeUnusedVar() {
         return this;
     }
 

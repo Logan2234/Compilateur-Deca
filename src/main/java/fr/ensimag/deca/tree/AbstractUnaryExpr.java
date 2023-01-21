@@ -96,8 +96,8 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     }
 
     @Override
-    protected Tree simplify() {
-        this.operand = (AbstractExpr)this.operand.simplify();
+    protected Tree removeUnusedVar() {
+        this.operand = (AbstractExpr)this.operand.removeUnusedVar();
         return this;
     }
 

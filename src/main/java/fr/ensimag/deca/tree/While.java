@@ -111,9 +111,9 @@ public class While extends AbstractInst {
     }
 
     @Override
-    protected Tree simplify() {
-        this.condition = (AbstractExpr) this.condition.simplify();
-        this.body = (ListInst) this.body.simplify();
+    protected Tree removeUnusedVar() {
+        this.condition = (AbstractExpr) this.condition.removeUnusedVar();
+        this.body = (ListInst) this.body.removeUnusedVar();
         if (!this.body.isEmpty()) {
             return this;
         }

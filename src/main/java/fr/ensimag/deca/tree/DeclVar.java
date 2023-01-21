@@ -96,8 +96,8 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    protected Tree simplify() {
-        this.initialization = (AbstractInitialization)this.initialization.simplify();
+    protected Tree removeUnusedVar() {
+        this.initialization = (AbstractInitialization)this.initialization.removeUnusedVar();
         if (this.varName.getDefinition().isUsed()) {
             return this;
         }

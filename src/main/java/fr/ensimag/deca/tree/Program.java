@@ -166,9 +166,9 @@ public class Program extends AbstractProgram {
     }
 
     @Override
-    protected Tree simplify() {
-        this.classes = (ListDeclClass) this.classes.simplify();
-        this.main = (AbstractMain) this.main.simplify();
+    protected Tree removeUnusedVar() {
+        this.classes = (ListDeclClass) this.classes.removeUnusedVar();
+        this.main = (AbstractMain) this.main.removeUnusedVar();
         return this;
     }
 
@@ -199,19 +199,19 @@ public class Program extends AbstractProgram {
         // solve compile time known cases.
         //this.collapse();
         // remove useless variables
-        this.removeUnusedVar(); 
+        this.optimUnusedVar(); 
     }
 
     /**
      * Remove all unused variables from the program
      * @return true if one or more variable have been removed
      */
-    private void removeUnusedVar() {
+    private void optimUnusedVar() {
         if (this.spotted) {
             this.resetSpottedVar();
         }
         this.spotUsedVar();
-        this.simplify();
+        this.removeUnusedVar();
     }
 
     /**

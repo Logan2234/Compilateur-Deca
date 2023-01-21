@@ -47,7 +47,7 @@ public class NoOperation extends AbstractInst {
     }
     
     @Override
-    protected Tree simplify() {
+    protected Tree removeUnusedVar() {
         return null;
     }
 

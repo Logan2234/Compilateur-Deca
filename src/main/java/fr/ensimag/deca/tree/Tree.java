@@ -306,7 +306,7 @@ public abstract class Tree {
      * to false the expressions "a instanceof B" when B is unused
      * @return the simplified expression
      */
-    protected abstract Tree simplify();
+    protected abstract Tree removeUnusedVar();
 
     
     /**

@@ -99,8 +99,8 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    protected Tree simplify() {
-        this.rightOperand = (AbstractExpr)this.rightOperand.simplify();
+    protected Tree removeUnusedVar() {
+        this.rightOperand = (AbstractExpr)this.rightOperand.removeUnusedVar();
         if (!this.getLeftOperand().getDefinition().isUsed()) {
             return this.rightOperand;
         }

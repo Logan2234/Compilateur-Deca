@@ -77,9 +77,8 @@ public class TestPlusWithoutMock {
         }
 
         @Override
-        protected boolean spotUsedVar() {
+        protected void spotUsedVar() {
             // TODO Auto-generated method stub
-            return true;
         }
     }
 

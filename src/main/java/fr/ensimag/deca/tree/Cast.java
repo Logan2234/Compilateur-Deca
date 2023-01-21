@@ -95,8 +95,8 @@ public class Cast extends AbstractExpr {
     }
 
     @Override
-    protected Tree simplify() {
-        this.expression = (AbstractExpr)this.expression.simplify();
+    protected Tree removeUnusedVar() {
+        this.expression = (AbstractExpr)this.expression.removeUnusedVar();
         return this;
     }
 

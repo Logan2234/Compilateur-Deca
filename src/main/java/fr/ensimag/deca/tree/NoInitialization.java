@@ -88,7 +88,7 @@ public class NoInitialization extends AbstractInitialization {
     }
     
     @Override
-    protected Tree simplify() {
+    protected Tree removeUnusedVar() {
         return this;
     }
     

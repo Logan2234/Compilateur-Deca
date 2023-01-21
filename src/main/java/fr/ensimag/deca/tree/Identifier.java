@@ -314,7 +314,7 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    protected Tree simplify() {
+    protected Tree removeUnusedVar() {
         return this;
     }
 

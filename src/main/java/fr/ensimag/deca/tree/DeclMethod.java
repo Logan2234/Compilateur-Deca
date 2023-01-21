@@ -193,11 +193,11 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
-    protected Tree simplify() {
+    protected Tree removeUnusedVar() {
         if (!this.methodName.getDefinition().isUsed()) {
             return null;
         }
-        this.body = (AbstractMethod)this.body.simplify();
+        this.body = (AbstractMethod)this.body.removeUnusedVar();
         return this;
     }
 

@@ -131,13 +131,13 @@ public class InstanceOf extends AbstractExpr {
     }
 
     @Override
-    protected Tree simplify() {
+    protected Tree removeUnusedVar() {
         if (!this.type.getClassDefinition().isUsed()) {
             BooleanLiteral bool = new BooleanLiteral(false);
             bool.setLocation(this.getLocation());
             return bool; 
         }
-        this.expression = (AbstractExpr)this.expression.simplify();
+        this.expression = (AbstractExpr)this.expression.removeUnusedVar();
         return this;
     }
 
