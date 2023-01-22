@@ -8,6 +8,8 @@ import java.io.PrintStream;
 import java.util.List;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.AbstractProgram;
@@ -80,6 +82,12 @@ public class TestPlusWithoutMock {
         protected boolean spotUsedVar() {
             // TODO Auto-generated method stub
             return true;
+        }
+
+        @Override
+        public CollapseResult<CollapseValue> collapseExpr() {
+            // return nothing ? expect if we find a way to compute methods at compile time...
+            return new CollapseResult<CollapseValue>(new CollapseValue(), false);
         }
     }
 

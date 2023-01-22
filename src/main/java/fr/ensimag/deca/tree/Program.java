@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
 import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
@@ -196,8 +197,8 @@ public class Program extends AbstractProgram {
         while(optimized) {
             optimized = false;
             // solve compile time known cases.
-            // TODO
-            optimized = this.collapse() || optimized;
+            // TODO collapse
+            optimized |= collapseProgram().couldCollapse();
             // optimized = this.removeUnusedVar() || optimized;
         }
     }
@@ -472,7 +473,7 @@ public class Program extends AbstractProgram {
     }
 
     @Override
-    public boolean collapse() {
-        return classes.collapse() || main.collapse();
+    public CollapseResult<Null> collapseProgram() {
+        return new CollapseResult<Null>(null, main.collapseMain().couldCollapse() || classes.collapseClasses().couldCollapse());
     }
 }

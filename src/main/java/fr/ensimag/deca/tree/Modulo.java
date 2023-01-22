@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
@@ -54,29 +56,15 @@ public class Modulo extends AbstractOpArith {
     }
 
     @Override
-    public boolean collapse() {
-        return getLeftOperand().collapse() || getRightOperand().collapse();
-    }
-
-    @Override
-    public Integer collapseInt() {
-        Integer rightCollapsedValue = getRightOperand().collapseInt();
-        if(rightCollapsedValue != null && getRightOperand().collapsable()) {
-            IntLiteral newInt = new IntLiteral(rightCollapsedValue);
-            newInt.setType(getType());
-            setRightOperand(newInt);
+    public CollapseResult<CollapseValue> collapseBinExpr() {
+        CollapseResult<CollapseValue> leftResult = getLeftOperand().collapseExpr();
+        CollapseResult<CollapseValue> rightResult = getRightOperand().collapseExpr();
+        if(getType().isInt() && leftResult.getResult().isInt() && rightResult.getResult().isInt()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asInt() % rightResult.getResult().asInt()), true);
         }
-        Integer leftCollapsedValue = getLeftOperand().collapseInt();
-        if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
-            IntLiteral newInt = new IntLiteral(leftCollapsedValue);
-            newInt.setType(getType());
-            setLeftOperand(newInt);
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), leftResult.couldCollapse() || rightResult.couldCollapse());
         }
-        if(rightCollapsedValue != null && leftCollapsedValue != null) {
-            System.out.println(rightCollapsedValue + " " + leftCollapsedValue);
-            return leftCollapsedValue % rightCollapsedValue;
-        }
-        return null;
     }
 
 }

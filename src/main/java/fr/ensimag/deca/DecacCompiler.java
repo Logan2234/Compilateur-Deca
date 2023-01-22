@@ -414,7 +414,7 @@ public class DecacCompiler {
             prog.verifyProgram(this);
             assert (prog.checkAllDecorations());
             if (compilerOptions.getCompileMode() == CompileMode.Compile) {
-                if (compilerOptions.getOptimize()) {
+                if (compilerOptions.getOptimize() || true) {
                     LOG.info("Optimizing the tree...");
                     prog.optimizeTree();
                     LOG.info("Tree optimized...");

@@ -72,10 +72,6 @@ public class DeclParam extends AbstractDeclParam {
         paramName.prettyPrint(s, prefix, true);
     }
 
-	@Override
-	public boolean collapse() {
-        return false;
-    }
 
     @Override
     protected boolean spotUsedVar() {

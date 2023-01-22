@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
@@ -100,4 +102,12 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         this.operand.addMethodCalls(foundMethodCalls);
     }
 
+    @Override
+    public CollapseResult<CollapseValue> collapseExpr() {
+        return collapseUnExpr();
+    }
+
+    public abstract CollapseResult<CollapseValue> collapseUnExpr();
+    
+    
 }

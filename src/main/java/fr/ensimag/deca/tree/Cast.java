@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -99,5 +101,11 @@ public class Cast extends AbstractExpr {
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
         this.expression.addMethodCalls(foundMethodCalls);
+    }
+
+    @Override
+    public CollapseResult<CollapseValue> collapseExpr() {
+        // this is for classes, so don't collapse at all
+        return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
 }

@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -90,14 +91,11 @@ public class Return extends AbstractInst {
     }
 
     @Override
-    public boolean collapse() {
-        return false;
-    }
-
-    @Override
-    public ListInst collapseInst() {
+    public CollapseResult<ListInst> collapseInst() {
+        // return nothing ? expect if we find a way to compute methods at compile time...
         ListInst result = new ListInst();
         result.add(this);
-        return result;
+        return new CollapseResult<ListInst>(result, false);
     }
+
 }

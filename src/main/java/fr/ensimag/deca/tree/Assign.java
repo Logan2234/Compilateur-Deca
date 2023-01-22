@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
@@ -94,32 +96,27 @@ public class Assign extends AbstractBinaryExpr {
     }
     
     @Override 
-    public boolean collapse() {
-        if(getRightOperand().collapse()) {
-            if(getRightOperand().getType().isBoolean()) {
-                // try to collapse to bool expr
-                Boolean collapsedValue = getRightOperand().collapseBool();
-                if(collapsedValue != null) {
-                    setRightOperand(new BooleanLiteral(collapsedValue));
-                }
-            }
-            else if(getRightOperand().getType().isInt()) {
-                // try to collapse to a int expr
-                Integer collapsedValue = getRightOperand().collapseInt();
-                if(collapsedValue != null) {
-                    setRightOperand(new IntLiteral(collapsedValue));
-                }
-            }
-            else if(getRightOperand().getType().isFloat()) {
-                // try to collapse to a float
-                Float collapsedValue = getRightOperand().collapseFloat();
-                if(collapsedValue != null) {
-                    setRightOperand(new FloatLiteral(collapsedValue));
-                }
-            }
-            return true;
+    public CollapseResult<CollapseValue> collapseBinExpr() {
+        CollapseResult<CollapseValue> result = getRightOperand().collapseExpr();
+        if(getLeftOperand().getType().isBoolean() && result.getResult().isBool()) {
+            setRightOperand(new BooleanLiteral(result.getResult().asBool()));
+            // tell we collapsed but no result, too dangerous to remove assignments
+            return new CollapseResult<CollapseValue>(new CollapseValue(), true);
         }
-        return false;
+        else if(getLeftOperand().getType().isFloat() && result.getResult().isFloat()) {
+            setRightOperand(new FloatLiteral(result.getResult().asFloat()));
+            // tell we collapsed but no result, too dangerous to remove assignments
+            return new CollapseResult<CollapseValue>(new CollapseValue(), true);
+        }
+        else if(getLeftOperand().getType().isInt() && result.getResult().isInt()) {
+            setRightOperand(new IntLiteral(result.getResult().asInt()));
+            // tell we collapsed but no result, too dangerous to remove assignments
+            return new CollapseResult<CollapseValue>(new CollapseValue(), true);
+        }
+        else {
+            // tell if at some point the expression collapsed
+            return new CollapseResult<CollapseValue>(new CollapseValue(), result.couldCollapse());
+        }
     }
 
 }

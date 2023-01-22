@@ -3,6 +3,8 @@ package fr.ensimag.deca.tree;
 import java.util.List;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 /**
@@ -27,5 +29,11 @@ public abstract class AbstractStringLiteral extends AbstractExpr {
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
+    }
+
+    @Override
+    public CollapseResult<CollapseValue> collapseExpr() {
+        // nothing to do
+        return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
 }

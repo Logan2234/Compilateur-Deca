@@ -2,6 +2,8 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -25,7 +27,7 @@ public class DeclField extends AbstractDeclField {
     final private Visibility visib;
     final private AbstractIdentifier type;
     final private AbstractIdentifier fieldName;
-    final private AbstractInitialization initialization;
+    private AbstractInitialization initialization;
 
     public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization,
             Visibility visib) {
@@ -128,8 +130,18 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    public boolean collapse() {
-        initialization.collapse();
-        return false;
+    public CollapseResult<Null> collapseDeclField() {
+        CollapseResult<CollapseValue> result = initialization.collapseInit();
+        // look in the collapse value if we can change the init node
+        if(type.getType().isBoolean() && result.getResult().isBool()) {
+            initialization = new Initialization(new BooleanLiteral(result.getResult().asBool()));
+        }
+        else if(type.getType().isFloat() && result.getResult().isFloat()) {
+            initialization = new Initialization(new FloatLiteral(result.getResult().asFloat()));
+        }
+        if(type.getType().isInt() && result.getResult().isInt()) {
+            initialization = new Initialization(new IntLiteral(result.getResult().asInt()));
+        }
+        return new CollapseResult<Null>(null, result.couldCollapse());
     }
 }

@@ -1,0 +1,16 @@
+// Description:
+//    test collapsing for ints
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 22/01/2023
+//
+{
+    int a = 2 + 4;
+    int b = 3 * 5;
+    int c = 4 % 3;
+    int d = 8 / 3;
+    int e = 3 - 2;
+}

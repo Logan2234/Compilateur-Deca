@@ -1,12 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
@@ -119,5 +120,13 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         this.leftOperand.addMethodCalls(foundMethodCalls);
         this.rightOperand.addMethodCalls(foundMethodCalls);
     }
+
+    @Override
+    public CollapseResult<CollapseValue> collapseExpr() {
+        return collapseBinExpr();
+    }
+
+    public abstract CollapseResult<CollapseValue> collapseBinExpr();
+    
     
 }

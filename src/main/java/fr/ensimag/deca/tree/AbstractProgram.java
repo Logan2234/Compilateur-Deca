@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.optim.CollapseResult;
 
 /**
  * Entry point for contextual verifications and code generation from outside the
@@ -20,4 +21,6 @@ public abstract class AbstractProgram extends Tree {
      * Optimize the decorated tree until there is no more simplification found
      */
     public abstract void optimizeTree();
+
+    public abstract CollapseResult<Null> collapseProgram();
 }

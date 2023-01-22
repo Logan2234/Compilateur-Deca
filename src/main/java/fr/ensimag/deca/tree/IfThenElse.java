@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -9,7 +11,6 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BLT;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -26,8 +27,8 @@ import org.apache.commons.lang.Validate;
 public class IfThenElse extends AbstractInst {
 
     private final AbstractExpr condition;
-    private final ListInst thenBranch;
-    private final ListInst elseBranch;
+    private ListInst thenBranch;
+    private ListInst elseBranch;
 
     public IfThenElse(AbstractExpr condition, ListInst thenBranch, ListInst elseBranch) {
         Validate.notNull(condition);
@@ -128,29 +129,28 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    public boolean collapse() {
-        return condition.collapse() || thenBranch.collapse() || elseBranch.collapse();
-    }
-
-    @Override
-    public ListInst collapseInst() {
-        // try to collapse the condition
-        Boolean collapsedCond = condition.collapseBool();
-        if(collapsedCond != null) {
-            // we can collapse whole if block !
-            if(collapsedCond) {
-                return thenBranch;
+    public CollapseResult<ListInst> collapseInst() {
+        CollapseResult<CollapseValue> condResult = condition.collapseExpr();
+        if(condResult.getResult().isBool()) {
+            // we can actually collapse the if !
+            if(condResult.getResult().asBool()) {
+                return new CollapseResult<ListInst>(thenBranch.collapseInsts().getResult(), true);
             }
             else {
-                return elseBranch;
+                return new CollapseResult<ListInst>(elseBranch.collapseInsts().getResult(), true);
             }
         }
-        // I mean, sadly return ourself :(
-        ListInst result = new ListInst();
-        result.add(this);
-        return result;
+        else {
+            // try to collapse our own branches
+            CollapseResult<ListInst> thenResult = thenBranch.collapseInsts();
+            CollapseResult<ListInst> elseResult = elseBranch.collapseInsts();
+            thenBranch = thenResult.getResult();
+            elseBranch = elseResult.getResult();
+            ListInst result = new ListInst();
+            result.add(this);
+            return new CollapseResult<ListInst>(result, thenResult.couldCollapse() || elseResult.couldCollapse());
+        }
     }
-
 
 
 }

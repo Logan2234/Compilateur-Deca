@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 /**
@@ -57,4 +58,6 @@ public abstract class AbstractDeclField extends Tree {
     public abstract void codeGenField(DecacCompiler compiler, RegisterOffset resultRegister);
 
     public abstract void setFieldOffset(DecacCompiler compiler, int offset);
+
+    public abstract CollapseResult<Null> collapseDeclField();
 }

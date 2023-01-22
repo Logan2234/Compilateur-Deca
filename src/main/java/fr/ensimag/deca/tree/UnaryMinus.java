@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.OPP;
 import fr.ensimag.deca.DecacCompiler;
@@ -43,34 +45,17 @@ public class UnaryMinus extends AbstractUnaryExpr {
     }
 
     @Override
-    public boolean collapse() {
-        return getOperand().collapse();
-    }
-
-    @Override
-    public Integer collapseInt() {
-        Integer collapsedValue = getOperand().collapseInt();
-        if(collapsedValue != null) {
-            Type oldType = getOperand().getType();
-            IntLiteral newInt = new IntLiteral(collapsedValue);
-            newInt.setType(oldType);
-            setOperand(newInt);
-            return -collapsedValue;
+    public CollapseResult<CollapseValue> collapseUnExpr() {
+        CollapseResult<CollapseValue> result = getOperand().collapseExpr();
+        if(getType().isInt() && result.getResult().isInt()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(- result.getResult().asInt()), true);
         }
-        return null;
-    }
-
-    @Override
-    public Float collapseFloat() {
-        Float collapsedValue = getOperand().collapseFloat();
-        if(collapsedValue != null) {
-            Type oldType = getOperand().getType();
-            FloatLiteral newInt = new FloatLiteral(collapsedValue);
-            newInt.setType(oldType);
-            setOperand(newInt);
-            return -collapsedValue;
+        else if(getType().isFloat() && result.getResult().isFloat()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(- result.getResult().asFloat()), true);
         }
-        return null;
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), result.couldCollapse());
+        }
     }
 
 }

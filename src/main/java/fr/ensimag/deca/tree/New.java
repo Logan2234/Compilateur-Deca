@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.codegen.runtimeErrors.FullHeapErr;
@@ -120,5 +122,11 @@ public class New extends AbstractExpr {
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
+    }
+
+    @Override
+    public CollapseResult<CollapseValue> collapseExpr() {
+        // return nothing ? expect if we find a way to compute methods at compile time...
+        return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
 }

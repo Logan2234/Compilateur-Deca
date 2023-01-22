@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
@@ -49,20 +51,13 @@ public class Not extends AbstractUnaryExpr {
     }
 
     @Override
-    public boolean collapse() {
-        return getOperand().collapse();
-    }
-
-    @Override
-    public Boolean collapseBool() {
-        Boolean collapsedValue = getOperand().collapseBool();
-        if(collapsedValue != null) {
-            Type oldType = getOperand().getType();
-            BooleanLiteral newBool = new BooleanLiteral(collapsedValue);
-            newBool.setType(oldType);
-            setOperand(newBool);
-            return !collapsedValue;
+    public CollapseResult<CollapseValue> collapseUnExpr() {
+        CollapseResult<CollapseValue> result = getOperand().collapseExpr();
+        if(result.getResult().isBool()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(!result.getResult().asBool()), true);
         }
-        return null;
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), result.couldCollapse());
+        }
     }
 }

@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.FLOAT;
 
@@ -36,22 +38,14 @@ public class ConvFloat extends AbstractUnaryExpr {
     }
 
     @Override
-    public boolean collapse() {
-        return getOperand().collapse();
-    }
-
-    @Override
-    public Float collapseFloat() {
-        Integer collapsedValue = getOperand().collapseInt();
-        if(collapsedValue != null && getOperand().collapsable()) {
-            FloatLiteral newFLoat = new FloatLiteral(collapsedValue);
-            newFLoat.setType(getType());
-            setOperand(newFLoat);
+    public CollapseResult<CollapseValue> collapseUnExpr() {
+        CollapseResult<CollapseValue> result = getOperand().collapseExpr();
+        if(result.getResult().isInt()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue((float)result.getResult().asInt()), true);
         }
-        if(collapsedValue != null) {
-            return (float)collapsedValue;
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), result.couldCollapse());
         }
-        return null;
     }
 
 }

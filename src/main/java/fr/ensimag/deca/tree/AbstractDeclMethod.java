@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 /**
@@ -61,4 +62,6 @@ public abstract class AbstractDeclMethod extends Tree {
      * @param compiler where we write the codes to.
      */
     public abstract void codeGenMethod(DecacCompiler compiler, String className);
+
+    public abstract CollapseResult<Null> collapseDeclMethod();
 }

@@ -11,6 +11,8 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
@@ -305,8 +307,9 @@ public class Identifier extends AbstractIdentifier {
 
 
     @Override
-    public boolean collapse() {
-        return false;
+    public CollapseResult<CollapseValue> collapseExpr() {
+        // nothing to collapse on identifier !
+        return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
 
     @Override

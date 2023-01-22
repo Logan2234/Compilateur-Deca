@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.INT;
 import fr.ensimag.deca.DecacCompiler;
@@ -32,6 +34,17 @@ public class ConvInt extends AbstractUnaryExpr {
     @Override
     public void codeGenUnExpr(DecacCompiler compiler, GPRegister resultRegister) {
         compiler.addInstruction(new INT(resultRegister, resultRegister));
+    }
+
+    @Override
+    public CollapseResult<CollapseValue> collapseUnExpr() {
+        CollapseResult<CollapseValue> result = getOperand().collapseExpr();
+        if(result.getResult().isFloat()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue((int)result.getResult().asFloat()), true);
+        }
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), result.couldCollapse());
+        }
     }
 
 }

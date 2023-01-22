@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -110,31 +112,33 @@ public class While extends AbstractInst {
     }
 
     @Override
-    public boolean collapse() {
-        return condition.collapse() || body.collapse();
-    }
-
-    @Override
-    public ListInst collapseInst() {
-        Boolean collapsedCond = condition.collapseBool();
-        if(collapsedCond != null) {
-            // if it's true, get out of block the body
-            if(collapsedCond) {
+    public CollapseResult<ListInst> collapseInst() {
+        // try to collapse the condition
+        CollapseResult<CollapseValue> condResult = condition.collapseExpr();
+        if(condResult.getResult().isBool()) {
+            // we can actually collapse the if !
+            if(condResult.getResult().asBool()) {
+                // we know we will enter the loop.
+                // TODO virgile ; this is the dangerous part....
+                // try to collapse our own branches
+                CollapseResult<ListInst> bodyResult = body.collapseInsts();
+                body = bodyResult.getResult();
                 ListInst result = new ListInst();
-                for(AbstractInst i : body.getList()) {
-                    // ! dangerous ...
-                    // result.add(i);
-                }
                 result.add(this);
-                return result;
+                return new CollapseResult<ListInst>(result, bodyResult.couldCollapse());
             }
-            // if not, skip while
             else {
-                return new ListInst();
+                // we know we will never enter the loop : remove the whole while instruction !
+                return new CollapseResult<ListInst>(new ListInst(), true);
             }
         }
-        ListInst result = new ListInst();
-        result.add(this);
-        return result;
+        else {
+            // try to collapse our own branches
+            CollapseResult<ListInst> bodyResult = body.collapseInsts();
+            body = bodyResult.getResult();
+            ListInst result = new ListInst();
+            result.add(this);
+            return new CollapseResult<ListInst>(result, bodyResult.couldCollapse());
+        }
     }
 }

@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -74,11 +76,6 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    public boolean collapse() {
-        return true;
-    }
-
-    @Override
     protected boolean spotUsedVar() {
         return false;
     }
@@ -89,12 +86,8 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    public Boolean collapseBool() {
-        return value;
-    }
-
-    @Override
-    public boolean collapsable() {
-        return false;
+    public CollapseResult<CollapseValue> collapseExpr() {
+        // can't collapse, but is a boolean value to collapse !
+        return new CollapseResult<CollapseValue>(new CollapseValue(value), false);
     }
 }

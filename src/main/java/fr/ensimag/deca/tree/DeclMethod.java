@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.ReturnCheckFunc;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
@@ -202,8 +203,7 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
-    public boolean collapse() {
-        body.collapse();
-        return false;
+    public CollapseResult<Null> collapseDeclMethod() {
+        return new CollapseResult<Null>(null, body.collapseMethodBody().couldCollapse());
     }
 }

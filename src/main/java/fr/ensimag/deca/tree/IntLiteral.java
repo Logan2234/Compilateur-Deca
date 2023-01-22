@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -81,12 +83,6 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
-    public boolean collapse() {
-        // every litteral can be trivialy solved.
-        return true;
-    }
-
-    @Override
     protected boolean spotUsedVar() {
         return false;
     }
@@ -101,7 +97,7 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
-    public boolean collapsable() {
-        return false;
+    public CollapseResult<CollapseValue> collapseExpr() {
+        return new CollapseResult<CollapseValue>(new CollapseValue(value), false);
     }
 }

@@ -3,6 +3,8 @@ package fr.ensimag.deca.tree;
 import org.apache.log4j.lf5.LogLevelFormatException;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
@@ -33,28 +35,15 @@ public class And extends AbstractOpBool {
     }
 
     @Override
-    public boolean collapse() {
-        return getRightOperand().collapse() || getLeftOperand().collapse();
-    }
-
-    @Override
-    public Boolean collapseBool() {
-        Boolean rightCollapsedValue = getRightOperand().collapseBool();
-        if(rightCollapsedValue != null && getRightOperand().collapsable()) {
-            BooleanLiteral newBool = new BooleanLiteral(rightCollapsedValue);
-            newBool.setType(getType());
-            setRightOperand(newBool);
+    public CollapseResult<CollapseValue> collapseBinExpr() {
+        CollapseResult<CollapseValue> leftResult = getLeftOperand().collapseExpr();
+        CollapseResult<CollapseValue> rightResult = getRightOperand().collapseExpr();
+        if(leftResult.getResult().isBool() && rightResult.getResult().isBool()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asBool() && rightResult.getResult().asBool()), true);
         }
-        Boolean leftCollapsedValue = getLeftOperand().collapseBool();
-        if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
-            BooleanLiteral newBool = new BooleanLiteral(leftCollapsedValue);
-            newBool.setType(getType());
-            setLeftOperand(newBool);
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), leftResult.couldCollapse() || rightResult.couldCollapse());
         }
-        if(rightCollapsedValue != null && leftCollapsedValue != null) {
-            return rightCollapsedValue && leftCollapsedValue;
-        }
-        return null;
     }
 
 

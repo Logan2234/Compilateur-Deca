@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -47,14 +48,9 @@ public class NoOperation extends AbstractInst {
     }
 
     @Override
-    public boolean collapse() {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public ListInst collapseInst() {
-        return new ListInst();
+    public CollapseResult<ListInst> collapseInst() {
+        // collapse no op into... no op.
+        return new CollapseResult<ListInst>(new ListInst(), true); // true because we removed ourself
     }
 
 }

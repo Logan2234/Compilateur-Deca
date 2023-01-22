@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -30,67 +32,22 @@ public class NotEquals extends AbstractOpExactCmp {
         compiler.addInstruction(new SNE(register));
     }
 
-
     @Override
-    public boolean collapse() {
-        return getRightOperand().collapse() || getLeftOperand().collapse();
+    public CollapseResult<CollapseValue> collapseBinExpr() {
+        CollapseResult<CollapseValue> leftResult = getLeftOperand().collapseExpr();
+        CollapseResult<CollapseValue> rightResult = getRightOperand().collapseExpr();
+        if(leftResult.getResult().isFloat() && rightResult.getResult().isFloat()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asFloat() != rightResult.getResult().asFloat()), true);
+        }
+        else if(leftResult.getResult().isInt() && rightResult.getResult().isInt()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asInt() != rightResult.getResult().asInt()), true);
+        }
+        else if(leftResult.getResult().isBool() && rightResult.getResult().isBool()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asBool() != rightResult.getResult().asBool()), true);
+        }
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), leftResult.couldCollapse() || rightResult.couldCollapse());
+        }
     }
-
-    @Override
-    public Boolean collapseBool() {
-        if(getRightOperand().getType().isBoolean()) {
-            Boolean rightCollapsedValue = getRightOperand().collapseBool();
-            if(rightCollapsedValue != null && getRightOperand().collapsable()) {
-                BooleanLiteral newBool = new BooleanLiteral(rightCollapsedValue);
-                newBool.setType(getType());
-                setRightOperand(newBool);
-            }
-            Boolean leftCollapsedValue = getLeftOperand().collapseBool();
-            if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
-                BooleanLiteral newBool = new BooleanLiteral(leftCollapsedValue);
-                newBool.setType(getType());
-                setLeftOperand(newBool);
-            }
-            if(rightCollapsedValue != null && leftCollapsedValue != null) {
-                return rightCollapsedValue != leftCollapsedValue;
-            }
-        }
-        else if(getRightOperand().getType().isInt()) {
-            Integer rightCollapsedValue = getRightOperand().collapseInt();
-            if(rightCollapsedValue != null && getRightOperand().collapsable()) {
-                IntLiteral newInt = new IntLiteral(rightCollapsedValue);
-                newInt.setType(getType());
-                setRightOperand(newInt);
-            }
-            Integer leftCollapsedValue = getLeftOperand().collapseInt();
-            if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
-                IntLiteral newInt = new IntLiteral(leftCollapsedValue);
-                newInt.setType(getType());
-                setLeftOperand(newInt);
-            }
-            if(rightCollapsedValue != null && leftCollapsedValue != null) {
-                return rightCollapsedValue != leftCollapsedValue;
-            }
-        }
-        else if(getRightOperand().getType().isFloat()) {
-            Float rightCollapsedValue = getRightOperand().collapseFloat();
-            if(rightCollapsedValue != null && getRightOperand().collapsable()) {
-                FloatLiteral newFloat = new FloatLiteral(rightCollapsedValue);
-                newFloat.setType(getType());
-                setRightOperand(newFloat);
-            }
-            Float leftCollapsedValue = getLeftOperand().collapseFloat();
-            if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
-                FloatLiteral newFloat = new FloatLiteral(leftCollapsedValue);
-                newFloat.setType(getType());
-                setLeftOperand(newFloat);
-            }
-            if(rightCollapsedValue != null && leftCollapsedValue != null) {
-                return rightCollapsedValue != leftCollapsedValue;
-            }
-        }
-        return null;
-    }
-
 
 }

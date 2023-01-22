@@ -1,0 +1,15 @@
+// Description:
+//    test collapsing for floats
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 22/01/2023
+//
+{
+    float a = 2.0 + 4.0;
+    float b = 3.0 * 5.0;
+    float d = 8.0 / 3.0;
+    float e = 3.0 - 2.0;
+}

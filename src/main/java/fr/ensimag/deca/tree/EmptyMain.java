@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
@@ -46,9 +47,9 @@ public class EmptyMain extends AbstractMain {
     }
 
 	@Override
-    public boolean collapse() {
-        // this main is empty : cannot collapse further.
-        return false;
+    public CollapseResult<Null> collapseMain() {
+        // empty main do not collapse, return false
+        return new CollapseResult<Null>(null, false);
     }
 
     @Override

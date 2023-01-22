@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -56,22 +57,20 @@ public class ListInst extends TreeList<AbstractInst> {
         return varSpotted;
     }
 
-    public boolean collapse() {
-        // try to collapse each instruction into a list of instructions
-        boolean collapse = false;
+    public CollapseResult<ListInst> collapseInsts() {
+        boolean somethingCollapsed = false;
         for (int i = 0; i < getList().size(); i++) {
             AbstractInst toCollapse = getList().get(i);
-            if(toCollapse.collapse()) {
-                collapse = true;
-                // remove this inst, replace it with it's collapsed form
-                removeAt(i);
-                int offset = 0;
-                for(AbstractInst newInst : toCollapse.collapseInst().getList()) {
-                    insert(newInst, i + offset);
-                    offset ++;
-                }
+            CollapseResult<ListInst> result = toCollapse.collapseInst();
+            somethingCollapsed |= result.couldCollapse();
+            // remove this inst, replace it with it's collapsed form
+            removeAt(i);
+            int offset = 0;
+            for(AbstractInst newInst : result.getResult().getList()) {
+                insert(newInst, i + offset);
+                offset ++;
             }
         }
-        return collapse;
+        return new CollapseResult<ListInst>(this, somethingCollapsed);
     }
 }

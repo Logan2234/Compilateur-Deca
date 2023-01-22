@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
@@ -73,11 +74,6 @@ public class MethodBody extends AbstractMethod {
         return varSpotted;
     }
 
-    @Override
-    public boolean collapse() {
-        // TODO
-        return false;
-    }
 	@Override
     public void codeGenMethod(DecacCompiler compiler) {
         // generate code for delcare variables
@@ -94,5 +90,10 @@ public class MethodBody extends AbstractMethod {
                 inst.asReturn().setMethodClassName(name);
             }
         }
+    }
+
+    @Override
+    public CollapseResult<Null> collapseMethodBody() {
+        return new CollapseResult<Null>(null, vars.collapseDeclVars().couldCollapse() || insts.collapseInsts().couldCollapse());
     }
 }

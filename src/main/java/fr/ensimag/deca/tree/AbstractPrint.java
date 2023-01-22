@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.IntType;
 import fr.ensimag.deca.DecacCompiler;
@@ -80,5 +82,12 @@ public abstract class AbstractPrint extends AbstractInst {
     @Override
     protected boolean spotUsedVar() {
         return this.arguments.spotUsedVar();
+    }
+
+    @Override
+    public CollapseResult<ListInst> collapseInst() {
+        ListInst result = new ListInst();
+        result.add(this);
+        return new CollapseResult<ListInst>(result, false);
     }
 }

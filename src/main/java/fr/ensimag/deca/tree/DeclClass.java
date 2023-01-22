@@ -6,6 +6,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
@@ -141,10 +142,8 @@ public class DeclClass extends AbstractDeclClass {
     }
     
     @Override
-    public boolean collapse() {
-        fields.collapse();
-        methods.collapse();
-        return false;
+    public CollapseResult<Null> collapseClass() {
+        return new CollapseResult<Null>(null, fields.collapseFields().couldCollapse() || methods.collapseMethods().couldCollapse());
     }
 
     @Override

@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -229,18 +231,14 @@ public abstract class AbstractExpr extends AbstractInst {
         return foundMethodCalls;
     }
     
-    @Override
-    public boolean collapse() {
-        // by default, return false. 
-        return false;
-        // expressions that can collapse will override this.
-    }
+    public abstract CollapseResult<CollapseValue> collapseExpr();
 
     @Override
-    public ListInst collapseInst() {
-        // by default, return empty list of instructions. 
-        return new ListInst();
-        // expressions that can collapse will override this.
+    public CollapseResult<ListInst> collapseInst() {
+        // by default, return ourselves.
+        ListInst result = new ListInst();
+        result.add(this);
+        return new CollapseResult<ListInst>(result, false);
     }
 
 }

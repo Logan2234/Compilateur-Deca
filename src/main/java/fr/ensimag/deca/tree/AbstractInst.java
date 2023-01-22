@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -50,5 +51,5 @@ public abstract class AbstractInst extends Tree {
      * It collapse to a list of instructions, because if blocks can collapse to one of the branches for example.
      * @return
      */
-    public abstract ListInst collapseInst();
+    public abstract CollapseResult<ListInst> collapseInst();
 }

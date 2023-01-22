@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
@@ -63,13 +64,12 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
             i.verifyMethodBody(compiler, localEnv, currentClass);
     }
 
-    @Override
-    public boolean collapse() {
-        boolean result = false;
-        for(AbstractDeclMethod i : getList()) {
-            result |= i.collapse();
+    public CollapseResult<Null> collapseMethods() {
+        boolean somethingCollapsed = false;
+        for(AbstractDeclMethod m : getList()) {
+            somethingCollapsed |= m.collapseDeclMethod().couldCollapse();
         }
-        return result;
+        return new CollapseResult<Null>(null, somethingCollapsed);
     }
 
 }

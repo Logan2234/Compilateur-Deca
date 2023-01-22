@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -83,8 +84,7 @@ public class Main extends AbstractMain {
     }
 
     @Override
-    public boolean collapse() {
-        // if either one of the declaration or instructions collapsed, we collapsed
-        return declVariables.collapse() || insts.collapse();
+    public CollapseResult<Null> collapseMain() {
+        return new CollapseResult<Null>(null, declVariables.collapseDeclVars().couldCollapse() || insts.collapseInsts().couldCollapse());
     }
 }

@@ -3,6 +3,8 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.OpOverflowErr;
 import fr.ensimag.deca.context.IntType;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
@@ -35,49 +37,18 @@ public class Plus extends AbstractOpArith {
     }
 
     @Override
-    public boolean collapse() {
-        return getLeftOperand().collapse() || getRightOperand().collapse();
+    public CollapseResult<CollapseValue> collapseBinExpr() {
+        CollapseResult<CollapseValue> leftResult = getLeftOperand().collapseExpr();
+        CollapseResult<CollapseValue> rightResult = getRightOperand().collapseExpr();
+        if(getType().isFloat() && leftResult.getResult().isFloat() && rightResult.getResult().isFloat()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asFloat() + rightResult.getResult().asFloat()), true);
+        }
+        else if(getType().isInt() && leftResult.getResult().isInt() && rightResult.getResult().isInt()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asInt() + rightResult.getResult().asInt()), true);
+        }
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), leftResult.couldCollapse() || rightResult.couldCollapse());
+        }
     }
-
-    @Override
-    public Float collapseFloat() {
-        Float rightCollapsedValue = getRightOperand().collapseFloat();
-        if(rightCollapsedValue != null && getRightOperand().collapsable()) {
-            FloatLiteral newFloat = new FloatLiteral(rightCollapsedValue);
-            newFloat.setType(getType());
-            setRightOperand(newFloat);
-        }
-        Float leftCollapsedValue = getLeftOperand().collapseFloat();
-        if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
-            FloatLiteral newFloat = new FloatLiteral(leftCollapsedValue);
-            newFloat.setType(getType());
-            setLeftOperand(newFloat);
-        }
-        if(rightCollapsedValue != null && leftCollapsedValue != null) {
-            return rightCollapsedValue + leftCollapsedValue;
-        }
-        return null;
-    }
-
-    @Override
-    public Integer collapseInt() {
-        Integer rightCollapsedValue = getRightOperand().collapseInt();
-        if(rightCollapsedValue != null && getRightOperand().collapsable()) {
-            IntLiteral newInt = new IntLiteral(rightCollapsedValue);
-            newInt.setType(getType());
-            setRightOperand(newInt);
-        }
-        Integer leftCollapsedValue = getLeftOperand().collapseInt();
-        if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
-            IntLiteral newInt = new IntLiteral(leftCollapsedValue);
-            newInt.setType(getType());
-            setLeftOperand(newInt);
-        }
-        if(rightCollapsedValue != null && leftCollapsedValue != null) {
-            return rightCollapsedValue + leftCollapsedValue;
-        }
-        return null;
-    }
-
 
 }
