@@ -7,6 +7,7 @@ import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -22,6 +23,7 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -156,5 +158,15 @@ public class MethodCall extends AbstractExpr {
     @Override
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         foundMethodCalls.add(this);
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        // TODO substitute only if expressions of param are atomic
+        // selection, and method call are not
+        if (!inlineMethods.containsKey(this.meth.getMethodDefinition())) {
+            this.params = (ListExpr)this.params.doSubstituteInlineMethods(inlineMethods);
+            return this;
+        }
     }
 }

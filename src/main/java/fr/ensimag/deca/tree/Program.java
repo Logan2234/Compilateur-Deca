@@ -20,8 +20,6 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -306,19 +304,31 @@ public class Program extends AbstractProgram {
      * Optimize the program tree with the substitution of inline methods
      */
     private void substituteInlineMethods() {
-        Map<MethodDefinition, DeclMethod> inlineMethods = this.spotInlineMethods();
+        Map<MethodDefinition, DeclMethod> inlineMethods = this.spotInlineMethodsFromProg();
         // this phase should come after the spotting of used methods
         // we need to know if a method is overrided
         // if it is, the program could call dynamically the overriding method (which could is not 
         // necessarily inline) instead of the statically subsituted inline method
         assert(this.methodsUsed != null);
         this.removeOverridedInlineMethods(inlineMethods);
+        this.doSubstituteInlineMethods(inlineMethods);
     }
 
-    private Map<MethodDefinition, DeclMethod> spotInlineMethods() {
+    /**
+     * Create an hasmap of inline methods and fill it by calling recursively spotInlineMethods
+     * @return hasmap of inline methods
+     */
+    private Map<MethodDefinition, DeclMethod> spotInlineMethodsFromProg() {
         Map<MethodDefinition, DeclMethod> inlineMethods = new HashMap<MethodDefinition, DeclMethod>();
         this.classes.spotInlineMethods(inlineMethods);
         return inlineMethods;
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.main = (Main)this.main.doSubstituteInlineMethods(inlineMethods);
+        this.classes = (ListDeclClass)this.classes.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 
     /**

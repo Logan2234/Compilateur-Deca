@@ -5,6 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
@@ -16,6 +17,7 @@ import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.text.html.HTMLDocument.Iterator;
 
@@ -151,5 +153,12 @@ public class While extends AbstractInst {
         ListInst result = new ListInst();
         result.add(this);
         return result;
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.condition = (AbstractExpr)this.condition.doSubstituteInlineMethods(inlineMethods);
+        this. body = (ListInst)this.body.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

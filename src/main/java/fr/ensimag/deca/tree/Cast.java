@@ -5,11 +5,13 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -104,5 +106,11 @@ public class Cast extends AbstractExpr {
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
         this.expression.addUnremovableExpr(foundMethodCalls);
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.expression = (AbstractExpr)this.expression.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

@@ -368,4 +368,11 @@ public abstract class Tree {
     protected void spotInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         // do nothing by default
     }
+
+    /**
+     * Browse recursively the tree for inline methods spotted previously and substitute them
+     * @param inlineMethods map of the inline methods spotted
+     * @return Tree used to give the calling method the substitution of the method
+     */
+    protected abstract Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods);
 }

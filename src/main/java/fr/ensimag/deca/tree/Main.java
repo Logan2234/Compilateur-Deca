@@ -4,8 +4,11 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
@@ -92,5 +95,12 @@ public class Main extends AbstractMain {
     public boolean collapse() {
         // if either one of the declaration or instructions collapsed, we collapsed
         return declVariables.collapse() || insts.collapse();
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.declVariables = (ListDeclVar)this.declVariables.doSubstituteInlineMethods(inlineMethods);
+        this.insts = (ListInst)this.insts.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

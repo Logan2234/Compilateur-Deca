@@ -224,4 +224,10 @@ public class DeclMethod extends AbstractDeclMethod {
             inlineMethods.put(this.methodName.getMethodDefinition(),this);
         }
     }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.body = (AbstractMethod)this.body.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
 }

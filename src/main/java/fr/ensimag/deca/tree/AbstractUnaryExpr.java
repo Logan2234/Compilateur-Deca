@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
@@ -10,6 +11,7 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -104,6 +106,12 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     @Override
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         this.operand.addUnremovableExpr(foundMethodCalls);
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.operand = (AbstractExpr)this.operand.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 
 }

@@ -222,4 +222,11 @@ public class DeclClass extends AbstractDeclClass {
         }
     }
 
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.fields = (ListDeclField)this.fields.doSubstituteInlineMethods(inlineMethods);
+        this.methods = (ListDeclMethod)this.methods.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
 }
