@@ -73,7 +73,8 @@ public class Modulo extends AbstractOpArith {
             setLeftOperand(newInt);
         }
         if(rightCollapsedValue != null && leftCollapsedValue != null) {
-            return rightCollapsedValue % leftCollapsedValue;
+            System.out.println(rightCollapsedValue + " " + leftCollapsedValue);
+            return leftCollapsedValue % rightCollapsedValue;
         }
         return null;
     }

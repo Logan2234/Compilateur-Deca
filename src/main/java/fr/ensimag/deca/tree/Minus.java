@@ -54,7 +54,7 @@ public class Minus extends AbstractOpArith {
             setLeftOperand(newFloat);
         }
         if(rightCollapsedValue != null && leftCollapsedValue != null) {
-            return rightCollapsedValue - leftCollapsedValue;
+            return leftCollapsedValue - rightCollapsedValue;
         }
         return null;
     }
@@ -74,7 +74,7 @@ public class Minus extends AbstractOpArith {
             setLeftOperand(newInt);
         }
         if(rightCollapsedValue != null && leftCollapsedValue != null) {
-            return rightCollapsedValue - leftCollapsedValue;
+            return leftCollapsedValue - rightCollapsedValue;
         }
         return null;
     }

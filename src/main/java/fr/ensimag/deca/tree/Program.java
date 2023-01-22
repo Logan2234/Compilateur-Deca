@@ -197,8 +197,8 @@ public class Program extends AbstractProgram {
             optimized = false;
             // solve compile time known cases.
             // TODO
-            //optimized = this.collapse() || optimized;
-            optimized = this.removeUnusedVar() || optimized;
+            optimized = this.collapse() || optimized;
+            // optimized = this.removeUnusedVar() || optimized;
         }
     }
 

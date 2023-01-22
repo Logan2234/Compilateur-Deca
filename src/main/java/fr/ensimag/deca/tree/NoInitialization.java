@@ -89,7 +89,6 @@ public class NoInitialization extends AbstractInitialization {
     
     @Override
     public boolean collapse() {
-        // TODO
         return false;
     }
 
