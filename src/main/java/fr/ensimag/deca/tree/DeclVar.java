@@ -9,7 +9,11 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
+import java.util.HashMap;
+
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.RegisterOffset;
@@ -103,7 +107,7 @@ public class DeclVar extends AbstractDeclVar {
 
             if (expr.isNew()){
                 if (defMethod){declaredClassesInMethod.put(varName.getName(), varModels.get(((New) expr).getClasse().getName()));}
-                else declaredClasses.put(varName.getName(), varModels.get(((New) expr).getClasse().getName()));
+                else declaredClasses.put(varName.getName(), (HashMap<Symbol,AbstractExpr>) (varModels.get(((New) expr).getClasse().getName()).clone()));
                 return false;
             }
 

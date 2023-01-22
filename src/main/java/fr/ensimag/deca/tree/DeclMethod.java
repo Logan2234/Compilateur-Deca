@@ -139,7 +139,7 @@ public class DeclMethod extends AbstractDeclMethod {
         paramMethod.clear(); 
         declaredClassesInMethod.clear();
         for (Symbol field : declaredClasses.keySet()){
-            declaredClassesInMethod.put(field, declaredClasses.get(field));
+            declaredClassesInMethod.put(field, (HashMap<Symbol, AbstractExpr>) declaredClasses.get(field).clone());
         }
         for (AbstractDeclParam param : params.getList()) {
             paramMethod.add(((DeclParam) param).getSymbolFromParamName());
