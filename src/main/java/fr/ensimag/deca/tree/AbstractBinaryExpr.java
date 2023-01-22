@@ -143,69 +143,35 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
     @Override
     public boolean irrelevant() {
-        if (defClass){
-
-            HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
-
-            boolean irrelevantRight = false;
-            if (getRightOperand().isSelection()){
-                AbstractExpr out = ((Selection) getRightOperand()).returnIrrelevantFromSelection();
-                if (out != null) {
-                    setRightOperand(out);
-                }
-                if (getRightOperand().isSelection()) irrelevantRight = ((Selection) getRightOperand()).isKnown();
+        boolean irrelevantRight = false;
+        if (getRightOperand().isSelection()){
+            AbstractExpr out = ((Selection) getRightOperand()).returnIrrelevantFromSelection();
+            if (out != null) {
+                setRightOperand(out);
             }
-            else if (getRightOperand().irrelevant() && actualDico.containsKey(((Identifier) getRightOperand()).getName())) {    
-                rightOperand = actualDico.get(((Identifier) getRightOperand()).getName());
-                irrelevantRight = (getRightOperand().irrelevant() && actualDico.containsKey(((Identifier) getRightOperand()).getName()));
-            }
-
-            boolean irrelevantLeft = false;
-            if (getLeftOperand().isSelection()){
-                AbstractExpr out = ((Selection) getLeftOperand()).returnIrrelevantFromSelection();
-                if (out != null) {
-                    setLeftOperand(out);
-                }
-                if (getLeftOperand().isSelection()) irrelevantLeft = ((Selection) getLeftOperand()).isKnown();
-            }
-            else if (getLeftOperand().irrelevant() && actualDico.containsKey(((Identifier) getLeftOperand()).getName())) {
-                leftOperand = actualDico.get(((Identifier) getLeftOperand()).getName());
-                irrelevantLeft = (getLeftOperand().irrelevant() && actualDico.containsKey(((Identifier) getLeftOperand()).getName()));
-            }
-            varModels.put(actualClass, actualDico);
-            return irrelevantLeft || irrelevantRight || (!getLeftOperand().isSelection() && 
-            ((leftOperand.irrelevant() && actualDico.containsKey(((Identifier) getLeftOperand()).getName())) || (rightOperand.irrelevant() && actualDico.containsKey(((Identifier) getRightOperand()).getName()))));
-
-        } else { 
-            boolean irrelevantRight = false;
-            if (getRightOperand().isSelection()){
-                AbstractExpr out = ((Selection) getRightOperand()).returnIrrelevantFromSelection();
-                if (out != null) {
-                    setRightOperand(out);
-                }
-                if (getRightOperand().isSelection()) irrelevantRight = ((Selection) getRightOperand()).isKnown();
-            }
-            else if (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName())) {
-                rightOperand = currentValues.get(((Identifier) getRightOperand()).getName());
-                irrelevantRight = (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName()));
-            }
-
-            boolean irrelevantLeft = false;
-            if (getLeftOperand().isSelection()){
-                AbstractExpr out = ((Selection) getLeftOperand()).returnIrrelevantFromSelection();
-                if (out != null) {
-                    setLeftOperand(out);
-                }
-                if (getLeftOperand().isSelection()) irrelevantLeft = ((Selection) getLeftOperand()).isKnown();
-            }
-            else if (getLeftOperand().irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) {
-                leftOperand = currentValues.get(((Identifier) getLeftOperand()).getName());
-                irrelevantLeft = (getLeftOperand().irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName()));
-            }
-
-            return irrelevantLeft || irrelevantRight || (!getLeftOperand().isSelection() && 
-            ((leftOperand.irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) || (rightOperand.irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName()))));
+            if (getRightOperand().isSelection()) irrelevantRight = ((Selection) getRightOperand()).isKnown();
         }
+        else if (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName())) {
+            rightOperand = currentValues.get(((Identifier) getRightOperand()).getName());
+            irrelevantRight = (getRightOperand().irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName()));
+        }
+
+        boolean irrelevantLeft = false;
+        if (getLeftOperand().isSelection()){
+            AbstractExpr out = ((Selection) getLeftOperand()).returnIrrelevantFromSelection();
+            if (out != null) {
+                setLeftOperand(out);
+            }
+            if (getLeftOperand().isSelection()) irrelevantLeft = ((Selection) getLeftOperand()).isKnown();
+        }
+        else if (getLeftOperand().irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) {
+            leftOperand = currentValues.get(((Identifier) getLeftOperand()).getName());
+            irrelevantLeft = (getLeftOperand().irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName()));
+        }
+
+        return irrelevantLeft || irrelevantRight || (!getLeftOperand().isSelection() && 
+        ((leftOperand.irrelevant() && currentValues.containsKey(((Identifier) getLeftOperand()).getName())) || (rightOperand.irrelevant() && currentValues.containsKey(((Identifier) getRightOperand()).getName()))));
+        
     } 
 
     @Override
