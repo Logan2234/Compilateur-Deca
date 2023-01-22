@@ -12,7 +12,9 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -27,6 +29,12 @@ import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -215,4 +223,35 @@ public class DeclMethod extends AbstractDeclMethod {
         body.collapse();
         return false;
     }
+
+    @Override
+    protected void spotInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        if (this.body.isInline()) {
+            inlineMethods.put(this.methodName.getMethodDefinition(),this);
+        }
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.body = (AbstractMethod)this.body.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    /**
+     * Method used to substitute inline methods.
+     * It returns the expression of the body's Return (its only instruction) with the parameters subsituted
+     * @param list of input parameters
+     * @return expression with parameters of the method susbituted with input parameters
+     */
+    public AbstractExpr getSubsitution(ListExpr inputParams) {
+        Map<ParamDefinition,AbstractExpr> substitutionTable = new HashMap<ParamDefinition,AbstractExpr>();
+        Iterator<AbstractDeclParam> iterParam = this.params.getList().iterator();
+        Iterator<AbstractExpr> iterInputParam = inputParams.getList().iterator();
+        while (iterParam.hasNext() && iterInputParam.hasNext()) {
+            substitutionTable.put(((DeclParam)iterParam.next()).getName().getParamDefinition(), iterInputParam.next());
+        }
+        AbstractInst inst = ((MethodBody)this.body).getInsts().getList().get(0);
+        return ((Return)inst).getExpression().substitute(substitutionTable);
+    }
+
 }

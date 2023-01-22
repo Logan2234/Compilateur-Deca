@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -8,6 +9,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
@@ -80,4 +82,15 @@ public class MethodAsmBody extends AbstractMethod {
     public void setReturnsNames(String name) {
         // useless here ?
     }
+
+    @Override
+    public boolean isInline() {
+        return false;
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        return this;
+    }
+
 }

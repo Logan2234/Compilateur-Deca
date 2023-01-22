@@ -9,6 +9,8 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.NullOperand;
@@ -22,6 +24,7 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -34,7 +37,7 @@ import org.apache.commons.lang.Validate;
 public class Selection extends AbstractLValue {
 
     private AbstractExpr obj;
-    private final AbstractIdentifier field;
+    private AbstractIdentifier field;
 
     public Selection(AbstractExpr obj, AbstractIdentifier field) {
         Validate.notNull(obj);
@@ -151,4 +154,23 @@ public class Selection extends AbstractLValue {
         // the object could be obtained via a MethodCall
         this.obj.addUnremovableExpr(foundMethodCalls);
     }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.obj = (AbstractExpr)this.obj.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new Selection(this.obj.substitute(substitutionTable),(AbstractIdentifier)this.field.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.obj.containsField() || this.field.containsField();
+    }
+
 }

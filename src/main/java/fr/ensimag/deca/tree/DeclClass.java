@@ -17,6 +17,8 @@ import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -211,6 +213,20 @@ public class DeclClass extends AbstractDeclClass {
             method.codeGenMethod(compiler, name.getName().getName());
             compiler.endCodeContext();
         }
+    }
+
+    @Override
+    protected void spotInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        for (AbstractDeclMethod method : this.methods.getList()) {
+            method.spotInlineMethods(inlineMethods);
+        }
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.fields = (ListDeclField)this.fields.doSubstituteInlineMethods(inlineMethods);
+        this.methods = (ListDeclMethod)this.methods.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 
 }

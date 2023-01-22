@@ -2,20 +2,20 @@ class A extends Object {
 
 	int cos(int x){
 		return x;
-
 	}
+
 
 	boolean bool(){
 		return true;
-
 	}
+
 }
 
 {
 	int x = readInt();
 	A a = new A();
-	int y = a.cos(1);
-	int z = a.cos(5);
+	int y = (a.cos(1) + 1);
+	int z = (a.cos(5) + 5);
 	a.cos(3);
 	a.cos(3);
 	a.cos(3);

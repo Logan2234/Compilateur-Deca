@@ -29,4 +29,10 @@ public abstract class AbstractMethod extends Tree {
      * Set the name of the class + method for the returns to know the labels.
      */
     public abstract void setReturnsNames(String name);
+
+    /**
+     * Used to spot "inline" methods to substitute their body
+     * @return true if the function is inline
+     */
+    public abstract boolean isInline();
 }

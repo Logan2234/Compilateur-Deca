@@ -8,10 +8,13 @@
 //    cree le 20/01/2023
 //
 class A {
-    int cos(int x){return x;}
+    int y = 3;
+    int cos(int x){return 2*x+5-x;}
+    int sin(int x){return x+y;}
 }
 
 {
     A a = new A();
     print(a.cos(3));
+    print(a.sin(3));
 }

@@ -2,8 +2,10 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+import java.util.Map;
 
 /**
  * Empty main Deca program
@@ -58,6 +60,11 @@ public class EmptyMain extends AbstractMain {
     
     @Override
     protected Tree removeUnusedVar() {
+        return this;
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         return this;
     }
 }

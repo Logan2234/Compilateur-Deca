@@ -5,6 +5,8 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
@@ -24,6 +26,7 @@ import static org.mockito.ArgumentMatchers.nullable;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -149,5 +152,23 @@ public class InstanceOf extends AbstractExpr {
 
     public AbstractExpr getExpr() {
         return this.expression;
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.expression = (AbstractExpr)this.expression.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new InstanceOf(this.expression.substitute(substitutionTable),(AbstractIdentifier) this.type.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.expression.containsField() || this.type.containsField();
     }
 }

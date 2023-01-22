@@ -8,10 +8,10 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -137,5 +137,11 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     public boolean collapse() {
         return initialization.collapse();
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.initialization = (AbstractInitialization)this.initialization.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

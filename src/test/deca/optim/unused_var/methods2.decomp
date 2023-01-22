@@ -5,9 +5,9 @@ class B extends A {
 
 	void onlyKeepOverride(){
 	}
+
 }
 
 {
 	B b = new B();
-	b.onlyKeepOverride();
-}
+	b.onlyKeepOverride();}

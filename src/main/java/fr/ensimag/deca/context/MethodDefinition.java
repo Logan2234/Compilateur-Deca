@@ -37,14 +37,14 @@ public class MethodDefinition extends ExpDefinition {
         return index;
     }
 
-    private int index;
-
+    
     @Override
     public MethodDefinition asMethodDefinition(String errorMessage, Location l)
-            throws ContextualError {
+    throws ContextualError {
         return this;
     }
-
+    
+    private int index;
     private final Signature signature;
     private ClassDefinition containingClass;
     private Label label;
@@ -99,17 +99,41 @@ public class MethodDefinition extends ExpDefinition {
     }
 
     /**
-     * If the unspotted method is an override of a useful method, it may be dynamically useful.
-     * @return true if the method is an override of a used method
+     * If the method is an override of a method in the map.
+     * Method use to know if an unspotted method may be dynamically useful ormore generally if
+     * a method is an override of a method in a group of methods
+     * @return true if the method is an override of a method in the map
      */
-    public boolean isOverrideOfUsed(Map<ClassDefinition,Set<Integer>> exploredMethods) {
+    public boolean isOverridingAMethodInMap(Map<ClassDefinition,Set<Integer>> map) {
         boolean res = false;
         ClassDefinition superClass = this.containingClass.getSuperClass();
         while(superClass != null && !res && this.index<=superClass.getNumberOfMethods()) {
-            res = exploredMethods.get(superClass).contains(this.index);
+            res = map.get(superClass).contains(this.index);
             superClass = superClass.getSuperClass();
         }
         return res;
+    }
+
+        /**
+     * If the method is an override of a method in the map.
+     * Method use to know if an unspotted method may be dynamically useful ormore generally if
+     * a method is an override of a method in a group of methods.
+     * The map must have an entry for every class in the program (a Set for each map)
+     * @return true if the method is an override of a method in the map
+     */
+    public static ClassDefinition isOverridingAMethodInMap(Map<ClassDefinition,Set<Integer>> map, ClassDefinition containingClass, int index) {
+        boolean res = false;
+        ClassDefinition previousClass = containingClass;
+        ClassDefinition superClass = containingClass.getSuperClass();
+        while(superClass != null && !res && index<=superClass.getNumberOfMethods()) {
+            res = map.get(superClass).contains(index);
+            previousClass = superClass;
+            superClass = superClass.getSuperClass();
+        }
+        if (res) {
+            return previousClass;
+        }
+        return null;
     }
 
 }

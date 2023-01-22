@@ -7,6 +7,9 @@ import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -21,7 +24,10 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -156,5 +162,35 @@ public class MethodCall extends AbstractExpr {
     @Override
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         foundMethodCalls.add(this);
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.params = (ListExpr)this.params.doSubstituteInlineMethods(inlineMethods);
+        if (!inlineMethods.containsKey(this.meth.getMethodDefinition())) {
+            return this;
+        }
+        // An inline methode should not be susbtituted if it takes as a parameter a method call,
+        // an assign or a read because it may be duplicated.
+        if(this.params.getUnremovableExpr().isEmpty()) {
+            return inlineMethods.get(this.meth.getMethodDefinition()).getSubsitution(this.params);
+        }
+        return this;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        ListExpr listExpr = new ListExpr();
+        for(AbstractExpr expr : this.params.getList()) {
+            listExpr.add(expr.substitute(substitutionTable));
+        }
+        AbstractExpr res = new MethodCall(this.obj.substitute(substitutionTable),(AbstractIdentifier) this.meth.substitute(substitutionTable),listExpr);
+        res.setLocation(this.getLocation());
+        return res;
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.obj.containsField() || this.meth.containsField() || this.params.containsField();
     }
 }

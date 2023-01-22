@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
+
+import fr.ensimag.deca.context.MethodDefinition;
 
 /**
  *
@@ -127,6 +130,17 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
      */
     protected void removeAt(int at) {
         list.remove(at);
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        ListIterator<TreeType> iter = this.iterator();
+        while(iter.hasNext()) {
+            TreeType currentTree = iter.next();
+            iter.remove();
+            iter.add((TreeType) currentTree.doSubstituteInlineMethods(inlineMethods));
+        }
+        return this;
     }
 
 }

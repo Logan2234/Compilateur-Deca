@@ -20,8 +20,6 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,6 +53,7 @@ public class Program extends AbstractProgram {
     private ListDeclClass classes;
     private AbstractMain main;
     private boolean spotted;
+    private Map<ClassDefinition,Set<Integer>> methodsUsed;
 
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
@@ -165,6 +164,7 @@ public class Program extends AbstractProgram {
         //this.collapse();
         // remove useless variables
         this.optimUnusedVar(); 
+        this.substituteInlineMethods();
     }
 
     /**
@@ -234,7 +234,7 @@ public class Program extends AbstractProgram {
                 DeclMethod method = iter.next();
                 MethodDefinition methDef= method.getName().getMethodDefinition();
                 ClassDefinition containingClass = methDef.getContainingClass();
-                if (methDef.isUsed() || (containingClass.isUsed() && methDef.isOverrideOfUsed(exploredMethods))) {
+                if (methDef.isUsed() || (containingClass.isUsed() && methDef.isOverridingAMethodInMap(exploredMethods))) {
                     // if method used or (containing class used and override)
                     method.spotUsedVar();
                     varSpotted = true;
@@ -243,6 +243,7 @@ public class Program extends AbstractProgram {
                 }
             }
         }
+        this.methodsUsed = exploredMethods;
     }
 
     /**
@@ -297,5 +298,89 @@ public class Program extends AbstractProgram {
     @Override
     public boolean collapse() {
         return classes.collapse() || main.collapse();
+    }
+
+    /**
+     * Optimize the program tree with the substitution of inline methods
+     */
+    private void substituteInlineMethods() {
+        Map<MethodDefinition, DeclMethod> inlineMethods = this.spotInlineMethodsFromProg();
+        // this phase should come after the spotting of used methods
+        // we need to know if a method is overrided
+        // if it is, the program could call dynamically the overriding method (which could is not 
+        // necessarily inline) instead of the statically subsituted inline method
+        assert(this.methodsUsed != null);
+        this.removeOverridedInlineMethods(inlineMethods);
+        this.doSubstituteInlineMethods(inlineMethods);
+    }
+
+    /**
+     * Create an hasmap of inline methods and fill it by calling recursively spotInlineMethods
+     * @return hasmap of inline methods
+     */
+    private Map<MethodDefinition, DeclMethod> spotInlineMethodsFromProg() {
+        Map<MethodDefinition, DeclMethod> inlineMethods = new HashMap<MethodDefinition, DeclMethod>();
+        this.classes.spotInlineMethods(inlineMethods);
+        return inlineMethods;
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.main = (AbstractMain) this.main.doSubstituteInlineMethods(inlineMethods);
+        this.classes = (ListDeclClass)this.classes.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    /**
+     * remove from the given map the methods that are overrider by toher used methods 
+     * that are not inline (in the map)
+     * @param map of the inline methods spotted
+     */
+    private void removeOverridedInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        // reshape the map of methods to fit the param of isOverridingMethodInMap()
+        Map<ClassDefinition,Set<Integer>> inlineMethodsReshaped = new HashMap<ClassDefinition,Set<Integer>>();
+        // The map must have an entry for every class in the program (a Set for each map)
+        for (AbstractDeclClass c : this.classes.getList()) {
+            inlineMethodsReshaped.put(((DeclClass)c).getName().getClassDefinition(),new HashSet<Integer>());           
+        }
+        // add indexes of inline methods
+        for (MethodDefinition methDef : inlineMethods.keySet()) {
+            ClassDefinition containingClass = methDef.getContainingClass();
+            inlineMethodsReshaped.get(containingClass).add(methDef.getIndex());
+        }
+        inlineMethods.clear();
+
+        // remove from the inline methods map the methods we should not substitute for dynamic calling reasons
+        for (Map.Entry<ClassDefinition, Set<Integer>> entry : this.methodsUsed.entrySet()) {
+            ClassDefinition classDef = entry.getKey();
+            for (Integer index : entry.getValue()) {
+                if (inlineMethodsReshaped.containsKey(classDef)
+                && inlineMethodsReshaped.get(classDef).contains(index)) {
+                    // keep the method as it is inline
+                }
+                ClassDefinition classWithOverridedMethods = MethodDefinition.isOverridingAMethodInMap(inlineMethodsReshaped, classDef, index);
+                // a method may override multiple methods in the clas hierarchy
+                while (classWithOverridedMethods != null) {
+                    // The method is used, is not inline and is an override of an inline method.
+                    // It may be used dynamically instead of the method it overrides so we cannot
+                    // substitute the latter.
+                    assert(inlineMethodsReshaped.get(classDef).contains(index));
+                    inlineMethodsReshaped.get(classDef).remove(index);
+                    classWithOverridedMethods = MethodDefinition.isOverridingAMethodInMap(inlineMethodsReshaped, classWithOverridedMethods, index);
+                }
+            }
+        }
+
+        // rebuild the map without the methods overrided by a non-inline method
+        for (AbstractDeclClass c : this.classes.getList()) {
+            ClassDefinition classDef = ((DeclClass)c).getName().getClassDefinition();
+            for (AbstractDeclMethod method : ((DeclClass)c).getMethods().getList()) {
+                MethodDefinition methDef = ((DeclMethod)method).getName().getMethodDefinition();
+                int index = methDef.getIndex();
+                if (inlineMethodsReshaped.get(classDef).contains(index)) {
+                    inlineMethods.put(methDef,(DeclMethod)method);
+                }
+            }
+        }
     }
 }

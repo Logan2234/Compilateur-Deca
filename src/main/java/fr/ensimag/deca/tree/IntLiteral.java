@@ -5,6 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
@@ -14,6 +15,7 @@ import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Integer literal
@@ -102,6 +104,18 @@ public class IntLiteral extends AbstractExpr {
 
     @Override
     public boolean collapsable() {
+        return false;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new IntLiteral(this.value);
+        res.setLocation(this.getLocation());
+        return res;
+    }
+
+    @Override
+    protected boolean containsField() {
         return false;
     }
 }
