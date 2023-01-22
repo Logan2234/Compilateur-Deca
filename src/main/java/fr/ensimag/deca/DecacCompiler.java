@@ -427,7 +427,7 @@ public class DecacCompiler {
                 LOG.info("Output file assembly file is: " + destName);
             }
             if(compilerOptions.getOptimize()) {
-                // AssemblyOptimizer.Optimize(program);
+                AssemblyOptimizer.Optimize(program);
             }
 
             if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {

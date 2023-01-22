@@ -2,11 +2,9 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.OpOverflowErr;
-import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
-import fr.ensimag.ima.pseudocode.instructions.INT;
 import fr.ensimag.ima.pseudocode.instructions.MUL;
 
 /**
@@ -26,13 +24,24 @@ public class Multiply extends AbstractOpArith {
     @Override
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dVal) {
         // mult
-        compiler.addInstruction(new MUL(dVal, register));
+        // we can set it to be replaced with a shift after compilation.
+        MUL mulInst = new MUL(dVal, register);
+        if(shiftReplacable) {
+            mulInst.setShiftReplacable();
+        }
+        compiler.addInstruction(mulInst);
         // check overflow
         if (getType().isFloat() && compiler.getCompilerOptions().getRunTestChecks()) {
             OpOverflowErr error = new OpOverflowErr();
             compiler.useRuntimeError(error);
             compiler.addInstruction(new BOV(error.getErrorLabel()));
         }
+    }
+
+    private boolean shiftReplacable = false;
+
+    public void setShiftReplacable() {
+        shiftReplacable = true;
     }
 
     public boolean factorised(DecacCompiler compiler) {
