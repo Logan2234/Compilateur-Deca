@@ -114,6 +114,13 @@ public class Assign extends AbstractBinaryExpr {
     @Override
     public boolean irrelevant(){
         
+        if (inWhile){
+            if (getLeftOperand().isSelection()){
+                ((Selection) getLeftOperand()).erraseIrrelevant();
+            } else {
+                if (currentValues.containsKey(getLeftOperand().getName())) currentValues.remove(getLeftOperand().getName());
+            }
+        }
 
         if (getRightOperand().isSelection()){
             AbstractExpr out = ((Selection) getRightOperand()).returnIrrelevantFromSelection();

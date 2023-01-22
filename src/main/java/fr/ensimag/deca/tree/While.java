@@ -132,17 +132,25 @@ public class While extends AbstractInst {
     @Override
     public boolean irrelevant() {
         
-        if (condition.irrelevant() || condition.isSelection()){
-            if (condition.isSelection()){
-                AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection();
-                if (out != null) {
-                    condition = out;
-                }
-            }
-            else {
-                condition = currentValues.get(((Identifier) condition).getName());
-            }
+        // if (condition.irrelevant() || condition.isSelection()){
+        //     if (condition.isSelection()){
+        //         AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection();
+        //         if (out != null) {
+        //             condition = out;
+        //         }
+        //     }
+        //     else {
+        //         condition = currentValues.get(((Identifier) condition).getName());
+        //     }
+        // }
+        // return condition.irrelevant() || body.irrelevant();
+        if (inWhile){
+            body.irrelevant();
+        } else {
+            inWhile = true;
+            body.irrelevant();
+            inWhile = false;
         }
-        return condition.irrelevant() || body.irrelevant();
+        return false; //todo REVOIR
     }
 }

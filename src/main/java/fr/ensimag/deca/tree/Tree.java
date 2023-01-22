@@ -309,6 +309,12 @@ public abstract class Tree {
      */
     public static Symbol actualClass;
 
+
+    /**
+     * Tells if we are in a while loop
+     */
+    public static boolean inWhile = false;
+
     /**
      * Dictionary of the current values of the variables in the Main program
      */

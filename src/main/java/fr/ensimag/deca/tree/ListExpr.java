@@ -51,8 +51,10 @@ public class ListExpr extends TreeList<AbstractExpr> {
                     } 
                 }
                 else {
-                    result |= true;
-                    set(i, currentValues.get(((Identifier) expr).getName()));
+                    if (currentValues.containsKey(((Identifier) expr).getName())){
+                        result |= true;
+                        set(i, currentValues.get(((Identifier) expr).getName()));
+                    }
                 }
             }
         }
