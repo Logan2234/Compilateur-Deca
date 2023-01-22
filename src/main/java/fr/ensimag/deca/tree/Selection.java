@@ -120,7 +120,11 @@ public class Selection extends AbstractLValue {
         else {
             if (obj.isThis()){
                 return currentValues.get(field.getName());
-            } else return declaredClasses.get(((Identifier) obj).getName()).get(field.getName());
+            } else {
+                if (!obj.isSelection())
+                    return declaredClasses.get(((Identifier) obj).getName()).get(field.getName());
+                else return null;
+            }
         }
     }
 
