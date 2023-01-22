@@ -83,4 +83,9 @@ public class StringLiteral extends AbstractStringLiteral {
         return res;
     }
 
+    @Override
+    protected boolean containsField() {
+        return false;
+    }
+
 }

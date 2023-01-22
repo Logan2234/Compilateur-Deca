@@ -2,13 +2,13 @@ class A extends Object {
 
 	int cos(int x){
 		return x;
-
 	}
+
 
 	boolean bool(){
 		return true;
-
 	}
+
 }
 
 {
@@ -19,5 +19,4 @@ class A extends Object {
 	3;
 	3;
 	3;
-	(false || true);
-}
+	(false || true);}

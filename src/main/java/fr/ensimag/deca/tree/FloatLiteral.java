@@ -120,4 +120,9 @@ public class FloatLiteral extends AbstractExpr {
         res.setLocation(this.getLocation());
         return res;
     }
+
+    @Override
+    protected boolean containsField() {
+        return false;
+    }
 }

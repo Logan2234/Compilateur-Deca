@@ -115,4 +115,9 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         return this;
     }
 
+    @Override
+    protected boolean containsField() {
+        return this.operand.containsField();
+    }
+
 }

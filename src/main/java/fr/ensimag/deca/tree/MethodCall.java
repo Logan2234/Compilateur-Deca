@@ -166,13 +166,13 @@ public class MethodCall extends AbstractExpr {
 
     @Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
-        // TODO substitute only if expressions of param are atomic
-        // selection, and method call are not
         this.params = (ListExpr)this.params.doSubstituteInlineMethods(inlineMethods);
         if (!inlineMethods.containsKey(this.meth.getMethodDefinition())) {
             return this;
         }
-        if(true){//this.params.isAtomic()) { // TODO see with other techniques of optim if factorisable ?
+        // An inline methode should not be susbtituted if it takes as a parameter a method call,
+        // an assign or a read because it may be duplicated.
+        if(this.params.getUnremovableExpr().isEmpty()) {
             return inlineMethods.get(this.meth.getMethodDefinition()).getSubsitution(this.params);
         }
         return this;
@@ -187,5 +187,10 @@ public class MethodCall extends AbstractExpr {
         AbstractExpr res = new MethodCall(this.obj.substitute(substitutionTable),(AbstractIdentifier) this.meth.substitute(substitutionTable),listExpr);
         res.setLocation(this.getLocation());
         return res;
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.obj.containsField() || this.meth.containsField() || this.params.containsField();
     }
 }

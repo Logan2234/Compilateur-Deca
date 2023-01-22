@@ -8,5 +8,4 @@ class B extends A {
 
 {
 	A b = new B();
-	print(b.x);
-}
+	print(b.x);}

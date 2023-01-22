@@ -359,5 +359,10 @@ public class Identifier extends AbstractIdentifier {
         }
         return substitutionTable.get(this.definition);
     }
+
+    @Override
+    protected boolean containsField() {
+        return this.getDefinition().isField();
+    }
     
 }

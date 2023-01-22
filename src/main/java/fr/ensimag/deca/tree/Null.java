@@ -87,4 +87,9 @@ public class Null extends AbstractExpr {
         return res;
     }
 
+    @Override
+    protected boolean containsField() {
+        return false;
+    }
+
 }

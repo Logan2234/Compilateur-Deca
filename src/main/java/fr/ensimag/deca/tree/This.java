@@ -97,4 +97,9 @@ public class This extends AbstractExpr {
         return res;
     }
 
+    @Override
+    protected boolean containsField() {
+        return false;
+    }
+
 }

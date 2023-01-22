@@ -136,4 +136,9 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         return this;
     }
 
+    @Override
+    protected boolean containsField() {
+        return this.leftOperand.containsField() || this.rightOperand.containsField();
+    }
+
 }

@@ -167,4 +167,10 @@ public class Selection extends AbstractLValue {
         res.setLocation(this.getLocation());
         return res;
     }
+
+    @Override
+    protected boolean containsField() {
+        return this.obj.containsField() || this.field.containsField();
+    }
+
 }

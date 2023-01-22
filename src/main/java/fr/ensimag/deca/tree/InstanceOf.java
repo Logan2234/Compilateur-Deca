@@ -166,4 +166,9 @@ public class InstanceOf extends AbstractExpr {
         res.setLocation(this.getLocation());
         return res;
     }
+
+    @Override
+    protected boolean containsField() {
+        return this.expression.containsField() || this.type.containsField();
+    }
 }

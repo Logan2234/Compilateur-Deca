@@ -63,5 +63,10 @@ public abstract class AbstractReadExpr extends AbstractExpr {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         return this;
     }
+
+    @Override
+    protected boolean containsField() {
+        return false;
+    }
     
 }

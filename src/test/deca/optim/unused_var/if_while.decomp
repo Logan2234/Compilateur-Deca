@@ -1,8 +1,6 @@
 {
 	if (true){
-		print("Error");
-	} else {
+		print("Error");} else {
 	}
 	while (((true && false) && (readInt() == 1))) {
-	}
-}
+	}}

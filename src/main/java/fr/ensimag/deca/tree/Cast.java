@@ -121,4 +121,9 @@ public class Cast extends AbstractExpr {
         res.setLocation(this.getLocation());
         return res;
     }
+
+    @Override
+    protected boolean containsField() {
+        return this.type.containsField() || this.expression.containsField();
+    }
 }
