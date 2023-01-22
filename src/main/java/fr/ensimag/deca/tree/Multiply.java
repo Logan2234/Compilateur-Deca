@@ -57,6 +57,7 @@ public class Multiply extends AbstractOpArith {
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new Multiply(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

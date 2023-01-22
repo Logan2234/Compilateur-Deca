@@ -192,6 +192,7 @@ public class MethodCall extends AbstractExpr {
             listExpr.add(expr.substitute(substitutionTable));
         }
         AbstractExpr res = new MethodCall(this.obj.substitute(substitutionTable),(AbstractIdentifier) this.meth.substitute(substitutionTable),listExpr);
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

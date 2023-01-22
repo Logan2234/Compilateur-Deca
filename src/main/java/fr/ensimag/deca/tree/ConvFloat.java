@@ -54,6 +54,7 @@ public class ConvFloat extends AbstractUnaryExpr {
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new ConvFloat(this.operand.substitute(substitutionTable));
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

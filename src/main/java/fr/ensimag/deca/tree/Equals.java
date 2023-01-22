@@ -57,6 +57,7 @@ public class Equals extends AbstractOpExactCmp {
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new Equals(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

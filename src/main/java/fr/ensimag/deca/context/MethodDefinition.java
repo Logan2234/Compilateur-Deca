@@ -125,7 +125,8 @@ public class MethodDefinition extends ExpDefinition {
         boolean res = false;
         ClassDefinition previousClass = containingClass;
         ClassDefinition superClass = containingClass.getSuperClass();
-        while(superClass != null && !res && index<=superClass.getNumberOfMethods()) {
+        if (superClass == null) return null;
+        while(superClass.getSuperClass() != null && !res && index<=superClass.getNumberOfMethods()) {
             res = map.get(superClass).contains(index);
             previousClass = superClass;
             superClass = superClass.getSuperClass();

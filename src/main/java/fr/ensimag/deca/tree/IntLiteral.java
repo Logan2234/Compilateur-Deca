@@ -106,6 +106,7 @@ public class IntLiteral extends AbstractExpr {
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new IntLiteral(this.value);
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

@@ -170,6 +170,7 @@ public class InstanceOf extends AbstractExpr {
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new InstanceOf(this.expression.substitute(substitutionTable),(AbstractIdentifier) this.type.substitute(substitutionTable));
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

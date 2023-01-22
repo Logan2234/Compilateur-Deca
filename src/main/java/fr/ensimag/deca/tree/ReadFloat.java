@@ -49,6 +49,7 @@ public class ReadFloat extends AbstractReadExpr {
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new ReadFloat();
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

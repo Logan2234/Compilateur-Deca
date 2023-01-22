@@ -100,6 +100,7 @@ public class This extends AbstractExpr {
     
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new This(this.implicit);
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

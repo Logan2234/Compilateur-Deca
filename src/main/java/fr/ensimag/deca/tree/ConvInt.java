@@ -53,6 +53,7 @@ public class ConvInt extends AbstractUnaryExpr {
     
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new ConvInt(this.operand.substitute(substitutionTable));
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

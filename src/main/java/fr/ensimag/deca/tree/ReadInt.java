@@ -49,6 +49,7 @@ public class ReadInt extends AbstractReadExpr {
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new ReadInt();
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

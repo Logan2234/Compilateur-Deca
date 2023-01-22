@@ -96,6 +96,7 @@ public class BooleanLiteral extends AbstractExpr {
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new BooleanLiteral(this.value);
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }

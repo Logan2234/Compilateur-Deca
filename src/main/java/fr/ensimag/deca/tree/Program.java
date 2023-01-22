@@ -161,13 +161,15 @@ public class Program extends AbstractProgram {
     @Override
     public void optimizeTree() {
         boolean optimized = true;
-        while(optimized) {
+        int i = 0;
+        while(optimized && i<10) {
             optimized = false;
             // solve compile time known cases.
             optimized |= collapseProgram().couldCollapse();
             // remove useless variables
             this.optimUnusedVar(); 
             this.substituteInlineMethods();
+            i++;
         }
     }
 

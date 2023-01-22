@@ -181,8 +181,10 @@ public class DeclClass extends AbstractDeclClass {
                     writtenMethods[methodIndex] = true;
                     RegisterOffset methodAddr = new RegisterOffset(compiler.readNextStackSpace().getOffset() + methodIndex, Register.GB);
                     method.setDAddr(methodAddr);
-                    compiler.addInstruction(new LOAD(new LabelOperand(new Label("code." + currentClass.getType().getName().getName() + "." + method.getName())), Register.R0));
-                    compiler.addInstruction(new STORE(Register.R0, methodAddr));
+                    if (method.isUsed()) {
+                        compiler.addInstruction(new LOAD(new LabelOperand(new Label("code." + currentClass.getType().getName().getName() + "." + method.getName())), Register.R0));
+                        compiler.addInstruction(new STORE(Register.R0, methodAddr));
+                    }
                 }
             }
             currentClass = currentClass.getSuperClass();

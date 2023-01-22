@@ -85,6 +85,7 @@ public class Null extends AbstractExpr {
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new Null();
+        res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
     }
