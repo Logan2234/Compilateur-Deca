@@ -10,6 +10,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.NullOperand;
@@ -36,7 +37,7 @@ import org.apache.commons.lang.Validate;
 public class Selection extends AbstractLValue {
 
     private AbstractExpr obj;
-    private final AbstractIdentifier field;
+    private AbstractIdentifier field;
 
     public Selection(AbstractExpr obj, AbstractIdentifier field) {
         Validate.notNull(obj);
@@ -157,6 +158,12 @@ public class Selection extends AbstractLValue {
     @Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         this.obj = (AbstractExpr)this.obj.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        this.obj = this.obj.substitute(substitutionTable);
         return this;
     }
 }

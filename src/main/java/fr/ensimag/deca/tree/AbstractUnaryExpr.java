@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
@@ -27,7 +28,7 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         return operand;
     }
 
-    private AbstractExpr operand;
+    protected AbstractExpr operand;
 
     public AbstractUnaryExpr(AbstractExpr operand) {
         Validate.notNull(operand);
@@ -111,6 +112,12 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     @Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         this.operand = (AbstractExpr)this.operand.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        this.operand = this.operand.substitute(substitutionTable);
         return this;
     }
 

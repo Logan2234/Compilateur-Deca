@@ -6,6 +6,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Register;
@@ -265,4 +266,6 @@ public abstract class AbstractExpr extends AbstractInst {
         return this;
     }
 
+    protected abstract AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable);
+    
 }

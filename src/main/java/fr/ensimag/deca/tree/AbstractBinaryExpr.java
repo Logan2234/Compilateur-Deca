@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -132,6 +133,13 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         this.leftOperand = (AbstractExpr)this.leftOperand.doSubstituteInlineMethods(inlineMethods);
         this.rightOperand = (AbstractExpr)this.rightOperand.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        this.leftOperand = this.leftOperand.substitute(substitutionTable);
+        this.rightOperand = this.rightOperand.substitute(substitutionTable);
         return this;
     }
 }

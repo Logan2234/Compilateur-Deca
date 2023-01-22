@@ -31,6 +31,7 @@ import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -350,4 +351,13 @@ public class Identifier extends AbstractIdentifier {
     protected Boolean isIdentifier() {
         return true;
     }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        if (!substitutionTable.containsKey(this.definition)) {
+            return this;
+        }
+        return substitutionTable.get(this.definition);
+    }
+    
 }
