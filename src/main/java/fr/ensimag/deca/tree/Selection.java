@@ -106,6 +106,10 @@ public class Selection extends AbstractLValue {
         return true;
     }
 
+    /**
+     * Return the value of the selection for otpimization. WARNING : Multiple Selection not supported
+     * @return the expression value for the selection
+     */
     public AbstractExpr returnIrrelevantFromSelection(){
         if (defClass) {
             if (obj.isThis()){
@@ -128,18 +132,29 @@ public class Selection extends AbstractLValue {
         }
     }
 
+    /**
+     * Function allowing to change a value of an external class
+     * @param e : The expression to set
+     */
     public void putIrrelevantFromSelection(AbstractExpr e){
         HashMap<Symbol, AbstractExpr> dico = declaredClasses.get(((Identifier) obj).getName());
         dico.put(field.getName(), e);
         declaredClasses.put(((Identifier) obj).getName(), dico);
     }
 
+    /**
+     * Same as putIrrelevantFromSelection but for methods
+     * @param e : The expression to set
+     */
     public void putIrrelevantFromSelectionInMethod(AbstractExpr e){
         HashMap<Symbol, AbstractExpr> dico = declaredClassesInMethod.get(((Identifier) obj).getName());
         dico.put(field.getName(), e);
         declaredClassesInMethod.put(((Identifier) obj).getName(), dico);
     }
 
+    /**
+     * Function allowing to errase a field of a known variables for optimization
+     */
     public void erraseIrrelevantFromSelection(){
         HashMap<Symbol, AbstractExpr> dico = declaredClasses.get(((Identifier) obj).getName());
         if (dico.containsKey(field.getName())) {
@@ -148,6 +163,9 @@ public class Selection extends AbstractLValue {
         }
     }
 
+    /**
+     * Same as erraseIrrelevantFromSelection but for methods
+     */
     public void erraseIrrelevantFromSelectionInMethod(){
         HashMap<Symbol, AbstractExpr> dico = declaredClassesInMethod.get(((Identifier) obj).getName());
         if (dico.containsKey(field.getName())) {
@@ -156,14 +174,25 @@ public class Selection extends AbstractLValue {
         }
     }
 
+    /**
+     * Calls erraseIrrelevantFromSelection or erraseIrrelevantFromSelectionInMethod depending on the context
+     */
     public void erraseIrrelevant(){
         if (defMethod) erraseIrrelevantFromSelectionInMethod(); else erraseIrrelevantFromSelection();
     }
 
+    /**
+     * Calls putIrrelevantFromSelection or putIrrelevantFromSelectionInMethod depending on the context
+     * @param e : The expression to set
+     */
     public void putIrrelevant(AbstractExpr e){
         if (defMethod) putIrrelevantFromSelectionInMethod(e); else putIrrelevantFromSelection(e);
     }
 
+    /**
+     * Function allowing to know if a selection is known or not
+     * @return if selection is known
+     */
     public boolean isKnown(){
         if (defClass) {
             if (obj.isThis()){
