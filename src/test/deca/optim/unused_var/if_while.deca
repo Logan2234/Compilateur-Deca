@@ -7,8 +7,13 @@
 // Historique:
 //    cree le 20/01/2023
 //
+class A {
+    int cos(){return 2;}
+}
+
 {
     boolean x;
+    A a = new A();
 
     // removed
     if (true) {}
@@ -27,6 +32,6 @@
     }
 
     // keep the whole loop
-    while ((x=true) && false && (readInt()==1)) {
+    while ((x=true) && false && (a.cos()==1)) {
     }
 }

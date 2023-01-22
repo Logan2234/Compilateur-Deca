@@ -14,8 +14,6 @@ class A {
 
 {
     boolean b;
-    // should remove "60" only
-    int x = 60 + readInt();
     A a = new A();
     // should remove the delcarations and add a.cos(1)) and a.cos(5) as instructions
     int y = a.cos(1) + 1;
