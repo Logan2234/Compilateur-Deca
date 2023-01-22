@@ -1,7 +1,10 @@
 package fr.ensimag.deca.tree;
 
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.OpOverflowErr;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
@@ -77,6 +80,13 @@ public class Minus extends AbstractOpArith {
             return rightCollapsedValue - leftCollapsedValue;
         }
         return null;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new Minus(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
     }
     
 }

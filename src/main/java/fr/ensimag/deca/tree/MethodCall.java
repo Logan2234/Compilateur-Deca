@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -25,6 +26,7 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
@@ -170,9 +172,20 @@ public class MethodCall extends AbstractExpr {
         if (!inlineMethods.containsKey(this.meth.getMethodDefinition())) {
             return this;
         }
-        if(this.params.isAtomic()) { // TODO see with other techniques of optim if factorisable ?
+        if(true){//this.params.isAtomic()) { // TODO see with other techniques of optim if factorisable ?
             return inlineMethods.get(this.meth.getMethodDefinition()).getSubsitution(this.params);
         }
         return this;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        ListExpr listExpr = new ListExpr();
+        for(AbstractExpr expr : this.params.getList()) {
+            listExpr.add(expr.substitute(substitutionTable));
+        }
+        AbstractExpr res = new MethodCall(this.obj.substitute(substitutionTable),(AbstractIdentifier) this.meth.substitute(substitutionTable),listExpr);
+        res.setLocation(this.getLocation());
+        return res;
     }
 }

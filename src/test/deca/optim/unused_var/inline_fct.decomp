@@ -1,12 +1,12 @@
 class A extends Object {
 
 	int cos(int x){
-		return x;
+		return (((2 * x) + 5) - x);
 
 	}
 }
 
 {
 	A a = new A();
-	print(a.cos(3));
+	print((((2 * 3) + 5) - 3));
 }

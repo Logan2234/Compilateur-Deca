@@ -4,9 +4,12 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.FLOAT;
 
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 
 /**
  * Conversion of an int into a float. Used for implicit conversions.
@@ -52,6 +55,13 @@ public class ConvFloat extends AbstractUnaryExpr {
             return (float)collapsedValue;
         }
         return null;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new ConvFloat(this.operand.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
     }
 
 }

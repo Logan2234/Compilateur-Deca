@@ -3,10 +3,14 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.OPP;
+
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 
 /**
  * @author gl03
@@ -71,6 +75,13 @@ public class UnaryMinus extends AbstractUnaryExpr {
             return -collapsedValue;
         }
         return null;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new UnaryMinus(this.operand.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
     }
 
 }

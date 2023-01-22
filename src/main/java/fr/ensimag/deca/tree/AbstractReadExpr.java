@@ -63,10 +63,5 @@ public abstract class AbstractReadExpr extends AbstractExpr {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         return this;
     }
-
-    @Override
-    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
-        return this;
-    }
     
 }

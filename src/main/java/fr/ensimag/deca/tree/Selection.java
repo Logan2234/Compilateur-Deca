@@ -163,7 +163,8 @@ public class Selection extends AbstractLValue {
 
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
-        this.obj = this.obj.substitute(substitutionTable);
-        return this;
+        AbstractExpr res = new Selection(this.obj.substitute(substitutionTable),(AbstractIdentifier)this.field.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
     }
 }

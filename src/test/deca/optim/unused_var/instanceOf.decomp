@@ -15,7 +15,7 @@ class C extends A {
 		print("Error");
 	} else {
 	}
-	if ((a.createChild() instanceof C)){
+	if ((new A() instanceof C)){
 		print("Error");
 	} else {
 	}

@@ -18,7 +18,7 @@ class B extends A {
 
 {
 	A a = new B();
-	A aa = a.createB();
+	A aa = new B();
 	a.used();
 	print(aa.x);
 }

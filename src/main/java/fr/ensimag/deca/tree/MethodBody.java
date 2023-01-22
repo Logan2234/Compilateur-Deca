@@ -108,8 +108,8 @@ public class MethodBody extends AbstractMethod {
     public boolean isInline() {
         if (this.vars.getList().isEmpty()
         && this.insts.getList().size() == 1
-        && this.insts.getList().get(0) instanceof Return
-        && !((Return)this.insts.getList().get(0)).getExpression().containsField()) { // TODO
+        && this.insts.getList().get(0) instanceof Return){
+        //&& !((Return)this.insts.getList().get(0)).getExpression().containsField()) { // TODO
             // an unremovable expression is an Assign, a MethodCall or a Read
             // an assign could change the state of a parameter
             Return ret = (Return)this.insts.getList().get(0);

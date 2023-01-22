@@ -326,7 +326,7 @@ public class Program extends AbstractProgram {
 
     @Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
-        this.main = (Main)this.main.doSubstituteInlineMethods(inlineMethods);
+        this.main = (AbstractMain) this.main.doSubstituteInlineMethods(inlineMethods);
         this.classes = (ListDeclClass)this.classes.doSubstituteInlineMethods(inlineMethods);
         return this;
     }

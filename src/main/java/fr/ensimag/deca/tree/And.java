@@ -60,5 +60,11 @@ public class And extends AbstractOpBool {
         return null;
     }
 
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new And(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
+    }
 
 }

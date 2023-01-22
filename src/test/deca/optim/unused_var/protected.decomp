@@ -1,0 +1,12 @@
+class A extends Object {
+	int x = 1;
+}
+
+class B extends A {
+	protected int x = 2;
+}
+
+{
+	A b = new B();
+	print(b.x);
+}

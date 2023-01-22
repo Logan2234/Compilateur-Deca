@@ -136,10 +136,4 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         return this;
     }
 
-    @Override
-    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
-        this.leftOperand = this.leftOperand.substitute(substitutionTable);
-        this.rightOperand = this.rightOperand.substitute(substitutionTable);
-        return this;
-    }
 }

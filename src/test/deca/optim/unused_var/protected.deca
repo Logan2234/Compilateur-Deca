@@ -16,6 +16,6 @@ class B extends A {
 }
 
 {
-    B b = new B();
+    A b = new B();
     print(b.x);
 }

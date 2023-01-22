@@ -14,10 +14,10 @@ class A extends Object {
 {
 	int x = (60 + readInt());
 	A a = new A();
-	int y = (a.cos(1) + 1);
-	int z = (a.cos(5) + 5);
-	a.cos(3);
-	a.cos(3);
-	a.cos(3);
-	(false || a.bool());
+	int y = (1 + 1);
+	int z = (5 + 5);
+	3;
+	3;
+	3;
+	(false || true);
 }

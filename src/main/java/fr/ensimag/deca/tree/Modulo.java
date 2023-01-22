@@ -5,11 +5,15 @@ import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.REM;
+
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.RemByZeroErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 
 /**
  *
@@ -78,4 +82,10 @@ public class Modulo extends AbstractOpArith {
         return null;
     }
 
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new Modulo(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
+    }
 }

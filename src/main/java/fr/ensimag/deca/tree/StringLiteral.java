@@ -78,7 +78,9 @@ public class StringLiteral extends AbstractStringLiteral {
 
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
-        return this;
+        AbstractExpr res = new StringLiteral(this.value);
+        res.setLocation(this.getLocation());
+        return res;
     }
 
 }

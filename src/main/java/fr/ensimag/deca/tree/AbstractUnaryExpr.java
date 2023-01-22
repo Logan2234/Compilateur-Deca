@@ -115,10 +115,4 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         return this;
     }
 
-    @Override
-    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
-        this.operand = this.operand.substitute(substitutionTable);
-        return this;
-    }
-
 }

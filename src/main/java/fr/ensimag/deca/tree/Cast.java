@@ -117,7 +117,8 @@ public class Cast extends AbstractExpr {
 
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
-        this.expression = this.expression.substitute(substitutionTable);
-        return this;
+        AbstractExpr res = new Cast((AbstractIdentifier) this.type.substitute(substitutionTable),this.expression.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
     }
 }

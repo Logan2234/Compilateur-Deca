@@ -116,6 +116,8 @@ public class FloatLiteral extends AbstractExpr {
 
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
-        return this;
+        AbstractExpr res = new FloatLiteral(this.value);
+        res.setLocation(this.getLocation());
+        return res;
     }
 }
