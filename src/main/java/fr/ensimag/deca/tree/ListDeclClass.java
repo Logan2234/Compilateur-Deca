@@ -3,7 +3,11 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -86,5 +90,12 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
             somethingCollapsed |= c.collapseClass().couldCollapse();
         }
         return new CollapseResult<Null>(null, somethingCollapsed);
+    }
+
+    @Override
+    protected void spotInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        for (AbstractDeclClass c : this.getList()) {
+            ((DeclClass)c).spotInlineMethods(inlineMethods);
+        }
     }
 }

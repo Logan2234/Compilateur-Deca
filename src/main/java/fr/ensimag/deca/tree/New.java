@@ -10,6 +10,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
@@ -27,6 +28,7 @@ import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -115,12 +117,12 @@ public class New extends AbstractExpr {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        return false;
+    protected void spotUsedVar() {
+        this.classe.spotUsedVar();
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
 
@@ -128,5 +130,17 @@ public class New extends AbstractExpr {
     public CollapseResult<CollapseValue> collapseExpr() {
         // return nothing ? expect if we find a way to compute methods at compile time...
         return new CollapseResult<CollapseValue>(new CollapseValue(), false);
+    }
+    
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new New((AbstractIdentifier) this.classe.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.classe.containsField();
     }
 }

@@ -7,11 +7,14 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -91,16 +94,39 @@ public class Cast extends AbstractExpr {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        boolean varSpotted = this.type.spotUsedVar();
-        varSpotted = this.expression.spotUsedVar() || varSpotted;
-        return varSpotted;
+    protected void spotUsedVar() {
+        this.type.spotUsedVar();
+        this.expression.spotUsedVar();
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected Tree removeUnusedVar() {
+        this.expression = (AbstractExpr)this.expression.removeUnusedVar();
+        return this;
+    }
+
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
-        this.expression.addMethodCalls(foundMethodCalls);
+        this.expression.addUnremovableExpr(foundMethodCalls);
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.expression = (AbstractExpr)this.expression.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new Cast((AbstractIdentifier) this.type.substitute(substitutionTable),this.expression.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.type.containsField() || this.expression.containsField();
     }
 
     @Override

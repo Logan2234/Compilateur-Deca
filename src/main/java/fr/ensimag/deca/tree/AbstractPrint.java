@@ -5,6 +5,7 @@ import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.IntType;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -12,6 +13,9 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
+import java.util.ListIterator;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -80,8 +84,20 @@ public abstract class AbstractPrint extends AbstractInst {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        return this.arguments.spotUsedVar();
+    protected void spotUsedVar() {
+        this.arguments.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        this.arguments.removeUnusedVar();
+        return this;
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.arguments = (ListExpr)this.arguments.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 
     @Override

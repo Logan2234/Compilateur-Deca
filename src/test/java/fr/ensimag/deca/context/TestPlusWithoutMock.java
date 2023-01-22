@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.optim.CollapseResult;
@@ -74,14 +75,25 @@ public class TestPlusWithoutMock {
         }
 
         @Override
-        protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
             // TODO Auto-generated method stub  
         }
 
         @Override
-        protected boolean spotUsedVar() {
+        protected void spotUsedVar() {
             // TODO Auto-generated method stub
-            return true;
+        }
+
+        @Override
+        protected AbstractExpr substitute(Map<ParamDefinition, AbstractExpr> substitutionTable) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        protected boolean containsField() {
+            // TODO Auto-generated method stub
+            return false;
         }
 
         @Override

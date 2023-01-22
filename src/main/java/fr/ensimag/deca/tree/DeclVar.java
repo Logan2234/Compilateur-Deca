@@ -10,8 +10,13 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.RegisterOffset;
@@ -92,9 +97,37 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    protected boolean spotUsedVar() {
+    protected void spotUsedVar() {
         // We don't spotUsedVar() on the type (it may be a class) or the identifier as they are just declared.
-        return this.initialization.spotUsedVar();
+        this.initialization.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        this.initialization = (AbstractInitialization)this.initialization.removeUnusedVar();
+        if (this.varName.getDefinition().isUsed()) {
+            return this;
+        }
+        if (this.initialization.getExpression() == null){
+            return null;
+        }
+        List<AbstractExpr> listExpr = this.initialization.getExpression().getUnremovableExpr();
+        if (listExpr.isEmpty()) {
+            return null;
+        }
+        if (this.type.getDefinition().getType().isInt() || this.type.getDefinition().getType().isFloat()) {
+            Iterator<AbstractExpr> iter = listExpr.iterator();
+            AbstractExpr expr = iter.next();
+            Location loc = expr.getLocation();
+            while (iter.hasNext()) {
+                loc = expr.getLocation();
+                expr = new Plus(expr, iter.next());
+                expr.setLocation(loc);
+            }
+            this.initialization = new Initialization(expr);
+            this.initialization.setLocation(loc);
+        }
+        return this;
     }
 
     public AbstractIdentifier getVar() {
@@ -119,5 +152,11 @@ public class DeclVar extends AbstractDeclVar {
             initialization = new Initialization(new IntLiteral(result.getResult().asInt()));
         }
         return new CollapseResult<Null>(null, result.couldCollapse());
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.initialization = (AbstractInitialization)this.initialization.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

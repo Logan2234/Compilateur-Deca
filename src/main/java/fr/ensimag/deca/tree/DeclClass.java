@@ -18,6 +18,8 @@ import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -30,8 +32,8 @@ public class DeclClass extends AbstractDeclClass {
 
     final private AbstractIdentifier name;
     final private AbstractIdentifier superIdentifier;
-    final private ListDeclField fields;
-    final private ListDeclMethod methods;
+    private ListDeclField fields;
+    private ListDeclMethod methods;
 
     public DeclClass(AbstractIdentifier name, AbstractIdentifier superIdentifier, ListDeclField fields,
             ListDeclMethod methods) {
@@ -132,9 +134,18 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     @Override
-    protected boolean spotUsedVar() {
+    protected void spotUsedVar() {
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
-        return false;
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        if (!this.name.getDefinition().isUsed()) {
+            return null;
+        }
+        this.fields = (ListDeclField)this.fields.removeUnusedVar();
+        this.methods = (ListDeclMethod)this.methods.removeUnusedVar();
+        return this;
     }
 
     public AbstractIdentifier getName() {
@@ -201,6 +212,20 @@ public class DeclClass extends AbstractDeclClass {
             method.codeGenMethod(compiler, name.getName().getName());
             compiler.endCodeContext();
         }
+    }
+
+    @Override
+    protected void spotInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        for (AbstractDeclMethod method : this.methods.getList()) {
+            method.spotInlineMethods(inlineMethods);
+        }
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.fields = (ListDeclField)this.fields.doSubstituteInlineMethods(inlineMethods);
+        this.methods = (ListDeclMethod)this.methods.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 
 }

@@ -2,12 +2,16 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.ClassType;
+
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.SymbolTable;
@@ -83,6 +87,18 @@ public abstract class AbstractIdentifier extends AbstractLValue {
      */
     public abstract VariableDefinition getVariableDefinition();
 
+    /**
+     * Like {@link #getDefinition()}, but works only if the definition is a
+     * ParamDefinition.
+     *
+     * This method essentially performs a cast, but throws an explicit exception
+     * when the cast fails.
+     *
+     * @throws DecacInternalError
+     *             if the definition is not a field definition.
+     */
+    public abstract ParamDefinition getParamDefinition();
+
     public abstract void setDefinition(Definition definition);
 
 
@@ -94,4 +110,9 @@ public abstract class AbstractIdentifier extends AbstractLValue {
      *         (corresponds to the "type" attribute)
      */
     public abstract Type verifyType(DecacCompiler compiler) throws ContextualError;
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        return this;
+    }
 }

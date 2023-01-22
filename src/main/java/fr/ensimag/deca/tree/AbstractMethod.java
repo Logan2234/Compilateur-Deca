@@ -32,4 +32,10 @@ public abstract class AbstractMethod extends Tree {
     public abstract void setReturnsNames(String name);
 
     public abstract CollapseResult<Null> collapseMethodBody();
+    
+    /**
+     * Used to spot "inline" methods to substitute their body
+     * @return true if the function is inline
+     */
+    public abstract boolean isInline();
 }

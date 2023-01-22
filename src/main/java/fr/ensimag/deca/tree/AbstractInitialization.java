@@ -38,5 +38,9 @@ public abstract class AbstractInitialization extends Tree {
     public abstract void codeGenInit(DecacCompiler compiler, Type objectType, RegisterOffset resultRegister);
 
     public abstract CollapseResult<CollapseValue> collapseInit();
+    /**
+     * @return the expression of the initialization
+     */
+    protected abstract AbstractExpr getExpression();
 
 }

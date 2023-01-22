@@ -7,6 +7,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
@@ -16,6 +17,8 @@ import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -26,7 +29,7 @@ import org.apache.commons.lang.Validate;
  */
 public class IfThenElse extends AbstractInst {
 
-    private final AbstractExpr condition;
+    private AbstractExpr condition;
     private ListInst thenBranch;
     private ListInst elseBranch;
 
@@ -109,11 +112,21 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        boolean varSpotted = this.condition.spotUsedVar();
-        varSpotted = this.thenBranch.spotUsedVar() || varSpotted;
-        varSpotted = this.elseBranch.spotUsedVar() || varSpotted;
-        return varSpotted;
+    protected void spotUsedVar() {
+        this.condition.spotUsedVar();
+        this.thenBranch.spotUsedVar();
+        this.elseBranch.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        this.condition = (AbstractExpr) this.condition.removeUnusedVar();
+        this.thenBranch = (ListInst) this.thenBranch.removeUnusedVar();
+        this.elseBranch = (ListInst) this.elseBranch.removeUnusedVar();
+        if (this.thenBranch.isEmpty() && this.elseBranch.isEmpty()) {
+            return this.condition;
+        }
+        return this;
     }
 
     public ListInst getThenInst() {
@@ -152,5 +165,12 @@ public class IfThenElse extends AbstractInst {
         }
     }
 
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.condition = (AbstractExpr)this.condition.doSubstituteInlineMethods(inlineMethods);
+        this.thenBranch = (ListInst)this.thenBranch.doSubstituteInlineMethods(inlineMethods);
+        this.elseBranch = (ListInst)this.elseBranch.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
 
 }

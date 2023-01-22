@@ -20,14 +20,14 @@ public abstract class AbstractStringLiteral extends AbstractExpr {
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         throw new UnsupportedOperationException("not yet implemented");
     }
-    
-    @Override
-    protected boolean spotUsedVar() {
-        return false;
-    }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected void spotUsedVar() {
+        // do nothing
+    }
+    
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
 

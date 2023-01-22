@@ -5,9 +5,13 @@ import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.INT;
+
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 
 /**
  * Conversion of a float into an int. Used for implicit conversions.
@@ -45,6 +49,12 @@ public class ConvInt extends AbstractUnaryExpr {
         else {
             return new CollapseResult<CollapseValue>(new CollapseValue(), result.couldCollapse());
         }
+    }
+    
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new ConvInt(this.operand.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
     }
 
 }

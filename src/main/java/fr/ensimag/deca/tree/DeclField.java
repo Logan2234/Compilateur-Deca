@@ -10,10 +10,13 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -120,9 +123,18 @@ public class DeclField extends AbstractDeclField {
 
 
     @Override
-    protected boolean spotUsedVar() {
-        // We don't spotUsedVar() on classes. We spot them indirectly from the main
-        return false;
+    protected void spotUsedVar() {
+        this.type.spotUsedVar();
+        this.fieldName.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        if (!this.fieldName.getDefinition().isUsed()) {
+            return null;
+        }
+        this.initialization = (AbstractInitialization)this.initialization.removeUnusedVar();
+        return this;
     }
 
     public AbstractIdentifier getName() {
@@ -143,5 +155,11 @@ public class DeclField extends AbstractDeclField {
             initialization = new Initialization(new IntLiteral(result.getResult().asInt()));
         }
         return new CollapseResult<Null>(null, result.couldCollapse());
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.initialization = (AbstractInitialization)this.initialization.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

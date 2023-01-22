@@ -1,10 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -298,9 +301,18 @@ public abstract class Tree {
 
     /**
      * Set to true the "used" attribute of definitions of used variables
-     * @return true if a used attribute has been set to true
      */
-    protected abstract boolean spotUsedVar();
+    protected abstract void spotUsedVar();
+
+    /**
+     * Only keep the right hand side of useless assignements and evaluates
+     * to false the expressions "a instanceof B" when B is unused
+     * @return the simplified expression
+     */
+    protected abstract Tree removeUnusedVar();
+
+
+    
 
     public boolean isReturn() {
         return false;
@@ -309,4 +321,20 @@ public abstract class Tree {
     public Return asReturn() {
         return null;
     }
+
+    
+    /**
+     * Store all inline functions in the given map, mapping its definition to its delcaration
+     * @param Map<MethodDefinition, ListDeclParam> in which are stored the inline methods 
+     */
+    protected void spotInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        // do nothing by default
+    }
+
+    /**
+     * Browse recursively the tree for inline methods spotted previously and substitute them
+     * @param inlineMethods map of the inline methods spotted
+     * @return Tree used to give the calling method the substitution of the method
+     */
+    protected abstract Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods);
 }

@@ -7,7 +7,6 @@
 // Historique:
 //    cree le 20/01/2023
 //
-
 {
     boolean x;
 
@@ -19,8 +18,15 @@
         print("Error");
     }
 
-    // keep the assignement
-    if(x = true) {
-        print("Error");
+    // keep the condition only
+    if ((x=true) && false && (x=false)) {
+    }
+
+    // remove
+    while ((x=true) && false && (x=false)) {
+    }
+
+    // keep the whole loop
+    while ((x=true) && false && (readInt()==1)) {
     }
 }

@@ -7,6 +7,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.NullOperand;
@@ -16,6 +17,7 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Integer literal
@@ -71,17 +73,28 @@ public class Null extends AbstractExpr {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        return false;
+    protected void spotUsedVar() {
+        // do nothing
+    }
+    
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
+        // do nothing
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
-        // do nothing
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new Null();
+        res.setLocation(this.getLocation());
+        return res;
     }
 
     @Override
     public CollapseResult<CollapseValue> collapseExpr() {
         return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
+    protected boolean containsField() {
+        return false;
+    }
+
 }

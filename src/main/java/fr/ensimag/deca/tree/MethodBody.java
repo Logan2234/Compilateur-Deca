@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -8,6 +9,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -68,10 +70,16 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        boolean varSpotted = this.vars.spotUsedVar();
-        varSpotted = this.insts.spotUsedVar() || varSpotted;
-        return varSpotted;
+    protected void spotUsedVar() {
+        this.vars.spotUsedVar();
+        this.insts.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        this.vars = (ListDeclVar)this.vars.removeUnusedVar();
+        this.insts = (ListInst)this.insts.removeUnusedVar();
+        return this;
     }
 
 	@Override
@@ -95,5 +103,30 @@ public class MethodBody extends AbstractMethod {
     @Override
     public CollapseResult<Null> collapseMethodBody() {
         return new CollapseResult<Null>(null, vars.collapseDeclVars().couldCollapse() || insts.collapseInsts().couldCollapse());
+    }
+    
+    public boolean isInline() {
+        if (this.vars.getList().isEmpty()
+        && this.insts.getList().size() == 1
+        && this.insts.getList().get(0) instanceof Return
+        && !((Return)this.insts.getList().get(0)).getExpression().containsField()) {
+            // an unremovable expression is an Assign, a MethodCall or a Read
+            // an assign could change the state of a parameter
+            Return ret = (Return)this.insts.getList().get(0);
+            for (AbstractExpr expr : ret.getExpression().getUnremovableExpr()) {
+                if (expr instanceof Assign){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.vars = (ListDeclVar)this.vars.doSubstituteInlineMethods(inlineMethods);
+        this.insts = (ListInst)this.insts.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

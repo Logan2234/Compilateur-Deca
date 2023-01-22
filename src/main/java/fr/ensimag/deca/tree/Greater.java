@@ -1,8 +1,11 @@
 package fr.ensimag.deca.tree;
 
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -45,6 +48,13 @@ public class Greater extends AbstractOpIneq {
         else {
             return new CollapseResult<CollapseValue>(new CollapseValue(), leftResult.couldCollapse() || rightResult.couldCollapse());
         }
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new Greater(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
     }
 
 }

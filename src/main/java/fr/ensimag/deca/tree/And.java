@@ -1,10 +1,13 @@
 package fr.ensimag.deca.tree;
 
+import java.util.Map;
+
 import org.apache.log4j.lf5.LogLevelFormatException;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
@@ -46,5 +49,11 @@ public class And extends AbstractOpBool {
         }
     }
 
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new And(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
+        res.setLocation(this.getLocation());
+        return res;
+    }
 
 }

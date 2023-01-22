@@ -7,6 +7,8 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Register;
@@ -19,6 +21,7 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -37,7 +40,14 @@ public abstract class AbstractExpr extends AbstractInst {
         return false;
     }
 
-    /*
+    /**
+     * @return true if the expression is an assign
+     */
+    boolean isAssign() {
+        return false;
+    }
+
+    /**
      * Used by This class for telling if the This is implicit or not.
      * getImpl return false and it will be override by This class
      * 
@@ -204,30 +214,32 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     /**
-     * Fin recursively all method calls and Reads in the expression and add them on
+     * Find recursively all method calls, assign and Reads in the expression and add them on
      * top of the list
      * This method is used for optimizing the Program tree.
      * Instructions should not be removed if they contains a MethodCall or a Read
-     * that could
-     * potentially print/read on stdin/stdout or change the state of an object.
-     * It had the methods found on top of the list
+     * that could potentially print/read on stdin/stdout or change the state of an object.
+     * An inline methode should not be susbtituted if it takes as a parameter a method call,
+     * an assign or a read.
+     * It had the methods found on top of the list.
      * 
      * @param the list of MethodCalls and Reads ordered by order of apparition
      */
-    protected abstract void addMethodCalls(List<AbstractExpr> foundMethodCalls);
+    protected abstract void addUnremovableExpr(List<AbstractExpr> foundMethodCalls);
 
     /**
-     * Fin recursively all method calls and reads in the expression
+     * Find recursively all method calls, assign and reads in the expression
      * This method is used for optimizing the Program tree.
      * Instructions should not be removed if they contains a MethodCall or a Read
-     * that could
-     * potentially print/read on stdin/stdout or change the state of an object.
+     * that could potentially print/read on stdin/stdout or change the state of an object.
+     * An inline methode should not be susbtituted if it takes as a parameter a method call,
+     * an assign or a read
      * 
      * @return the list of MethodCall ordered by order of apparition
      */
-    protected final List<AbstractExpr> getMethodCalls() {
+    protected final List<AbstractExpr> getUnremovableExpr() {
         List<AbstractExpr> foundMethodCalls = new LinkedList<AbstractExpr>();
-        this.addMethodCalls(foundMethodCalls);
+        this.addUnremovableExpr(foundMethodCalls);
         return foundMethodCalls;
     }
     
@@ -241,4 +253,31 @@ public abstract class AbstractExpr extends AbstractInst {
         return new CollapseResult<ListInst>(result, false);
     }
 
+    /**
+     * Return the tree as it is which is the default behavior
+     */
+    @Override
+    protected Tree removeUnusedVar() {
+        return this;
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        return this;
+    }
+
+    /**
+     * Method used for inline method optimization.
+     * It creates a duplicate of the expression with the parameters substituted for the
+     * right expression given by the substitutionTable
+     * @param substitutionTable parameters -> expressions
+     */
+    protected abstract AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable);
+
+    /**
+     * Check recursively if the expression contains a field
+     * @return true if it contains a field
+     */
+    protected abstract boolean containsField();
+    
 }

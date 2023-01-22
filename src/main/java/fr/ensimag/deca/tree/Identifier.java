@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.optim.CollapseResult;
@@ -27,6 +28,7 @@ import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -124,7 +126,7 @@ public class Identifier extends AbstractIdentifier {
      * when the cast fails.
      * 
      * @throws DecacInternalError
-     *                            if the definition is not a field definition.
+     *                            if the definition is not a variable definition.
      */
     @Override
     public VariableDefinition getVariableDefinition() {
@@ -140,13 +142,35 @@ public class Identifier extends AbstractIdentifier {
 
     /**
      * Like {@link #getDefinition()}, but works only if the definition is a
+     * ParamDefinition.
+     * 
+     * This method essentially performs a cast, but throws an explicit exception
+     * when the cast fails.
+     * 
+     * @throws DecacInternalError
+     *                            if the definition is not a parameter definition.
+     */
+    @Override
+    public ParamDefinition getParamDefinition() {
+        try {
+            return (ParamDefinition) definition;
+        } catch (ClassCastException e) {
+            throw new DecacInternalError(
+                    "Identifier "
+                            + getName()
+                            + " is not a parameter identifier, you can't call getParamDefinition on it");
+        }
+    }
+
+    /**
+     * Like {@link #getDefinition()}, but works only if the definition is a
      * ExpDefinition.
      * 
      * This method essentially performs a cast, but throws an explicit exception
      * when the cast fails.
      * 
      * @throws DecacInternalError
-     *                            if the definition is not a field definition.
+     *                            if the definition is not an expression definition.
      */
     @Override
     public ExpDefinition getExpDefinition() {
@@ -313,12 +337,17 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    protected boolean spotUsedVar() {
-        return this.definition.spotUsedVar();
+    protected void spotUsedVar() {
+        this.definition.spotUsedVar();
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected Tree removeUnusedVar() {
+        return this;
+    }
+
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
 
@@ -326,4 +355,18 @@ public class Identifier extends AbstractIdentifier {
     protected Boolean isIdentifier() {
         return true;
     }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        if (!substitutionTable.containsKey(this.definition)) {
+            return this;
+        }
+        return substitutionTable.get(this.definition);
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.getDefinition().isField();
+    }
+    
 }

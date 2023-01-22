@@ -1,0 +1,21 @@
+class A extends Object {
+	int x = 1;
+	int y;
+
+	void useY(){
+	}
+
+}
+
+class B extends A {
+	protected int x = 2;
+
+	void useY(){
+		print(y);}
+
+}
+
+{
+	A b = new B();
+	print(b.x);
+	b.useY();}

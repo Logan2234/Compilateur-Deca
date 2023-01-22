@@ -3,6 +3,8 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -12,6 +14,7 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -109,16 +112,22 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
     
     @Override
-    protected boolean spotUsedVar() {
-        boolean varSpotted = this.leftOperand.spotUsedVar();
-        varSpotted = this.rightOperand.spotUsedVar() || varSpotted;
-        return varSpotted;
+    protected void spotUsedVar() {
+        this.leftOperand.spotUsedVar();
+        this.rightOperand.spotUsedVar();
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
-        this.leftOperand.addMethodCalls(foundMethodCalls);
-        this.rightOperand.addMethodCalls(foundMethodCalls);
+    protected Tree removeUnusedVar() {
+        this.leftOperand = (AbstractExpr)this.leftOperand.removeUnusedVar();
+        this.rightOperand = (AbstractExpr)this.rightOperand.removeUnusedVar();
+        return this;
+    }
+
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
+        this.leftOperand.addUnremovableExpr(foundMethodCalls);
+        this.rightOperand.addUnremovableExpr(foundMethodCalls);
     }
 
     @Override
@@ -129,4 +138,16 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     public abstract CollapseResult<CollapseValue> collapseBinExpr();
     
     
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.leftOperand = (AbstractExpr)this.leftOperand.doSubstituteInlineMethods(inlineMethods);
+        this.rightOperand = (AbstractExpr)this.rightOperand.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.leftOperand.containsField() || this.rightOperand.containsField();
+    }
+
 }

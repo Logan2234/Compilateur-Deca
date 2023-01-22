@@ -1,11 +1,14 @@
 package fr.ensimag.deca.tree;
 
 import java.util.List;
+import java.util.Map;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.InvalidReadErr;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
@@ -49,13 +52,18 @@ public abstract class AbstractReadExpr extends AbstractExpr {
     protected abstract void codeGenRead(DecacCompiler compiler);
 
     @Override
-    protected boolean spotUsedVar() {
-        return false;
+    protected void spotUsedVar() {
+        // do nothing
+    }
+    
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
+        foundMethodCalls.add(this);
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
-        foundMethodCalls.add(this);
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        return this;
     }
 
     @Override
@@ -63,4 +71,9 @@ public abstract class AbstractReadExpr extends AbstractExpr {
         // reads can't be collapsed
         return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
+    
+    protected boolean containsField() {
+        return false;
+    }
+    
 }
