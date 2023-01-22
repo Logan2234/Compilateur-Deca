@@ -1,0 +1,27 @@
+// Description:
+//    On teste si l'optimisation fonctionne bien avec les expressions unaires et après, binaires.
+//
+// Resultats:
+//    Ok et la décompilation est 
+// 
+// {
+// 	boolean a = true;
+// 	boolean b = (!true);
+// 	if ((!(!true))){
+// 	} else {
+// 	}
+// 	if ((true && (!true))){
+// 	} else {
+// 	}
+// }
+// 
+//
+// Historique:
+//    cree le 22/01/2023
+
+{
+    boolean a = true;
+    boolean b = !a;
+    if (!b){}
+    if (a && b){}
+}

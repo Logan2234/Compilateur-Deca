@@ -120,7 +120,6 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
             }
             else if (operand.irrelevant() && actualDico.containsKey(((Identifier) operand).getName())) {
                 operand = actualDico.get(((Identifier) operand).getName());
-                irrelevant = true;
             }
 
             varModels.put(actualClass, actualDico);
@@ -138,7 +137,6 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
             }
             else if (operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName())) {
                 operand = currentValues.get(((Identifier) operand).getName());
-                irrelevant = true;
             }
 
             return irrelevant || (!operand.isSelection() && 
