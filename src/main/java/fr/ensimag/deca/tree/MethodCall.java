@@ -7,6 +7,7 @@ import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -22,6 +23,7 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -164,9 +166,13 @@ public class MethodCall extends AbstractExpr {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         // TODO substitute only if expressions of param are atomic
         // selection, and method call are not
+        this.params = (ListExpr)this.params.doSubstituteInlineMethods(inlineMethods);
         if (!inlineMethods.containsKey(this.meth.getMethodDefinition())) {
-            this.params = (ListExpr)this.params.doSubstituteInlineMethods(inlineMethods);
             return this;
         }
+        if(this.params.isAtomic()) { // TODO see with other techniques of optim if factorisable ?
+            return inlineMethods.get(this.meth.getMethodDefinition()).getSubsitution(this.params);
+        }
+        return this;
     }
 }

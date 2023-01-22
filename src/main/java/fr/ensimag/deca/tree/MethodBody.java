@@ -111,11 +111,10 @@ public class MethodBody extends AbstractMethod {
         && this.insts.getList().get(0) instanceof Return
         && !((Return)this.insts.getList().get(0)).getExpression().containsField()) { // TODO
             // an unremovable expression is an Assign, a MethodCall or a Read
-            // a method call could have fields as parameters
-            // an assign could change the state of the object
+            // an assign could change the state of a parameter
             Return ret = (Return)this.insts.getList().get(0);
             for (AbstractExpr expr : ret.getExpression().getUnremovableExpr()) {
-                if (!(expr instanceof AbstractReadExpr)){
+                if (expr instanceof Assign){
                     return false;
                 }
             }

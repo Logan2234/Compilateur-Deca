@@ -34,6 +34,10 @@ public class DeclParam extends AbstractDeclParam {
         this.paramName = paramName;
     }
 
+    public AbstractIdentifier getName() {
+        return this.paramName;
+    }
+
     @Override
     protected Type verifyDeclParam(DecacCompiler compiler) throws ContextualError {
         Type type = this.type.verifyType(compiler);
