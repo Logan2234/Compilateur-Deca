@@ -80,4 +80,10 @@ public class MethodAsmBody extends AbstractMethod {
     public void setReturnsNames(String name) {
         // useless here ?
     }
+
+    @Override
+    public boolean isInline() {
+        return false;
+    }
+
 }

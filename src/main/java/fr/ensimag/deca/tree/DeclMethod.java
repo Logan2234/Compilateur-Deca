@@ -27,6 +27,8 @@ import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -214,5 +216,12 @@ public class DeclMethod extends AbstractDeclMethod {
     public boolean collapse() {
         body.collapse();
         return false;
+    }
+
+    @Override
+    protected void spotInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        if (this.body.isInline()) {
+            inlineMethods.put(this.methodName.getMethodDefinition(),this);
+        }
     }
 }
