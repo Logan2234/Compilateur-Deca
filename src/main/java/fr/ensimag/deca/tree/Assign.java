@@ -114,11 +114,6 @@ public class Assign extends AbstractBinaryExpr {
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         foundMethodCalls.add(this);
     }
-
-    @Override
-    boolean isAssign() {
-        return true;
-    }
     
     @Override 
     public CollapseResult<CollapseValue> collapseBinExpr() {

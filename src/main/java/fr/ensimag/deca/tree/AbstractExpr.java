@@ -41,13 +41,6 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     /**
-     * @return true if the expression is an assign
-     */
-    boolean isAssign() {
-        return false;
-    }
-
-    /**
      * Used by This class for telling if the This is implicit or not.
      * getImpl return false and it will be override by This class
      * 
