@@ -281,24 +281,45 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     public void codeGenPrint(DecacCompiler compiler, boolean hex) {
-        if (definition.getType().isInt()) {
-            // print identifier as an int :
-            // load addr in R1
-            compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
-            // print it
-
-            compiler.addInstruction(new WINT());
-        } else if (definition.getType().isFloat()) {
-            // print identifier as an float :
-            // load addr in R1
-            compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
-            // print it
-            if (hex) {
-                compiler.addInstruction(new WFLOATX());
-            } else {
-                compiler.addInstruction(new WFLOAT());
+        // if it is a field, we need to first load the value on from the heap !
+        if(getDefinition().isField()) {
+            GPRegister classPointerRegister = compiler.allocateRegister();
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
+            compiler.addInstruction(new LOAD(new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister), Register.R1));
+            compiler.freeRegister(classPointerRegister);
+            if (definition.getType().isInt()) {
+                // print it
+                compiler.addInstruction(new WINT());
+            } else if (definition.getType().isFloat()) {
+                // print it
+                if (hex) {
+                    compiler.addInstruction(new WFLOATX());
+                } else {
+                    compiler.addInstruction(new WFLOAT());
+                }
             }
         }
+        else {
+            if (definition.getType().isInt()) {
+                // print identifier as an int :
+                // load addr in R1
+                compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
+                // print it
+    
+                compiler.addInstruction(new WINT());
+            } else if (definition.getType().isFloat()) {
+                // print identifier as an float :
+                // load addr in R1
+                compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
+                // print it
+                if (hex) {
+                    compiler.addInstruction(new WFLOATX());
+                } else {
+                    compiler.addInstruction(new WFLOAT());
+                }
+            }
+        }
+
     }
 
     /**

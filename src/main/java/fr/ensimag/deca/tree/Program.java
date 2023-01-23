@@ -167,28 +167,12 @@ public class Program extends AbstractProgram {
         compiler.addInstruction(new RTS());
     }
 
-    @Override
-    public void optimizeTree(DecacCompiler compiler) {
-        boolean optimized = true;
-        int i = 0;
-        while(optimized && i<10) {
-            optimized = false;
-            // solve compile time known cases.
-            optimized |= collapseProgram().couldCollapse();
-            factorise(compiler);
-            splitCalculus(compiler);
-            // remove useless variables
-            optimUnusedVar(); 
-            substituteInlineMethods();
-            i++;
-        }
-    }
-
     /**
      * Remove all unused variables from the program
      * @return true if one or more variable have been removed
      */
-    private void optimUnusedVar() {
+    @Override
+    public void optimUnusedVar() {
         if (this.spotted) {
             this.resetSpottedVar();
         }
@@ -320,7 +304,7 @@ public class Program extends AbstractProgram {
     /**
      * Optimize the program tree with the substitution of inline methods
      */
-    private void substituteInlineMethods() {
+    public void substituteInlineMethods() {
         Map<MethodDefinition, DeclMethod> inlineMethods = this.spotInlineMethodsFromProg();
         // this phase should come after the spotting of used methods
         // we need to know if a method is overrided

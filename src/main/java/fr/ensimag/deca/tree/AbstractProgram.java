@@ -17,10 +17,9 @@ public abstract class AbstractProgram extends Tree {
 
     public abstract void codeGenProgram(DecacCompiler compiler);
 
-    /**
-     * Optimize the decorated tree until there is no more simplification found
-     */
-    public abstract void optimizeTree(DecacCompiler compiler);
-
     public abstract CollapseResult<Null> collapseProgram();
+
+    public abstract void optimUnusedVar();
+
+    public abstract void substituteInlineMethods();
 }
