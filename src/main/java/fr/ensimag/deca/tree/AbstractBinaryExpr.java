@@ -116,8 +116,14 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
     @Override
     public AbstractInst factorise(DecacCompiler compiler){
+        System.out.println(leftOperand);
         leftOperand = (AbstractExpr)leftOperand.factorise(compiler);
+        System.out.println(leftOperand);
+        System.out.println(rightOperand);
+
         rightOperand = (AbstractExpr)rightOperand.factorise(compiler);
+        System.out.println(rightOperand);
+        
         return this;
     }
 

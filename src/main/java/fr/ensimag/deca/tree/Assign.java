@@ -101,7 +101,8 @@ public class Assign extends AbstractBinaryExpr {
 
     @Override
     public AbstractInst factorise(DecacCompiler compiler) {
-        return rightOperand.factorise(compiler);
+        setRightOperand((AbstractExpr)rightOperand.factorise(compiler));
+        return this;
     }
 
     @Override
