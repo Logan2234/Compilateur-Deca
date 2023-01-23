@@ -101,11 +101,6 @@ public class Assign extends AbstractBinaryExpr {
         return rightOperand.factorise(compiler);
     }
 
-    @Override
-    public boolean isSplitable(DecacCompiler compiler) {
-        return rightOperand.isSplitable(compiler);
-    }
-
     @Override 
     public boolean collapse() {
         if(rightOperand.collapse()) {

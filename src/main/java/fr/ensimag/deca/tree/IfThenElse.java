@@ -124,10 +124,6 @@ public class IfThenElse extends AbstractInst {
         return this;
     }
 
-    public boolean isSplitable(DecacCompiler compiler) {
-        return condition.isSplitable(compiler) || thenBranch.isSplitable(compiler) || elseBranch.isSplitable(compiler);
-    }
-
     @Override
     public AbstractInst splitCalculus(DecacCompiler compiler) {
         condition.splitCalculus(compiler);

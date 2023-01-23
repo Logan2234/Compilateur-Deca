@@ -55,11 +55,4 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         setType(typeLeft);
         return typeLeft;
     }
-
-    public boolean isFacto() {
-        if ((leftOperand.isLiteral() && leftOperand.getType().isInt())
-                ^ (rightOperand.isLiteral() && rightOperand.getType().isInt()))
-            return true;
-        return false;
-    }
 }

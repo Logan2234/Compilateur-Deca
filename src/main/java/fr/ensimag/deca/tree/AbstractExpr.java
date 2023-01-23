@@ -264,10 +264,9 @@ public abstract class AbstractExpr extends AbstractInst {
                 list.add(multiply);
             }
         }
-        if (list.size() == 0){
-            
-        }
-        else if (list.size() == 1) {
+        if (list.size() == 0) {
+
+        } else if (list.size() == 1) {
             listPlus.add(list.getList().get(0));
         } else {
             Plus plus = new Plus((AbstractExpr) list.getList().get(1), (AbstractExpr) list.getList().get(0));
@@ -383,22 +382,22 @@ public abstract class AbstractExpr extends AbstractInst {
         } catch (ClassCastException e) {
             try {
                 if (leftIsMinus)
-                    incOccur(map, symbolToIdent, (Identifier) ((UnaryMinus) (leftOperand)).getOperand(), multiplier);
+                    incOccur(map, symbolToIdent, (Identifier) ((UnaryMinus) (leftOperand)).getOperand(), leftmultiplier);
                 else
-                    incOccur(map, symbolToIdent, (Identifier) leftOperand, multiplier);
+                    incOccur(map, symbolToIdent, (Identifier) leftOperand, leftmultiplier);
             } catch (ClassCastException e1) {
                 try {
                     addMap(map, mapSymbol, symbolToIdent, exprList, leftOperand, op);
                 } catch (ClassCastException e3) {
-                    exprList.add((AbstractExpr) ((AbstractOpArith) (node)).getRightOperand());
+                    exprList.add((AbstractExpr) ((AbstractOpArith) (node)).getLeftOperand());
                     return;
                 }
             }
             try {
                 if (rightIsMinus)
-                    incOccur(map, symbolToIdent, (Identifier) ((UnaryMinus) rightOperand).getOperand(), multiplier);
+                    incOccur(map, symbolToIdent, (Identifier) ((UnaryMinus) rightOperand).getOperand(), rightmultiplier);
                 else
-                    incOccur(map, symbolToIdent, (Identifier) rightOperand, multiplier);
+                    incOccur(map, symbolToIdent, (Identifier) rightOperand, rightmultiplier);
             } catch (ClassCastException e2) {
                 try {
                     addMap(map, mapSymbol, symbolToIdent, exprList, rightOperand, plusOrMinus);

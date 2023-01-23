@@ -405,7 +405,7 @@ public class DecacCompiler {
                 prog.verifyProgram(this);
                 // prog.optimizeTree();
                 prog.factorise(this);
-                prog.prettyPrint(System.out);
+                // prog.prettyPrint(System.out);
                 prog.splitCalculus(this);
             }
             LOG.info("Writing deca file ...");
@@ -420,6 +420,7 @@ public class DecacCompiler {
                 if (compilerOptions.getOptimize()) {
                     LOG.info("Optimizing the tree...");
                     // prog.optimizeTree();
+                    prog.factorise(this);
                     prog.splitCalculus(this);
                     LOG.info("Tree optimized...");
                 }

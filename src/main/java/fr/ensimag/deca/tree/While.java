@@ -113,10 +113,6 @@ public class While extends AbstractInst {
         return this;
     }
 
-    public boolean isSplitable(DecacCompiler compiler) {
-        return condition.isSplitable(compiler) || body.isSplitable(compiler);
-    }
-
     @Override
     public AbstractInst splitCalculus(DecacCompiler compiler) {
         condition.splitCalculus(compiler);

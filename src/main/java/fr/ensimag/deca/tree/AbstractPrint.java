@@ -89,11 +89,6 @@ public abstract class AbstractPrint extends AbstractInst {
     }
 
     @Override
-    public boolean isSplitable(DecacCompiler compiler) {
-        return arguments.isSplitable(compiler);
-    }
-
-    @Override
     public AbstractInst splitCalculus(DecacCompiler compiler) {
         arguments.splitCalculus(compiler);
         return this;

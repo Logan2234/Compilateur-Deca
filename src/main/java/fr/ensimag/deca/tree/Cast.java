@@ -102,7 +102,8 @@ public class Cast extends AbstractExpr {
 
     @Override
     public AbstractInst factorise(DecacCompiler compiler) {
-        expression.factorise(compiler);
+        if (expression.isSplitable(compiler))
+            expression.factorise(compiler);
         return this;
     }
 

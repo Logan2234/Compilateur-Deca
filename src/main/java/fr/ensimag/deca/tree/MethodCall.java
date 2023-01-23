@@ -145,11 +145,6 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    public boolean isSplitable(DecacCompiler compiler) {
-        return params.isSplitable(compiler);
-    }
-
-    @Override
     public AbstractInst splitCalculus(DecacCompiler compiler) {
         params.splitCalculus(compiler);
         return this;
