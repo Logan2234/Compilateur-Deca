@@ -68,7 +68,7 @@ public class ListExpr extends TreeList<AbstractExpr> {
      */
     protected boolean isAtomic() {
         for (AbstractExpr expr : this.getList()) {
-            if (expr.isAtomic()) {
+            if (!expr.isAtomic()) {
                 return false;
             }
         }
