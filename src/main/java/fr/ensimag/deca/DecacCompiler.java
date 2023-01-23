@@ -4,6 +4,7 @@ import fr.ensimag.deca.CompilerOptions.CompileMode;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.optim.AssemblyOptimizer;
+import fr.ensimag.deca.optim.TreeOptimizer;
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.tools.DecacInternalError;
@@ -401,9 +402,9 @@ public class DecacCompiler {
         }
 
         if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
-                if (compilerOptions.getOptimize()) {
+            if (compilerOptions.getOptimize()) {
                 prog.verifyProgram(this);
-                prog.optimizeTree();
+                TreeOptimizer.Optimize(prog);
             }
             LOG.info("Writing deca file ...");
             prog.decompile(out);
@@ -414,9 +415,9 @@ public class DecacCompiler {
             prog.verifyProgram(this);
             assert (prog.checkAllDecorations());
             if (compilerOptions.getCompileMode() == CompileMode.Compile) {
-                if (compilerOptions.getOptimize() || true) {
+                if (compilerOptions.getOptimize()) {
                     LOG.info("Optimizing the tree...");
-                    prog.optimizeTree();
+                    TreeOptimizer.Optimize(prog);
                     LOG.info("Tree optimized...");
                 }
                 prog.codeGenProgram(this);

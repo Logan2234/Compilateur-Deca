@@ -10,11 +10,22 @@
 class A {
     int y = 3;
     int cos(int x){return 2*x+5-x;}
-    int sin(int x){return x+y;}
+    int sin(int x){return x+y-x*y/x%y;}
+    boolean bool(int x){return (x == x+1) || (x<=2) && (x>= 3) && (this.y<4) && (x>4) && (this instanceof B) && (this.equals(new A()));}
+    boolean bool1(int x){return (x == x+1) || (x<=2) && (x>= 3) && (x>4);}
 }
+
+class B {}
 
 {
     A a = new A();
     print(a.cos(3));
     print(a.sin(3));
+    if (a.bool(3)) {
+        print("error1");
+    } else if (a.bool1(3)) {
+        print("error2");
+    } else if (a.bool1(4)) {
+        print("error3");
+    }
 }

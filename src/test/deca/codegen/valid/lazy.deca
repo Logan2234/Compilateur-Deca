@@ -1,0 +1,28 @@
+// Description:
+//    test de l'évaluation booléenne paresseuse.
+//
+// Resultats:
+//    ok
+//    ok
+//
+// Historique:
+//    cree le 21/01/2023
+
+class A {
+    boolean flaggedTrue() {
+        println("FLAAAAG");
+        return true;
+    }
+}
+
+{
+    A a = new A();
+
+    if(true || a.flaggedTrue()) {
+        println("ok");
+    }
+
+    if(!(false && a.flaggedTrue())) {
+        println("ok");
+    }
+}
