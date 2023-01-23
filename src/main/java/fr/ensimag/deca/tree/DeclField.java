@@ -60,7 +60,8 @@ public class DeclField extends AbstractDeclField {
             // On cherche à savoir si c'est bien un Field
             FieldDefinition motherField = defExp.asFieldDefinition("The name \"" + fieldName.getName().getName()
                     + "\" is already used for a method in the superclass (rule 2.5)", getLocation());
-            def = new FieldDefinition(type, getLocation(), visib, currentClass, motherField.getIndex());
+            currentClass.incNumberOfFields();
+            def = new FieldDefinition(type, getLocation(), visib, currentClass, currentClass.getNumberOfFields());
         } else {
             currentClass.incNumberOfFields();
             def = new FieldDefinition(type, getLocation(), visib, currentClass, currentClass.getNumberOfFields());
