@@ -50,7 +50,8 @@ public class NoOperation extends AbstractInst {
     }
     
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
+        prog.setVarRemoved();
         return null;
     }
 

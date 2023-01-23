@@ -78,9 +78,9 @@ public class Main extends AbstractMain {
     }
     
     @Override
-    protected Tree removeUnusedVar() {
-        this.declVariables = (ListDeclVar)this.declVariables.removeUnusedVar();
-        this.insts = (ListInst)this.insts.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.declVariables = (ListDeclVar)this.declVariables.removeUnusedVar(prog);
+        this.insts = (ListInst)this.insts.removeUnusedVar(prog);
         return this;
     }
 

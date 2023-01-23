@@ -287,7 +287,7 @@ public abstract class AbstractExpr extends AbstractInst {
      * Return the tree as it is which is the default behavior
      */
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         return this;
     }
 

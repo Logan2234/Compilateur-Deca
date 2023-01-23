@@ -130,9 +130,9 @@ public class While extends AbstractInst {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.condition = (AbstractExpr) this.condition.removeUnusedVar();
-        this.body = (ListInst) this.body.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.condition = (AbstractExpr) this.condition.removeUnusedVar(prog);
+        this.body = (ListInst) this.body.removeUnusedVar(prog);
         if (!this.body.isEmpty()) {
             return this;
         }

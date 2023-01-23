@@ -58,10 +58,10 @@ public class ListInst extends TreeList<AbstractInst> {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         ListIterator<AbstractInst> iter = this.iterator();
         while (iter.hasNext()) {
-            AbstractInst tree = (AbstractInst) iter.next().removeUnusedVar();
+            AbstractInst tree = (AbstractInst) iter.next().removeUnusedVar(prog);
             // we have to remove first because it may be a new tree
             iter.remove();
             if (tree == null) {

@@ -65,7 +65,7 @@ public class MethodAsmBody extends AbstractMethod {
     }
     
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         return this;
     }
     

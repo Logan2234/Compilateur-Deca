@@ -123,8 +123,8 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         return operand.isReadExpr();
     }
 
-    protected Tree removeUnusedVar() {
-        this.operand = (AbstractExpr)this.operand.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.operand = (AbstractExpr)this.operand.removeUnusedVar(prog);
         return this;
     }
 

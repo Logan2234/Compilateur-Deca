@@ -152,12 +152,12 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         if (!this.name.getDefinition().isUsed()) {
             return null;
         }
-        this.fields = (ListDeclField)this.fields.removeUnusedVar();
-        this.methods = (ListDeclMethod)this.methods.removeUnusedVar();
+        this.fields = (ListDeclField)this.fields.removeUnusedVar(prog);
+        this.methods = (ListDeclMethod)this.methods.removeUnusedVar(prog);
         return this;
     }
 

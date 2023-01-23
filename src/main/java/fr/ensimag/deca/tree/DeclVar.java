@@ -106,16 +106,18 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.initialization = (AbstractInitialization)this.initialization.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.initialization = (AbstractInitialization)this.initialization.removeUnusedVar(prog);
         if (this.varName.getDefinition().isUsed()) {
             return this;
         }
         if (this.initialization.getExpression() == null){
+            prog.setVarRemoved();
             return null;
         }
         List<AbstractExpr> listExpr = this.initialization.getExpression().getUnremovableExpr();
         if (listExpr.isEmpty()) {
+            prog.setVarRemoved();
             return null;
         }
         if (this.type.getDefinition().getType().isInt() || this.type.getDefinition().getType().isFloat()) {

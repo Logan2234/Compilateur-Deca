@@ -62,9 +62,14 @@ public class Program extends AbstractProgram {
         return main;
     }
 
+    public void setVarRemoved() {
+        this.varRemoved = true;
+    }
+
     private ListDeclClass classes;
     private AbstractMain main;
     private boolean spotted;
+    private boolean varRemoved = false;
     private Map<ClassDefinition,Set<Integer>> methodsUsed;
 
     @Override
@@ -174,12 +179,13 @@ public class Program extends AbstractProgram {
      * @return true if one or more variable have been removed
      */
     @Override
-    public void optimUnusedVar() {
+    public boolean optimUnusedVar() {
         if (this.spotted) {
             this.resetSpottedVar();
         }
         this.spotUsedVar();
-        this.removeUnusedVar();
+        this.removeUnusedVar(this);
+        return this.varRemoved;
     }
 
     @Override
@@ -200,9 +206,10 @@ public class Program extends AbstractProgram {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.classes = (ListDeclClass) this.classes.removeUnusedVar();
-        this.main = (AbstractMain) this.main.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.varRemoved = false;
+        this.classes = (ListDeclClass) this.classes.removeUnusedVar(prog);
+        this.main = (AbstractMain) this.main.removeUnusedVar(prog);
         return this;
     }
 

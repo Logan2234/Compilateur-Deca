@@ -91,7 +91,7 @@ public class DeclParam extends AbstractDeclParam {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         return this;
     }
 
