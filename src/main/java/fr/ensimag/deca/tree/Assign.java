@@ -107,7 +107,6 @@ public class Assign extends AbstractBinaryExpr {
     @Override
     public boolean irrelevant() {
         if (inWhile) {
-            System.out.println("in while");
             if (getLeftOperand().isSelection()) {
                 ((Selection) getLeftOperand()).erraseIrrelevant();
             } else {
