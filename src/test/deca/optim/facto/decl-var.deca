@@ -8,6 +8,6 @@
 //    cree le 22/01/2023
 
 {
-    int a;
+    int a = 1;
     int b = 2*a + a*13 - (5*a) / (9*a);
 }

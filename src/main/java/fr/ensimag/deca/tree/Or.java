@@ -3,7 +3,10 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.SNE;
 
 /**
@@ -30,27 +33,10 @@ public class Or extends AbstractOpBool {
     }
 
     @Override
-    public boolean collapse() {
-        return getRightOperand().collapse() || getLeftOperand().collapse();
-    }
-
-    @Override
-    public Boolean collapseBool() {
-        Boolean rightCollapsedValue = getRightOperand().collapseBool();
-        if(rightCollapsedValue != null && getRightOperand().collapsable()) {
-            BooleanLiteral newBool = new BooleanLiteral(rightCollapsedValue);
-            newBool.setType(getType());
-            setRightOperand(newBool);
-        }
-        Boolean leftCollapsedValue = getLeftOperand().collapseBool();
-        if(leftCollapsedValue != null && getLeftOperand().collapsable()) {
-            BooleanLiteral newBool = new BooleanLiteral(leftCollapsedValue);
-            newBool.setType(getType());
-            setLeftOperand(newBool);
-        }
-        if(rightCollapsedValue != null && leftCollapsedValue != null) {
-            return rightCollapsedValue || leftCollapsedValue;
-        }
-        return null;
-    }
+    public void lazyEvaluation(DecacCompiler compiler, GPRegister resultRegister, Label toLabel) {
+        // and : if the result of register is false, branch to label
+        compiler.addInstruction(new CMP(1, resultRegister));
+        // if result register contains zero, return false in it 
+        compiler.addInstruction(new BEQ(toLabel));
+    } 
 }

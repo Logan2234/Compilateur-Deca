@@ -264,9 +264,11 @@ public abstract class AbstractExpr extends AbstractInst {
                 list.add(multiply);
             }
         }
-        if (list.size() == 1) {
+        if (list.size() == 0){
+            
+        }
+        else if (list.size() == 1) {
             listPlus.add(list.getList().get(0));
-            ;
         } else {
             Plus plus = new Plus((AbstractExpr) list.getList().get(1), (AbstractExpr) list.getList().get(0));
             plus.setType(compiler.environmentType.INT);
@@ -332,14 +334,13 @@ public abstract class AbstractExpr extends AbstractInst {
             if (!leftOperand.isLiteral() && !rightOperand.isLiteral()) {
                 Identifier identLeft;
                 Identifier identRight;
-                if (leftIsMinus){
+                if (leftIsMinus) {
                     identLeft = (Identifier) ((UnaryMinus) leftOperand).getOperand();
                     Type type = rightOperand.getType();
                     rightOperand = new UnaryMinus(rightOperand);
                     rightOperand.setType(type);
                     rightIsMinus = true;
-                }
-                else
+                } else
                     identLeft = (Identifier) leftOperand;
                 if (rightIsMinus)
                     identRight = (Identifier) ((UnaryMinus) rightOperand).getOperand();
@@ -424,15 +425,12 @@ public abstract class AbstractExpr extends AbstractInst {
         Map<Symbol, Identifier> symbolToIdent = new HashMap<>();
         ListExpr exprList = new ListExpr();
         addMap(map, mapSymbol, symbolToIdent, exprList, this, "+");
-
         ListExpr multiply = new ListExpr();
         for (Map.Entry<Symbol, Integer> entry : map.entrySet()) {
-            if (entry.getValue() != 0) {
-                Multiply mult = new Multiply(symbolToIdent.get(entry.getKey()), new IntLiteral(entry.getValue()));
-                mult.setType(compiler.environmentType.INT);
-                mult.rightOperand.setType(compiler.environmentType.INT);
-                multiply.add(mult);
-            }
+            Multiply mult = new Multiply(symbolToIdent.get(entry.getKey()), new IntLiteral(entry.getValue()));
+            mult.setType(compiler.environmentType.INT);
+            mult.rightOperand.setType(compiler.environmentType.INT);
+            multiply.add(mult);
         }
 
         ListExpr multiplySymbol = new ListExpr();

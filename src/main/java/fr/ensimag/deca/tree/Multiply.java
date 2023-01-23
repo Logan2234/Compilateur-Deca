@@ -92,12 +92,13 @@ public class Multiply extends AbstractOpArith {
             try {
                 int value = ((IntLiteral) (((UnaryMinus) rightOperand).getOperand())).getValue();
                 AbstractExpr rightBisOperand = new IntLiteral(value);
-                shift(compiler, rightBisOperand, leftOperand, list);
+                shift(compiler, leftOperand ,rightBisOperand , list);
                 ((UnaryMinus) rightOperand).setOperand((AbstractExpr) list.getList().get(list.size() - 1));
                 list.add(rightOperand);
                 ((UnaryMinus) list.getList().get(list.size() - 1)).setType(compiler.environmentType.INT);
             } catch (ClassCastException e) {
                 shift(compiler, leftOperand, rightOperand, list);
+                if (list.size() != 0)
                 ((AbstractOpArith) list.getList().get(list.size() - 1)).setType(compiler.environmentType.INT);
             }
 
@@ -112,12 +113,15 @@ public class Multiply extends AbstractOpArith {
                 ((UnaryMinus) list.getList().get(list.size() - 1)).setType(compiler.environmentType.INT);
             } catch (ClassCastException e) {
                 shift(compiler, rightOperand, leftOperand, list);
-                ((AbstractOpArith) list.getList().get(list.size() - 1)).setType(compiler.environmentType.INT);
+                if (list.size() != 0)
+                    ((AbstractOpArith) list.getList().get(list.size() - 1)).setType(compiler.environmentType.INT);
             }
         } else {
             return super.splitCalculus(compiler);
         }
+        if (list.size() != 0)
         return list.getList().get(list.size() - 1);
+        return new IntLiteral(0);
     }
 
     public boolean collapse() {

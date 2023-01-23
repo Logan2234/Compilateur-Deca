@@ -12,7 +12,7 @@ class A{
 }
 
 {
-    int a;
-    A objet;
+    int a = 1;
+    A objet = new A();
     objet.method(2*a + a*13 - (5*a) / (9*a));
 }

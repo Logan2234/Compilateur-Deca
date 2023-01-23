@@ -8,6 +8,7 @@
 //    cree le 22/01/2023
 
 {
-    int a, b;
+    int a=1;
+    int b=1;
     print(-2*a +a*a - ((-a)*(-13)) + 2 + a*(-b) + (-a)*b);
 }
