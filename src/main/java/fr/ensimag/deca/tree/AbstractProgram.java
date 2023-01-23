@@ -19,7 +19,7 @@ public abstract class AbstractProgram extends Tree {
 
     public abstract CollapseResult<Null> collapseProgram();
 
-    public abstract void optimUnusedVar();
+    public abstract boolean optimUnusedVar();
 
     public abstract void substituteInlineMethods();
 }
