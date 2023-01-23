@@ -40,11 +40,11 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
 
         if (!typeLeft.isInt() && !typeLeft.isFloat())
             throw new ContextualError(
-                    "The left operand of a comparaison operation has to be an int or a float (rule 3.33)", loc);
+                    "The left operand of a comparison operation has to be an int or a float (rule 3.33)", loc);
 
         if (!typeRight.isInt() && !typeRight.isFloat())
             throw new ContextualError(
-                    "The right operand of a comparaison operation has to be an int or a float (rule 3.33)", loc);
+                    "The right operand of a comparison operation has to be an int or a float (rule 3.33)", loc);
 
         ConvFloat convFloat;
         if (typeLeft.isFloat() && typeRight.isInt()) {

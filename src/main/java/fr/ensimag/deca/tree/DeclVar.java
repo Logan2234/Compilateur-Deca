@@ -41,7 +41,7 @@ public class DeclVar extends AbstractDeclVar {
         Type type = this.type.verifyType(compiler);
 
         if (type.isVoid())
-            throw new ContextualError("A variable can't be void (rule 3.17)", getLocation());
+            throw new ContextualError("The variable's type can't be void (rule 3.17)", getLocation());
 
         try {
             ExpDefinition def = new VariableDefinition(type, getLocation());
