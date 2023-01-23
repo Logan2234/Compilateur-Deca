@@ -1,0 +1,13 @@
+// Description:
+//    test du bloc vide
+//
+// Resultats:
+//    1
+//
+// Historique:
+//    cree le 08/01/2023
+{
+    float a = 1;
+    int b = (int)(a);
+    println(b);
+}
