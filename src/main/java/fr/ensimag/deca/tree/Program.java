@@ -175,6 +175,7 @@ public class Program extends AbstractProgram {
 
     @Override
     protected void spotUsedVar() {
+        this.spotted = true;
         this.main.spotUsedVar();
         this.spotFromUsedMethods();
         this.spotOverridingFields();
