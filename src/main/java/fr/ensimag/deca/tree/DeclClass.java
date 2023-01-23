@@ -189,6 +189,7 @@ public class DeclClass extends AbstractDeclClass {
                     writtenMethods[methodIndex] = true;
                     RegisterOffset methodAddr = new RegisterOffset(compiler.readNextStackSpace().getOffset() + methodIndex, Register.GB);
                     method.setDAddr(methodAddr);
+                    // don't generate address if the method is never used (and if we are optimizing);
                     if (method.isUsed() || !compiler.getCompilerOptions().getOptimize()) {
                         compiler.addInstruction(new LOAD(new LabelOperand(new Label("code." + currentClass.getType().getName().getName() + "." + method.getName())), Register.R0));
                         compiler.addInstruction(new STORE(Register.R0, methodAddr));
