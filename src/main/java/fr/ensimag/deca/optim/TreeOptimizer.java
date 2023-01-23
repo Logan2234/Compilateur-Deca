@@ -17,7 +17,7 @@ public class TreeOptimizer {
             // remove useless variables
             program.factorise(compiler);
             program.splitCalculus(compiler);
-            program.optimUnusedVar(); 
+            optimized = program.optimUnusedVar(); 
             program.substituteInlineMethods();
             i++;
         }

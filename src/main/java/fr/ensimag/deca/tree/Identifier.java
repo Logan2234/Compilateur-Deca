@@ -371,7 +371,7 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         return this;
     }
 

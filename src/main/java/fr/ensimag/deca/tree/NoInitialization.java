@@ -96,7 +96,7 @@ public class NoInitialization extends AbstractInitialization {
         return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
     
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         return this;
     }
     

@@ -143,9 +143,9 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.leftOperand = (AbstractExpr)this.leftOperand.removeUnusedVar();
-        this.rightOperand = (AbstractExpr)this.rightOperand.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.leftOperand = (AbstractExpr)this.leftOperand.removeUnusedVar(prog);
+        this.rightOperand = (AbstractExpr)this.rightOperand.removeUnusedVar(prog);
         return this;
     }
 

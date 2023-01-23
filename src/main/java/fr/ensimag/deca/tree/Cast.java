@@ -100,8 +100,8 @@ public class Cast extends AbstractExpr {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.expression = (AbstractExpr)this.expression.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.expression = (AbstractExpr)this.expression.removeUnusedVar(prog);
         return this;
     }
 

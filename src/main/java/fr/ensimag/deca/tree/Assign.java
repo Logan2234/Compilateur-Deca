@@ -110,8 +110,8 @@ public class Assign extends AbstractBinaryExpr {
         return false;
     }
 
-    protected Tree removeUnusedVar() {
-        this.rightOperand = (AbstractExpr) this.rightOperand.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.rightOperand = (AbstractExpr) this.rightOperand.removeUnusedVar(prog);
         if (!this.getLeftOperand().getDefinition().isUsed()) {
             return this.rightOperand;
         }

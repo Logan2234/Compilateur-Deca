@@ -104,10 +104,10 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         ListIterator<TreeType> iter = this.iterator();
         while(iter.hasNext()) {
-            TreeType tree = (TreeType)iter.next().removeUnusedVar();
+            TreeType tree = (TreeType)iter.next().removeUnusedVar(prog);
             iter.remove();
             if (tree != null) {
                 iter.add(tree);

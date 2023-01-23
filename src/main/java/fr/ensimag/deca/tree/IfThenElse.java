@@ -124,10 +124,10 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.condition = (AbstractExpr) this.condition.removeUnusedVar();
-        this.thenBranch = (ListInst) this.thenBranch.removeUnusedVar();
-        this.elseBranch = (ListInst) this.elseBranch.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.condition = (AbstractExpr) this.condition.removeUnusedVar(prog);
+        this.thenBranch = (ListInst) this.thenBranch.removeUnusedVar(prog);
+        this.elseBranch = (ListInst) this.elseBranch.removeUnusedVar(prog);
         if (this.thenBranch.isEmpty() && this.elseBranch.isEmpty()) {
             return this.condition;
         }

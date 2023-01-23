@@ -60,7 +60,7 @@ public class EmptyMain extends AbstractMain {
     }
     
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         return this;
     }
 

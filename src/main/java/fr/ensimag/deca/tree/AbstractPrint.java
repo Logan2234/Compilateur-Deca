@@ -84,8 +84,8 @@ public abstract class AbstractPrint extends AbstractInst {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.arguments.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.arguments.removeUnusedVar(prog);
         return this;
     }
 
