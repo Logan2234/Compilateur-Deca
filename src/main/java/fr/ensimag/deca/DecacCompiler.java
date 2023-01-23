@@ -417,7 +417,7 @@ public class DecacCompiler {
             if (compilerOptions.getCompileMode() == CompileMode.Compile) {
                 if (compilerOptions.getOptimize()) {
                     LOG.info("Optimizing the tree...");
-                    TreeOptimizer.Optimize(prog);
+                    TreeOptimizer.Optimize(prog, this);
                     LOG.info("Tree optimized...");
                 }
                 prog.codeGenProgram(this);
