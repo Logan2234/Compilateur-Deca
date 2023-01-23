@@ -295,10 +295,6 @@ public abstract class Tree {
         }
     }
 
-    protected Boolean isLiteral() {
-        return false;
-    }
-
     protected Boolean isIdentifier() {
         return false;
     }
