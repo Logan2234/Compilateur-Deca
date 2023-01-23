@@ -177,9 +177,9 @@ public class MethodCall extends AbstractExpr {
         if (!inlineMethods.containsKey(this.meth.getMethodDefinition())) {
             return this;
         }
-        // An inline methode should not be susbtituted if it takes as a parameter a method call,
-        // an assign or a read because it may be duplicated.
-        if(this.params.getUnremovableExpr().isEmpty()) {
+        // only subsitute if the parameters are "atomics" because they can be
+        // duplicated in the subsituted expression
+        if(this.params.isAtomic()) {
             return inlineMethods.get(this.meth.getMethodDefinition()).getSubsitution(this.params);
         }
         return this;

@@ -110,4 +110,9 @@ public class This extends AbstractExpr {
         return false;
     }
 
+    @Override
+    protected boolean isAtomic() {
+        return true;
+    }
+
 }

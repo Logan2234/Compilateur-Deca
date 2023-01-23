@@ -135,4 +135,12 @@ public class Cast extends AbstractExpr {
         // this is for classes, so don't collapse at all
         return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
+
+    @Override
+    protected boolean isAtomic() {
+        if (this.expression.isAtomic()) {
+            return true;
+        }
+        return false;
+    }
 }

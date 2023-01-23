@@ -376,5 +376,10 @@ public class Identifier extends AbstractIdentifier {
     protected boolean containsField() {
         return this.getDefinition().isField();
     }
+
+    @Override
+    protected boolean isAtomic() {
+        return true;
+    }
     
 }

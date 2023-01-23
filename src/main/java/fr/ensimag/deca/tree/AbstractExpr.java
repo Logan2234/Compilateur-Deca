@@ -48,6 +48,16 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     /**
+     * Method used to know if an expression is "atomic", meaning that it is not expensive for
+     * ima to compute. This way, we know if an inline substitution will introduce more complexity
+     * if a parameter appears multiple times in the method.
+     * @return true if the expression is "atomic"
+     */
+    protected boolean isAtomic() {
+        return false;
+    }
+
+    /**
      * Used by This class for telling if the This is implicit or not.
      * getImpl return false and it will be override by This class
      * 
