@@ -44,14 +44,6 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     /**
-     * Check if the expression is a literal expression
-     * @return true if is a literal expression
-     */
-    protected Boolean isLiteral() {
-        return true;
-    }
-
-    /**
      * Method used to know if an expression is "atomic", meaning that it is not expensive for
      * ima to compute. This way, we know if an inline substitution will introduce more complexity
      * if a parameter appears multiple times in the method.
@@ -287,7 +279,7 @@ public abstract class AbstractExpr extends AbstractInst {
      * Return the tree as it is which is the default behavior
      */
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         return this;
     }
 
@@ -417,7 +409,7 @@ public abstract class AbstractExpr extends AbstractInst {
                     mapSymbol.put(identLeft.getName(), new ArrayList<>());
                 mapSymbol.get(identLeft.getName()).add(rightOperand);
 
-            } else if (leftOperand.isLiteral() && !rightOperand.isLiteral())
+            } else if (leftOperand.isLiteral() && !rightOperand.isLiteral()){
                 if (leftIsMinus && rightIsMinus)
                     incOccur(map, symbolToIdent, ((Identifier) ((UnaryMinus) (rightOperand)).getOperand()),
                             multiplier * ((IntLiteral) ((UnaryMinus) leftOperand).getOperand()).getValue());
@@ -430,6 +422,7 @@ public abstract class AbstractExpr extends AbstractInst {
                 else
                     incOccur(map, symbolToIdent, (Identifier) rightOperand,
                             multiplier * ((IntLiteral) leftOperand).getValue());
+            }
             else if (rightOperand.isLiteral() && !leftOperand.isLiteral())
                 if (rightIsMinus && leftIsMinus)
                     incOccur(map, symbolToIdent, ((Identifier) ((UnaryMinus) leftOperand).getOperand()),
@@ -495,7 +488,7 @@ public abstract class AbstractExpr extends AbstractInst {
             mult.rightOperand.setType(compiler.environmentType.INT);
             multiply.add(mult);
         }
-
+        
         ListExpr multiplySymbol = new ListExpr();
         for (Map.Entry<Symbol, List<AbstractExpr>> entry : mapSymbol.entrySet()) {
             for (AbstractExpr expr : entry.getValue()) {
