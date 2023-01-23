@@ -9,13 +9,11 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 import java.io.PrintStream;
-import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
@@ -108,19 +106,25 @@ public class While extends AbstractInst {
         this.body.spotUsedVar(prog);
     }
     
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        condition = (AbstractExpr)condition.factorise(compiler);
+        body.factorise(compiler);
+        return this;
+    }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return condition.factorised(compiler) || body.factorised(compiler);
+    public boolean isSplitable(DecacCompiler compiler) {
+        return condition.isSplitable(compiler) || body.isSplitable(compiler);
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
-        condition.factoInst(compiler);
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        condition.splitCalculus(compiler);
         
-        if (body.factorised(compiler))
-            body.factoInst(compiler);
+        if (body.isSplitable(compiler))
+            body.splitCalculus(compiler);
 
-        return null;
+        return this;
     }
 
     @Override

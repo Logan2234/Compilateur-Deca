@@ -199,14 +199,21 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return methods.factorised(compiler) || fields.factorised(compiler);
+    public AbstractInst factorise(DecacCompiler compiler) {
+        fields.factorise(compiler);
+        methods.factorise(compiler);
+        return null;
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
-        fields.factoInst(compiler);
-        methods.factoInst(compiler);
+    public boolean isSplitable(DecacCompiler compiler) {
+        return methods.isSplitable(compiler) || fields.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        fields.splitCalculus(compiler);
+        methods.splitCalculus(compiler);
         return null;
     }
 

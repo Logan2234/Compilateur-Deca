@@ -1,5 +1,9 @@
 package fr.ensimag.deca.tree;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.OpOverflowErr;
 import fr.ensimag.ima.pseudocode.DVal;
@@ -26,7 +30,7 @@ public class Multiply extends AbstractOpArith {
         // mult
         // we can set it to be replaced with a shift after compilation.
         MUL mulInst = new MUL(dVal, register);
-        if(shiftReplacable) {
+        if (shiftReplacable) {
             mulInst.setShiftReplacable();
         }
         compiler.addInstruction(mulInst);
@@ -44,50 +48,43 @@ public class Multiply extends AbstractOpArith {
         shiftReplacable = true;
     }
 
-    public boolean factorised(DecacCompiler compiler) {
+    public boolean isSplitable(DecacCompiler compiler) {
         if (leftOperand.isLiteral() ^ rightOperand.isLiteral()) {
+            int poids = 0;
+            int value;
             if (leftOperand.isLiteral() && leftOperand.getType().isInt()) {
-                int value;
                 try {
-                    value = ((IntLiteral)((UnaryMinus)leftOperand).getOperand()).getValue();
+                    value = ((IntLiteral) ((UnaryMinus) leftOperand).getOperand()).getValue();
                 } catch (ClassCastException c) {
                     value = ((IntLiteral) leftOperand).getValue();
                 }
-                String[] nbbinaire = Integer.toBinaryString(value).split("");
-                int[] binaire = new int[nbbinaire.length];
-                int poids = 0;
-                for (int i = 0; i < nbbinaire.length; i++) {
-                    binaire[i] = Integer.parseInt(nbbinaire[nbbinaire.length - 1 - i]);
-                    if (binaire[i] == 1) 
-                        poids++;   
-                }
-                return (poids<=5);
-            }
-            if (leftOperand.isLiteral() && leftOperand.getType().isFloat())
-                return false; // On ne developpe pas les floats en somme car il faudra dans tous les cas faire
-                              // des additions donc pas optim
-            if (rightOperand.getType().isInt()) {
-                int value;
+            } else if (leftOperand.isLiteral() && !leftOperand.getType().isInt())
+                return false;
+            else if (rightOperand.getType().isInt()) {
                 try {
-                    value = ((IntLiteral)((UnaryMinus)rightOperand).getOperand()).getValue();
+                    value = ((IntLiteral) ((UnaryMinus) rightOperand).getOperand()).getValue();
                 } catch (ClassCastException c) {
                     value = ((IntLiteral) rightOperand).getValue();
                 }
-                String[] nbbinaire = Integer.toBinaryString(value).split("");
-                int[] binaire = new int[nbbinaire.length];
-                int poids = 0;
-                for (int i = 0; i < nbbinaire.length; i++) {
-                    binaire[i] = Integer.parseInt(nbbinaire[nbbinaire.length - 1 - i]);
-                    if (binaire[i] == 1) 
-                        poids++;   
-                }
-                return (poids<=5);
+            } else
+                return false;
+            String[] nbbinaire = Integer.toBinaryString(value).split("");
+            List<Integer> binaire = new ArrayList<>();
+            for (int i = 0; i < nbbinaire.length; i++) {
+                binaire.add(Integer.parseInt(nbbinaire[nbbinaire.length - 1 - i]));
+                if (binaire.get(i) == 1)
+                poids += i;
             }
+            poids += Collections.frequency(binaire, 1) - 1;
+            return (poids <= 9);
         }
-        return super.factorised(compiler);
+        return super.isSplitable(compiler);
     }
 
-    public AbstractInst factoInst(DecacCompiler compiler) {
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        if (!this.isSplitable(compiler))
+            return this;
+
         ListInst list = new ListInst();
 
         // Letter * number
@@ -96,32 +93,31 @@ public class Multiply extends AbstractOpArith {
                 int value = ((IntLiteral) (((UnaryMinus) rightOperand).getOperand())).getValue();
                 AbstractExpr rightBisOperand = new IntLiteral(value);
                 shift(compiler, rightBisOperand, leftOperand, list);
-                ((UnaryMinus)rightOperand).setOperand((AbstractExpr)list.getList().get(list.size()-1));
+                ((UnaryMinus) rightOperand).setOperand((AbstractExpr) list.getList().get(list.size() - 1));
                 list.add(rightOperand);
-                ((UnaryMinus) list.getList().get(list.size()-1)).setType(compiler.environmentType.INT);
+                ((UnaryMinus) list.getList().get(list.size() - 1)).setType(compiler.environmentType.INT);
             } catch (ClassCastException e) {
                 shift(compiler, leftOperand, rightOperand, list);
-                ((AbstractOpArith) list.getList().get(list.size()-1)).setType(compiler.environmentType.INT);
+                ((AbstractOpArith) list.getList().get(list.size() - 1)).setType(compiler.environmentType.INT);
             }
 
         // number * Letter
-        else if (leftOperand.isLiteral() && rightOperand.getType().isInt()){
+        else if (leftOperand.isLiteral() && rightOperand.getType().isInt()) {
             try {
                 int value = ((IntLiteral) (((UnaryMinus) leftOperand).getOperand())).getValue();
                 AbstractExpr leftBisOperand = new IntLiteral(value);
                 shift(compiler, rightOperand, leftBisOperand, list);
-                ((UnaryMinus)leftOperand).setOperand((AbstractExpr)list.getList().get(list.size()-1));
+                ((UnaryMinus) leftOperand).setOperand((AbstractExpr) list.getList().get(list.size() - 1));
                 list.add(leftOperand);
-                ((UnaryMinus) list.getList().get(list.size()-1)).setType(compiler.environmentType.INT);
+                ((UnaryMinus) list.getList().get(list.size() - 1)).setType(compiler.environmentType.INT);
             } catch (ClassCastException e) {
                 shift(compiler, rightOperand, leftOperand, list);
-                ((AbstractOpArith) list.getList().get(list.size()-1)).setType(compiler.environmentType.INT);
+                ((AbstractOpArith) list.getList().get(list.size() - 1)).setType(compiler.environmentType.INT);
             }
+        } else {
+            return super.splitCalculus(compiler);
         }
-        else {
-            return super.factoInst(compiler);
-        }
-        return list.getList().get(list.size()-1);
+        return list.getList().get(list.size() - 1);
     }
 
     public boolean collapse() {

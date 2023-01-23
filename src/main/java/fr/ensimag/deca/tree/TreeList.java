@@ -118,10 +118,20 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler) {
+    public boolean isSplitable(DecacCompiler compiler) {
         for (TreeType t : list)
-            if (t.factorised(compiler))
+            if (t.isSplitable(compiler))
                 return true;
         return false;
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        for (int i = 0; i < getList().size(); i++) {
+            TreeType inst = (TreeType)getList().get(i).factorise(compiler);
+            if (inst != null)
+                set(i, inst);
+        }
+        return null;
     }
 }

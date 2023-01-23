@@ -198,13 +198,19 @@ public class DeclMethod extends AbstractDeclMethod {
         return this.body;
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return body.factorised(compiler);
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        body.factorise(compiler);
+        return null;
+    }
+
+    public boolean isSplitable(DecacCompiler compiler) {
+        return body.isSplitable(compiler);
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
-        body.factoInst(compiler);
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        body.splitCalculus(compiler);
         return null;
     }
 

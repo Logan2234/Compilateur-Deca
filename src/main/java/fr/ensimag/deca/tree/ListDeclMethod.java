@@ -64,10 +64,10 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
         for (AbstractDeclMethod method : getList())
-            if (method.factorised(compiler))
-                method.factoInst(compiler);
+            if (method.isSplitable(compiler))
+                method.splitCalculus(compiler);
         return null;
     }
 

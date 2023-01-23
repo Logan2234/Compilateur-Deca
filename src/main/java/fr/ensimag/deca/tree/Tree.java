@@ -315,12 +315,20 @@ public abstract class Tree {
      */
     public abstract boolean collapse();
 
-    public boolean factorised(DecacCompiler compiler){
+    public boolean isSplitable(DecacCompiler compiler){
         return false;
     }
 
-    public AbstractInst factoInst(DecacCompiler compiler){
+    public AbstractInst splitCalculus(DecacCompiler compiler){
         return null;
+    }
+
+    public AbstractInst factorise(DecacCompiler compiler){
+        try {
+            return (AbstractInst)this;
+        } catch (ClassCastException e){
+            return null;
+        }
     }
 
     /**

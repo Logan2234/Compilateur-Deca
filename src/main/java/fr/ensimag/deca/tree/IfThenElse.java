@@ -111,26 +111,34 @@ public class IfThenElse extends AbstractInst {
 
     @Override
     protected void spotUsedVar(AbstractProgram prog) {
-        this.condition.spotUsedVar(prog);
-        this.thenBranch.spotUsedVar(prog);
-        this.elseBranch.spotUsedVar(prog);
+        condition.spotUsedVar(prog);
+        thenBranch.spotUsedVar(prog);
+        elseBranch.spotUsedVar(prog);
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return condition.factorised(compiler) || thenBranch.factorised(compiler) || elseBranch.factorised(compiler);
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        condition = (AbstractExpr)condition.factorise(compiler);
+        thenBranch.factorise(compiler);
+        elseBranch.factorise(compiler);
+        return this;
+    }
+
+    public boolean isSplitable(DecacCompiler compiler) {
+        return condition.isSplitable(compiler) || thenBranch.isSplitable(compiler) || elseBranch.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        condition.splitCalculus(compiler);
+        thenBranch.splitCalculus(compiler);
+        elseBranch.splitCalculus(compiler);
+
+        return this;
     }
 
     public boolean collapse() {
         return condition.collapse() || thenBranch.collapse() || elseBranch.collapse();
-    }
-
-    @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
-        condition.factoInst(compiler);
-        thenBranch.factoInst(compiler);
-        elseBranch.factoInst(compiler);
-
-        return null;
     }
 
     @Override

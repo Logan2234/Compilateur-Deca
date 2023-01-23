@@ -59,10 +59,10 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
             i.verifyDeclVar(compiler, localEnv, currentClass);
     }
 
-    public AbstractInst factoInst(DecacCompiler compiler) {
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
         for (AbstractDeclVar var : getList())
-            if (var.factorised(compiler))
-                var.factoInst(compiler);
+            if (var.isSplitable(compiler))
+                var.splitCalculus(compiler);
         return null;
     }
 

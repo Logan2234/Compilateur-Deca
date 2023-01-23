@@ -81,10 +81,17 @@ public class Main extends AbstractMain {
         return insts;
     }
     
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        declVariables.factorise(compiler);
+        insts.factorise(compiler);
+        return null;
+    }
+
 	@Override
-	public AbstractInst factoInst(DecacCompiler compiler) {
-        declVariables.factoInst(compiler);
-        insts.factoInst(compiler);
+	public AbstractInst splitCalculus(DecacCompiler compiler) {
+        declVariables.splitCalculus(compiler);
+        insts.splitCalculus(compiler);
         return null;
 	}
     

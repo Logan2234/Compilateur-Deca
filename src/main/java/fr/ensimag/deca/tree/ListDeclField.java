@@ -63,10 +63,10 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
         for (AbstractDeclField field : getList())
-            if (field.factorised(compiler))
-                field.factoInst(compiler);
+            if (field.isSplitable(compiler))
+                field.splitCalculus(compiler);
         return null;
     }
 

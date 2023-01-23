@@ -139,13 +139,19 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return params.factorised(compiler);
+    public AbstractInst factorise(DecacCompiler compiler) {
+        params.factorise(compiler);
+        return null;
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
-        params.factoInst(compiler);
+    public boolean isSplitable(DecacCompiler compiler) {
+        return params.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        params.splitCalculus(compiler);
         return this;
     }
 

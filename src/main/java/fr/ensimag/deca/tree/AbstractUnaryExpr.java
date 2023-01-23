@@ -96,13 +96,19 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     }
     
     @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return getOperand().factorised(compiler);
+    public AbstractInst factorise(DecacCompiler compiler) {
+        operand = (AbstractExpr)operand.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return getOperand().isSplitable(compiler);
     }
     
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
-        setOperand((AbstractExpr)getOperand().factoInst(compiler));
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        setOperand((AbstractExpr)getOperand().splitCalculus(compiler));
         return this;
     }
 

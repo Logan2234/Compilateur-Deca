@@ -6,7 +6,6 @@ import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
@@ -110,16 +109,23 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return leftOperand.factorised(compiler) || rightOperand.factorised(compiler);
+    public AbstractInst factorise(DecacCompiler compiler){
+        leftOperand = (AbstractExpr)leftOperand.factorise(compiler);
+        rightOperand = (AbstractExpr)rightOperand.factorise(compiler);
+        return this;
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
-        if (leftOperand.factorised(compiler))
-            leftOperand = ((AbstractExpr) leftOperand.factoInst(compiler));
-        if (rightOperand.factorised(compiler))
-            rightOperand = ((AbstractExpr) rightOperand.factoInst(compiler));
+    public boolean isSplitable(DecacCompiler compiler) {
+        return leftOperand.isSplitable(compiler) || rightOperand.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        if (leftOperand.isSplitable(compiler))
+            leftOperand = ((AbstractExpr) leftOperand.splitCalculus(compiler));
+        if (rightOperand.isSplitable(compiler))
+            rightOperand = ((AbstractExpr) rightOperand.splitCalculus(compiler));
         return this;
     }
 

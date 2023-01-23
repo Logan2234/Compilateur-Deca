@@ -2,9 +2,6 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -61,13 +58,23 @@ public class ListInst extends TreeList<AbstractInst> {
         }
     }
 
-    public AbstractInst factoInst(DecacCompiler compiler) {
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
         for (int i = 0; i < getList().size(); i++) {
-            if (getList().get(i).factorised(compiler)) {
-                AbstractInst inst = getList().get(i).factoInst(compiler);
-                if (inst != null)
-                    set(i, inst);
-            }
+            AbstractInst inst = getList().get(i).factorise(compiler);
+            if (inst != null)
+                set(i, inst);
+            // else
+            //     removeAt(i);
+        }
+        return null;
+    }
+    
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (int i = 0; i < getList().size(); i++) {
+            AbstractInst inst = getList().get(i).splitCalculus(compiler);
+            if (inst != null)
+                set(i, inst);
         }
         return null;
     }
@@ -90,5 +97,4 @@ public class ListInst extends TreeList<AbstractInst> {
         }
         return collapse;
     }
-
 }

@@ -306,9 +306,16 @@ public class Program extends AbstractProgram {
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
-        main.factoInst(compiler);
-        classes.factoInst(compiler);
+    public AbstractInst factorise(DecacCompiler compiler) {
+        main.factorise(compiler);
+        classes.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        main.splitCalculus(compiler);
+        classes.splitCalculus(compiler);
         return null;
     }
         

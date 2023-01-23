@@ -34,10 +34,10 @@ public class ListExpr extends TreeList<AbstractExpr> {
         return collapsed;
     }
 
-    public AbstractInst factoInst(DecacCompiler compiler) {
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
         for (int i = 0; i < getList().size(); i++) {
-            if (getList().get(i).factorised(compiler))
-                set(i, (AbstractExpr)getList().get(i).factoInst(compiler));
+            if (getList().get(i).isSplitable(compiler))
+                set(i, (AbstractExpr)getList().get(i).splitCalculus(compiler));
         }
         return null;
     }

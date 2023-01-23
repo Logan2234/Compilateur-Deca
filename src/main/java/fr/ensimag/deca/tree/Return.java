@@ -101,13 +101,19 @@ public class Return extends AbstractInst {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler){
-        return expression.factorised(compiler);
+    public AbstractInst factorise(DecacCompiler compiler) {
+        expression.factorise(compiler);
+        return this;
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
-        expression = (AbstractExpr)expression.factoInst(compiler);
+    public boolean isSplitable(DecacCompiler compiler){
+        return expression.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        expression = (AbstractExpr)expression.splitCalculus(compiler);
         return this;
     }
 }

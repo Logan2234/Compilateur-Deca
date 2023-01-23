@@ -108,13 +108,19 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return initialization.factorised(compiler);
+    public AbstractInst factorise(DecacCompiler compiler) {
+        initialization.factorise(compiler);
+        return null;
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler){
-        initialization.factoInst(compiler);
+    public boolean isSplitable(DecacCompiler compiler) {
+        return initialization.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        initialization.splitCalculus(compiler);
         return null;
     }
 }

@@ -126,13 +126,19 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return initialization.factorised(compiler);
+    public AbstractInst factorise(DecacCompiler compiler) {
+        initialization.factorise(compiler);
+        return null;
+    }
+    
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return initialization.isSplitable(compiler);
     }
 
     @Override
-    public AbstractInst factoInst(DecacCompiler compiler) {
-        initialization.factoInst(compiler);
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        initialization.splitCalculus(compiler);
         return null;
     }
 

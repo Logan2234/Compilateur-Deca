@@ -79,4 +79,8 @@ public class Minus extends AbstractOpArith {
         return null;
     }
     
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        return this.facto(compiler, false);
+    }
 }
