@@ -91,8 +91,6 @@ public class MethodBody extends AbstractMethod {
 
     @Override
     public void setReturnsNames(String name) {
-        System.out.print("setting method name : "); // TODO Virgile à supprimer
-        System.out.println(name);
         for(AbstractInst inst : insts.getList()) {
             if(inst.isReturn()) {
                 inst.asReturn().setMethodClassName(name);
@@ -121,11 +119,6 @@ public class MethodBody extends AbstractMethod {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public boolean irrelevant() {
-        return vars.irrelevant() || insts.irrelevant();
     }
 
 	@Override

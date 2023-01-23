@@ -378,19 +378,6 @@ public abstract class Tree {
     public boolean isNew() {
         return false;
     }
-    
-    /**
-     * Check if the tree have irrelevant assignments.
-     * Example : int a = 1; int b = a; b = 2; a = 3; --> int a = 1, int b=1, ... 
-     * This calls the irrelevant triggers on each nodes.
-     * @return if this node could find more irrelevant assignments.
-     */
-    public abstract boolean irrelevant();
-
-    /**
-     * Dictionary of the virtual values of the variables, in each if/else statement.
-     */
-    public static HashMap<Integer, HashMap<Symbol, AbstractExpr>> irrelevantValuesForIf = new HashMap<Integer, HashMap<Symbol, AbstractExpr>>();
 
     /**
      * Number of the if/else statement.
@@ -406,15 +393,6 @@ public abstract class Tree {
      * Tells if we are creating a field
      */
     public static boolean inField = false;
-
-    /**
-     * Do the same as irrelevant(), but in if/else statements with a subDefinition of values.
-     * @param i the number of the if/else statement.
-     * @return if this node could find more irrelevant assignments.
-     */
-    public boolean irrelevant(int i){
-        return false;
-    }
 
     protected Boolean isLiteral() {
         return false;
@@ -436,17 +414,6 @@ public abstract class Tree {
      */
     protected abstract Tree removeUnusedVar();
 
-
-
-    /* * Collapse the float values known at compile time.
-     * if the expression cannot collapse, null is returned.
-     * 
-     * @return the value of the compile-time known float.
-     */
-    public Float collapseFloat() {
-        throw new UnsupportedOperationException("Not yet implemented !");
-    }
-
     public boolean isReturn() {
         return false;
     }
@@ -455,7 +422,6 @@ public abstract class Tree {
         return null;
     }
 
-    
     /**
      * Store all inline functions in the given map, mapping its definition to its delcaration
      * @param Map<MethodDefinition, ListDeclParam> in which are stored the inline methods 

@@ -112,11 +112,6 @@ public class NoInitialization extends AbstractInitialization {
     }
 
     @Override
-    public boolean irrelevant() {
-        return false;
-    }
-
-    @Override
     public boolean hasInitialization(){
         return false;
     }

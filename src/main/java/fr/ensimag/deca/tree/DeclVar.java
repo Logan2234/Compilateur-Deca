@@ -163,34 +163,6 @@ public class DeclVar extends AbstractDeclVar {
         return this;
     }
 
-    @Override
-    public boolean irrelevant(){ 
-        if (initialization.hasInitialization()) {
-            AbstractExpr expr = ((Initialization) initialization).getExpression();
-
-            if (expr.isNew()){
-                if (defMethod){declaredClassesInMethod.put(varName.getName(), varModels.get(((New) expr).getClasse().getName()));}
-                else declaredClasses.put(varName.getName(), (HashMap<Symbol,AbstractExpr>) (varModels.get(((New) expr).getClasse().getName()).clone()));
-                return false;
-            }
-
-            if (expr.isSelection()){
-                AbstractExpr out = ((Selection) expr).returnIrrelevantFromSelection();
-                if (out != null) ((Initialization) initialization).setExpression(out);
-                return false;
-            }
-
-            if (expr.irrelevant()){
-                ((Initialization) initialization).setExpression(currentValues.get(((Identifier) expr).getName()));
-            }
-            if (!expr.isReadExpr()){
-                currentValues.put(varName.getName(), ((Initialization) initialization).getExpression());
-    
-            } else if (currentValues.containsKey(varName.getName())){
-                currentValues.remove(varName.getName());
-            } 
-        }
-        return false;}
 
     @Override
     public AbstractInst factorise(DecacCompiler compiler) {

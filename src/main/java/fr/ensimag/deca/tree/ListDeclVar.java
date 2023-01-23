@@ -71,20 +71,5 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
                 var.splitCalculus(compiler);
         return null;
     }
-    @Override
-    public boolean irrelevant() {
-        boolean result = false;
-        AbstractDeclVar expr;
-        
-        for (int i = 0; i < getList().size(); i++) {
-            expr = getList().get(i);
-            if (expr.irrelevant()){
-                result |= true;
-                set(i, expr);
-            }
-        }
-
-        return result;
-    }
 
 }

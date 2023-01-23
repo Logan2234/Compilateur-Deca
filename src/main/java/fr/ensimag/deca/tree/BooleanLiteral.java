@@ -87,10 +87,6 @@ public class BooleanLiteral extends AbstractExpr {
         // do nothing
     }
 
-    protected Boolean isLiteral() {
-        return false;
-    }
-
     @Override
     public CollapseResult<CollapseValue> collapseExpr() {
         // can't collapse, but is a boolean value to collapse !
@@ -109,9 +105,4 @@ public class BooleanLiteral extends AbstractExpr {
     protected boolean containsField() {
         return false;
     }
-
-    public Boolean collapseBool() {
-        return value;
-    }
-
 }

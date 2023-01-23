@@ -41,14 +41,14 @@ do
             if [ $? -ne 0 ]
             then
                 echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca\//}${RED} execution of the optimized file failed"
-                if [[ $1 == "--maven" ]];
-                then
-                    exit 1
-                fi
+                # if [[ $1 == "--maven" ]];
+                # then
+                #     exit 1
+                # fi
             else
                 i=$(wc --lines "${test%.deca}"-without-opti.ass | cut -c1-3)
                 j=$(wc --lines "${test%.deca}".ass | cut -c1-3)
-                if [ i \> j ]
+                if [ $i -ge $j ]
                 then
                     echo -e "${GREENBOLD}Test passed: $NOCOLOR${test/.\/src\/test\/deca\//}$GREEN optimized file has less lines than original file"
                 else

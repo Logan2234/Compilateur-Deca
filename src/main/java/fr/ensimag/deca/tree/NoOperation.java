@@ -64,9 +64,4 @@ public class NoOperation extends AbstractInst {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         return this;
     }
-
-    @Override
-    public boolean irrelevant() {
-        return false;
-    }
 }

@@ -104,9 +104,4 @@ public class DeclParam extends AbstractDeclParam {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         return this;
     }
-
-    @Override
-    public boolean irrelevant(){
-        return false;
-    }
 }

@@ -202,16 +202,6 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    public boolean irrelevant() {
-        return true;
-    }
-
-    @Override
-    public boolean irrelevant(int i) {
-        return true;
-    }
-
-    @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Definition def = localEnv.get(name);

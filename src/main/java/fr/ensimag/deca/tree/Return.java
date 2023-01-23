@@ -119,39 +119,6 @@ public class Return extends AbstractInst {
     }
 
     @Override
-    public boolean irrelevant(){
-        if (inWhile) return false;
-        if (expression.irrelevant() || expression.isSelection()){
-            if (expression.isSelection()){
-                AbstractExpr out = ((Selection) expression).returnIrrelevantFromSelection();
-                if (out != null) {
-                    expression = out;
-                }
-            }
-            else {
-                expression = currentValues.get(((Identifier) expression).getName());
-            }
-        }
-        return expression.irrelevant();
-    }
-
-    @Override
-    public boolean irrelevant(int i){
-        if (expression.irrelevant(i) || expression.isSelection()){
-            if (expression.isSelection()){
-                AbstractExpr out = ((Selection) expression).returnIrrelevantFromSelection(i);
-                if (out != null) {
-                    expression = out;
-                }
-            }
-            else {
-                expression = irrelevantValuesForIf.get(i).get(((Identifier) expression).getName());
-            }
-        }
-        return expression.irrelevant(i);
-    }
-
-    @Override
     public AbstractInst factorise(DecacCompiler compiler) {
         expression.factorise(compiler);
         return this;

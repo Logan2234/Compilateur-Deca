@@ -263,18 +263,6 @@ public class DeclClass extends AbstractDeclClass {
         return this;
     }
 
-    @Override
-    public boolean irrelevant(){
-        defMethod = false;
-        declaredClasses.clear();
-        defClass = true;
-        actualClass = name.getName();
-        varModels.put(actualClass, new HashMap<Symbol, AbstractExpr>());
-        fields.irrelevant();
-        methods.irrelevant();
-        return false;
-    }
-
     public AbstractInst factorise(DecacCompiler compiler) {
         fields.factorise(compiler);
         methods.factorise(compiler);

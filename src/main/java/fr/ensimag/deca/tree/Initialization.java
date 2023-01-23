@@ -112,11 +112,6 @@ public class Initialization extends AbstractInitialization {
     }
 
     @Override
-    public boolean irrelevant(){
-        return expression.irrelevant();
-    }
-
-    @Override
     public boolean hasInitialization() {
         return true;
     }

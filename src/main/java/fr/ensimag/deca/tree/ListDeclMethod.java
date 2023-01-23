@@ -73,21 +73,6 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
     }
 
     @Override
-    public boolean irrelevant() {
-        boolean result = false;
-        AbstractDeclMethod expr;
-
-        for (int i = 0; i < getList().size(); i++) {
-            expr = getList().get(i);
-            if (expr.irrelevant()) {
-                result |= true;
-                set(i, expr);
-            }
-        }
-        return result;
-    }
-
-    @Override
     public AbstractInst splitCalculus(DecacCompiler compiler) {
         for (AbstractDeclMethod method : getList())
             if (method.isSplitable(compiler))

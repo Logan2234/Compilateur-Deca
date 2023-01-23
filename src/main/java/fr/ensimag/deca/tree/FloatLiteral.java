@@ -121,8 +121,4 @@ public class FloatLiteral extends AbstractExpr {
     protected boolean containsField() {
         return false;
     }
-
-    protected Boolean isLiteral() {
-        return false;
-    }
 }

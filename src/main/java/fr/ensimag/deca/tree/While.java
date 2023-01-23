@@ -181,27 +181,4 @@ public class While extends AbstractInst {
         return this;
     }
 
-    @Override
-    public boolean irrelevant() {
-        if (inWhile){
-            body.irrelevant();
-        } else {
-            inWhile = true;
-            body.irrelevant();
-            inWhile = false;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean irrelevant(int i) {
-        if (inWhile){
-            body.irrelevant(i);
-        } else {
-            inWhile = true;
-            body.irrelevant(i);
-            inWhile = false;
-        }
-        return false;
-    }
 }

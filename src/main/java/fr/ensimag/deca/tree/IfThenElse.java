@@ -135,32 +135,6 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    public boolean irrelevant() {
-        if (condition.irrelevant() || condition.isSelection()) {
-            if (condition.isSelection()) {
-                AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection();
-                if (out != null) {
-                    condition = out;
-                }
-            } else {
-                condition = currentValues.get(((Identifier) condition).getName());
-            }
-        }
-        boolean whereWeInIf = inIf;
-        ifNumber += 2;
-        inIf = true;
-        boolean sortie = false;
-        irrelevantValuesForIf.put(ifNumber.intValue() - 1, (HashMap<Symbol, AbstractExpr>) currentValues.clone());
-        irrelevantValuesForIf.put(ifNumber.intValue(), (HashMap<Symbol, AbstractExpr>) currentValues.clone());
-        sortie = thenBranch.irrelevant(ifNumber.intValue() - 1) || elseBranch.irrelevant(ifNumber.intValue());
-        ifNumber -= 2;
-        if (!whereWeInIf)
-            inIf = false;
-
-        return condition.irrelevant() || sortie;
-    }
-
-    @Override
     public AbstractInst factorise(DecacCompiler compiler) {
         condition = (AbstractExpr) condition.factorise(compiler);
         thenBranch.factorise(compiler);
@@ -175,35 +149,6 @@ public class IfThenElse extends AbstractInst {
         elseBranch.splitCalculus(compiler);
 
         return this;
-    }
-
-    @Override
-    public boolean irrelevant(int i) {
-
-        if (condition.irrelevant() || condition.isSelection()) {
-            if (condition.isSelection()) {
-                AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection(i);
-                if (out != null) {
-                    condition = out;
-                }
-            } else {
-                condition = irrelevantValuesForIf.get(i).get(((Identifier) condition).getName());
-            }
-        }
-        boolean whereWeInIf = inIf ? true : false;
-        ifNumber += 2;
-        inIf = true;
-        boolean sortie = false;
-        irrelevantValuesForIf.put(ifNumber.intValue() - 1,
-                (HashMap<Symbol, AbstractExpr>) irrelevantValuesForIf.get(i).clone());
-        irrelevantValuesForIf.put(ifNumber.intValue(),
-                (HashMap<Symbol, AbstractExpr>) irrelevantValuesForIf.get(i).clone());
-        sortie = thenBranch.irrelevant(ifNumber.intValue() - 1) || elseBranch.irrelevant(ifNumber.intValue());
-        ifNumber -= 2;
-        if (!whereWeInIf)
-            inIf = false;
-
-        return condition.irrelevant() || sortie;
     }
 
     public ListInst getThenInst() {

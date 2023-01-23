@@ -106,37 +106,6 @@ public class ListInst extends TreeList<AbstractInst> {
     }
 
     @Override
-    public boolean irrelevant() {
-        boolean result = false;
-        AbstractInst expr;
-
-        for (int i = 0; i < getList().size(); i++) {
-            expr = getList().get(i);
-            if (expr.irrelevant()) {
-                result |= true;
-                set(i, expr);
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public boolean irrelevant(int j) {
-        boolean result = false;
-        AbstractInst expr;
-
-        for (int i = 0; i < getList().size(); i++) {
-            expr = getList().get(i);
-            if (expr.irrelevant(j)) {
-                result |= true;
-                set(i, expr);
-            }
-        }
-        return result;
-    }
-
-    @Override
     public AbstractInst factorise(DecacCompiler compiler) {
         for (int i = 0; i < getList().size(); i++) {
             AbstractInst inst = getList().get(i).factorise(compiler);

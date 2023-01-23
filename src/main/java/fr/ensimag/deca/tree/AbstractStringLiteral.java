@@ -25,11 +25,6 @@ public abstract class AbstractStringLiteral extends AbstractExpr {
     protected void spotUsedVar() {
         // do nothing
     }
-    
-    @Override
-    public boolean irrelevant(){
-        return false;
-	}
 
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
