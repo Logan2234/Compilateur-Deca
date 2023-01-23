@@ -18,7 +18,7 @@
 {
     int test = 0;
     int test1 = 2;
-	int test2 = 2 + readInt() + test1;
-    test = test2;
-    print(test + test2);
+	// int test2 = 2 + readInt() + test1;
+    // test = test2;
+    // print(test + test2);
 }

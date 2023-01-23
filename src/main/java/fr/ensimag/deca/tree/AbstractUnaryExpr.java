@@ -113,7 +113,8 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     
     @Override
     public AbstractInst splitCalculus(DecacCompiler compiler) {
-        setOperand((AbstractExpr)getOperand().splitCalculus(compiler));
+        if (operand.isSplitable(compiler))
+            setOperand((AbstractExpr)operand.splitCalculus(compiler));
         return this;
     }
 

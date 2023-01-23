@@ -88,7 +88,7 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     protected Boolean isLiteral() {
-        return true;
+        return false;
     }
 
     @Override

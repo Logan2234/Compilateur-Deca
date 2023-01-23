@@ -29,7 +29,7 @@ public class StringLiteral extends AbstractStringLiteral {
     }
     
     protected Boolean isLiteral() {
-        return true;
+        return false;
     }
 
     private String value;

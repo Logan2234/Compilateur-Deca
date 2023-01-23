@@ -123,6 +123,6 @@ public class FloatLiteral extends AbstractExpr {
     }
 
     protected Boolean isLiteral() {
-        return true;
+        return false;
     }
 }

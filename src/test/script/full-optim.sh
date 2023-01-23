@@ -16,7 +16,7 @@ PATH=./src/test/script/launchers:"$PATH"
 
 echo -e "${BWHITE} \n============================= Optim tests =============================\n"
 
-files=$(find ./src/test/deca/optim/facto -name "*.deca")
+files=$(find ./src/test/deca/optim/ -name "*.deca")
 
 for test in $files
 do
