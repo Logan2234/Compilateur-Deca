@@ -122,7 +122,7 @@ public abstract class AbstractExpr extends AbstractInst {
         }
 
         // Ajout du décor
-        setType(expectedType);
+        setType(rtype);
 
         if (expectedType.isFloat() && rtype.isInt()) {
             AbstractExpr convFloat = new ConvFloat(this);
