@@ -1,0 +1,15 @@
+// Description:
+//    Factorisation et décomposotion en shift dans un cast
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 22/01/2023
+
+{
+    int a;
+    (float)(2*a + a*13 - (5*a) / (9*a));
+}
+
+void main(int 15*a+15*a);
