@@ -51,7 +51,7 @@ public class Return extends AbstractInst {
         if (returnType.isVoid())
             throw new ContextualError("Return cannot be used when method has void type (rule 3.24)", getLocation());
 
-        expression.verifyRValue(compiler, localEnv, currentClass, returnType);
+        expression = expression.verifyRValue(compiler, localEnv, currentClass, returnType);
     }
 
     @Override
