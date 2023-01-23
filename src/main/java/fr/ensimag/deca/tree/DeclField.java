@@ -13,12 +13,15 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
 import java.util.HashMap;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 
@@ -129,6 +132,23 @@ public class DeclField extends AbstractDeclField {
     protected void spotUsedVar() {
         this.type.spotUsedVar();
         this.fieldName.spotUsedVar();
+    }
+
+    @Override
+    protected void getSpottedFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        FieldDefinition fieldDef = this.getName().getFieldDefinition();
+        if (fieldDef.isUsed()){
+            Symbol symb = this.getName().getName();
+            if (!usedFields.containsKey(symb)) {
+                usedFields.put(symb, new HashSet<ClassDefinition>());
+            }
+            usedFields.get(symb).add(fieldDef.getContainingClass());
+        }
+    }
+
+    @Override
+    protected void spotOverridingFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        this.fieldName.spotOverridingFields(usedFields);
     }
 
     @Override

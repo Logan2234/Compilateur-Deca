@@ -153,4 +153,12 @@ public class Cast extends AbstractExpr {
         expression = (AbstractExpr)expression.splitCalculus(compiler);
         return this;
     }
+
+    @Override
+    protected boolean isAtomic() {
+        if (this.expression.isAtomic()) {
+            return true;
+        }
+        return false;
+    }
 }

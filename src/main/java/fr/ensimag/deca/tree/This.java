@@ -106,7 +106,12 @@ public class This extends AbstractExpr {
     }
 
     @Override
-    public boolean isThis(){
+    protected boolean isAtomic() {
+        return true;
+    }
+
+    @Override
+    public boolean isThis() {
         return true;
     }
 

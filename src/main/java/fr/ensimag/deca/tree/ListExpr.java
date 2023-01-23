@@ -62,4 +62,20 @@ public class ListExpr extends TreeList<AbstractExpr> {
         }
         return null;
     }
+
+    /**
+     * Method used to know if all the expressions in the list are "atomic", meaning that it is not expensive for
+     * ima to compute. This way, we know if an inline substitution will introduce more complexity
+     * if a parameter appears multiple times in the method.
+     * @return true if the expression is "atomic"
+     */
+    protected boolean isAtomic() {
+        for (AbstractExpr expr : this.getList()) {
+            if (!expr.isAtomic()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

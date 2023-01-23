@@ -1,9 +1,12 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.ByteArrayOutputStream;
@@ -12,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -436,4 +440,22 @@ public abstract class Tree {
      * @return Tree used to give the calling method the substitution of the method
      */
     protected abstract Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods);
+
+    /**
+     * Add all spotted fields to the Map.
+     * @param map storing all symbols of used fields and associating to those symbols
+     * the set of classes definition that have this symbol as a field when this field is used
+     */
+    protected void getSpottedFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        throw new UnsupportedOperationException("This method should not be called on this tree.");
+    }
+
+    /**
+     * Spot fields overriding useful fields as they may become dynamically useful
+     * @param map storing all symbols of used fields and associating to those symbols
+     * the set of classes definition that have this symbol as a field when this field is used
+     */
+    protected void spotOverridingFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        throw new UnsupportedOperationException("This method should not be called on this tree.");
+    }
 }

@@ -121,4 +121,9 @@ public class FloatLiteral extends AbstractExpr {
     protected boolean containsField() {
         return false;
     }
+
+    @Override
+    protected boolean isAtomic() {
+        return true;
+    }
 }

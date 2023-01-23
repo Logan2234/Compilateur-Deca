@@ -94,8 +94,15 @@ public class Null extends AbstractExpr {
     public CollapseResult<CollapseValue> collapseExpr() {
         return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
+
+    @Override
     protected boolean containsField() {
         return false;
+    }
+
+    @Override
+    protected boolean isAtomic() {
+        return true;
     }
 
 }
