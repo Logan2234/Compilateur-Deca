@@ -130,6 +130,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     public AbstractInst splitCalculus(DecacCompiler compiler) {
         if (leftOperand.isSplitable(compiler))
             leftOperand = ((AbstractExpr) leftOperand.splitCalculus(compiler));
+        //System.out.println(rightOperand);
         if (rightOperand.isSplitable(compiler))
             rightOperand = ((AbstractExpr) rightOperand.splitCalculus(compiler));
         return this;
