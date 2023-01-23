@@ -133,6 +133,32 @@ public class Selection extends AbstractLValue {
     }
 
     /**
+     * Return the value of the selection for otpimization in If/Else statments. WARNING : Multiple Selection not supported
+     * @return the expression value for the selection
+     */
+    public AbstractExpr returnIrrelevantFromSelection(int i){
+        if (defClass) {
+            if (obj.isThis()){
+                return varModels.get(actualClass).get(field.getName());
+            } else {
+                if (!obj.isSelection())
+                    if (declaredClassesInMethod.containsKey(((Identifier) obj).getName())) {return declaredClassesInMethod.get(((Identifier) obj).getName()).get(field.getName());}
+                    else return declaredClasses.get(((Identifier) obj).getName()).get(field.getName());
+                else return null;
+            }
+        }
+        else {
+            if (obj.isThis()){
+                return irrelevantValuesForIf.get(i).get(field.getName());
+            } else {
+                if (!obj.isSelection())
+                    return declaredClasses.get(((Identifier) obj).getName()).get(field.getName());
+                else return null;
+            }
+        }
+    }
+
+    /**
      * Function allowing to change a value of an external class
      * @param e : The expression to set
      */
@@ -202,6 +228,23 @@ public class Selection extends AbstractLValue {
         else {
             if (obj.isThis()){
                 return currentValues.containsKey(field.getName());
+            } else return declaredClasses.get(((Identifier) obj).getName()).containsKey(field.getName());
+        }
+    }
+
+    /**
+     * Function allowing to know if a selection is known or not in if/else statements
+     * @return if selection is known
+     */
+    public boolean isKnown(int i){
+        if (defClass) {
+            if (obj.isThis()){
+                return varModels.get(actualClass).containsKey(field.getName());
+            } else return declaredClasses.get(((Identifier) obj).getName()).containsKey(field.getName()) || declaredClassesInMethod.get(((Identifier) obj).getName()).containsKey(field.getName());
+        }
+        else {
+            if (obj.isThis()){
+                return irrelevantValuesForIf.get(i).containsKey(field.getName());
             } else return declaredClasses.get(((Identifier) obj).getName()).containsKey(field.getName());
         }
     }

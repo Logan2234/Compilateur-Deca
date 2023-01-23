@@ -142,6 +142,42 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
+    public boolean irrelevant(int i){
+
+        if (getLeftOperand().isSelection()){
+            ((Selection) getLeftOperand()).erraseIrrelevant();
+        } else {
+            if (currentValues.containsKey(getLeftOperand().getName())) currentValues.remove(getLeftOperand().getName());
+        }
+        
+        if (inWhile){
+            if (getLeftOperand().isSelection()){
+                ((Selection) getLeftOperand()).erraseIrrelevant();
+            } else {
+                if (irrelevantValuesForIf.get(i).containsKey(getLeftOperand().getName())) irrelevantValuesForIf.get(i).remove(getLeftOperand().getName());
+            }
+        }
+
+        if (getRightOperand().isSelection()){
+            AbstractExpr out = ((Selection) getRightOperand()).returnIrrelevantFromSelection(i);
+            if (out != null) setRightOperand(out);
+        }
+        if (getRightOperand().irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) getRightOperand()).getName())){
+            setRightOperand((irrelevantValuesForIf.get(i).get(((Identifier) getRightOperand()).getName())));
+        }
+        if (!getRightOperand().isReadExpr()){
+            if (getLeftOperand().isSelection()) {((Selection) getLeftOperand()).putIrrelevant(getRightOperand());}
+            else irrelevantValuesForIf.get(i).put(getLeftOperand().getName(), getRightOperand());
+
+        } else if (getLeftOperand().isSelection()){
+            ((Selection) getLeftOperand()).erraseIrrelevant();
+        } else {
+            if (irrelevantValuesForIf.get(i).containsKey(getLeftOperand().getName())) irrelevantValuesForIf.get(i).remove(getLeftOperand().getName());
+        }
+        return false; 
+    }
+
+    @Override
     public boolean isReadExpr(){
         return false;
     }

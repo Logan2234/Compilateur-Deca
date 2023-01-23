@@ -85,4 +85,9 @@ public abstract class AbstractPrint extends AbstractInst {
     public boolean irrelevant(){
         return arguments.irrelevant();
     }
+
+    @Override
+    public boolean irrelevant(int i){
+        return arguments.irrelevant(i);
+    }
 }

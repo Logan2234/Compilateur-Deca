@@ -379,6 +379,30 @@ public abstract class Tree {
     public abstract boolean irrelevant();
 
     /**
+     * Dictionary of the virtual values of the variables, in each if/else statement.
+     */
+    public static HashMap<Integer, HashMap<Symbol, AbstractExpr>> irrelevantValuesForIf = new HashMap<Integer, HashMap<Symbol, AbstractExpr>>();
+
+    /**
+     * Number of the if/else statement.
+     */
+    public static Integer ifNumber = 0;
+
+    /**
+     * Tells if we are in an if/else statement.
+     */
+    public static boolean inIf = false;
+
+    /**
+     * Do the same as irrelevant(), but in if/else statements with a subDefinition of values.
+     * @param i the number of the if/else statement.
+     * @return if this node could find more irrelevant assignments.
+     */
+    public boolean irrelevant(int i){
+        return false;
+    }
+
+    /**
      * Replace the boolean values known at compile time by the variables.
      * if the expression cannot be replaced, null is returned.
      * @return the value of the compile-time known boolean.

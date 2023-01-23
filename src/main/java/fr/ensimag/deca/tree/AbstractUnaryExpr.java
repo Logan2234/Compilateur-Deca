@@ -124,6 +124,25 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     }
 
     @Override
+    public boolean irrelevant(int i) {
+        boolean irrelevant = false;
+        if (operand.isSelection()){
+            AbstractExpr out = ((Selection) operand).returnIrrelevantFromSelection(i);
+            if (out != null) {
+                operand = out;
+            }
+            if (operand.isSelection()) irrelevant = ((Selection) operand).isKnown(i);
+        }
+        else if (operand.irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) operand).getName())) {
+            operand = irrelevantValuesForIf.get(i).get(((Identifier) operand).getName());
+        }
+
+        return irrelevant || (!operand.isSelection() && 
+        (operand.irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) operand).getName())));
+    
+    }
+
+    @Override
     public boolean isReadExpr() {
         return operand.isReadExpr();
     }

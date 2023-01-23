@@ -6,14 +6,18 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
+import net.bytebuddy.matcher.FailSafeMatcher;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -123,7 +127,44 @@ public class IfThenElse extends AbstractInst {
                 condition = currentValues.get(((Identifier) condition).getName());
             }
         }
-        return condition.irrelevant() || thenBranch.irrelevant() || elseBranch.irrelevant();
+        boolean whereWeInIf = inIf ? true : false;
+        ifNumber += 2;
+        inIf = true;
+        boolean sortie = false;
+        irrelevantValuesForIf.put(ifNumber.intValue() - 1, (HashMap<Symbol, AbstractExpr>) currentValues.clone());
+        irrelevantValuesForIf.put(ifNumber.intValue(), (HashMap<Symbol, AbstractExpr>) currentValues.clone());
+        sortie = thenBranch.irrelevant(ifNumber.intValue() - 1) || elseBranch.irrelevant(ifNumber.intValue());
+        ifNumber -= 2;
+        if (!whereWeInIf) inIf = false;
+
+        return condition.irrelevant() || sortie;
+    }
+
+    @Override
+    public boolean irrelevant(int i){ 
+
+        if (condition.irrelevant() || condition.isSelection()){
+            if (condition.isSelection()){
+                AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection(i);
+                if (out != null) {
+                    condition = out;
+                }
+            }
+            else {
+                condition = irrelevantValuesForIf.get(i).get(((Identifier) condition).getName());
+            }
+        }
+        boolean whereWeInIf = inIf ? true : false;
+        ifNumber += 2;
+        inIf = true;
+        boolean sortie = false;
+        irrelevantValuesForIf.put(ifNumber.intValue() - 1, (HashMap<Symbol, AbstractExpr>) irrelevantValuesForIf.get(i).clone());
+        irrelevantValuesForIf.put(ifNumber.intValue(), (HashMap<Symbol, AbstractExpr>) irrelevantValuesForIf.get(i).clone());
+        sortie = thenBranch.irrelevant(ifNumber.intValue() - 1) || elseBranch.irrelevant(ifNumber.intValue());
+        ifNumber -= 2;
+        if (!whereWeInIf) inIf = false;
+
+        return condition.irrelevant() || sortie;
     }
 
     @Override

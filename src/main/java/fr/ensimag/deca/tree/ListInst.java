@@ -82,4 +82,20 @@ public class ListInst extends TreeList<AbstractInst> {
 
         return result;
     }
+
+    @Override
+    public boolean irrelevant(int j) {
+        boolean result = false;
+        AbstractInst expr;
+        
+        for (int i = 0; i < getList().size(); i++) {
+            expr = getList().get(i);
+            if (expr.irrelevant(j)){
+                result |= true;
+                set(i, expr);
+            }
+        }
+
+        return result;
+    }
 }

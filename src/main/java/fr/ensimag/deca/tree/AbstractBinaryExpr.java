@@ -175,6 +175,39 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     } 
 
     @Override
+    public boolean irrelevant(int i) {
+        boolean irrelevantRight = false;
+        if (getRightOperand().isSelection()){
+            AbstractExpr out = ((Selection) getRightOperand()).returnIrrelevantFromSelection(i);
+            if (out != null) {
+                setRightOperand(out);
+            }
+            if (getRightOperand().isSelection()) irrelevantRight = ((Selection) getRightOperand()).isKnown(i);
+        }
+        else if (getRightOperand().irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) getRightOperand()).getName())) {
+            rightOperand = irrelevantValuesForIf.get(i).get(((Identifier) getRightOperand()).getName());
+            irrelevantRight = (getRightOperand().irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) getRightOperand()).getName()));
+        }
+
+        boolean irrelevantLeft = false;
+        if (getLeftOperand().isSelection()){
+            AbstractExpr out = ((Selection) getLeftOperand()).returnIrrelevantFromSelection(i);
+            if (out != null) {
+                setLeftOperand(out);
+            }
+            if (getLeftOperand().isSelection()) irrelevantLeft = ((Selection) getLeftOperand()).isKnown(i);
+        }
+        else if (getLeftOperand().irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) getLeftOperand()).getName())) {
+            leftOperand = irrelevantValuesForIf.get(i).get(((Identifier) getLeftOperand()).getName());
+            irrelevantLeft = (getLeftOperand().irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) getLeftOperand()).getName()));
+        }
+
+        return irrelevantLeft || irrelevantRight || (!getLeftOperand().isSelection() && 
+        ((leftOperand.irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) getLeftOperand()).getName())) || (rightOperand.irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) getRightOperand()).getName()))));
+        
+    } 
+
+    @Override
     public boolean isReadExpr() {
         return leftOperand.isReadExpr() || rightOperand.isReadExpr();
     }

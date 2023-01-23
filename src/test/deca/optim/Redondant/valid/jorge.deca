@@ -1,0 +1,18 @@
+// Description:
+//    Addition d'un int et un float
+//
+// Resultats:
+//    4.40000e+00
+//
+// Historique:
+//    cree le 07/01/2023
+
+{
+    int a = 0;
+    if (true) {
+        a = 1;
+        print(a);
+    } else {
+        print(a);
+    }
+}

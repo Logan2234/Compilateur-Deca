@@ -180,23 +180,8 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    public boolean irrelevantable(){
+    public boolean irrelevant(int i) {
         return true;
-    }
-
-    @Override
-    public Boolean irrelevantBool(){
-        return ((BooleanLiteral) currentValues.get(name)).getValue();
-    }
-
-    @Override
-    public Integer irrelevantInt(){
-        return ((IntLiteral) currentValues.get(name)).getValue();
-    }
-
-    @Override
-    public Float irrelevantFloat(){
-        return ((FloatLiteral) currentValues.get(name)).getValue();
     }
 
     @Override
