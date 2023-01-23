@@ -1,7 +1,5 @@
 package fr.ensimag.deca.context;
 
-import fr.ensimag.deca.context.ClassType;
-import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
 
@@ -80,10 +78,17 @@ public abstract class Type {
 
     public Boolean assignCompatible(Type type2) {
         if (this.sameType(type2))
+        {
             return true;
+        }
 
-        if (this.isFloat() && type2.isInt())
+        if (this.isFloat() && type2.isInt()) {
             return true;
+        }
+
+        if(this.isClass() && type2.isNull()) {
+            return true;
+        }
 
         try {
             ClassType class1 = asClassType(null, null);

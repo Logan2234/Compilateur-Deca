@@ -1,0 +1,45 @@
+// Description:
+//    test limits of method calls.
+//
+// Resultats:
+//    6, 5
+//    9, 5
+//
+// Historique:
+//    cree le 21/01/2023
+
+class A {
+    int x = 2;
+    int y = 3;
+
+    void increment(int dx, int dy) {
+        x = x + dx;
+        y = y + dy;
+    }
+
+    int flow(int dx) {
+        x = x + dx;
+        return x + dx;
+    }
+
+    int getX() {
+        return x;
+    }
+
+    int getY() {
+        return y;
+    }
+}
+
+
+{
+    A a = new A(); // 2, 3
+    A b = new A(); // 2, 3
+
+    a.increment(a.getY(), b.getX()); // a : 5, 5
+    b.increment(a.flow(1), b.getX()); // a : 6, 5; b : 9, 5
+
+    println(a.getX(), ", ", a.getY()); // 6, 5
+    println(b.getX(), ", ", b.getY()); // 9, 5
+
+}

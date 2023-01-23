@@ -1,0 +1,25 @@
+// Description:
+//    Créé une méthide avec un asm body
+//
+// Resultats:
+//    lit et affiche les charactères à l'écran jusqu'a ce que 'esc'  soit pressé.
+//
+// Historique:
+//    cree le 21/01/2023
+
+class CharReader {
+    int readChar() asm(
+        "RUTF8
+        LOAD R1, R0
+        RTS"
+    );
+}
+
+{
+    CharReader reader = new CharReader();
+    int char = 0;
+    
+    while((char = reader.readChar()) != 27) {
+        println(char);
+    }
+}

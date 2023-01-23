@@ -14,6 +14,8 @@ NB_INVALID_TESTS=0
 VALID_PASSED=0
 INVALID_PASSED=0
 
+# ALMOST SIMILAR TO OPTION-V IN OPTIONS-SCRIPTS FOLDER
+
 # On se place dans le répertoire du projet (quel que soit le
 # répertoire d'où est lancé le script) :
 cd "$(dirname "$0")"/../../../ || exit 1

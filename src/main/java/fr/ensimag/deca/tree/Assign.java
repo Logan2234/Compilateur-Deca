@@ -6,7 +6,6 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
@@ -15,7 +14,6 @@ import java.util.List;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 
 /**
@@ -54,25 +52,37 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler, GPRegister _r) {
+    public void codeGenExpr(DecacCompiler compiler, GPRegister resulRegister) {
         // put the right value in the left value !
         // put the result of the right value in a register
-        GPRegister resultRegister = compiler.allocateRegister();
-        this.rightOperand.codeGenExpr(compiler, resultRegister);
+        GPRegister register = compiler.allocateRegister();
+        this.getRightOperand().codeGenExpr(compiler, register);
         if(getLeftOperand().getDefinition().isField()) {
             // if we have a field, we are in a method. load object from -2(SP) and then get the field from offset.
             GPRegister classPointerRegister = compiler.allocateRegister();
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
-            compiler.addInstruction(new STORE(resultRegister, new RegisterOffset(getLeftOperand().getDefinition().getDAddrOffsetOnly(), classPointerRegister)));
+            compiler.addInstruction(new STORE(register, new RegisterOffset(getLeftOperand().getDefinition().getDAddrOffsetOnly(), classPointerRegister)));
             compiler.freeRegister(classPointerRegister);
+            if(resulRegister == null) {
+                compiler.incrementContextUsedStack();
+                compiler.addInstruction(new PUSH(register));
+            }
+            else {
+                compiler.addInstruction(new LOAD(register, resulRegister));
+            }
         }
         else {
-            // compute right expression in the register
-            this.rightOperand.codeGenExpr(compiler, resultRegister);
-            compiler.addInstruction(new STORE(resultRegister, getLeftOperand().getDefinition().getDAddr()));
+            compiler.addInstruction(new STORE(register, getLeftOperand().getDefinition().getDAddr()));
+            if(resulRegister == null) {
+                compiler.incrementContextUsedStack();
+                compiler.addInstruction(new PUSH(register));
+            }
+            else {
+                compiler.addInstruction(new LOAD(register, resulRegister));
+            }
         }
         // free the alocated register
-        compiler.freeRegister(resultRegister);
+        compiler.freeRegister(register);
     }
 
     @Override

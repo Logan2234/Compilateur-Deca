@@ -687,7 +687,7 @@ decl_method returns[AbstractDeclMethod tree]
             assert($ident.tree != null);
             assert($params.tree != null);
             assert($code.text != null);
-            StringLiteral codeAsm = new StringLiteral($code.text);
+            StringLiteral codeAsm = new StringLiteral($code.text.substring(1, $code.text.length() - 1));
             setLocation(codeAsm,$code.start);
             AbstractMethod asmBody = new MethodAsmBody(codeAsm);
             setLocation(asmBody,$ASM);

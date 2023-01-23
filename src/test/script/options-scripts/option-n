@@ -55,6 +55,58 @@ else
     fi
 fi
 
+# Test avec les null déréférencements
+decac ./src/test/deca/codegen/invalid/null-delisting-field.deca
+mv ./src/test/deca/codegen/invalid/null-delisting-field.ass ./src/test/deca/codegen/invalid/null-delisting-field-without-n.ass
+decac -n ./src/test/deca/codegen/invalid/null-delisting-field.deca
+
+diff=$(diff ./src/test/deca/codegen/invalid/null-delisting-field-without-n.ass ./src/test/deca/codegen/invalid/null-delisting-field.ass)
+
+if echo $diff | grep -q "NullReference"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -n removes Error.NullReference on null delisting with field"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -n does not remove Error.NullReference on null delisting with field"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+decac ./src/test/deca/codegen/invalid/null-delisting-method.deca
+mv ./src/test/deca/codegen/invalid/null-delisting-method.ass ./src/test/deca/codegen/invalid/null-delisting-method-without-n.ass
+decac -n ./src/test/deca/codegen/invalid/null-delisting-method.deca
+
+diff=$(diff ./src/test/deca/codegen/invalid/null-delisting-method-without-n.ass ./src/test/deca/codegen/invalid/null-delisting-method.ass)
+
+if echo $diff | grep -q "NullReference"
+then
+    echo -e "${GREENBOLD}Test passed:$GREEN decac -n removes Error.NullReference on null delisting with method"
+else 
+    echo -e "${REDBOLD}Test failed:$RED decac -n does not remove Error.NullReference on null delisting with method"
+    if [[ $1 == "--maven" ]];
+    then
+        exit 1
+    fi
+fi
+
+# decac ./src/test/deca/codegen/invalid/no-return-method.deca
+# mv ./src/test/deca/codegen/invalid/no-return-method.ass ./src/test/deca/codegen/invalid/no-return-method-without-n.ass
+# decac -n ./src/test/deca/codegen/invalid/no-return-method.deca
+
+# diff=$(diff ./src/test/deca/codegen/invalid/no-return-method-without-n.ass ./src/test/deca/codegen/invalid/no-return-method.ass)
+
+# if echo $diff | grep -q "NoReturn"
+# then
+#     echo -e "${GREENBOLD}Test passed:$GREEN decac -n removes Error.noReturn"
+# else 
+#     echo -e "${REDBOLD}Test failed:$RED decac -n does not remove Error.noReturn"
+#     if [[ $1 == "--maven" ]];
+#     then
+#         exit 1
+#     fi
+# fi
+
 rm ./src/test/deca/codegen/invalid/*.ass
 
 # TODO: Les autres règles de 11.1 et 11.3
