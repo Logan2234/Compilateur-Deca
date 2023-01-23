@@ -8,9 +8,9 @@
 //    cree le 19/01/2023
 
 class A {
-    int m = 31*m;
+    int m = 257*m;
     boolean get(){
-        return 31*m < 23*m;
+        return 15*m < 23*m;
     }
 
     int set(int a){}
@@ -26,6 +26,8 @@ class B extends A {
     int m = 15*a;
     int n = 63*a+2;
 
+    10*a + 10*a - 10 * a;
+    
     60*m;
     
     -60*m;

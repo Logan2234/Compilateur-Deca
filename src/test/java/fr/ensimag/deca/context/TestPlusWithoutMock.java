@@ -82,7 +82,7 @@ public class TestPlusWithoutMock {
         }
 
         @Override
-        public boolean factorised(DecacCompiler compiler) {
+        public boolean isSplitable(DecacCompiler compiler) {
             return false;
         }
     }
