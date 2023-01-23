@@ -116,6 +116,7 @@ public class DeclField extends AbstractDeclField {
     @Override
     public boolean irrelevant(){
         if (initialization.hasInitialization()) {
+            inField = true;
             AbstractExpr expr = ((Initialization) initialization).getExpression();
             HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
 
@@ -131,6 +132,7 @@ public class DeclField extends AbstractDeclField {
             }
 
             if (expr.irrelevant()){
+                System.out.println("irrelevant");
                 ((Initialization) initialization).setExpression(actualDico.get(((Identifier) expr).getName()));
             }
             if (!expr.isReadExpr()){
@@ -140,6 +142,7 @@ public class DeclField extends AbstractDeclField {
                 actualDico.remove(fieldName.getName());
             } 
             varModels.put(actualClass, actualDico);
+            inField = false;
         }   
         return false;
     }

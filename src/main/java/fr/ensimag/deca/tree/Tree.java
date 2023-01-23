@@ -392,6 +392,11 @@ public abstract class Tree {
      * Tells if we are in an if/else statement.
      */
     public static boolean inIf = false;
+    
+    /**
+     * Tells if we are creating a field
+     */
+    public static boolean inField = false;
 
     /**
      * Do the same as irrelevant(), but in if/else statements with a subDefinition of values.

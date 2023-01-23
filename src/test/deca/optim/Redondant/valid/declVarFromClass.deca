@@ -38,6 +38,6 @@ class B {
 {
     A test = new A();
     int c = test.a;
-    int shit = 42;
-    print(shit + shit);
+    int TEST = 42;
+    print(TEST + TEST);
 }
