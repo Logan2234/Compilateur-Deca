@@ -116,7 +116,6 @@ public class DeclField extends AbstractDeclField {
         fieldName.getDefinition().setDAddrOffsetOnly(offset);
     }
 
-
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
         // We don't spotUsedVar() on classes. We spot them indirectly from the main
@@ -127,10 +126,22 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return true;   
+    public AbstractInst factorise(DecacCompiler compiler) {
+        initialization.factorise(compiler);
+        return null;
     }
     
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return initialization.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        initialization.splitCalculus(compiler);
+        return null;
+    }
+
     public boolean collapse() {
         initialization.collapse();
         return false;

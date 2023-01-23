@@ -53,9 +53,6 @@ public class Modulo extends AbstractOpArith {
         }
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
     public boolean collapse() {
         return getLeftOperand().collapse() || getRightOperand().collapse();
     }

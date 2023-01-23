@@ -2,9 +2,6 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -61,48 +58,43 @@ public class ListInst extends TreeList<AbstractInst> {
         }
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        // try to collapse each instruction into a list of instructions
-        boolean facto = false;
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
         for (int i = 0; i < getList().size(); i++) {
-            AbstractInst toFacto = getList().get(i);
-            if(toFacto.factorised(compiler))
-                facto = true;
-                // remove this inst, replace it with it's collapsed form
-                // removeAt(i);
-                // ListInst list = toFacto.factoInst(compiler);
-                // AbstractInst newInst = list.getList().get(list.size()-1);
-                // insert(newInst, i);
+            AbstractInst inst = getList().get(i).factorise(compiler);
+            if (inst != null)
+                set(i, inst);
+            // else
+            //     removeAt(i);
         }
-        return facto;
+        return null;
     }
-
-    public ListInst factoInst(DecacCompiler compiler) {
-        for (AbstractInst i : getList())
-            i.factoInst(compiler);
-        return new ListInst();
+    
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (int i = 0; i < getList().size(); i++) {
+            AbstractInst inst = getList().get(i).splitCalculus(compiler);
+            if (inst != null)
+                set(i, inst);
+        }
+        return null;
     }
-
-
 
     public boolean collapse() {
         // try to collapse each instruction into a list of instructions
         boolean collapse = false;
         for (int i = 0; i < getList().size(); i++) {
             AbstractInst toCollapse = getList().get(i);
-            if(toCollapse.collapse()) {
+            if (toCollapse.collapse()) {
                 collapse = true;
                 // remove this inst, replace it with it's collapsed form
                 removeAt(i);
                 int offset = 0;
-                for(AbstractInst newInst : toCollapse.collapseInst().getList()) {
+                for (AbstractInst newInst : toCollapse.collapseInst().getList()) {
                     insert(newInst, i + offset);
-                    offset ++;
+                    offset++;
                 }
             }
         }
         return collapse;
     }
-
-    
 }

@@ -35,11 +35,6 @@ public class ConvFloat extends AbstractUnaryExpr {
         compiler.addInstruction(new FLOAT(resultRegister, resultRegister));
     }
 
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
-    
     public boolean collapse() {
         return getOperand().collapse();
     }
@@ -57,18 +52,4 @@ public class ConvFloat extends AbstractUnaryExpr {
         }
         return null;
     }
-
-    public Float factoFloat() {
-        /*Integer collapsedValue = getOperand().collapseInt();
-        if(collapsedValue != null && getOperand().collapsable()) {
-            FloatLiteral newFLoat = new FloatLiteral(collapsedValue);
-            newFLoat.setType(getType());
-            setOperand(newFLoat);
-        }
-        if(collapsedValue != null) {
-            return (float)collapsedValue;
-        }*/
-        return null;
-    }
-
 }

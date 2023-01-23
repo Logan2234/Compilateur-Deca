@@ -94,6 +94,23 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     protected void spotUsedVar(AbstractProgram prog) {
         this.operand.spotUsedVar(prog);
     }
+    
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        operand = (AbstractExpr)operand.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return getOperand().isSplitable(compiler);
+    }
+    
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        setOperand((AbstractExpr)getOperand().splitCalculus(compiler));
+        return this;
+    }
 
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {

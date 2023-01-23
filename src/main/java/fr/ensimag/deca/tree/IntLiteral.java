@@ -96,13 +96,7 @@ public class IntLiteral extends AbstractExpr {
         // do nothing
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
     public Integer collapseInt() {
-        return value;
-    }
-    public Integer factoInt() {
         return value;
     }
 

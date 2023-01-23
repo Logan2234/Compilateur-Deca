@@ -43,9 +43,4 @@ public class ReadInt extends AbstractReadExpr {
     protected void codeGenRead(DecacCompiler compiler) {
         compiler.addInstruction(new RINT());
     }
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
-
 }

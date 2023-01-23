@@ -125,12 +125,19 @@ public class Initialization extends AbstractInitialization {
         return collapsing;
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return expression.factorised(compiler);
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        expression = (AbstractExpr)expression.factorise(compiler);
+        return null;
+    }
+
+    public boolean isSplitable(DecacCompiler compiler) {
+        return expression.isSplitable(compiler);
     }
     
-    public void factoInst(DecacCompiler compiler){
-        expression.factoInst(compiler);
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        expression = (AbstractExpr)expression.splitCalculus(compiler);
+        return null;
     }
 
 }

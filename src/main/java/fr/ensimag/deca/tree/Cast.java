@@ -100,7 +100,20 @@ public class Cast extends AbstractExpr {
         this.expression.addMethodCalls(foundMethodCalls);
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return false;
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        expression.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return expression.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        expression = (AbstractExpr)expression.splitCalculus(compiler);
+        return this;
     }
 }

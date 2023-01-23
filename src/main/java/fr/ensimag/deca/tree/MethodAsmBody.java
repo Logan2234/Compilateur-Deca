@@ -69,10 +69,6 @@ public class MethodAsmBody extends AbstractMethod {
         // do nothing
     }
 
-    @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return false;
-    }
     public boolean collapse() {
         // TODO
         return false;

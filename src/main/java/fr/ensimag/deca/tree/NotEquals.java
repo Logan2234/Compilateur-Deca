@@ -30,10 +30,6 @@ public class NotEquals extends AbstractOpExactCmp {
         compiler.addInstruction(new SNE(register));
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
-
     @Override
     public boolean collapse() {
         return getRightOperand().collapse() || getLeftOperand().collapse();

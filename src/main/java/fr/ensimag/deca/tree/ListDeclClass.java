@@ -58,13 +58,15 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        for (AbstractDeclClass c : getList()) {
-            if (c.factorised(compiler))
-                return true;
-        }
-        return false;
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (AbstractDeclClass _class : getList())
+            if (_class.isSplitable(compiler))
+                _class.splitCalculus(compiler);
+        return null;
     }
+
+
     @Override
     public boolean collapse() {
         return false;

@@ -83,15 +83,19 @@ public abstract class AbstractPrint extends AbstractInst {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return arguments.factorised(compiler);
+    public AbstractInst factorise(DecacCompiler compiler) {
+        arguments.factorise(compiler);
+        return this;
     }
 
     @Override
-    public ListInst factoInst(DecacCompiler compiler) {
-        arguments.factoInst(compiler);
-        ListInst list = new ListInst();
-        list.add(this);
-        return list;
+    public boolean isSplitable(DecacCompiler compiler) {
+        return arguments.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        arguments.splitCalculus(compiler);
+        return this;
     }
 }

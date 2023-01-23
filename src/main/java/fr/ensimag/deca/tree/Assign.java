@@ -41,7 +41,7 @@ public class Assign extends AbstractBinaryExpr {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Type type = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
-        getRightOperand().verifyRValue(compiler, localEnv, currentClass, type);
+        rightOperand.verifyRValue(compiler, localEnv, currentClass, type);
         
         // Ajout du décor et renvoie du type
         setType(type);
@@ -58,7 +58,7 @@ public class Assign extends AbstractBinaryExpr {
         // put the right value in the left value !
         // put the result of the right value in a register
         GPRegister resultRegister = compiler.allocateRegister();
-        this.getRightOperand().codeGenExpr(compiler, resultRegister);
+        this.rightOperand.codeGenExpr(compiler, resultRegister);
         if(getLeftOperand().getDefinition().isField()) {
             // if we have a field, we are in a method. load object from -2(SP) and then get the field from offset.
             GPRegister classPointerRegister = compiler.allocateRegister();
@@ -68,7 +68,7 @@ public class Assign extends AbstractBinaryExpr {
         }
         else {
             // compute right expression in the register
-            this.getRightOperand().codeGenExpr(compiler, resultRegister);
+            this.rightOperand.codeGenExpr(compiler, resultRegister);
             compiler.addInstruction(new STORE(resultRegister, getLeftOperand().getDefinition().getDAddr()));
         }
         // free the alocated register
@@ -86,38 +86,36 @@ public class Assign extends AbstractBinaryExpr {
         this.rightOperand.spotUsedVar(prog);
     }
     
-    public boolean factorised(DecacCompiler compiler) {
-        return getRightOperand().factorised(compiler);
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        return rightOperand.factorise(compiler);
     }
 
     @Override
-    public ListInst factoInst(DecacCompiler compiler) {
-        ListInst list = getRightOperand().factoInst(compiler);
-        setRightOperand((AbstractExpr)list.getList().get(list.getList().size() - 1));
-        list.add(this);
-        return list;
+    public boolean isSplitable(DecacCompiler compiler) {
+        return rightOperand.isSplitable(compiler);
     }
 
     @Override 
     public boolean collapse() {
-        if(getRightOperand().collapse()) {
-            if(getRightOperand().getType().isBoolean()) {
+        if(rightOperand.collapse()) {
+            if(rightOperand.getType().isBoolean()) {
                 // try to collapse to bool expr
-                Boolean collapsedValue = getRightOperand().collapseBool();
+                Boolean collapsedValue = rightOperand.collapseBool();
                 if(collapsedValue != null) {
                     setRightOperand(new BooleanLiteral(collapsedValue));
                 }
             }
-            else if(getRightOperand().getType().isInt()) {
+            else if(rightOperand.getType().isInt()) {
                 // try to collapse to a int expr
-                Integer collapsedValue = getRightOperand().collapseInt();
+                Integer collapsedValue = rightOperand.collapseInt();
                 if(collapsedValue != null) {
                     setRightOperand(new IntLiteral(collapsedValue));
                 }
             }
-            else if(getRightOperand().getType().isFloat()) {
+            else if(rightOperand.getType().isFloat()) {
                 // try to collapse to a float
-                Float collapsedValue = getRightOperand().collapseFloat();
+                Float collapsedValue = rightOperand.collapseFloat();
                 if(collapsedValue != null) {
                     setRightOperand(new FloatLiteral(collapsedValue));
                 }

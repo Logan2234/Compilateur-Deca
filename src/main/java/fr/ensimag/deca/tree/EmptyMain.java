@@ -49,16 +49,6 @@ public class EmptyMain extends AbstractMain {
     protected void spotUsedVar(AbstractProgram prog) {
         // do nothing
     }
-
-    @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return false;
-    }
-
-    @Override
-    public void factoInst(DecacCompiler compiler){
-        // Nothing
-    }
     
     public boolean collapse() {
         // this main is empty : cannot collapse further.

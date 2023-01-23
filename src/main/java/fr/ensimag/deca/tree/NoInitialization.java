@@ -90,14 +90,4 @@ public class NoInitialization extends AbstractInitialization {
         // TODO
         return false;
     }
-
-    @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return false;
-    }
-
-    @Override
-    public void factoInst(DecacCompiler compiler){
-        // Nothing
-    }
 }

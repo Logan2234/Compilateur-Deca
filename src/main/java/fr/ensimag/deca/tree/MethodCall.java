@@ -106,7 +106,7 @@ public class MethodCall extends AbstractExpr {
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // put the params on the stack, in reverse order
         compiler.addComment("Method call : " + meth.getName().getName());
-        for(int i = params.size() - 1; i >= 0; i--) {
+        for (int i = params.size() - 1; i >= 0; i--) {
             params.getList().get(i).codeGenExpr(compiler, null); // null so the result will be on the stack !
         }
         // push the object on the stack
@@ -114,7 +114,7 @@ public class MethodCall extends AbstractExpr {
         // call the bsr with the correct method adress
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
         // null reference exception
-        if(compiler.getCompilerOptions().getRunTestChecks()) {
+        if (compiler.getCompilerOptions().getRunTestChecks()) {
             compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
             AbstractRuntimeErr error = new NullReferenceErr();
             compiler.useRuntimeError(error);
@@ -126,17 +126,33 @@ public class MethodCall extends AbstractExpr {
         // the offset is the index !
         compiler.addInstruction(new BSR(new RegisterOffset(meth.getMethodDefinition().getIndex(), Register.R1)));
         // pop everything in R1
-        for(int i = params.size(); i >= 0; i--) { // +1 for the object !
+        for (int i = params.size(); i >= 0; i--) { // +1 for the object !
             compiler.addInstruction(new POP(Register.R1));
         }
         // if the method returned something, it is now in R0 ! put it as a result
-        if(resultRegister == null) {
+        if (resultRegister == null) {
             compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R0));
-        }
-        else {
+        } else {
             compiler.addInstruction(new LOAD(Register.R0, resultRegister));
         }
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        params.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return params.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        params.splitCalculus(compiler);
+        return this;
     }
 
     @Override
@@ -149,9 +165,5 @@ public class MethodCall extends AbstractExpr {
     @Override
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         foundMethodCalls.add(this);
-    }
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
     }
 }

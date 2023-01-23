@@ -90,9 +90,4 @@ public class Equals extends AbstractOpExactCmp {
         }
         return null;
     }
-
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
 }

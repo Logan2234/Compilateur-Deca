@@ -93,15 +93,7 @@ public class BooleanLiteral extends AbstractExpr {
         // do nothing
     }
 
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;
-    }
     public Boolean collapseBool() {
-        return value;
-    }
-
-    public Boolean factoBool() {
         return value;
     }
 

@@ -75,7 +75,7 @@ public class MethodBody extends AbstractMethod {
 
     @Override
     public void setReturnsNames(String name) {
-        System.out.print("setting method name : ");
+        System.out.print("setting method name : "); // TODO Virgile à supprimer
         System.out.println(name);
         for(AbstractInst inst : insts.getList()) {
             if(inst.isReturn()) {
@@ -90,8 +90,22 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
-    public boolean factorised(DecacCompiler compiler){
-        return insts.factorised(compiler);
+    public AbstractInst factorise(DecacCompiler compiler) {
+        vars.factorise(compiler);
+        insts.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler){
+        return vars.isSplitable(compiler) || insts.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        vars.splitCalculus(compiler);
+        insts.splitCalculus(compiler);
+        return null;
     }
 
     @Override

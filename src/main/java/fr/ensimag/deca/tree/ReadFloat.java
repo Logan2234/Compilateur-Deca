@@ -43,8 +43,4 @@ public class ReadFloat extends AbstractReadExpr {
     protected void codeGenRead(DecacCompiler compiler) {
         compiler.addInstruction(new RFLOAT());
     }
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
 }

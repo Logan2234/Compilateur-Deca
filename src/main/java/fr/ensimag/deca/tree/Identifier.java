@@ -3,8 +3,6 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
-import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
@@ -17,11 +15,8 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.BEQ;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
@@ -276,10 +271,11 @@ public class Identifier extends AbstractIdentifier {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // if it is a field, we need to first load the value on from the heap !
-        if(getDefinition().isField()) {
+        if (getDefinition().isField()) {
             GPRegister classPointerRegister = compiler.allocateRegister();
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
-            compiler.addInstruction(new LOAD(new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister), classPointerRegister));
+            compiler.addInstruction(new LOAD(new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister),
+                    classPointerRegister));
             if (resultRegister == null) {
                 // put self value on the stack
                 // load self on R1, then push R1
@@ -292,8 +288,7 @@ public class Identifier extends AbstractIdentifier {
                 compiler.addInstruction(new LOAD(classPointerRegister, resultRegister));
                 compiler.freeRegister(classPointerRegister);
             }
-        }
-        else {
+        } else {
             if (resultRegister == null) {
                 // put self value on the stack
                 // load self on R1, then push R1
@@ -317,16 +312,4 @@ public class Identifier extends AbstractIdentifier {
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
-
-    @Override
-    public ListInst factoInst(DecacCompiler compiler) {
-        ListInst list = new ListInst();
-        list.add(this);
-        return list;
-    }
-
 }

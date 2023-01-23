@@ -33,9 +33,7 @@ public class Minus extends AbstractOpArith {
             compiler.addInstruction(new BOV(error.getErrorLabel()));
         }
     }
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
+
     @Override
     public boolean collapse() {
         return getLeftOperand().collapse() || getRightOperand().collapse();
@@ -81,4 +79,8 @@ public class Minus extends AbstractOpArith {
         return null;
     }
     
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        return this.facto(compiler, false);
+    }
 }

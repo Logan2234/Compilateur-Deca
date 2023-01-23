@@ -30,10 +30,6 @@ public class Greater extends AbstractOpIneq {
         compiler.addInstruction(new SGT(register));
     }
 
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
-
     public boolean collapse() {
         return getRightOperand().collapse() || getLeftOperand().collapse();
     }

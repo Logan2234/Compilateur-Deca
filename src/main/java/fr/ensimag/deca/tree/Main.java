@@ -80,16 +80,19 @@ public class Main extends AbstractMain {
     public ListInst getListInst() {
         return insts;
     }
-
+    
     @Override
-    public boolean factorised(DecacCompiler compiler) {
-        return declVariables.factorised(compiler) || insts.factorised(compiler);
+    public AbstractInst factorise(DecacCompiler compiler) {
+        declVariables.factorise(compiler);
+        insts.factorise(compiler);
+        return null;
     }
 
 	@Override
-	public void factoInst(DecacCompiler compiler) {
-        declVariables.factoInst(compiler);
-        insts.factoInst(compiler);
+	public AbstractInst splitCalculus(DecacCompiler compiler) {
+        declVariables.splitCalculus(compiler);
+        insts.splitCalculus(compiler);
+        return null;
 	}
     
     public boolean collapse() {

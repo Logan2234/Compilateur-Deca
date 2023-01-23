@@ -6,6 +6,8 @@ import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Instruction;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.MUL;
+import fr.ensimag.ima.pseudocode.instructions.SHL;
 import fr.ensimag.ima.pseudocode.instructions.SUB;
 
 /**
@@ -32,8 +34,11 @@ public class AssemblyOptimizer {
             while(OptRemoveUselessWrites(program)) { keepOptimizing = true; }
             // optimize conditions with immediates
             while(OptCond(program)) { keepOptimizing = true; }
+            // replace mul by shifts when possible
+            while(OptMulShifts(program)) { keepOptimizing = true; }
             // finally, replace loads by subs
-            while(OptLoadSub(program)) { keepOptimizing = true; }
+            // todo : assert the register used contains integer or float value (no adresses or labels)
+            // while(OptLoadSub(program)) { keepOptimizing = true; }
         }
     }
 
@@ -166,6 +171,23 @@ public class AssemblyOptimizer {
         }
         return optimizing;
     }
+
+    private static boolean OptMulShifts(IMAProgram program) {
+        boolean optimizing = false;
+        for(int i = 0; i < program.size(); i++) {
+            AbstractLine line = program.getLine(i);
+            if(line.isInstruction()) {
+                if(line.asInstruction().isDvalToReg() && line.asInstruction().asDvalToReg().isMul()) {
+                    MUL multiplication = line.asInstruction().asDvalToReg().asMul();
+                    if(multiplication.isShiftReplacable()) {
+                        program.replaceInstructionAt(new SHL(multiplication.getOperand2().asGpRegister()), "MUL 2, " + multiplication.getOperand2().asGpRegister(), i);
+                    }
+                }
+            }
+        }
+        return optimizing;
+    }
+
 
 }
 

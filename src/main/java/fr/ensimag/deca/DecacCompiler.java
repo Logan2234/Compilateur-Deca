@@ -403,8 +403,9 @@ public class DecacCompiler {
         if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
                 if (compilerOptions.getOptimize()) {
                 prog.verifyProgram(this);
-                //prog.optimizeTree();
-                prog.factorised(this);
+                // prog.optimizeTree();
+                prog.factorise(this);
+                prog.splitCalculus(this);
                 //prog.prettyPrint(System.out);
             }
             LOG.info("Writing deca file ...");
@@ -419,7 +420,7 @@ public class DecacCompiler {
                 if (compilerOptions.getOptimize()) {
                     LOG.info("Optimizing the tree...");
                     // prog.optimizeTree();
-                    prog.factorised(this);
+                    prog.splitCalculus(this);
                     LOG.info("Tree optimized...");
                 }
                 prog.codeGenProgram(this);
@@ -427,7 +428,7 @@ public class DecacCompiler {
                 LOG.info("Output file assembly file is: " + destName);
             }
             if(compilerOptions.getOptimize()) {
-                // AssemblyOptimizer.Optimize(program);
+                AssemblyOptimizer.Optimize(program);
             }
 
             if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {

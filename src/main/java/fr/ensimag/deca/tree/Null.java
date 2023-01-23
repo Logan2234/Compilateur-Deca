@@ -77,8 +77,4 @@ public class Null extends AbstractExpr {
     protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
-
-    public boolean factorised(DecacCompiler compiler) {
-        return false;//TODO
-    }
 }

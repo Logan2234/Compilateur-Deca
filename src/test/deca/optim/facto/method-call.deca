@@ -1,0 +1,18 @@
+// Description:
+//    Factorisation et décomposotion en shift dans un method call
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 22/01/2023
+
+class A{
+    void method(int a){}
+}
+
+{
+    int a;
+    A objet;
+    objet.method(2*a + a*13 - (5*a) / (9*a));
+}
