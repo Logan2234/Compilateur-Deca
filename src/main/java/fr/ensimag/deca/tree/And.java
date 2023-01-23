@@ -49,6 +49,7 @@ public class And extends AbstractOpBool {
         }
     }
 
+    
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new And(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));

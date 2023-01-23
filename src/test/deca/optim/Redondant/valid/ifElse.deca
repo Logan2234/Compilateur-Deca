@@ -1,0 +1,43 @@
+// Description:
+//    Différent tests de changement de valeurs dans les if
+//
+// Resultats:
+//    1
+//    1
+//    Et le décompile fait :
+//
+//{
+//	int a = 0;
+//	if (true){
+//		(a = 1);
+//		if (false){
+//			(a = 2);
+//			print(2);
+//		} else {
+//			print(1);
+//		}
+//	} else {
+//		print(0);
+//	}
+//	print(a);
+//}
+//
+//
+// Historique:
+//    cree le 23/01/2023
+
+{
+    int a = 0;
+    if (true) {
+        a = 1;
+        if (false){
+            a = 2;
+            print(a);
+        } else {
+            print(a);
+        }
+    } else {
+        print(a);
+    }
+    print(a);
+}

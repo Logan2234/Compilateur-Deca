@@ -124,6 +124,11 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
+    public boolean irrelevant() {
+        return vars.irrelevant() || insts.irrelevant();
+    }
+
+	@Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         this.vars = (ListDeclVar)this.vars.doSubstituteInlineMethods(inlineMethods);
         this.insts = (ListInst)this.insts.doSubstituteInlineMethods(inlineMethods);

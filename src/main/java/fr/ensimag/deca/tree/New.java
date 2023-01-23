@@ -47,6 +47,10 @@ public class New extends AbstractExpr {
         this.classe = classe;
     }
 
+    public AbstractIdentifier getClasse(){
+        return this.classe;
+    }
+
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
@@ -117,6 +121,11 @@ public class New extends AbstractExpr {
     }
 
     @Override
+    public boolean isNew() {
+        return true;
+    }
+
+	@Override
     protected void spotUsedVar() {
         this.classe.spotUsedVar();
     }

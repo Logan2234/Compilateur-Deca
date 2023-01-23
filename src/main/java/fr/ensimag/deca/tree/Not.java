@@ -72,4 +72,5 @@ public class Not extends AbstractUnaryExpr {
         res.setLocation(this.getLocation());
         return res;
     }
+
 }

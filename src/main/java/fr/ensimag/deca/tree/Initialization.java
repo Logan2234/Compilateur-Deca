@@ -110,5 +110,15 @@ public class Initialization extends AbstractInitialization {
         this.expression = (AbstractExpr)this.expression.doSubstituteInlineMethods(inlineMethods);
         return this;
     }
+
+    @Override
+    public boolean irrelevant(){
+        return expression.irrelevant();
+    }
+
+    @Override
+    public boolean hasInitialization() {
+        return true;
+    }
     
 }

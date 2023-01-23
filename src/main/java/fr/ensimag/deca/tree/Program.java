@@ -389,4 +389,9 @@ public class Program extends AbstractProgram {
             }
         }
     }
+
+    @Override
+    public boolean irrelevant() {
+        return classes.irrelevant() || main.irrelevant();
+    }
 }

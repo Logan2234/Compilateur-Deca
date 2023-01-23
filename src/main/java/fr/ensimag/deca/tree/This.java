@@ -110,4 +110,9 @@ public class This extends AbstractExpr {
         return false;
     }
 
+    @Override
+    public boolean isThis(){
+        return true;
+    }
+
 }

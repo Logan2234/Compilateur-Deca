@@ -71,4 +71,29 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         return new CollapseResult<Null>(null, somethingCollapsed);
     }
 
+
+    @Override
+    public boolean collapse() {
+        boolean result = false;
+        for (AbstractDeclField i : getList()) {
+            result |= i.collapse();
+        }
+        return result;
+    }
+
+    @Override
+    public boolean irrelevant() {
+        boolean result = false;
+        AbstractDeclField expr;
+        
+        for (int i = 0; i < getList().size(); i++) {
+            expr = getList().get(i);
+            if (expr.irrelevant()){
+                result |= true;
+                set(i, expr);
+            }
+        }
+
+        return result;
+    }
 }

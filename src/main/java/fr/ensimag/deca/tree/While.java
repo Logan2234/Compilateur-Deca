@@ -165,4 +165,54 @@ public class While extends AbstractInst {
         this. body = (ListInst)this.body.doSubstituteInlineMethods(inlineMethods);
         return this;
     }
+
+    @Override
+    public boolean irrelevant() {
+        
+        // if (condition.irrelevant() || condition.isSelection()){
+        //     if (condition.isSelection()){
+        //         AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection();
+        //         if (out != null) {
+        //             condition = out;
+        //         }
+        //     }
+        //     else {
+        //         condition = currentValues.get(((Identifier) condition).getName());
+        //     }
+        // }
+        // return condition.irrelevant() || body.irrelevant();
+        if (inWhile){
+            body.irrelevant();
+        } else {
+            inWhile = true;
+            body.irrelevant();
+            inWhile = false;
+        }
+        return false; //todo REVOIR
+    }
+
+    @Override
+    public boolean irrelevant(int i) {
+        
+        // if (condition.irrelevant() || condition.isSelection()){
+        //     if (condition.isSelection()){
+        //         AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection();
+        //         if (out != null) {
+        //             condition = out;
+        //         }
+        //     }
+        //     else {
+        //         condition = currentValues.get(((Identifier) condition).getName());
+        //     }
+        // }
+        // return condition.irrelevant() || body.irrelevant();
+        if (inWhile){
+            body.irrelevant(i);
+        } else {
+            inWhile = true;
+            body.irrelevant(i);
+            inWhile = false;
+        }
+        return false; //todo REVOIR
+    }
 }

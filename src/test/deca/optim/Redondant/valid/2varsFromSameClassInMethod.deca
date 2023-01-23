@@ -1,0 +1,42 @@
+// Description:
+//    On va tester si, dans une méthode, lorsqu'on crée deux variables d'une même classe, elles sont bien indépendantes entre elles.
+//
+// Resultats:
+//    ok et le decompile fait : 
+//
+//class A extends Object {
+//	void m(){
+//		boolean a = true;
+//		boolean b = (!true);
+//		int c = 3;
+//		print(3);
+//		if ((!(!true))){
+//		} else {
+//		}
+//		if ((true && (!true))){
+//		} else {
+//		}
+//	
+//}
+//
+//}
+//{
+//}
+//
+//
+//
+// Historique:
+//    cree le 22/01/2023
+
+class A {
+    void m(){
+        boolean a = true;
+        boolean b = !a;
+        int c = 3;
+        print(c);
+        if (!b){}
+        if (a && b){}
+    }
+}
+{
+}

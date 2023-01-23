@@ -18,6 +18,10 @@ import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
+import java.io.PrintStream;
+import java.util.HashMap;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
@@ -152,6 +156,26 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
+    public boolean irrelevant(){
+        defMethod = true;
+        currentValues.clear();
+        paramMethod.clear(); 
+        declaredClassesInMethod.clear();
+        for (Symbol field : declaredClasses.keySet()){
+            declaredClassesInMethod.put(field, (HashMap<Symbol, AbstractExpr>) declaredClasses.get(field).clone());
+        }
+        for (AbstractDeclParam param : params.getList()) {
+            paramMethod.add(((DeclParam) param).getSymbolFromParamName());
+        }
+        for (Symbol field : varModels.get(actualClass).keySet()){
+            if (!paramMethod.contains(field)){
+                currentValues.put(field, varModels.get(actualClass).get(field));
+            }
+        }
+        
+        body.irrelevant();
+        return false;
+    }
     public void codeGenMethod(DecacCompiler compiler, String className) {
         // set the labels for the returns
         body.iter(new ReturnCheckFunc(className + "." + methodName.getName().getName()));

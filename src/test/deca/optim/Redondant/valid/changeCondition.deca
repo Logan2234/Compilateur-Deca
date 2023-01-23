@@ -1,0 +1,32 @@
+// Description:
+//    On teste si la condition du if change bien de valeur si on l'a défini avant
+//
+// Resultats:
+//    ok mais la décompilation doit être : 
+//
+//class A extends Object {
+//	public boolean a = true;
+//
+//}
+//{
+//	A a = new A();
+//	if (true){
+//		print("ok");
+//	} else {
+//	}
+//}
+//
+// Historique:
+//    cree le 21/01/2023
+
+class A {
+    boolean a = true;
+}
+
+{
+    A a = new A();
+    if (a.a) {
+        print("ok");
+    }
+
+}

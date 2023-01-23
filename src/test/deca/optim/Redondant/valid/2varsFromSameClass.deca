@@ -1,0 +1,37 @@
+// Description:
+//    On va tester si, lorsqu'on crée deux variables d'une même classe, elles sont bien indépendantes entre elles.
+//
+// Resultats:
+//    1
+//    2
+// et la décompilation :
+//class A extends Object {
+//	public int i;
+//	public float j;
+//
+//}
+//{
+//	A a = new A();
+//	A b = new A();
+//	(a.i = 1);
+//	(b.i = 2);
+//	print(1);
+//	print(2);
+//}
+//
+// Historique:
+//    cree le 22/01/2023
+
+class A{
+    int i;
+    float j;
+}
+
+{
+	A a = new A();
+    A b = new A();
+    a.i = 1;
+    b.i = 2;
+    print(a.i);
+    print(b.i);
+}

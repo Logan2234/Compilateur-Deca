@@ -213,6 +213,29 @@ public abstract class AbstractExpr extends AbstractInst {
         }
     }
 
+    @Override 
+    public boolean irrelevant() {
+        // by default, return false. 
+        return false;
+        // expressions that can errase irrelevant expressions will override this.
+    }
+
+    /**
+     * Function telling if the expression is a "This" instance
+     * @return id the expression is a "This" instance
+     */
+    public boolean isThis(){
+        return false;
+    }
+
+    /**
+     * Tells if the LValue is a "Selection" instance
+     * @return if the LValue is a "Selection" instance
+     */
+    public boolean isSelection(){
+        return false;
+    }
+
     /**
      * Find recursively all method calls, assign and Reads in the expression and add them on
      * top of the list

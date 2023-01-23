@@ -83,6 +83,17 @@ public abstract class AbstractPrint extends AbstractInst {
         arguments.prettyPrint(s, prefix, true);
     }
 
+
+    @Override
+    public boolean irrelevant(){
+        return arguments.irrelevant();
+    }
+
+    @Override
+    public boolean irrelevant(int i){
+        return arguments.irrelevant(i);
+	}
+
     @Override
     protected void spotUsedVar() {
         this.arguments.spotUsedVar();

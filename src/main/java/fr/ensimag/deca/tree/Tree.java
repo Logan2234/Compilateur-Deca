@@ -4,8 +4,13 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -290,6 +295,178 @@ public abstract class Tree {
             return "";
         }
     }
+
+    /**
+     * Tells if we are actually defining classes
+     */
+    public static boolean defClass = true;
+
+    /**
+     * Tells if we are actually defining methods
+     */
+    public static boolean defMethod = false;
+
+    /**
+     * Tells which class we are actually defining
+     */
+    public static Symbol actualClass;
+
+
+    /**
+     * Tells if we are in a while loop
+     */
+    public static boolean inWhile = false;
+
+    /**
+     * Dictionary of the current values of the variables in the Main program
+     */
+    public static HashMap<Symbol, AbstractExpr> currentValues = new HashMap<Symbol, AbstractExpr>();
+
+    /**
+     * Dictionary of the values defined by the class definition, before entering the Main program
+     */
+    public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> varModels = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
+
+    /*
+     * Dictionary of the values of a class, after have entered the Main program
+     */
+    public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> declaredClasses = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
+
+    /**
+     * Parameters of the method we are currently defining
+     */
+    public static Set<Symbol> paramMethod = new HashSet<Symbol>();
+
+    /**
+     * Dictionary of the values of a class in the method we are currently defining
+     */
+    public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> declaredClassesInMethod = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
+
+    /**
+     * Optimize the decorated tree.
+     */
+    public void optimizeTree() {
+        // solve compile time known cases.
+        // while(collapse()) {
+        //     // rien
+        // }
+        while(irrelevant()){
+            //rien
+        }
+        
+    }
+
+    /**
+     * Check if the class is a read expression.
+     * @return if the class is a read expression.
+     */
+    public boolean isReadExpr() {
+        return false;
+    }
+
+    /**
+     * Check if the class is a "New" expression.
+     * @return if the class is a "New" expression.
+     */
+    public boolean isNew() {
+        return false;
+    }
+    
+    /**
+     * Check if the tree have irrelevant assignments.
+     * Example : int a = 1; int b = a; b = 2; a = 3; --> int a = 1, int b=1, ... 
+     * This calls the irrelevant triggers on each nodes.
+     * @return if this node could find more irrelevant assignments.
+     */
+    public abstract boolean irrelevant();
+
+    /**
+     * Dictionary of the virtual values of the variables, in each if/else statement.
+     */
+    public static HashMap<Integer, HashMap<Symbol, AbstractExpr>> irrelevantValuesForIf = new HashMap<Integer, HashMap<Symbol, AbstractExpr>>();
+
+    /**
+     * Number of the if/else statement.
+     */
+    public static Integer ifNumber = 0;
+
+    /**
+     * Tells if we are in an if/else statement.
+     */
+    public static boolean inIf = false;
+    
+    /**
+     * Tells if we are creating a field
+     */
+    public static boolean inField = false;
+
+    /**
+     * Do the same as irrelevant(), but in if/else statements with a subDefinition of values.
+     * @param i the number of the if/else statement.
+     * @return if this node could find more irrelevant assignments.
+     */
+    public boolean irrelevant(int i){
+        return false;
+    }
+
+    /**
+     * Replace the boolean values known at compile time by the variables.
+     * if the expression cannot be replaced, null is returned.
+     * @return the value of the compile-time known boolean.
+     */
+    public Boolean irrelevantBool() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    };
+
+    /**
+     * Replace the integer values known at compile time by the variables.
+     * if the expression cannot be replaced, null is returned.
+     * @return the value of the compile-time known int.
+     */
+    public Integer irrelevantInt() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    };
+
+    /**
+     * Replace the float values known at compile time by the variables.
+     * if the expression cannot be replaced, null is returned.
+     * @return the value of the compile-time known float.
+     */
+    public Float irrelevantFloat() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    };
+
+
+    public boolean irrelevantable() {
+        // tells if we are at a terminal node or not. only true for variables.
+        // by default, return false. 
+        return false;
+    }
+
+    /**
+     * Check if the tree can collapse into a compile time known node.
+     * This calls the collapse triggers on each nodes.
+     * @return if this node could collapse.
+     */
+    public abstract boolean collapse();
+
+    /**
+     * Collapse the boolean values known at compile time.
+     * if the expression cannot collapse, null is returned.
+     * @return the value of the compile-time known boolean.
+     */
+    public Boolean collapseBool() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    };
+
+    /**
+     * Collapse the int values known at compile time.
+     * if the expression cannot collapse, null is returned.
+     * @return the value of the compile-time known int.
+     */
+    public Integer collapseInt() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+	}
 
     protected Boolean isLiteral() {
         return false;

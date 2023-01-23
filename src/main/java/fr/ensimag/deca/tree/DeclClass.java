@@ -8,6 +8,10 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
+import java.io.PrintStream;
+import java.util.HashMap;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.Register;
@@ -228,6 +232,18 @@ public class DeclClass extends AbstractDeclClass {
         this.fields = (ListDeclField)this.fields.doSubstituteInlineMethods(inlineMethods);
         this.methods = (ListDeclMethod)this.methods.doSubstituteInlineMethods(inlineMethods);
         return this;
+    }
+
+    @Override
+    public boolean irrelevant(){
+        defMethod = false;
+        declaredClasses.clear();
+        defClass = true;
+        actualClass = name.getName();
+        varModels.put(actualClass, new HashMap<Symbol, AbstractExpr>());
+        fields.irrelevant();
+        methods.irrelevant();
+        return false;
     }
 
 }

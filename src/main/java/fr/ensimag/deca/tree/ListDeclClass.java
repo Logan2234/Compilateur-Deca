@@ -98,4 +98,20 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
             ((DeclClass)c).spotInlineMethods(inlineMethods);
         }
     }
+
+@Override
+    public boolean irrelevant(){
+        boolean result = false;
+        AbstractDeclClass expr;
+        
+        for (int i = 0; i < getList().size(); i++) {
+            expr = getList().get(i);
+            if (expr.irrelevant()){
+                result |= true;
+                set(i, expr);
+            }
+        }
+
+        return result;
+    }
 }

@@ -1,0 +1,33 @@
+// Description:
+//    On va tester si, lorsqu'on appelle une variable
+//    d'une classe dans une classe, elle est bien changée
+//
+// Resultats:
+//    ok et en décompile, on a :
+//class A extends Object {
+//	public int a = 0;
+//
+//}
+//class B extends Object {
+//	public A test = new A();
+//	public int d = 0;
+//
+//}
+//{
+//}
+//
+// Historique:
+//    cree le 21/01/2023
+
+class A {
+    int a = 0;
+}
+
+class B {
+    A test = new A();
+    int d = test.a;
+}
+
+
+{
+}
