@@ -116,8 +116,14 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
     @Override
     public AbstractInst factorise(DecacCompiler compiler){
+        System.out.println(leftOperand);
         leftOperand = (AbstractExpr)leftOperand.factorise(compiler);
+        System.out.println(leftOperand);
+        System.out.println(rightOperand);
+
         rightOperand = (AbstractExpr)rightOperand.factorise(compiler);
+        System.out.println(rightOperand);
+        
         return this;
     }
 
@@ -176,6 +182,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
     @Override
     public boolean irrelevant() {
+        if (inWhile) return false;
         if (inField){
             HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
             boolean irrelevantRight = false;

@@ -101,7 +101,8 @@ public class Assign extends AbstractBinaryExpr {
 
     @Override
     public AbstractInst factorise(DecacCompiler compiler) {
-        return rightOperand.factorise(compiler);
+        setRightOperand((AbstractExpr)rightOperand.factorise(compiler));
+        return this;
     }
 
     @Override
@@ -113,6 +114,7 @@ public class Assign extends AbstractBinaryExpr {
                 if (currentValues.containsKey(getLeftOperand().getName()))
                     currentValues.remove(getLeftOperand().getName());
             }
+            return false;
 
         }
         if (getRightOperand().isSelection()) {

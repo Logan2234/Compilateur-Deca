@@ -120,6 +120,7 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
 
     @Override
     public boolean irrelevant() {
+        if (inWhile) return false;
         if (inField){
             HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
             boolean irrelevant = false;

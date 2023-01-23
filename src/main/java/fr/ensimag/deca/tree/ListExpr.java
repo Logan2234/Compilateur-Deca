@@ -62,17 +62,19 @@ public class ListExpr extends TreeList<AbstractExpr> {
         for (int i = 0; i < getList().size(); i++) {
             expr = getList().get(i);
             if (expr.irrelevant() || expr.isSelection()){
-                if (expr.isSelection()){
-                    AbstractExpr out = ((Selection) expr).returnIrrelevantFromSelection();
-                    if (out != null) {
-                        result |= true;
-                        set(i, out);
-                    } 
-                }
-                else {
-                    if (currentValues.containsKey(((Identifier) expr).getName())){
-                        result |= true;
-                        set(i, currentValues.get(((Identifier) expr).getName()));
+                if (!inWhile) {
+                    if (expr.isSelection()){
+                        AbstractExpr out = ((Selection) expr).returnIrrelevantFromSelection();
+                        if (out != null) {
+                            result |= true;
+                            set(i, out);
+                        } 
+                    }
+                    else {
+                        if (currentValues.containsKey(((Identifier) expr).getName())){
+                            result |= true;
+                            set(i, currentValues.get(((Identifier) expr).getName()));
+                        }
                     }
                 }
             }
