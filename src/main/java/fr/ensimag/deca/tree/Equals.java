@@ -61,5 +61,4 @@ public class Equals extends AbstractOpExactCmp {
         res.setLocation(this.getLocation());
         return res;
     }
-    
 }

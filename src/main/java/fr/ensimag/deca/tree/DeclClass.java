@@ -11,6 +11,10 @@ import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
+import java.io.PrintStream;
+import java.util.HashMap;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
@@ -26,7 +30,6 @@ import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
-import java.io.PrintStream;
 import java.util.Map;
 import java.util.Set;
 
@@ -276,4 +279,33 @@ public class DeclClass extends AbstractDeclClass {
         return this;
     }
 
+    @Override
+    public boolean irrelevant(){
+        defMethod = false;
+        declaredClasses.clear();
+        defClass = true;
+        actualClass = name.getName();
+        varModels.put(actualClass, new HashMap<Symbol, AbstractExpr>());
+        fields.irrelevant();
+        methods.irrelevant();
+        return false;
+    }
+
+    public AbstractInst factorise(DecacCompiler compiler) {
+        fields.factorise(compiler);
+        methods.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return methods.isSplitable(compiler) || fields.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        fields.splitCalculus(compiler);
+        methods.splitCalculus(compiler);
+        return null;
+    }
 }

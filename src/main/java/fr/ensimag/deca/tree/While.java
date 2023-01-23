@@ -12,7 +12,6 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -21,7 +20,6 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
 
 import org.apache.commons.lang.Validate;
 
@@ -109,6 +107,23 @@ public class While extends AbstractInst {
     }
 
     @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        condition = (AbstractExpr)condition.factorise(compiler);
+        body.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        condition.splitCalculus(compiler);
+        
+        if (body.isSplitable(compiler))
+            body.splitCalculus(compiler);
+
+        return this;
+    }
+
+    @Override
     protected void spotUsedVar() {
         this.condition.spotUsedVar();
         this.body.spotUsedVar();
@@ -164,5 +179,29 @@ public class While extends AbstractInst {
         this.condition = (AbstractExpr)this.condition.doSubstituteInlineMethods(inlineMethods);
         this. body = (ListInst)this.body.doSubstituteInlineMethods(inlineMethods);
         return this;
+    }
+
+    @Override
+    public boolean irrelevant() {
+        if (inWhile){
+            body.irrelevant();
+        } else {
+            inWhile = true;
+            body.irrelevant();
+            inWhile = false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean irrelevant(int i) {
+        if (inWhile){
+            body.irrelevant(i);
+        } else {
+            inWhile = true;
+            body.irrelevant(i);
+            inWhile = false;
+        }
+        return false;
     }
 }

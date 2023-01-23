@@ -27,6 +27,10 @@ public abstract class AbstractStringLiteral extends AbstractExpr {
     }
     
     @Override
+    public boolean irrelevant(){
+        return false;
+	}
+
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }

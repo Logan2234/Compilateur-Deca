@@ -90,6 +90,11 @@ public class MethodAsmBody extends AbstractMethod {
     }
 
     @Override
+    public boolean irrelevant() {
+        return false;
+    }
+
+	@Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         return this;
     }

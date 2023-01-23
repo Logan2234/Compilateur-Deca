@@ -103,4 +103,27 @@ public class Main extends AbstractMain {
         this.insts = (ListInst)this.insts.doSubstituteInlineMethods(inlineMethods);
         return this;
     }
+
+    @Override
+    public boolean irrelevant(){
+        defMethod = false;
+        currentValues.clear();
+        declaredClasses.clear();
+        defClass = false;
+        return declVariables.irrelevant() || insts.irrelevant();
+    }
+    
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        declVariables.factorise(compiler);
+        insts.factorise(compiler);
+        return null;
+    }
+
+	@Override
+	public AbstractInst splitCalculus(DecacCompiler compiler) {
+        declVariables.splitCalculus(compiler);
+        insts.splitCalculus(compiler);
+        return null;
+	}
 }

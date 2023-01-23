@@ -76,6 +76,29 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     }
 
     @Override
+    public boolean irrelevant() {
+        boolean result = false;
+        AbstractDeclField expr;
+        
+        for (int i = 0; i < getList().size(); i++) {
+            expr = getList().get(i);
+            if (expr.irrelevant()){
+                result |= true;
+                set(i, expr);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (AbstractDeclField field : getList())
+            if (field.isSplitable(compiler))
+                field.splitCalculus(compiler);
+        return null;
+    }
+    @Override
     protected void getSpottedFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
         for (AbstractDeclField field : this.getList()) {
             ((DeclField)field).getSpottedFields(usedFields);

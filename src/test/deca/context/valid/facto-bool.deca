@@ -1,0 +1,16 @@
+// Description:
+//    factorisation de boolean
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 20/01/2023
+
+{
+    int A;
+    int B;
+    int C;
+    (A * B) + (A * C);
+    //A * (B + C);
+}

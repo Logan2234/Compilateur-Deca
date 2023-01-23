@@ -26,7 +26,7 @@ import org.apache.commons.lang.Validate;
  * @date 09/01/2023
  */
 public class Return extends AbstractInst {
-    
+
     private AbstractExpr expression;
 
     public Return(AbstractExpr expression) {
@@ -101,6 +101,7 @@ public class Return extends AbstractInst {
     protected Tree removeUnusedVar() {
         this.expression = (AbstractExpr)this.expression.removeUnusedVar();
         return this;
+
     }
 
     @Override
@@ -114,6 +115,56 @@ public class Return extends AbstractInst {
     @Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         this.expression = (AbstractExpr)this.expression.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    @Override
+    public boolean irrelevant(){
+        if (inWhile) return false;
+        if (expression.irrelevant() || expression.isSelection()){
+            if (expression.isSelection()){
+                AbstractExpr out = ((Selection) expression).returnIrrelevantFromSelection();
+                if (out != null) {
+                    expression = out;
+                }
+            }
+            else {
+                expression = currentValues.get(((Identifier) expression).getName());
+            }
+        }
+        return expression.irrelevant();
+    }
+
+    @Override
+    public boolean irrelevant(int i){
+        if (expression.irrelevant(i) || expression.isSelection()){
+            if (expression.isSelection()){
+                AbstractExpr out = ((Selection) expression).returnIrrelevantFromSelection(i);
+                if (out != null) {
+                    expression = out;
+                }
+            }
+            else {
+                expression = irrelevantValuesForIf.get(i).get(((Identifier) expression).getName());
+            }
+        }
+        return expression.irrelevant(i);
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        expression.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler){
+        return expression.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        expression = (AbstractExpr)expression.splitCalculus(compiler);
         return this;
     }
 }

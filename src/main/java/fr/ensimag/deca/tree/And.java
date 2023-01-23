@@ -13,6 +13,7 @@ import fr.ensimag.ima.pseudocode.instructions.ADD;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.SHR;
+import fr.ensimag.ima.pseudocode.instructions.SNE;
 
 /**
  *
@@ -34,18 +35,11 @@ public class And extends AbstractOpBool {
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
         // sum both bool as int and shift the result, should be 1
         compiler.addInstruction(new ADD(dval, register));
-        compiler.addInstruction(new SHR(register));
+        compiler.addInstruction(new SHR(register)); // raise flags for CMP #0, val
+        compiler.addInstruction(new SNE(register)); // so true if neq (false if eq)
     }
-
+    
     @Override
-    public void lazyEvaluation(DecacCompiler compiler, GPRegister resultRegister, Label toLabel) {
-        // and : if the result of register is false, branch to label
-        compiler.addInstruction(new CMP(0, resultRegister));
-        // if result register contains zero, return false in it 
-        compiler.addInstruction(new BEQ(toLabel));
-    }
-
-
     public CollapseResult<CollapseValue> collapseBinExpr() {
         CollapseResult<CollapseValue> leftResult = getLeftOperand().collapseExpr();
         CollapseResult<CollapseValue> rightResult = getRightOperand().collapseExpr();
@@ -57,6 +51,7 @@ public class And extends AbstractOpBool {
         }
     }
 
+    
     @Override
     protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
         AbstractExpr res = new And(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
@@ -65,4 +60,10 @@ public class And extends AbstractOpBool {
         return res;
     }
 
+    public void lazyEvaluation(DecacCompiler compiler, GPRegister resultRegister, Label toLabel) {
+        // and : if the result of register is false, branch to label
+        compiler.addInstruction(new CMP(0, resultRegister));
+        // if result register contains zero, return false in it 
+        compiler.addInstruction(new BEQ(toLabel));
+    } 
 }

@@ -203,6 +203,16 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
+    public boolean irrelevant() {
+        return true;
+    }
+
+    @Override
+    public boolean irrelevant(int i) {
+        return true;
+    }
+
+    @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Definition def = localEnv.get(name);
@@ -319,10 +329,11 @@ public class Identifier extends AbstractIdentifier {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // if it is a field, we need to first load the value on from the heap !
-        if(getDefinition().isField()) {
+        if (getDefinition().isField()) {
             GPRegister classPointerRegister = compiler.allocateRegister();
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
-            compiler.addInstruction(new LOAD(new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister), classPointerRegister));
+            compiler.addInstruction(new LOAD(new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister),
+                    classPointerRegister));
             if (resultRegister == null) {
                 // put self value on the stack
                 // load self on R1, then push R1
@@ -335,8 +346,7 @@ public class Identifier extends AbstractIdentifier {
                 compiler.addInstruction(new LOAD(classPointerRegister, resultRegister));
                 compiler.freeRegister(classPointerRegister);
             }
-        }
-        else {
+        } else {
             if (resultRegister == null) {
                 // put self value on the stack
                 // load self on R1, then push R1

@@ -12,7 +12,10 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +51,7 @@ public class DeclVar extends AbstractDeclVar {
         Type type = this.type.verifyType(compiler);
 
         if (type.isVoid())
-            throw new ContextualError("A variable can't be void (rule 3.17)", getLocation());
+            throw new ContextualError("The variable's type can't be void (rule 3.17)", getLocation());
 
         try {
             ExpDefinition def = new VariableDefinition(type, getLocation());
@@ -158,5 +161,51 @@ public class DeclVar extends AbstractDeclVar {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         this.initialization = (AbstractInitialization)this.initialization.doSubstituteInlineMethods(inlineMethods);
         return this;
+    }
+
+    @Override
+    public boolean irrelevant(){ 
+        if (initialization.hasInitialization()) {
+            AbstractExpr expr = ((Initialization) initialization).getExpression();
+
+            if (expr.isNew()){
+                if (defMethod){declaredClassesInMethod.put(varName.getName(), varModels.get(((New) expr).getClasse().getName()));}
+                else declaredClasses.put(varName.getName(), (HashMap<Symbol,AbstractExpr>) (varModels.get(((New) expr).getClasse().getName()).clone()));
+                return false;
+            }
+
+            if (expr.isSelection()){
+                AbstractExpr out = ((Selection) expr).returnIrrelevantFromSelection();
+                if (out != null) ((Initialization) initialization).setExpression(out);
+                return false;
+            }
+
+            if (expr.irrelevant()){
+                ((Initialization) initialization).setExpression(currentValues.get(((Identifier) expr).getName()));
+            }
+            if (!expr.isReadExpr()){
+                currentValues.put(varName.getName(), ((Initialization) initialization).getExpression());
+    
+            } else if (currentValues.containsKey(varName.getName())){
+                currentValues.remove(varName.getName());
+            } 
+        }
+        return false;}
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        initialization.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return initialization.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        initialization.splitCalculus(compiler);
+        return null;
     }
 }

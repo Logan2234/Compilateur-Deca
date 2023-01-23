@@ -3,7 +3,7 @@
 //
 // Resultats:
 //    Erreur contextuelle
-//    Ligne 12 : The left operand of a comparaison operation has to be an int or a float (rule 3.33)
+//    Ligne 12 : The left operand of a comparison operation has to be an int or a float (rule 3.33)
 //
 // Historique:
 //    cree le 06/01/2023

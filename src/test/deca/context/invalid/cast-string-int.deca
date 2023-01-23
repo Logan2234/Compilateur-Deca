@@ -2,7 +2,7 @@
 //    Cast un string en un int
 //
 // Resultats:
-//    Ligne 11: Unable to cast type "string" to "int"
+//    Ligne 11: Unable to cast type "string" to "int" (rule 3.39)
 //
 // Historique:
 //    cree le 06/01/2023

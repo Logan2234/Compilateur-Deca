@@ -4,8 +4,6 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.instructions.ADD;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.SEQ;
 
@@ -72,4 +70,5 @@ public class Not extends AbstractUnaryExpr {
         res.setLocation(this.getLocation());
         return res;
     }
+
 }

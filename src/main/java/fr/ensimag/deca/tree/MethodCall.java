@@ -9,7 +9,6 @@ import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Signature;
@@ -26,9 +25,7 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
@@ -114,7 +111,7 @@ public class MethodCall extends AbstractExpr {
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // put the params on the stack, in reverse order
         compiler.addComment("Method call : " + meth.getName().getName());
-        for(int i = params.size() - 1; i >= 0; i--) {
+        for (int i = params.size() - 1; i >= 0; i--) {
             params.getList().get(i).codeGenExpr(compiler, null); // null so the result will be on the stack !
         }
         // push the object on the stack
@@ -122,7 +119,7 @@ public class MethodCall extends AbstractExpr {
         // call the bsr with the correct method adress
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
         // null reference exception
-        if(compiler.getCompilerOptions().getRunTestChecks()) {
+        if (compiler.getCompilerOptions().getRunTestChecks()) {
             compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
             AbstractRuntimeErr error = new NullReferenceErr();
             compiler.useRuntimeError(error);
@@ -134,15 +131,14 @@ public class MethodCall extends AbstractExpr {
         // the offset is the index !
         compiler.addInstruction(new BSR(new RegisterOffset(meth.getMethodDefinition().getIndex(), Register.R1)));
         // pop everything in R1
-        for(int i = params.size(); i >= 0; i--) { // +1 for the object !
+        for (int i = params.size(); i >= 0; i--) { // +1 for the object !
             compiler.addInstruction(new POP(Register.R1));
         }
         // if the method returned something, it is now in R0 ! put it as a result
-        if(resultRegister == null) {
+        if (resultRegister == null) {
             compiler.incrementContextUsedStack();
             compiler.addInstruction(new PUSH(Register.R0));
-        }
-        else {
+        } else {
             compiler.addInstruction(new LOAD(Register.R0, resultRegister));
         }
     }
@@ -153,6 +149,18 @@ public class MethodCall extends AbstractExpr {
         this.meth.spotUsedVar();
         this.params.spotUsedVar();
     }
+    
+    public AbstractInst factorise(DecacCompiler compiler) {
+        params.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        params.splitCalculus(compiler);
+        return this;
+    }
+    
 
     @Override
     protected Tree removeUnusedVar() {

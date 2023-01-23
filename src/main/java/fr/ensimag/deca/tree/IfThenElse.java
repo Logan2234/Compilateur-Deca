@@ -9,14 +9,17 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BLT;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
@@ -66,13 +69,15 @@ public class IfThenElse extends AbstractInst {
         Label elseLabel = new Label(label + ".else");
         Label endLabel = new Label(label + ".end");
         // the if expression returns a bool. write it down in R1,
-        // then compare 1 to R1 to trigger flags : if EQ, then the expression was false : branch to else block
+        // then compare 1 to R1 to trigger flags : if EQ, then the expression was false
+        // : branch to else block
         GPRegister register = compiler.allocateRegister();
         condition.codeGenExpr(compiler, register);
         compiler.addInstruction(new CMP(new ImmediateInteger(1), register));
         compiler.freeRegister(register);
         // branch to else flag if EQ, then if block
-        compiler.addInstruction(new BLT(elseLabel)); // use bge as an bool is true if 1 or greater (should not be greater, but no so sure of me)
+        compiler.addInstruction(new BLT(elseLabel)); // use bge as an bool is true if 1 or greater (should not be
+                                                     // greater, but no so sure of me)
         thenBranch.codeGenListInst(compiler);
         compiler.addInstruction(new BRA(endLabel));
         // else flag to branch to, and else block
@@ -129,6 +134,78 @@ public class IfThenElse extends AbstractInst {
         return this;
     }
 
+    @Override
+    public boolean irrelevant() {
+        if (condition.irrelevant() || condition.isSelection()) {
+            if (condition.isSelection()) {
+                AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection();
+                if (out != null) {
+                    condition = out;
+                }
+            } else {
+                condition = currentValues.get(((Identifier) condition).getName());
+            }
+        }
+        boolean whereWeInIf = inIf;
+        ifNumber += 2;
+        inIf = true;
+        boolean sortie = false;
+        irrelevantValuesForIf.put(ifNumber.intValue() - 1, (HashMap<Symbol, AbstractExpr>) currentValues.clone());
+        irrelevantValuesForIf.put(ifNumber.intValue(), (HashMap<Symbol, AbstractExpr>) currentValues.clone());
+        sortie = thenBranch.irrelevant(ifNumber.intValue() - 1) || elseBranch.irrelevant(ifNumber.intValue());
+        ifNumber -= 2;
+        if (!whereWeInIf)
+            inIf = false;
+
+        return condition.irrelevant() || sortie;
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        condition = (AbstractExpr) condition.factorise(compiler);
+        thenBranch.factorise(compiler);
+        elseBranch.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        condition.splitCalculus(compiler);
+        thenBranch.splitCalculus(compiler);
+        elseBranch.splitCalculus(compiler);
+
+        return this;
+    }
+
+    @Override
+    public boolean irrelevant(int i) {
+
+        if (condition.irrelevant() || condition.isSelection()) {
+            if (condition.isSelection()) {
+                AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection(i);
+                if (out != null) {
+                    condition = out;
+                }
+            } else {
+                condition = irrelevantValuesForIf.get(i).get(((Identifier) condition).getName());
+            }
+        }
+        boolean whereWeInIf = inIf ? true : false;
+        ifNumber += 2;
+        inIf = true;
+        boolean sortie = false;
+        irrelevantValuesForIf.put(ifNumber.intValue() - 1,
+                (HashMap<Symbol, AbstractExpr>) irrelevantValuesForIf.get(i).clone());
+        irrelevantValuesForIf.put(ifNumber.intValue(),
+                (HashMap<Symbol, AbstractExpr>) irrelevantValuesForIf.get(i).clone());
+        sortie = thenBranch.irrelevant(ifNumber.intValue() - 1) || elseBranch.irrelevant(ifNumber.intValue());
+        ifNumber -= 2;
+        if (!whereWeInIf)
+            inIf = false;
+
+        return condition.irrelevant() || sortie;
+    }
+
     public ListInst getThenInst() {
         return this.thenBranch;
     }
@@ -144,16 +221,14 @@ public class IfThenElse extends AbstractInst {
     @Override
     public CollapseResult<ListInst> collapseInst() {
         CollapseResult<CollapseValue> condResult = condition.collapseExpr();
-        if(condResult.getResult().isBool()) {
+        if (condResult.getResult().isBool()) {
             // we can actually collapse the if !
-            if(condResult.getResult().asBool()) {
+            if (condResult.getResult().asBool()) {
                 return new CollapseResult<ListInst>(thenBranch.collapseInsts().getResult(), true);
-            }
-            else {
+            } else {
                 return new CollapseResult<ListInst>(elseBranch.collapseInsts().getResult(), true);
             }
-        }
-        else {
+        } else {
             // try to collapse our own branches
             CollapseResult<ListInst> thenResult = thenBranch.collapseInsts();
             CollapseResult<ListInst> elseResult = elseBranch.collapseInsts();
@@ -167,9 +242,9 @@ public class IfThenElse extends AbstractInst {
 
     @Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
-        this.condition = (AbstractExpr)this.condition.doSubstituteInlineMethods(inlineMethods);
-        this.thenBranch = (ListInst)this.thenBranch.doSubstituteInlineMethods(inlineMethods);
-        this.elseBranch = (ListInst)this.elseBranch.doSubstituteInlineMethods(inlineMethods);
+        this.condition = (AbstractExpr) this.condition.doSubstituteInlineMethods(inlineMethods);
+        this.thenBranch = (ListInst) this.thenBranch.doSubstituteInlineMethods(inlineMethods);
+        this.elseBranch = (ListInst) this.elseBranch.doSubstituteInlineMethods(inlineMethods);
         return this;
     }
 

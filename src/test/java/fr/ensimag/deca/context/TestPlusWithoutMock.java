@@ -101,6 +101,11 @@ public class TestPlusWithoutMock {
             // return nothing ? expect if we find a way to compute methods at compile time...
             return new CollapseResult<CollapseValue>(new CollapseValue(), false);
         }
+
+        @Override
+        public boolean isSplitable(DecacCompiler compiler) {
+            return false;
+        }
     }
 
     public void testType() throws ContextualError {

@@ -1,0 +1,18 @@
+// Description:
+//    Get un attribut protected dans une classe fille
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 14/01/2023
+
+class A{
+    protected int x;
+}
+
+class B extends A {
+    void getx(){
+        x;
+    }
+}

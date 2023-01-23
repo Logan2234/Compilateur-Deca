@@ -3,7 +3,6 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
-import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -42,5 +41,11 @@ public abstract class AbstractInitialization extends Tree {
      * @return the expression of the initialization
      */
     protected abstract AbstractExpr getExpression();
+
+    /**
+     * Return true if there is an initialization
+     * @return false by default, true if the class has an initialization
+     */
+    public abstract boolean hasInitialization();
 
 }

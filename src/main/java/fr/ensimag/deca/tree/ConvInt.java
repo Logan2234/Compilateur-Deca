@@ -57,5 +57,4 @@ public class ConvInt extends AbstractUnaryExpr {
         res.setLocation(this.getLocation());
         return res;
     }
-
 }

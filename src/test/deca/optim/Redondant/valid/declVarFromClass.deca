@@ -1,0 +1,43 @@
+// Description:
+//    On va tester si, lorsqu'on appelle une variable
+//    d'une classe, elle est bien changée
+//
+// Resultats:
+//    ok et en décompile, on a :
+//class A extends Object {
+//	public int a = 0;
+//	public int b = ((0 + 0) + 42);
+//
+//}
+//class B extends Object {
+//	public int b = 1;
+//	public int c = 1;
+//
+//}
+//{
+//	A test = new A();
+//	int c = 0;
+//	int shit = 42;
+//	print((42 + 42));
+//}
+//
+// Historique:
+//    cree le 20/01/2023
+
+class A {
+    int a = 0;
+    int b = a + a + 42;
+}
+
+class B {
+    int b = 1;
+    int c = b;
+}
+
+
+{
+    A test = new A();
+    int c = test.a;
+    int TEST = 42;
+    print(TEST + TEST);
+}

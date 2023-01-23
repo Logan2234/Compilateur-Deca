@@ -7,5 +7,4 @@ package fr.ensimag.ima.pseudocode;
  * @date 01/01/2023
  */
 public abstract class DVal extends Operand {
-
 }

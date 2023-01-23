@@ -3,7 +3,24 @@
 //    mainly to improve jacoco coverage.
 //
 // Resultats:
-//
+//    1
+//    -1
+//    2
+//    0
+//    1
+//    1
+//    0
+//    1
+//    1.00000e+00
+//    2.00000e+00
+//    0.00000e+00
+//    1.00000e+00
+//    1.00000e+00
+//    true
+//    true
+//    true
+//    true
+//    true
 //
 // Historique:
 //    cree le 07/01/2023

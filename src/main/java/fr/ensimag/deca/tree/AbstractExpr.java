@@ -11,6 +11,7 @@ import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
@@ -19,6 +20,8 @@ import fr.ensimag.ima.pseudocode.instructions.WINT;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,13 +40,6 @@ public abstract class AbstractExpr extends AbstractInst {
      *         in the source code (and should be decompiled to the empty string).
      */
     boolean isImplicit() {
-        return false;
-    }
-
-    /**
-     * @return true if the expression is an assign
-     */
-    boolean isAssign() {
         return false;
     }
 
@@ -223,6 +219,29 @@ public abstract class AbstractExpr extends AbstractInst {
         }
     }
 
+    @Override 
+    public boolean irrelevant() {
+        // by default, return false. 
+        return false;
+        // expressions that can errase irrelevant expressions will override this.
+    }
+
+    /**
+     * Function telling if the expression is a "This" instance
+     * @return id the expression is a "This" instance
+     */
+    public boolean isThis(){
+        return false;
+    }
+
+    /**
+     * Tells if the LValue is a "Selection" instance
+     * @return if the LValue is a "Selection" instance
+     */
+    public boolean isSelection(){
+        return false;
+    }
+
     /**
      * Find recursively all method calls, assign and Reads in the expression and add them on
      * top of the list
@@ -290,4 +309,231 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     protected abstract boolean containsField();
     
+
+    protected void shift(DecacCompiler compiler, AbstractExpr left, AbstractExpr right, ListInst listPlus) {
+        int value = ((IntLiteral) right).getValue();
+        String[] nbbinaire = Integer.toBinaryString(value).split("");
+        int[] binaire = new int[nbbinaire.length];
+        ListInst list = new ListInst();
+        for (int i = 0; i < nbbinaire.length; i++) {
+            binaire[i] = Integer.parseInt(nbbinaire[nbbinaire.length - 1 - i]);
+            if (binaire[i] == 1) {
+                AbstractExpr puissance = new IntLiteral((int) Math.pow(2, i));
+                ((IntLiteral) puissance).setType(compiler.environmentType.INT);
+                AbstractExpr multiply = new Multiply(left, puissance);
+                ((Multiply) multiply).setShiftReplacable();
+                ((Multiply) multiply).setType(compiler.environmentType.INT);
+
+                list.add(multiply);
+            }
+        }
+        if (list.size() == 0) {
+
+        } else if (list.size() == 1) {
+            listPlus.add(list.getList().get(0));
+        } else {
+            Plus plus = new Plus((AbstractExpr) list.getList().get(1), (AbstractExpr) list.getList().get(0));
+            plus.setType(compiler.environmentType.INT);
+            listPlus.add(plus);
+            if (list.size() > 2) {
+                for (int i = 2; i < list.size(); i++) {
+                    Plus operand = new Plus((AbstractExpr) list.getList().get(i), (AbstractExpr) plus);
+                    ((Plus) operand).setType(compiler.environmentType.INT);
+                    plus = new Plus((AbstractExpr) list.getList().get(i), (AbstractExpr) plus);
+                    ((Plus) plus).setType(compiler.environmentType.INT);
+                    listPlus.add(operand);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param map
+     * @param mapSymbol
+     * @param symbolToIdent
+     * @param exprList
+     * @param node
+     * @param op
+     */
+    private void addMap(Map<Symbol, Integer> map, Map<Symbol, List<AbstractExpr>> mapSymbol,
+            Map<Symbol, Identifier> symbolToIdent, ListExpr exprList, AbstractInst node, String op) {
+        AbstractExpr leftOperand = ((AbstractOpArith) node).getLeftOperand();
+        AbstractExpr rightOperand = ((AbstractOpArith) node).getRightOperand();
+        String plusOrMinus = ((AbstractOpArith) node).getOperatorName();
+        int leftmultiplier = (op == "-" ? -1 : 1);
+        int rightmultiplier = (plusOrMinus == "-" ? -1 : 1);
+        boolean leftIsMinus = false, rightIsMinus = false;
+
+        try {
+            leftOperand = (UnaryMinus) leftOperand;
+            leftmultiplier *= -1;
+            leftIsMinus = true;
+        } catch (ClassCastException e) {
+        }
+        try {
+            rightOperand = (UnaryMinus) rightOperand;
+            rightmultiplier *= -1;
+            rightIsMinus = true;
+        } catch (ClassCastException e) {
+        }
+
+        int multiplier = leftmultiplier * rightmultiplier;
+
+        try {
+            Divide divide = (Divide) node;
+            exprList.add(divide);
+            return;
+        } catch (ClassCastException e) {
+            try {
+                Modulo modulo = (Modulo) node;
+                exprList.add(modulo);
+                return;
+            } catch (ClassCastException e2) {
+            }
+        }
+        try {
+            Multiply mult = (Multiply) node;
+            if (!leftOperand.isLiteral() && !rightOperand.isLiteral()) {
+                Identifier identLeft;
+                Identifier identRight;
+                if (leftIsMinus) {
+                    identLeft = (Identifier) ((UnaryMinus) leftOperand).getOperand();
+                    Type type = rightOperand.getType();
+                    rightOperand = new UnaryMinus(rightOperand);
+                    rightOperand.setType(type);
+                    rightIsMinus = true;
+                } else
+                    identLeft = (Identifier) leftOperand;
+                if (rightIsMinus)
+                    identRight = (Identifier) ((UnaryMinus) rightOperand).getOperand();
+                else
+                    identRight = (Identifier) rightOperand;
+
+                symbolToIdent.put(identRight.getName(), identRight);
+                symbolToIdent.put(identLeft.getName(), identLeft);
+
+                if (!mapSymbol.containsKey(identLeft.getName()))
+                    mapSymbol.put(identLeft.getName(), new ArrayList<>());
+                mapSymbol.get(identLeft.getName()).add(rightOperand);
+
+            } else if (leftOperand.isLiteral() && !rightOperand.isLiteral())
+                if (leftIsMinus && rightIsMinus)
+                    incOccur(map, symbolToIdent, ((Identifier) ((UnaryMinus) (rightOperand)).getOperand()),
+                            multiplier * ((IntLiteral) ((UnaryMinus) leftOperand).getOperand()).getValue());
+                else if (leftIsMinus)
+                    incOccur(map, symbolToIdent, (Identifier) rightOperand,
+                            multiplier * ((IntLiteral) ((UnaryMinus) leftOperand).getOperand()).getValue());
+                else if (rightIsMinus)
+                    incOccur(map, symbolToIdent, ((Identifier) ((UnaryMinus) (rightOperand)).getOperand()),
+                            multiplier * ((IntLiteral) leftOperand).getValue());
+                else
+                    incOccur(map, symbolToIdent, (Identifier) rightOperand,
+                            multiplier * ((IntLiteral) leftOperand).getValue());
+            else if (rightOperand.isLiteral() && !leftOperand.isLiteral())
+                if (rightIsMinus && leftIsMinus)
+                    incOccur(map, symbolToIdent, ((Identifier) ((UnaryMinus) leftOperand).getOperand()),
+                            multiplier * ((IntLiteral) ((UnaryMinus) rightOperand).getOperand()).getValue());
+                else if (leftIsMinus)
+                    incOccur(map, symbolToIdent, ((Identifier) ((UnaryMinus) leftOperand).getOperand()),
+                            multiplier * ((IntLiteral) rightOperand).getValue());
+                else if (rightIsMinus)
+                    incOccur(map, symbolToIdent, (Identifier) leftOperand,
+                            multiplier * ((IntLiteral) ((UnaryMinus) rightOperand).getOperand()).getValue());
+                else
+                    incOccur(map, symbolToIdent, (Identifier) leftOperand,
+                            multiplier * ((IntLiteral) rightOperand).getValue());
+        } catch (ClassCastException e) {
+            try {
+                if (leftIsMinus)
+                    incOccur(map, symbolToIdent, (Identifier) ((UnaryMinus) (leftOperand)).getOperand(), leftmultiplier);
+                else
+                    incOccur(map, symbolToIdent, (Identifier) leftOperand, leftmultiplier);
+            } catch (ClassCastException e1) {
+                try {
+                    addMap(map, mapSymbol, symbolToIdent, exprList, leftOperand, op);
+                } catch (ClassCastException e3) {
+                    exprList.add((AbstractExpr) ((AbstractOpArith) (node)).getLeftOperand());
+                    return;
+                }
+            }
+            try {
+                if (rightIsMinus)
+                    incOccur(map, symbolToIdent, (Identifier) ((UnaryMinus) rightOperand).getOperand(), rightmultiplier);
+                else
+                    incOccur(map, symbolToIdent, (Identifier) rightOperand, rightmultiplier);
+            } catch (ClassCastException e2) {
+                try {
+                    addMap(map, mapSymbol, symbolToIdent, exprList, rightOperand, plusOrMinus);
+                } catch (ClassCastException e3) {
+                    exprList.add((AbstractExpr) ((AbstractOpArith) (node)).getRightOperand());
+                }
+            }
+        }
+    }
+
+    private void incOccur(Map<Symbol, Integer> map, Map<Symbol, Identifier> symbolToIdent, Identifier ident, int num) {
+        symbolToIdent.put(ident.getName(), ident);
+        map.merge(ident.getName(), num, Integer::sum);
+    }
+
+    /**
+     * @param compiler
+     * @param classChoser
+     * @return
+     */
+    public AbstractExpr facto(DecacCompiler compiler, boolean classChoser) {
+        Map<Symbol, Integer> map = new HashMap<>();
+        Map<Symbol, List<AbstractExpr>> mapSymbol = new HashMap<>();
+        Map<Symbol, Identifier> symbolToIdent = new HashMap<>();
+        ListExpr exprList = new ListExpr();
+        addMap(map, mapSymbol, symbolToIdent, exprList, this, "+");
+        ListExpr multiply = new ListExpr();
+        for (Map.Entry<Symbol, Integer> entry : map.entrySet()) {
+            Multiply mult = new Multiply(symbolToIdent.get(entry.getKey()), new IntLiteral(entry.getValue()));
+            mult.setType(compiler.environmentType.INT);
+            mult.rightOperand.setType(compiler.environmentType.INT);
+            multiply.add(mult);
+        }
+
+        ListExpr multiplySymbol = new ListExpr();
+        for (Map.Entry<Symbol, List<AbstractExpr>> entry : mapSymbol.entrySet()) {
+            for (AbstractExpr expr : entry.getValue()) {
+                Multiply mult = new Multiply(symbolToIdent.get(entry.getKey()), expr);
+                mult.setType(compiler.environmentType.INT);
+                mult.leftOperand.setType(compiler.environmentType.INT);
+                multiplySymbol.add(mult);
+            }
+        }
+
+        AbstractExpr expr = null;
+        expr = appendToExpr(compiler, multiply, expr, classChoser);
+        expr = appendToExpr(compiler, multiplySymbol, expr, classChoser);
+        expr = appendToExpr(compiler, exprList, expr, classChoser);
+        return expr;
+    }
+
+    private AbstractExpr appendToExpr(DecacCompiler compiler, ListExpr listExpr, AbstractExpr expr,
+            boolean classChoser) {
+        if (listExpr.size() > 0) {
+            if (expr == null)
+                expr = listExpr.getList().get(0);
+            else {
+                if (classChoser)
+                    expr = new Plus(expr, listExpr.getList().get(0));
+                else
+                    expr = new Minus(expr, listExpr.getList().get(0));
+
+                expr.setType(compiler.environmentType.INT);
+            }
+
+            for (int i = 1; i < listExpr.size(); i++) {
+                if (classChoser)
+                    expr = new Plus(expr, listExpr.getList().get(i));
+                else
+                    expr = new Minus(expr, listExpr.getList().get(i));
+                expr.setType(compiler.environmentType.INT);
+            }
+        }
+        return expr;
+    }
 }

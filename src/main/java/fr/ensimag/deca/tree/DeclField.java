@@ -13,9 +13,12 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -125,7 +128,6 @@ public class DeclField extends AbstractDeclField {
         fieldName.getDefinition().setDAddrOffsetOnly(offset);
     }
 
-
     @Override
     protected void spotUsedVar() {
         this.type.spotUsedVar();
@@ -182,5 +184,55 @@ public class DeclField extends AbstractDeclField {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         this.initialization = (AbstractInitialization)this.initialization.doSubstituteInlineMethods(inlineMethods);
         return this;
+    }
+
+    @Override
+    public boolean irrelevant(){
+        if (initialization.hasInitialization()) {
+            inField = true;
+            AbstractExpr expr = ((Initialization) initialization).getExpression();
+            HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
+
+            if (expr.isNew()){
+                declaredClasses.put(fieldName.getName(), varModels.get(((New) expr).getClasse().getName()));
+                return false;
+            }
+
+            if (expr.isSelection()){
+                AbstractExpr out = ((Selection) expr).returnIrrelevantFromSelection();
+                if (out != null) ((Initialization) initialization).setExpression(out);
+                return false;
+            }
+
+            if (expr.irrelevant()){
+                System.out.println("irrelevant");
+                ((Initialization) initialization).setExpression(actualDico.get(((Identifier) expr).getName()));
+            }
+            if (!expr.isReadExpr()){
+                actualDico.put(fieldName.getName(), ((Initialization) initialization).getExpression());
+    
+            } else if (actualDico.containsKey(fieldName.getName())){
+                actualDico.remove(fieldName.getName());
+            } 
+            varModels.put(actualClass, actualDico);
+            inField = false;
+        }
+        return false;
+    }
+
+    public AbstractInst factorise(DecacCompiler compiler) {
+        initialization.factorise(compiler);
+        return null;
+    }
+    
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return initialization.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        initialization.splitCalculus(compiler);
+        return null;
     }
 }
