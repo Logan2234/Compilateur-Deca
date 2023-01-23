@@ -8,6 +8,7 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.Register;
@@ -19,6 +20,7 @@ import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.io.PrintStream;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 
@@ -213,6 +215,20 @@ public class DeclClass extends AbstractDeclClass {
             compiler.newCodeContext();
             method.codeGenMethod(compiler, name.getName().getName());
             compiler.endCodeContext();
+        }
+    }
+
+    @Override
+    protected void getSpottedFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        if (this.getName().getClassDefinition().isUsed()) {
+            this.fields.getSpottedFields(usedFields);
+        }
+    }
+
+    @Override
+    protected void spotOverridingFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        if (this.getName().getClassDefinition().isUsed()) {
+            this.fields.spotOverridingFields(usedFields);
         }
     }
 

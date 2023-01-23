@@ -2,6 +2,8 @@ package fr.ensimag.deca.context;
 
 import java.util.Map;
 import java.util.Set;
+
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.deca.tree.Visibility;
 
@@ -63,6 +65,26 @@ public class FieldDefinition extends ExpDefinition {
         boolean varSpotted = super.spotRelatedDefs();
         varSpotted = this.containingClass.spotUsedVar() || varSpotted;
         return varSpotted;
+    }
+
+    /**
+     * Spot the field if it is an override of a used field.
+     * It may become dynamically useful
+     * @param map storing all symbols of used fields and associating to those symbols
+     * the set of classes definition that have this symbol as a field when this field is used
+     */
+    public void spotOverridingFields(Symbol symbol, Map<Symbol,Set<ClassDefinition>> usedFields) {
+        if (usedFields.containsKey(symbol)) {
+            ClassDefinition currentClass = this.containingClass;
+            // check if override of used field
+            while (currentClass != null && !usedFields.get(symbol).contains(currentClass)) {
+                currentClass = currentClass.getSuperClass();
+            }
+            if (currentClass != null) {
+                this.spotUsedVar();
+                usedFields.get(symbol).add(currentClass);
+            }
+        }
     }
 
 }

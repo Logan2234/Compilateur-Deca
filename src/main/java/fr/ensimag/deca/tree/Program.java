@@ -17,6 +17,8 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 
+import static org.mockito.Mockito.reset;
+
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -258,47 +260,9 @@ public class Program extends AbstractProgram {
      */
     private void spotOverridingFields() {
         LOG.debug("===================== Spot from fields =====================");
-
-        /* init */
         Map<Symbol,Set<ClassDefinition>> usedFields = new HashMap<Symbol,Set<ClassDefinition>>();
-        Set<DeclField> fieldsToSpot = new HashSet<DeclField>();
-        for (AbstractDeclClass c : this.classes.getList()) {
-            DeclClass class_ = (DeclClass) c;
-            // if a class is not used, its fields won't be used anyway
-            if (!class_.getName().getDefinition().isUsed()) {continue;}
-            for (AbstractDeclField field : ((DeclClass)c).getFields().getList()) {
-                FieldDefinition fieldDef = ((DeclField)field).getName().getFieldDefinition();
-                
-                if (fieldDef.isUsed()){
-                    // add the class to the table
-                    Symbol symb = ((DeclField)field).getName().getName();
-                    if (!usedFields.containsKey(symb)) {
-                        usedFields.put(symb, new HashSet<ClassDefinition>());
-                    }
-                    usedFields.get(symb).add(fieldDef.getContainingClass());
-                }
-                else {
-                    fieldsToSpot.add((DeclField)field);
-                }
-            }
-        }
-
-        /* spotting */
-        for (DeclField field : fieldsToSpot) {
-            Symbol symb = ((DeclField)field).getName().getName();
-            if (usedFields.containsKey(symb)) {
-                ClassDefinition containingClass = field.getName().getFieldDefinition().getContainingClass();
-                ClassDefinition currentClass = containingClass;
-                // check if override of used field
-                while (currentClass != null && !usedFields.get(symb).contains(currentClass)) {
-                    currentClass = currentClass.getSuperClass();
-                }
-                if (currentClass != null) {
-                    field.spotUsedVar();
-                    usedFields.get(symb).add(currentClass);
-                }
-            }
-        }
+        this.classes.getSpottedFields(usedFields);
+        this.classes.spotOverridingFields(usedFields);
     }
 
     @Override

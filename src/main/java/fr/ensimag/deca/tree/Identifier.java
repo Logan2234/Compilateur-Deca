@@ -29,6 +29,7 @@ import fr.ensimag.ima.pseudocode.instructions.WINT;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 
@@ -339,6 +340,13 @@ public class Identifier extends AbstractIdentifier {
     @Override
     protected void spotUsedVar() {
         this.definition.spotUsedVar();
+    }
+
+    @Override
+    protected void spotOverridingFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        assert(this.containsField());
+        this.getFieldDefinition().spotOverridingFields(this.name,usedFields);
+
     }
 
     @Override
