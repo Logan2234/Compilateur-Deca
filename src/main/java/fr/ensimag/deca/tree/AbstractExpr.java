@@ -44,6 +44,14 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     /**
+     * Check if the expression is a literal expression
+     * @return true if is a literal expression
+     */
+    protected Boolean isLiteral() {
+        return true;
+    }
+
+    /**
      * Method used to know if an expression is "atomic", meaning that it is not expensive for
      * ima to compute. This way, we know if an inline substitution will introduce more complexity
      * if a parameter appears multiple times in the method.

@@ -112,6 +112,7 @@ public class IntLiteral extends AbstractExpr {
         return false;
     }
 
+    @Override
     protected Boolean isLiteral() {
         return true;
     }
