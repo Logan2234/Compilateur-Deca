@@ -26,7 +26,7 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
-import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
@@ -191,7 +191,7 @@ public class DeclMethod extends AbstractDeclMethod {
         if(!type.getType().isVoid() && compiler.getCompilerOptions().getRunTestChecks()) {
             AbstractRuntimeErr error = new NoReturnErr();
             compiler.useRuntimeError(error);
-            compiler.addInstruction(new BRA(error.getErrorLabel()));
+            compiler.addInstruction(new BSR(error.getErrorLabel()));
         }
         compiler.addLabel(new Label("end." + className + "." + methodName.getName().getName()));
         // save and restore context used registers 
@@ -238,6 +238,22 @@ public class DeclMethod extends AbstractDeclMethod {
 
     public AbstractMethod getBody() {
         return this.body;
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        body.factorise(compiler);
+        return null;
+    }
+
+    public boolean isSplitable(DecacCompiler compiler) {
+        return body.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        body.splitCalculus(compiler);
+        return null;
     }
 
     @Override

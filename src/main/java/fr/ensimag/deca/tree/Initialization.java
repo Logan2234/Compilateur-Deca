@@ -121,4 +121,19 @@ public class Initialization extends AbstractInitialization {
         return true;
     }
     
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        expression = (AbstractExpr)expression.factorise(compiler);
+        return null;
+    }
+
+    public boolean isSplitable(DecacCompiler compiler) {
+        return expression.isSplitable(compiler);
+    }
+    
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        expression = (AbstractExpr)expression.splitCalculus(compiler);
+        return null;
+    }
+
 }

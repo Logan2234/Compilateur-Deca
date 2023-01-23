@@ -24,7 +24,6 @@ public class Divide extends AbstractOpArith {
         super(leftOperand, rightOperand);
     }
 
-
     @Override
     protected String getOperatorName() {
         return "/";
@@ -32,21 +31,20 @@ public class Divide extends AbstractOpArith {
 
     @Override
     public void codeGenBinExp(DecacCompiler compiler, GPRegister register, DVal dval) {
-        
-        if(getType().isInt()) {
+
+        if (getType().isInt()) {
             compiler.addInstruction(new QUO(dval, register));
             // depending on self type, float or int div
-            if(compiler.getCompilerOptions().getRunTestChecks()) {
+            if (compiler.getCompilerOptions().getRunTestChecks()) {
                 // add runtime division by zero check
                 DivByZeroErr error = new DivByZeroErr();
                 compiler.useRuntimeError(error);
                 compiler.addInstruction(new BOV(error.getErrorLabel()));
             }
-        }
-        else if(getType().isFloat()) {
+        } else if (getType().isFloat()) {
             compiler.addInstruction(new DIV(dval, register));
             // depending on self type, float or int div
-            if(compiler.getCompilerOptions().getRunTestChecks()) {
+            if (compiler.getCompilerOptions().getRunTestChecks()) {
                 // add runtime division by zero check
                 OpOverflowErr error = new OpOverflowErr();
                 compiler.useRuntimeError(error);
@@ -77,7 +75,5 @@ public class Divide extends AbstractOpArith {
         res.setType(this.getType());
         res.setLocation(this.getLocation());
         return res;
-    }
-
-    
+    }    
 }

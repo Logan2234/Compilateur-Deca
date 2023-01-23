@@ -69,5 +69,4 @@ public class NoOperation extends AbstractInst {
     public boolean irrelevant() {
         return false;
     }
-
 }

@@ -20,6 +20,7 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -103,6 +104,23 @@ public class While extends AbstractInst {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         condition.prettyPrint(s, prefix, false);
         body.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        condition = (AbstractExpr)condition.factorise(compiler);
+        body.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        condition.splitCalculus(compiler);
+        
+        if (body.isSplitable(compiler))
+            body.splitCalculus(compiler);
+
+        return this;
     }
 
     @Override

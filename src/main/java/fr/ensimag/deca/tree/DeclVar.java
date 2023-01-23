@@ -51,7 +51,7 @@ public class DeclVar extends AbstractDeclVar {
         Type type = this.type.verifyType(compiler);
 
         if (type.isVoid())
-            throw new ContextualError("A variable can't be void (rule 3.17)", getLocation());
+            throw new ContextualError("The variable's type can't be void (rule 3.17)", getLocation());
 
         try {
             ExpDefinition def = new VariableDefinition(type, getLocation());
@@ -190,6 +190,22 @@ public class DeclVar extends AbstractDeclVar {
                 currentValues.remove(varName.getName());
             } 
         }
-        return false;
+        return false;}
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        initialization.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return initialization.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        initialization.splitCalculus(compiler);
+        return null;
     }
 }

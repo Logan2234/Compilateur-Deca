@@ -1,0 +1,98 @@
+// Description:
+//    call a method with all expressions possible.
+//    mainly to improve jacoco coverage.
+//
+// Resultats:
+//    1
+//    -1
+//    2
+//    0
+//    1
+//    1
+//    0
+//    1
+//    1.00000e+00
+//    2.00000e+00
+//    0.00000e+00
+//    1.00000e+00
+//    1.00000e+00
+//    true
+//    true
+//    true
+//    true
+//    true
+//
+// Historique:
+//    cree le 07/01/2023
+
+class Printer {
+    void printInt(int x) {
+        println(x);
+    }
+
+    void printFloat(float x) {
+        println(x);
+    }
+
+    void printBool(boolean x) {
+        if(x) {
+            println("true");
+        }
+        else {
+            println("false");
+        }
+    }
+}
+
+class A {
+    int x = 1;
+    int getX() {
+        return x;
+    }
+
+    void setX(int x) {
+        this.x = x;
+    }
+
+    void resetX() {
+        setX(1);
+    }
+
+    void what() {
+        setX(x = 2);
+    }
+
+    void dumb(A a) {
+        
+    }
+}
+
+{
+    Printer p = new Printer();
+    A a = new A();
+
+    p.printInt(1);
+    p.printInt(-1);
+    p.printInt(1 + 1);
+    p.printInt(1 - 1);
+    p.printInt(1 * 1);
+    p.printInt(1 / 1);
+    p.printInt(1 % 1);
+    p.printInt(a.getX());
+    p.printFloat(1.0);
+    p.printFloat(1.0 + 1.0);
+    p.printFloat(1.0 - 1.0);
+    p.printFloat(1.0 * 1.0);
+    p.printFloat(1.0 / 1.0);
+    p.printBool(true);
+    p.printBool(!false);
+    p.printBool(true || false);
+    p.printBool(true && true);
+    p.printBool(a instanceof A);
+
+    a.resetX();
+    a.dumb(null);
+    a.dumb(new A());
+    a = null;
+
+}

@@ -17,6 +17,4 @@ public class Print extends AbstractPrint {
     String getSuffix() {
         return "";
     }
-    
-
 }

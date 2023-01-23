@@ -3,6 +3,8 @@ package fr.ensimag.deca.tree;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
@@ -101,5 +103,13 @@ public class ListExpr extends TreeList<AbstractExpr> {
             }
         }
         return result;
+    }
+
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (int i = 0; i < getList().size(); i++) {
+            if (getList().get(i).isSplitable(compiler))
+                set(i, (AbstractExpr)getList().get(i).splitCalculus(compiler));
+        }
+        return null;
     }
 }

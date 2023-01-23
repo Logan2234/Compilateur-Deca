@@ -20,7 +20,7 @@ public abstract class AbstractProgram extends Tree {
     /**
      * Optimize the decorated tree until there is no more simplification found
      */
-    public abstract void optimizeTree();
+    public abstract void optimizeTree(DecacCompiler compiler);
 
     public abstract CollapseResult<Null> collapseProgram();
 }

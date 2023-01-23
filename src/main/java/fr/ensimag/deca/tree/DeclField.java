@@ -124,7 +124,6 @@ public class DeclField extends AbstractDeclField {
         fieldName.getDefinition().setDAddrOffsetOnly(offset);
     }
 
-
     @Override
     protected void spotUsedVar() {
         this.type.spotUsedVar();
@@ -196,7 +195,23 @@ public class DeclField extends AbstractDeclField {
             } 
             varModels.put(actualClass, actualDico);
             inField = false;
-        }   
+        }
         return false;
+    }
+
+    public AbstractInst factorise(DecacCompiler compiler) {
+        initialization.factorise(compiler);
+        return null;
+    }
+    
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return initialization.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        initialization.splitCalculus(compiler);
+        return null;
     }
 }

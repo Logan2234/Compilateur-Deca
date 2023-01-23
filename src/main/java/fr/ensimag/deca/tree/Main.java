@@ -112,4 +112,18 @@ public class Main extends AbstractMain {
         defClass = false;
         return declVariables.irrelevant() || insts.irrelevant();
     }
+    
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        declVariables.factorise(compiler);
+        insts.factorise(compiler);
+        return null;
+    }
+
+	@Override
+	public AbstractInst splitCalculus(DecacCompiler compiler) {
+        declVariables.splitCalculus(compiler);
+        insts.splitCalculus(compiler);
+        return null;
+	}
 }

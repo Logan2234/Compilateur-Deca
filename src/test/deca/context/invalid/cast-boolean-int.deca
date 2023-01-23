@@ -2,7 +2,7 @@
 //    Cast un int en un boolean
 //
 // Resultats:
-//    Ligne 12: Unable to cast type "int" to "boolean"
+//    Ligne 12: Unable to cast type "int" to "boolean" (rule 3.39)
 //
 // Historique:
 //    cree le 06/01/2023

@@ -27,5 +27,4 @@ public class Println extends AbstractPrint {
     String getSuffix() {
         return "ln";
     }
-
 }

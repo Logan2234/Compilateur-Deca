@@ -54,14 +54,14 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
             i.verifyParam(compiler, localEnv, currentClass);
     }
 
-	@Override
+    @Override
     public boolean irrelevant() {
         boolean result = false;
         AbstractDeclParam expr;
-        
+
         for (int i = 0; i < getList().size(); i++) {
             expr = getList().get(i);
-            if (expr.irrelevant()){
+            if (expr.irrelevant()) {
                 result |= true;
                 set(i, expr);
             }
@@ -69,9 +69,4 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
 
         return result;
     }
-
-
-    
-
-
 }

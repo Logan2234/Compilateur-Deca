@@ -27,11 +27,13 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
 
         if (!typeLeft.isInt() && !typeLeft.isFloat())
             throw new ContextualError(
-                    "The left operand of an arithmetical operation has to be an int or a float (rule 3.33)", getLocation());
+                    "The left operand of an arithmetical operation has to be an int or a float (rule 3.33)",
+                    getLocation());
 
         if (!typeRight.isInt() && !typeRight.isFloat())
             throw new ContextualError(
-                    "The right operand of an arithmetical operation has to be an int or a float (rule 3.33)", getLocation());
+                    "The right operand of an arithmetical operation has to be an int or a float (rule 3.33)",
+                    getLocation());
 
         // Ajout du décor et renvoie du type
         if (typeLeft.isFloat() && typeRight.isInt()) {
@@ -51,5 +53,4 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         setType(typeLeft);
         return typeLeft;
     }
-
 }

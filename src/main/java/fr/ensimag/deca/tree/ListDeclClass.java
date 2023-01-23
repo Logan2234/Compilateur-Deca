@@ -63,6 +63,14 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (AbstractDeclClass _class : getList())
+            if (_class.isSplitable(compiler))
+                _class.splitCalculus(compiler);
+        return null;
+    }
+
     /**
      * Generate the vTables for all the classes.
      * @param compiler where we write the instructions to.

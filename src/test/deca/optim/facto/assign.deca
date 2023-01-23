@@ -1,0 +1,14 @@
+// Description:
+//    Factorisation et décomposotion en shift dans un assign
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 22/01/2023
+
+{
+    int a = 1;
+    a = (2*(-a) + a*13 - (5*a) / (9*a));
+    
+}

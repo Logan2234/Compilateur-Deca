@@ -103,9 +103,6 @@ public class FloatLiteral extends AbstractExpr {
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
-    public Float collapseFloat() {
-        return value;
-    }
 
     @Override
     public CollapseResult<CollapseValue> collapseExpr() {
@@ -123,5 +120,9 @@ public class FloatLiteral extends AbstractExpr {
     @Override
     protected boolean containsField() {
         return false;
+    }
+
+    protected Boolean isLiteral() {
+        return true;
     }
 }

@@ -1,0 +1,12 @@
+// Description:
+//    Factorisation et décomposotion des comparaisons
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 22/01/2023
+{
+    int m, n; 
+    (-m)*15 - m*(-15) >= n*m +6;
+}

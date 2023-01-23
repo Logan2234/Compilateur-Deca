@@ -40,6 +40,7 @@ public abstract class Tree {
     public void setLocation(int line, int column, String filename) {
         this.location = new Location(line, column, filename);
     }
+
     private Location location;
 
     /**
@@ -92,7 +93,7 @@ public abstract class Tree {
      * @param inlist
      * @param nodeName
      * @return The prefix to use for the next recursive calls to
-     * {@link #prettyPrint()}.
+     *         {@link #prettyPrint()}.
      */
     String printNodeLine(PrintStream s, String prefix, boolean last,
             boolean inlist, String nodeName) {
@@ -174,10 +175,10 @@ public abstract class Tree {
      * Pretty-print tree (see {@link #prettyPrint()}). This is an internal
      * function that should usually not be called directly.
      *
-     * @param s Stream to send the output to
+     * @param s      Stream to send the output to
      * @param prefix Prefix (ASCII-art showing hierarchy) to print for this
-     * node.
-     * @param last Whether the node being displayed is the last child of a tree.
+     *               node.
+     * @param last   Whether the node being displayed is the last child of a tree.
      * @param inlist Whether the node is being displayed as part of a list.
      */
     protected final void prettyPrint(PrintStream s, String prefix,
@@ -206,7 +207,8 @@ public abstract class Tree {
     }
 
     /**
-     * Function used internally by {@link #iter(TreeFunction)}. Must call iter() on each
+     * Function used internally by {@link #iter(TreeFunction)}. Must call iter() on
+     * each
      * child of the tree.
      *
      * @param f
@@ -232,8 +234,9 @@ public abstract class Tree {
      * Useful for debugging/defensive programming.
      *
      * @return true. Raises an exception in case of error. The return value is
-     * meant to allow assert(tree.checkAllLocations()), to enable the defensive
-     * check only if assertions are enabled.
+     *         meant to allow assert(tree.checkAllLocations()), to enable the
+     *         defensive
+     *         check only if assertions are enabled.
      */
     public boolean checkAllDecorations() {
         iter(new TreeFunction() {
@@ -267,8 +270,9 @@ public abstract class Tree {
      * Useful for debugging/defensive programming.
      *
      * @return true. Raises an exception in case of error. The return value is
-     * meant to allow assert(tree.checkAllLocations()), to enable the defensive
-     * check only if assertions are enabled.
+     *         meant to allow assert(tree.checkAllLocations()), to enable the
+     *         defensive
+     *         check only if assertions are enabled.
      */
     public boolean checkAllLocations() {
         iter(new TreeFunction() {
@@ -342,19 +346,6 @@ public abstract class Tree {
      */
     public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> declaredClassesInMethod = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
 
-    /**
-     * Optimize the decorated tree.
-     */
-    public void optimizeTree() {
-        // solve compile time known cases.
-        // while(collapse()) {
-        //     // rien
-        // }
-        while(irrelevant()){
-            //rien
-        }
-        
-    }
 
     /**
      * Check if the class is a read expression.
@@ -362,6 +353,22 @@ public abstract class Tree {
      */
     public boolean isReadExpr() {
         return false;
+    }
+
+    public boolean isSplitable(DecacCompiler compiler){
+        return false;
+    }
+
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        return null;
+    }
+
+    public AbstractInst factorise(DecacCompiler compiler){
+        try {
+            return (AbstractInst)this;
+        } catch (ClassCastException e){
+            return null;
+        }
     }
 
     /**
@@ -409,40 +416,6 @@ public abstract class Tree {
         return false;
     }
 
-    /**
-     * Replace the boolean values known at compile time by the variables.
-     * if the expression cannot be replaced, null is returned.
-     * @return the value of the compile-time known boolean.
-     */
-    public Boolean irrelevantBool() {
-        throw new UnsupportedOperationException("Not yet implemented !");
-    };
-
-    /**
-     * Replace the integer values known at compile time by the variables.
-     * if the expression cannot be replaced, null is returned.
-     * @return the value of the compile-time known int.
-     */
-    public Integer irrelevantInt() {
-        throw new UnsupportedOperationException("Not yet implemented !");
-    };
-
-    /**
-     * Replace the float values known at compile time by the variables.
-     * if the expression cannot be replaced, null is returned.
-     * @return the value of the compile-time known float.
-     */
-    public Float irrelevantFloat() {
-        throw new UnsupportedOperationException("Not yet implemented !");
-    };
-
-
-    public boolean irrelevantable() {
-        // tells if we are at a terminal node or not. only true for variables.
-        // by default, return false. 
-        return false;
-    }
-
     protected Boolean isLiteral() {
         return false;
     }
@@ -464,7 +437,15 @@ public abstract class Tree {
     protected abstract Tree removeUnusedVar();
 
 
-    
+
+    /* * Collapse the float values known at compile time.
+     * if the expression cannot collapse, null is returned.
+     * 
+     * @return the value of the compile-time known float.
+     */
+    public Float collapseFloat() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    }
 
     public boolean isReturn() {
         return false;

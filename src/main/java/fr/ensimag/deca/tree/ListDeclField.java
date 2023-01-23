@@ -71,7 +71,6 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         return new CollapseResult<Null>(null, somethingCollapsed);
     }
 
-
     @Override
     public boolean irrelevant() {
         boolean result = false;
@@ -86,5 +85,13 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         }
 
         return result;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (AbstractDeclField field : getList())
+            if (field.isSplitable(compiler))
+                field.splitCalculus(compiler);
+        return null;
     }
 }

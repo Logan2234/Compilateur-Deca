@@ -26,7 +26,7 @@ import org.apache.commons.lang.Validate;
  * @date 09/01/2023
  */
 public class Return extends AbstractInst {
-    
+
     private AbstractExpr expression;
 
     public Return(AbstractExpr expression) {
@@ -101,6 +101,7 @@ public class Return extends AbstractInst {
     protected Tree removeUnusedVar() {
         this.expression = (AbstractExpr)this.expression.removeUnusedVar();
         return this;
+
     }
 
     @Override
@@ -147,5 +148,22 @@ public class Return extends AbstractInst {
             }
         }
         return expression.irrelevant(i);
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        expression.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler){
+        return expression.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        expression = (AbstractExpr)expression.splitCalculus(compiler);
+        return this;
     }
 }

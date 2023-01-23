@@ -69,5 +69,9 @@ public class UnaryMinus extends AbstractUnaryExpr {
         res.setLocation(this.getLocation());
         return res;
     }
-
+    
+    @Override
+    public Boolean isLiteral(){
+        return getOperand().isLiteral();
+    }
 }

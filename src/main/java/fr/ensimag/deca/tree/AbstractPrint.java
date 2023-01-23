@@ -112,4 +112,16 @@ public abstract class AbstractPrint extends AbstractInst {
         result.add(this);
         return new CollapseResult<ListInst>(result, false);
     }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        arguments.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        arguments.splitCalculus(compiler);
+        return this;
+    }
 }
