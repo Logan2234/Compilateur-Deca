@@ -9,7 +9,6 @@ import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Signature;
@@ -26,9 +25,7 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;

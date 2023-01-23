@@ -15,13 +15,11 @@ import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BLT;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
-import net.bytebuddy.matcher.FailSafeMatcher;
 
 import java.io.PrintStream;
 import java.util.HashMap;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 
-import java.io.PrintStream;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;

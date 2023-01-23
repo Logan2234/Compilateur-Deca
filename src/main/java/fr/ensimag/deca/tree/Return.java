@@ -119,33 +119,33 @@ public class Return extends AbstractInst {
 
     @Override
     public boolean irrelevant(){
-        if (e.irrelevant() || e.isSelection()){
-            if (e.isSelection()){
-                AbstractExpr out = ((Selection) e).returnIrrelevantFromSelection();
+        if (expression.irrelevant() || expression.isSelection()){
+            if (expression.isSelection()){
+                AbstractExpr out = ((Selection) expression).returnIrrelevantFromSelection();
                 if (out != null) {
-                    e = out;
+                    expression = out;
                 }
             }
             else {
-                e = currentValues.get(((Identifier) e).getName());
+                expression = currentValues.get(((Identifier) expression).getName());
             }
         }
-        return e.irrelevant();
+        return expression.irrelevant();
     }
 
     @Override
     public boolean irrelevant(int i){
-        if (e.irrelevant(i) || e.isSelection()){
-            if (e.isSelection()){
-                AbstractExpr out = ((Selection) e).returnIrrelevantFromSelection(i);
+        if (expression.irrelevant(i) || expression.isSelection()){
+            if (expression.isSelection()){
+                AbstractExpr out = ((Selection) expression).returnIrrelevantFromSelection(i);
                 if (out != null) {
-                    e = out;
+                    expression = out;
                 }
             }
             else {
-                e = irrelevantValuesForIf.get(i).get(((Identifier) e).getName());
+                expression = irrelevantValuesForIf.get(i).get(((Identifier) expression).getName());
             }
         }
-        return e.irrelevant(i);
+        return expression.irrelevant(i);
     }
 }

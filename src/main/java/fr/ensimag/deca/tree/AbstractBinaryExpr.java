@@ -4,8 +4,8 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.context.MethodDefinition;
-import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
@@ -13,6 +13,7 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

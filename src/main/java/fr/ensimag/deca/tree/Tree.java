@@ -443,31 +443,6 @@ public abstract class Tree {
         return false;
     }
 
-    /**
-     * Check if the tree can collapse into a compile time known node.
-     * This calls the collapse triggers on each nodes.
-     * @return if this node could collapse.
-     */
-    public abstract boolean collapse();
-
-    /**
-     * Collapse the boolean values known at compile time.
-     * if the expression cannot collapse, null is returned.
-     * @return the value of the compile-time known boolean.
-     */
-    public Boolean collapseBool() {
-        throw new UnsupportedOperationException("Not yet implemented !");
-    };
-
-    /**
-     * Collapse the int values known at compile time.
-     * if the expression cannot collapse, null is returned.
-     * @return the value of the compile-time known int.
-     */
-    public Integer collapseInt() {
-        throw new UnsupportedOperationException("Not yet implemented !");
-	}
-
     protected Boolean isLiteral() {
         return false;
     }

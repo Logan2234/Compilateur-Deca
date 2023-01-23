@@ -23,7 +23,6 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.RegisterOffset;
-import net.bytebuddy.agent.builder.AgentBuilder.InitializationStrategy;
 
 /**
  * Declaration of a variable

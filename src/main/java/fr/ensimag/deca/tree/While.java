@@ -12,7 +12,6 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -20,8 +19,6 @@ import fr.ensimag.ima.pseudocode.instructions.CMP;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.text.html.HTMLDocument.Iterator;
 
 import org.apache.commons.lang.Validate;
 
@@ -168,19 +165,6 @@ public class While extends AbstractInst {
 
     @Override
     public boolean irrelevant() {
-        
-        // if (condition.irrelevant() || condition.isSelection()){
-        //     if (condition.isSelection()){
-        //         AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection();
-        //         if (out != null) {
-        //             condition = out;
-        //         }
-        //     }
-        //     else {
-        //         condition = currentValues.get(((Identifier) condition).getName());
-        //     }
-        // }
-        // return condition.irrelevant() || body.irrelevant();
         if (inWhile){
             body.irrelevant();
         } else {
@@ -188,24 +172,11 @@ public class While extends AbstractInst {
             body.irrelevant();
             inWhile = false;
         }
-        return false; //todo REVOIR
+        return false;
     }
 
     @Override
     public boolean irrelevant(int i) {
-        
-        // if (condition.irrelevant() || condition.isSelection()){
-        //     if (condition.isSelection()){
-        //         AbstractExpr out = ((Selection) condition).returnIrrelevantFromSelection();
-        //         if (out != null) {
-        //             condition = out;
-        //         }
-        //     }
-        //     else {
-        //         condition = currentValues.get(((Identifier) condition).getName());
-        //     }
-        // }
-        // return condition.irrelevant() || body.irrelevant();
         if (inWhile){
             body.irrelevant(i);
         } else {
@@ -213,6 +184,6 @@ public class While extends AbstractInst {
             body.irrelevant(i);
             inWhile = false;
         }
-        return false; //todo REVOIR
+        return false;
     }
 }

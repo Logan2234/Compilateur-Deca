@@ -7,7 +7,6 @@ import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
@@ -15,7 +14,6 @@ import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.*;
-import net.bytebuddy.asm.AsmVisitorWrapper;
 
 import java.io.PrintStream;
 import java.util.HashMap;

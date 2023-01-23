@@ -21,7 +21,6 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
-import java.io.PrintStream;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;

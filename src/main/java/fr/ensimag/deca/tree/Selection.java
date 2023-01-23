@@ -23,10 +23,8 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
-import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 
@@ -292,6 +290,7 @@ public class Selection extends AbstractLValue {
                 return irrelevantValuesForIf.get(i).containsKey(field.getName());
             } else return declaredClasses.get(((Identifier) obj).getName()).containsKey(field.getName());
         }
+    }
 
 	@Override
     protected void spotUsedVar() {

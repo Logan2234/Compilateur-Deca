@@ -1,7 +1,6 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.DVal;
@@ -11,9 +10,6 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
-
-import java.util.HashMap;
-import net.bytebuddy.implementation.bind.annotation.This;
 
 import java.util.List;
 import java.util.Map;
@@ -192,32 +188,8 @@ public class Assign extends AbstractBinaryExpr {
     boolean isAssign() {
         return true;
     }
-    
-    @Override 
-    public boolean collapse() {
-        if(getRightOperand().collapse()) {
-            if(getRightOperand().getType().isBoolean()) {
-                // try to collapse to bool expr
-                Boolean collapsedValue = getRightOperand().collapseBool();
-                if(collapsedValue != null) {
-                    setRightOperand(new BooleanLiteral(collapsedValue));
-                }
-            }
-            else if(getRightOperand().getType().isInt()) {
-                // try to collapse to a int expr
-                Integer collapsedValue = getRightOperand().collapseInt();
-                if(collapsedValue != null) {
-                    setRightOperand(new IntLiteral(collapsedValue));
-                }
-            }
-            else if(getRightOperand().getType().isFloat()) {
-                // try to collapse to a float
-                Float collapsedValue = getRightOperand().collapseFloat();
-                if(collapsedValue != null) {
-                    setRightOperand(new FloatLiteral(collapsedValue));
-                }
-            }
-            return true;
+
+    @Override
     public CollapseResult<CollapseValue> collapseBinExpr() {
         CollapseResult<CollapseValue> result = getRightOperand().collapseExpr();
         if(getLeftOperand().getType().isBoolean() && result.getResult().isBool()) {
@@ -239,7 +211,6 @@ public class Assign extends AbstractBinaryExpr {
             // tell if at some point the expression collapsed
             return new CollapseResult<CollapseValue>(new CollapseValue(), result.couldCollapse());
         }
-        return false;
     }
 
     @Override

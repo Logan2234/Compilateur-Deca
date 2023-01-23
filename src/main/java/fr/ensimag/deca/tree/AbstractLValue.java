@@ -1,7 +1,6 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Definition;
-import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;

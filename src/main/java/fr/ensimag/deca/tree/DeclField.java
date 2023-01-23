@@ -18,7 +18,6 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
-import java.io.PrintStream;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;

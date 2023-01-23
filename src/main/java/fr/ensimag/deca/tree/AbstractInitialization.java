@@ -3,7 +3,6 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
-import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
