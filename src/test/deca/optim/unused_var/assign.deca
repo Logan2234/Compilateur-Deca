@@ -1,0 +1,26 @@
+// Description:
+//    only keep useful assignments
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 17/01/2023
+//
+{
+    // x useless mais assign
+    int y;
+    int x = (y=2);
+    // z supprimé
+    int z=2;
+    x=3;
+
+    // garder le y=3 car utilisé
+    print(y=3);
+    print(y);
+
+    // simplification en print(3)
+    print(z=3);
+
+
+}

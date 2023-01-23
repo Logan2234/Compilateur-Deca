@@ -1,14 +1,21 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.SEQ;
+
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 
 /**
  *
@@ -45,5 +52,24 @@ public class Not extends AbstractUnaryExpr {
         // compare the result with zero, than check equality : true if it was false
         compiler.addInstruction(new CMP(0, resulRegister));
         compiler.addInstruction(new SEQ(resulRegister));
+    }
+
+    @Override
+    public CollapseResult<CollapseValue> collapseUnExpr() {
+        CollapseResult<CollapseValue> result = getOperand().collapseExpr();
+        if(result.getResult().isBool()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(!result.getResult().asBool()), true);
+        }
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), result.couldCollapse());
+        }
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new Not(this.operand.substitute(substitutionTable));
+        res.setType(this.getType());
+        res.setLocation(this.getLocation());
+        return res;
     }
 }

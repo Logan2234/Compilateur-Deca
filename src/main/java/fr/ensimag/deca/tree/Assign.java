@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
@@ -8,10 +10,16 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
+import net.bytebuddy.implementation.bind.annotation.This;
+
+import java.util.List;
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 
 /**
  * Assignment, i.e. lvalue = expr.
@@ -88,9 +96,59 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
+    protected void spotUsedVar() {
         // we don't spot leftOperand
-        this.rightOperand.spotUsedVar(prog);
+        this.rightOperand.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        this.rightOperand = (AbstractExpr)this.rightOperand.removeUnusedVar();
+        if (!this.getLeftOperand().getDefinition().isUsed()) {
+            return this.rightOperand;
+        }
+        return this;
+    }
+
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
+        foundMethodCalls.add(this);
+    }
+
+    @Override
+    boolean isAssign() {
+        return true;
     }
     
+    @Override 
+    public CollapseResult<CollapseValue> collapseBinExpr() {
+        CollapseResult<CollapseValue> result = getRightOperand().collapseExpr();
+        if(getLeftOperand().getType().isBoolean() && result.getResult().isBool()) {
+            setRightOperand(new BooleanLiteral(result.getResult().asBool()));
+            // tell we collapsed but no result, too dangerous to remove assignments
+            return new CollapseResult<CollapseValue>(new CollapseValue(), true);
+        }
+        else if(getLeftOperand().getType().isFloat() && result.getResult().isFloat()) {
+            setRightOperand(new FloatLiteral(result.getResult().asFloat()));
+            // tell we collapsed but no result, too dangerous to remove assignments
+            return new CollapseResult<CollapseValue>(new CollapseValue(), true);
+        }
+        else if(getLeftOperand().getType().isInt() && result.getResult().isInt()) {
+            setRightOperand(new IntLiteral(result.getResult().asInt()));
+            // tell we collapsed but no result, too dangerous to remove assignments
+            return new CollapseResult<CollapseValue>(new CollapseValue(), true);
+        }
+        else {
+            // tell if at some point the expression collapsed
+            return new CollapseResult<CollapseValue>(new CollapseValue(), result.couldCollapse());
+        }
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        // An assign could change the state of a parameter.
+        // So a method containing an assign should not be substituted.
+        assert(false);
+        return this;
+    }
 }

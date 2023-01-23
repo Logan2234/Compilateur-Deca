@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
@@ -61,4 +62,13 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         for (AbstractDeclField i : getList())
             i.verifyInitField(compiler, localEnv, currentClass);
     }
+    
+    public CollapseResult<Null> collapseFields() {
+        boolean somethingCollapsed = false;
+        for(AbstractDeclField f : getList()) {
+            somethingCollapsed |= f.collapseDeclField().couldCollapse();
+        }
+        return new CollapseResult<Null>(null, somethingCollapsed);
+    }
+
 }

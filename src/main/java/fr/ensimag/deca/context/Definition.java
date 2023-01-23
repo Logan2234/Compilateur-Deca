@@ -1,8 +1,6 @@
 package fr.ensimag.deca.context;
 
 import org.apache.log4j.Logger;
-
-import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
@@ -49,7 +47,7 @@ public abstract class Definition {
     }
 
     private Location location;
-    private Type type;
+    protected Type type;
 
     public boolean isField() {
         return false;
@@ -153,7 +151,8 @@ public abstract class Definition {
      * Reset the used attribute back to false
      */
     public void resetUsed() {
-        used = false;
+        LOG.debug("Reset : "+ this.toString());
+        this.used = false;
     }
 
     /*
@@ -166,22 +165,28 @@ public abstract class Definition {
 
     /**
      * Set to true its "used" attribute and the one of the defitions in relation with itself
+     * and explore related definitions
      * @param compiler
      */
-    public void spotUsedVar(AbstractProgram prog) {
+    public boolean spotUsedVar() {
         // prevent looping over methods
-        if (!isUsed()) {
-            setUsed();
-            // if (this.type.isClass()) {
-            //     ClassType classType = (ClassType)(this.type); // TODO check this, not useful anymore ?
-            //     classType.getDefinition().spotUsedVar(prog);
-            // }
-            spotRelatedDefs(prog);
+        if (!this.isUsed()) {
+            this.setUsed();
+            return this.spotRelatedDefs();
         }
+        return false;
     }
 
     /**
-     * Set to true the "used" attribute of related definitions
+     * Set to true the "used" attribute of related definitions (super or containing class)
+     * @return true if a definition as been set to true
      */
-    public abstract void spotRelatedDefs(AbstractProgram prog);
+    public boolean spotRelatedDefs() {
+        boolean varSpotted = false;
+        if (this.type.isClass()) {
+            varSpotted = ((ClassType)this.type).getDefinition().spotUsedVar();
+        }
+        return varSpotted;
+    }
+
 }

@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.IMAInternalError;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
@@ -56,4 +57,13 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
         for (AbstractDeclVar i : getList())
             i.verifyDeclVar(compiler, localEnv, currentClass);
     }
+
+    public CollapseResult<Null> collapseDeclVars() {
+        boolean somethingCollapsed = false;
+        for(AbstractDeclVar v : getList()) {
+            somethingCollapsed |= v.collapseDeclVar().couldCollapse();
+        }
+        return new CollapseResult<Null>(null, somethingCollapsed);
+    }
+
 }

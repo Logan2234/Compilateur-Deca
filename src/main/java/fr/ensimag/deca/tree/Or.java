@@ -1,6 +1,11 @@
 package fr.ensimag.deca.tree;
 
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
@@ -38,5 +43,25 @@ public class Or extends AbstractOpBool {
         compiler.addInstruction(new CMP(1, resultRegister));
         // if result register contains zero, return false in it 
         compiler.addInstruction(new BEQ(toLabel));
-    } 
+    }
+
+    
+    public CollapseResult<CollapseValue> collapseBinExpr() {
+        CollapseResult<CollapseValue> leftResult = getLeftOperand().collapseExpr();
+        CollapseResult<CollapseValue> rightResult = getRightOperand().collapseExpr();
+        if(leftResult.getResult().isBool() && rightResult.getResult().isBool()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asBool() || rightResult.getResult().asBool()), true);
+        }
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), leftResult.couldCollapse() || rightResult.couldCollapse());
+        }
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new Or(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
+        res.setType(this.getType());
+        res.setLocation(this.getLocation());
+        return res;
+    }
 }

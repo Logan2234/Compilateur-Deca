@@ -2,6 +2,10 @@ package fr.ensimag.deca.context;
 
 import fr.ensimag.deca.tree.*;
 import fr.ensimag.ima.pseudocode.Label;
+
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
@@ -33,15 +37,16 @@ public class MethodDefinition extends ExpDefinition {
         return index;
     }
 
-    private int index;
-
+    
     @Override
     public MethodDefinition asMethodDefinition(String errorMessage, Location l)
-            throws ContextualError {
+    throws ContextualError {
         return this;
     }
-
+    
+    private int index;
     private final Signature signature;
+    private ClassDefinition containingClass;
     private Label label;
     
     /**
@@ -51,14 +56,19 @@ public class MethodDefinition extends ExpDefinition {
      * @param signature List of arguments of the method
      * @param index Index of the method in the class. Starts from 0.
      */
-    public MethodDefinition(Type type, Location location, Signature signature, int index) {
+    public MethodDefinition(Type type, Location location, Signature signature, int index, ClassDefinition containingClass) {
         super(type, location);
         this.signature = signature;
+        this.containingClass = containingClass;
         this.index = index;
     }
 
     public Signature getSignature() {
         return signature;
+    }
+
+    public ClassDefinition getContainingClass() {
+        return this.containingClass;
     }
 
     @Override
@@ -82,37 +92,49 @@ public class MethodDefinition extends ExpDefinition {
     }
 
     @Override
-    public void spotRelatedDefs(AbstractProgram prog) {
-        assert(prog instanceof Program);
-        // the types of params are spotted at the methodCall and if the type of a param is a class
-        // then the class is spotted at the methodCall directly or indirectly by the subclass
-        // the return type could be a class but it is spotted in the body
-        for (AbstractDeclClass c : ((Program)prog).getClasses().getList()) {
-            assert(c instanceof DeclClass);
-            // TODO if (/* class is class or subclass */)
-            for (AbstractDeclMethod method : ((DeclClass)c).getMethods().getList()) {
-                assert(method instanceof DeclMethod);
-                // find the corresponding DeclMethod
-                // (match the tree location of DeclMethod with the definition location of the current MethodDefinition)
-                // Each method as a different location
-                LOG.debug("Looking for the method");
-                if (getLocation() == method.getLocation()) {
-                    LOG.debug("Methods matched");
-                    // explore the body of the method to spot other useful variables
-                    ((DeclMethod)(method)).spotUsedVar(prog);
-                    // spot the containing class
-                    ((DeclClass)c).getName().getClassDefinition().spotUsedVar(prog);
-                } 
-                // TODO
-                // if the dynamique type of the object calling the method is a subclass then the
-                // overriding methods should have been spotted
-                // else if (/*method == redéfinition */) { 
-                //     LOG.debug("Overriding method found");
-                //     // explore the body of the method to spot other useful variables
-                //     ((DeclMethod)(method)).spotUsedVar(prog);
-
-                // }
-            }
-        }
+    public boolean spotRelatedDefs() {
+        boolean varSpotted = super.spotRelatedDefs();
+        varSpotted = this.containingClass.spotUsedVar() || varSpotted;
+        return varSpotted;
     }
+
+    /**
+     * If the method is an override of a method in the map.
+     * Method use to know if an unspotted method may be dynamically useful ormore generally if
+     * a method is an override of a method in a group of methods
+     * @return true if the method is an override of a method in the map
+     */
+    public boolean isOverridingAMethodInMap(Map<ClassDefinition,Set<Integer>> map) {
+        boolean res = false;
+        ClassDefinition superClass = this.containingClass.getSuperClass();
+        while(superClass != null && !res && this.index<=superClass.getNumberOfMethods()) {
+            res = map.get(superClass).contains(this.index);
+            superClass = superClass.getSuperClass();
+        }
+        return res;
+    }
+
+        /**
+     * If the method is an override of a method in the map.
+     * Method use to know if an unspotted method may be dynamically useful ormore generally if
+     * a method is an override of a method in a group of methods.
+     * The map must have an entry for every class in the program (a Set for each map)
+     * @return true if the method is an override of a method in the map
+     */
+    public static ClassDefinition isOverridingAMethodInMap(Map<ClassDefinition,Set<Integer>> map, ClassDefinition containingClass, int index) {
+        boolean res = false;
+        ClassDefinition previousClass = containingClass;
+        ClassDefinition superClass = containingClass.getSuperClass();
+        if (superClass == null) return null;
+        while(superClass.getSuperClass() != null && !res && index<=superClass.getNumberOfMethods()) {
+            res = map.get(superClass).contains(index);
+            previousClass = superClass;
+            superClass = superClass.getSuperClass();
+        }
+        if (res) {
+            return previousClass;
+        }
+        return null;
+    }
+
 }

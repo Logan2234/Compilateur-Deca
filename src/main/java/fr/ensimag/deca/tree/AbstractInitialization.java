@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.deca.DecacCompiler;
@@ -34,5 +36,11 @@ public abstract class AbstractInitialization extends Tree {
      * @param compiler Where we write the code.
      */
     public abstract void codeGenInit(DecacCompiler compiler, Type objectType, RegisterOffset resultRegister);
+
+    public abstract CollapseResult<CollapseValue> collapseInit();
+    /**
+     * @return the expression of the initialization
+     */
+    protected abstract AbstractExpr getExpression();
 
 }

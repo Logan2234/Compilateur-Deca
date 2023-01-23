@@ -2,16 +2,21 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -25,7 +30,7 @@ public class DeclField extends AbstractDeclField {
     final private Visibility visib;
     final private AbstractIdentifier type;
     final private AbstractIdentifier fieldName;
-    final private AbstractInitialization initialization;
+    private AbstractInitialization initialization;
 
     public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization,
             Visibility visib) {
@@ -117,12 +122,44 @@ public class DeclField extends AbstractDeclField {
     }
 
 
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
-        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    @Override
+    protected void spotUsedVar() {
+        this.type.spotUsedVar();
+        this.fieldName.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        if (!this.fieldName.getDefinition().isUsed()) {
+            return null;
+        }
+        this.initialization = (AbstractInitialization)this.initialization.removeUnusedVar();
+        return this;
     }
 
     public AbstractIdentifier getName() {
         return this.fieldName;
+    }
+
+    @Override
+    public CollapseResult<Null> collapseDeclField() {
+        CollapseResult<CollapseValue> result = initialization.collapseInit();
+        // look in the collapse value if we can change the init node
+        if(type.getType().isBoolean() && result.getResult().isBool()) {
+            initialization = new Initialization(new BooleanLiteral(result.getResult().asBool()));
+        }
+        else if(type.getType().isFloat() && result.getResult().isFloat()) {
+            initialization = new Initialization(new FloatLiteral(result.getResult().asFloat()));
+        }
+        if(type.getType().isInt() && result.getResult().isInt()) {
+            initialization = new Initialization(new IntLiteral(result.getResult().asInt()));
+        }
+        return new CollapseResult<Null>(null, result.couldCollapse());
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.initialization = (AbstractInitialization)this.initialization.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

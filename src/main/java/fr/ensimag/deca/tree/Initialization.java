@@ -1,10 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
@@ -14,6 +17,8 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -22,6 +27,7 @@ import org.apache.commons.lang.Validate;
  */
 public class Initialization extends AbstractInitialization {
 
+    @Override
     public AbstractExpr getExpression() {
         return expression;
     }
@@ -84,7 +90,25 @@ public class Initialization extends AbstractInitialization {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.expression.spotUsedVar(prog);
+    protected void spotUsedVar() {
+        this.expression.spotUsedVar();
     }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        this.expression = (AbstractExpr)this.expression.removeUnusedVar();
+        return this;
+    }
+    
+    @Override
+    public CollapseResult<CollapseValue> collapseInit() {
+        return expression.collapseExpr();
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.expression = (AbstractExpr)this.expression.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+    
 }

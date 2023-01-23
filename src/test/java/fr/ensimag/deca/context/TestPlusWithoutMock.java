@@ -6,8 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.AbstractProgram;
@@ -72,13 +75,31 @@ public class TestPlusWithoutMock {
         }
 
         @Override
-        protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+        protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
             // TODO Auto-generated method stub  
         }
 
         @Override
-        protected void spotUsedVar(AbstractProgram prog) {
+        protected void spotUsedVar() {
             // TODO Auto-generated method stub
+        }
+
+        @Override
+        protected AbstractExpr substitute(Map<ParamDefinition, AbstractExpr> substitutionTable) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        protected boolean containsField() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public CollapseResult<CollapseValue> collapseExpr() {
+            // return nothing ? expect if we find a way to compute methods at compile time...
+            return new CollapseResult<CollapseValue>(new CollapseValue(), false);
         }
     }
 

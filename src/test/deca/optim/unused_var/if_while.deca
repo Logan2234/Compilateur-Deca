@@ -1,0 +1,37 @@
+// Description:
+//    instanceOf in the right cases
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 20/01/2023
+//
+class A {
+    int cos(){return 2;}
+}
+
+{
+    boolean x;
+    A a = new A();
+
+    // removed
+    if (true) {}
+
+    // not simplified by unused_var
+    if (true) {
+        print("Error");
+    }
+
+    // keep the condition only
+    if ((x=true) && false && (x=false)) {
+    }
+
+    // remove
+    while ((x=true) && false && (x=false)) {
+    }
+
+    // keep the whole loop
+    while ((x=true) && false && (a.cos()==1)) {
+    }
+}

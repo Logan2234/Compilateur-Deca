@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -8,7 +9,9 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.UserAsmBlock;
 
@@ -57,6 +60,16 @@ public class MethodAsmBody extends AbstractMethod {
     }
 
     @Override
+    protected void spotUsedVar() {
+        // do nothing
+    }
+    
+    @Override
+    protected Tree removeUnusedVar() {
+        return this;
+    }
+    
+	@Override
     public void codeGenMethod(DecacCompiler compiler) {
         compiler.add(new UserAsmBlock(code.getValue()));
     }
@@ -65,8 +78,20 @@ public class MethodAsmBody extends AbstractMethod {
     public void setReturnsNames(String name) {
         // useless here ?
     }
-    
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+
+    @Override
+    public CollapseResult<Null> collapseMethodBody() {
+        // no collapse for asm method
+        return new CollapseResult<Null>(null, false);
     }
+    
+    public boolean isInline() {
+        return false;
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        return this;
+    }
+
 }

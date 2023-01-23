@@ -1,0 +1,21 @@
+// Description:
+//    remove methods
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 20/01/2023
+//
+class A {
+    void onlyKeepOverride(){}
+}
+
+class B extends A {
+    void onlyKeepOverride(){}
+}
+
+{
+    B b = new B();
+    b.onlyKeepOverride();
+}

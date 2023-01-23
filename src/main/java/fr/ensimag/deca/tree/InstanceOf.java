@@ -1,10 +1,14 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
@@ -24,6 +28,7 @@ import static org.mockito.ArgumentMatchers.nullable;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -35,7 +40,7 @@ import org.apache.commons.lang.Validate;
  */
 public class InstanceOf extends AbstractExpr {
 
-    private final AbstractExpr expression;
+    private AbstractExpr expression;
     private final AbstractIdentifier type;
 
     public InstanceOf(AbstractExpr expression, AbstractIdentifier type) {
@@ -120,15 +125,58 @@ public class InstanceOf extends AbstractExpr {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.expression.spotUsedVar(prog);
-        // We don't spotUsedVar on the class type.
+    protected void spotUsedVar() {
+        // We don't spotUsedVar on the class type by default
         // If the class is not used elsewhere then the expression will be evaluated to false.
+        if (!this.expression.getUnremovableExpr().isEmpty()) {
+            // we cannot remove the instanceof so we have to spot the type
+            this.type.spotUsedVar();
+        }
+        this.expression.spotUsedVar();
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected Tree removeUnusedVar() {
+        if (!this.type.getClassDefinition().isUsed()) {
+            BooleanLiteral bool = new BooleanLiteral(false);
+            bool.setLocation(this.getLocation());
+            return bool; 
+        }
+        this.expression = (AbstractExpr)this.expression.removeUnusedVar();
+        return this;
+    }
+
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // the expression could be obtained via a MethodCall
-        this.expression.addMethodCalls(foundMethodCalls);
+        this.expression.addUnremovableExpr(foundMethodCalls);
+    }
+
+    public AbstractExpr getExpr() {
+        return this.expression;
+    }
+
+    @Override
+    public CollapseResult<CollapseValue> collapseExpr() {
+        // nothing to collapse here
+        return new CollapseResult<CollapseValue>(new CollapseValue(), false);
+    }
+    
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.expression = (AbstractExpr)this.expression.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new InstanceOf(this.expression.substitute(substitutionTable),(AbstractIdentifier) this.type.substitute(substitutionTable));
+        res.setType(this.getType());
+        res.setLocation(this.getLocation());
+        return res;
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.expression.containsField() || this.type.containsField();
     }
 }

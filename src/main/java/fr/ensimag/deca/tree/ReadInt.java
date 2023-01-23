@@ -5,10 +5,12 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.instructions.RINT;
 
 import java.io.PrintStream;
+import java.util.Map;
 
 /**
  *
@@ -42,5 +44,13 @@ public class ReadInt extends AbstractReadExpr {
     @Override
     protected void codeGenRead(DecacCompiler compiler) {
         compiler.addInstruction(new RINT());
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new ReadInt();
+        res.setType(this.getType());
+        res.setLocation(this.getLocation());
+        return res;
     }
 }

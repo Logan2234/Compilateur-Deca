@@ -8,6 +8,7 @@ import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
@@ -25,6 +26,8 @@ import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -37,8 +40,8 @@ public class DeclClass extends AbstractDeclClass {
 
     final private AbstractIdentifier name;
     final private AbstractIdentifier superIdentifier;
-    final private ListDeclField fields;
-    final private ListDeclMethod methods;
+    private ListDeclField fields;
+    private ListDeclMethod methods;
 
     public DeclClass(AbstractIdentifier name, AbstractIdentifier superIdentifier, ListDeclField fields,
             ListDeclMethod methods) {
@@ -139,6 +142,30 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     @Override
+    protected void spotUsedVar() {
+        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        if (!this.name.getDefinition().isUsed()) {
+            return null;
+        }
+        this.fields = (ListDeclField)this.fields.removeUnusedVar();
+        this.methods = (ListDeclMethod)this.methods.removeUnusedVar();
+        return this;
+    }
+
+    public AbstractIdentifier getName() {
+        return name;
+    }
+    
+    @Override
+    public CollapseResult<Null> collapseClass() {
+        return new CollapseResult<Null>(null, fields.collapseFields().couldCollapse() || methods.collapseMethods().couldCollapse());
+    }
+
+    @Override
     public void codeGenVTable(DecacCompiler compiler) {
         // generate the vtable for that class.
         // get the VTable addr
@@ -162,8 +189,10 @@ public class DeclClass extends AbstractDeclClass {
                     writtenMethods[methodIndex] = true;
                     RegisterOffset methodAddr = new RegisterOffset(compiler.readNextStackSpace().getOffset() + methodIndex, Register.GB);
                     method.setDAddr(methodAddr);
-                    compiler.addInstruction(new LOAD(new LabelOperand(new Label("code." + currentClass.getType().getName().getName() + "." + method.getName())), Register.R0));
-                    compiler.addInstruction(new STORE(Register.R0, methodAddr));
+                    if (method.isUsed() || !compiler.getCompilerOptions().getOptimize()) {
+                        compiler.addInstruction(new LOAD(new LabelOperand(new Label("code." + currentClass.getType().getName().getName() + "." + method.getName())), Register.R0));
+                        compiler.addInstruction(new STORE(Register.R0, methodAddr));
+                    }
                 }
             }
             currentClass = currentClass.getSuperClass();
@@ -216,12 +245,18 @@ public class DeclClass extends AbstractDeclClass {
         }
     }
 
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
-        // We don't spotUsedVar() on classes. We spot them indirectly from the main
+    @Override
+    protected void spotInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        for (AbstractDeclMethod method : this.methods.getList()) {
+            method.spotInlineMethods(inlineMethods);
+        }
     }
 
-    public AbstractIdentifier getName() {
-        return name;
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.fields = (ListDeclField)this.fields.doSubstituteInlineMethods(inlineMethods);
+        this.methods = (ListDeclMethod)this.methods.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
+
 }

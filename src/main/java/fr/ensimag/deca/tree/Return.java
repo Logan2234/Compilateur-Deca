@@ -1,10 +1,12 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
@@ -13,6 +15,8 @@ import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -22,8 +26,8 @@ import org.apache.commons.lang.Validate;
  * @date 09/01/2023
  */
 public class Return extends AbstractInst {
-
-    private final AbstractExpr expression;
+    
+    private AbstractExpr expression;
 
     public Return(AbstractExpr expression) {
         Validate.notNull(expression);
@@ -34,6 +38,10 @@ public class Return extends AbstractInst {
 
     public void setMethodClassName(String name) {
         this.methodClassName = name;
+    }
+
+    public AbstractExpr getExpression() {
+        return this.expression;
     }
 
     @Override
@@ -85,7 +93,27 @@ public class Return extends AbstractInst {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.expression.spotUsedVar(prog);
+    protected void spotUsedVar() {
+        this.expression.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        this.expression = (AbstractExpr)this.expression.removeUnusedVar();
+        return this;
+    }
+
+    @Override
+    public CollapseResult<ListInst> collapseInst() {
+        // return nothing ? expect if we find a way to compute methods at compile time...
+        ListInst result = new ListInst();
+        result.add(this);
+        return new CollapseResult<ListInst>(result, false);
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.expression = (AbstractExpr)this.expression.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

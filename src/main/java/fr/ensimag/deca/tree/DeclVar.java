@@ -3,13 +3,20 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.RegisterOffset;
@@ -24,7 +31,7 @@ public class DeclVar extends AbstractDeclVar {
 
     final private AbstractIdentifier type;
     final private AbstractIdentifier varName;
-    final private AbstractInitialization initialization;
+    private AbstractInitialization initialization;
 
     public DeclVar(AbstractIdentifier type, AbstractIdentifier varName, AbstractInitialization initialization) {
         Validate.notNull(type);
@@ -90,10 +97,37 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        // We don't spotUsedVar() on the type (it may be a class) or the identifier as
-        // they are just declared.
-        this.initialization.spotUsedVar(prog);
+    protected void spotUsedVar() {
+        // We don't spotUsedVar() on the type (it may be a class) or the identifier as they are just declared.
+        this.initialization.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        this.initialization = (AbstractInitialization)this.initialization.removeUnusedVar();
+        if (this.varName.getDefinition().isUsed()) {
+            return this;
+        }
+        if (this.initialization.getExpression() == null){
+            return null;
+        }
+        List<AbstractExpr> listExpr = this.initialization.getExpression().getUnremovableExpr();
+        if (listExpr.isEmpty()) {
+            return null;
+        }
+        if (this.type.getDefinition().getType().isInt() || this.type.getDefinition().getType().isFloat()) {
+            Iterator<AbstractExpr> iter = listExpr.iterator();
+            AbstractExpr expr = iter.next();
+            Location loc = expr.getLocation();
+            while (iter.hasNext()) {
+                loc = expr.getLocation();
+                expr = new Plus(expr, iter.next());
+                expr.setLocation(loc);
+            }
+            this.initialization = new Initialization(expr);
+            this.initialization.setLocation(loc);
+        }
+        return this;
     }
 
     public AbstractIdentifier getVar() {
@@ -102,5 +136,27 @@ public class DeclVar extends AbstractDeclVar {
 
     public AbstractInitialization getInit() {
         return this.initialization;
+    }
+
+    @Override
+    public CollapseResult<Null> collapseDeclVar() {
+        CollapseResult<CollapseValue> result = initialization.collapseInit();
+        // look in the collapse value if we can change the init node
+        if(type.getType().isBoolean() && result.getResult().isBool()) {
+            initialization = new Initialization(new BooleanLiteral(result.getResult().asBool()));
+        }
+        else if(type.getType().isFloat() && result.getResult().isFloat()) {
+            initialization = new Initialization(new FloatLiteral(result.getResult().asFloat()));
+        }
+        if(type.getType().isInt() && result.getResult().isInt()) {
+            initialization = new Initialization(new IntLiteral(result.getResult().asInt()));
+        }
+        return new CollapseResult<Null>(null, result.couldCollapse());
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.initialization = (AbstractInitialization)this.initialization.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

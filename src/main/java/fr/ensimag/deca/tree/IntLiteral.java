@@ -1,10 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
@@ -14,6 +17,7 @@ import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Integer literal
@@ -81,17 +85,34 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
-    protected Boolean isLiteral() {
-        return true;
-    }
-
-    @Override
-    protected void spotUsedVar(AbstractProgram prog) {
+    protected void spotUsedVar() {
         // do nothing
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
+    }
+    
+    public Integer collapseInt() {
+        return value;
+    }
+
+    @Override
+    public CollapseResult<CollapseValue> collapseExpr() {
+        return new CollapseResult<CollapseValue>(new CollapseValue(value), false);
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new IntLiteral(this.value);
+        res.setType(this.getType());
+        res.setLocation(this.getLocation());
+        return res;
+    }
+
+    @Override
+    protected boolean containsField() {
+        return false;
     }
 }

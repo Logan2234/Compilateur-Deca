@@ -1,6 +1,11 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+
+import java.util.List;
+import java.util.ListIterator;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -46,14 +51,63 @@ public class ListInst extends TreeList<AbstractInst> {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
+    protected void spotUsedVar() {
         for (AbstractInst inst : this.getList()) {
-            // TODO avoid from a higher level in the class hierarchy for more spotUsedVar
-            // avoidance
-            // TODO It requires to know if there is methodcall in the abstractexpr
             if (!(inst instanceof Identifier)) {
-                inst.spotUsedVar(prog);
+                inst.spotUsedVar();
             }
         }
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        ListIterator<AbstractInst> iter = this.iterator();
+        while(iter.hasNext()) {
+            AbstractInst tree = (AbstractInst)iter.next().removeUnusedVar();
+            // we have to remove first because it may be a new tree
+            iter.remove();
+            if (tree == null) {
+                // keep it removed
+            }
+            else if (tree instanceof AbstractExpr) {
+                AbstractExpr expr = (AbstractExpr)tree;
+                List<AbstractExpr> unremovableExpressions = expr.getUnremovableExpr();
+                if (unremovableExpressions.isEmpty()) {
+                    // don't add the expression
+                }
+                else if (expr.getType().isBoolean()) {
+                    // replace the expression as it is
+                    iter.add(tree);
+                    // we cannot break the expression because for instance, the left operand
+                    // of an AND shouldn't be evaluated if the right operand is false
+                }
+                else {
+                    for (AbstractExpr expression : unremovableExpressions) {
+                        iter.add(expression); // add after the current instruction
+                    }
+                }
+            }
+            else {
+                iter.add(tree);
+            }
+        }
+        return this;
+    }
+
+    public CollapseResult<ListInst> collapseInsts() {
+        boolean somethingCollapsed = false;
+        for (int i = 0; i < getList().size(); i++) {
+            AbstractInst toCollapse = getList().get(i);
+            CollapseResult<ListInst> result = toCollapse.collapseInst();
+            somethingCollapsed |= result.couldCollapse();
+            // remove this inst, replace it with it's collapsed form
+            removeAt(i);
+            int offset = 0;
+            for(AbstractInst newInst : result.getResult().getList()) {
+                insert(newInst, i + offset);
+                offset ++;
+            }
+        }
+        return new CollapseResult<ListInst>(this, somethingCollapsed);
     }
 }

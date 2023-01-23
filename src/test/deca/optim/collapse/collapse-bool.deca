@@ -1,0 +1,32 @@
+// Description:
+//    test collapsing for bools
+//
+// Resultats:
+//    
+//
+// Historique:
+//    cree le 22/01/2023
+//
+{
+    boolean a = true || false;
+    boolean b = true && false;
+    boolean c = !false;
+
+    if(true || false) {
+        print("ok");
+    }
+    else {
+        print("ko");
+    }
+
+    if(!(true && false) || false) {
+        print("ok");
+    }
+    else {
+        print("ko");
+    }
+
+    while(false) {
+        print("ko");
+    }
+}

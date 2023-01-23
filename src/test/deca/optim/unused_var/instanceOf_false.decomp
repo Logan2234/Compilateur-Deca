@@ -1,5 +1,0 @@
-FATAL fr.ensimag.deca.DecacCompiler.compile(DecacCompiler.java:291) - Exception raised while compiling file /home/vianney/Documents/ENSIMAG/2A/Projet_GL/gl03/./src/test/deca/optim/unused_var/instanceOf_false.deca:
-java.lang.NullPointerException: Cannot invoke "fr.ensimag.deca.tree.AbstractProgram.checkAllLocations()" because "prog" is null
-	at fr.ensimag.deca.DecacCompiler.doCompile(DecacCompiler.java:317)
-	at fr.ensimag.deca.DecacCompiler.compile(DecacCompiler.java:279)
-	at fr.ensimag.deca.DecacMain.main(DecacMain.java:78)

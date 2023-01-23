@@ -1,10 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
@@ -15,6 +18,10 @@ import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 import java.io.PrintStream;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
 
 import org.apache.commons.lang.Validate;
 
@@ -102,8 +109,60 @@ public class While extends AbstractInst {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.condition.spotUsedVar(prog);
-        this.body.spotUsedVar(prog);
+    protected void spotUsedVar() {
+        this.condition.spotUsedVar();
+        this.body.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        this.condition = (AbstractExpr) this.condition.removeUnusedVar();
+        this.body = (ListInst) this.body.removeUnusedVar();
+        if (!this.body.isEmpty()) {
+            return this;
+        }
+        List<AbstractExpr> unremovableExpressions = this.condition.getUnremovableExpr();
+        if (unremovableExpressions.isEmpty()) {
+            return null;
+        } 
+        return this;
+    }
+
+    @Override
+    public CollapseResult<ListInst> collapseInst() {
+        // try to collapse the condition
+        CollapseResult<CollapseValue> condResult = condition.collapseExpr();
+        if(condResult.getResult().isBool()) {
+            // we can actually collapse the if !
+            if(condResult.getResult().asBool()) {
+                // we know we will enter the loop.
+                // TODO virgile ; this is the dangerous part....
+                // try to collapse our own branches
+                CollapseResult<ListInst> bodyResult = body.collapseInsts();
+                body = bodyResult.getResult();
+                ListInst result = new ListInst();
+                result.add(this);
+                return new CollapseResult<ListInst>(result, bodyResult.couldCollapse());
+            }
+            else {
+                // we know we will never enter the loop : remove the whole while instruction !
+                return new CollapseResult<ListInst>(new ListInst(), true);
+            }
+        }
+        else {
+            // try to collapse our own branches
+            CollapseResult<ListInst> bodyResult = body.collapseInsts();
+            body = bodyResult.getResult();
+            ListInst result = new ListInst();
+            result.add(this);
+            return new CollapseResult<ListInst>(result, bodyResult.couldCollapse());
+        }
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.condition = (AbstractExpr)this.condition.doSubstituteInlineMethods(inlineMethods);
+        this. body = (ListInst)this.body.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

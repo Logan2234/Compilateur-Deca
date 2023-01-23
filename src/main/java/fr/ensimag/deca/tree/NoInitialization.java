@@ -1,10 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
@@ -16,6 +19,7 @@ import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 import java.io.PrintStream;
+import java.util.Map;
 
 /**
  * Absence of initialization (e.g. "int x;" as opposed to "int x =
@@ -83,7 +87,28 @@ public class NoInitialization extends AbstractInitialization {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
+    protected void spotUsedVar() {
         // do nothing
     }
+    
+    @Override
+    public CollapseResult<CollapseValue> collapseInit() {
+        return new CollapseResult<CollapseValue>(new CollapseValue(), false);
+    }
+    
+    protected Tree removeUnusedVar() {
+        return this;
+    }
+    
+    @Override
+    protected AbstractExpr getExpression() {
+        return null;
+    }
+
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        return this;
+    }
+
 }

@@ -1,0 +1,33 @@
+// Description:
+//    instanceOf in the right cases
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 11/01/2023
+//
+class A {
+    A createChild(){
+        return new A();
+    }
+}
+
+class B extends A {}
+
+class C extends A {}
+
+{
+    A a = new A();
+
+    // trivial condition
+    if(a instanceof B) {
+        print("Error");
+    }
+
+    // the methodCall could print, read or change the state of a
+    // so we have to keep it and spot C
+    if(a.createChild() instanceof C) {
+        print("Error");
+    }
+}

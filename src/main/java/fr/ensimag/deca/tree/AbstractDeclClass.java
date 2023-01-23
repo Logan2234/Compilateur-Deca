@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.optim.CollapseResult;
 
 /**
  * Class declaration.
@@ -46,4 +47,6 @@ public abstract class AbstractDeclClass extends Tree {
      * @param compiler Where we write the instructions to.
      */
     public abstract void codeGenClass(DecacCompiler compiler);
+
+    public abstract CollapseResult<Null> collapseClass();
 }

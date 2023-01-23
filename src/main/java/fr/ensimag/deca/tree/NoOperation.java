@@ -1,12 +1,15 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+import java.util.Map;
 
 /**
  * 
@@ -42,7 +45,24 @@ public class NoOperation extends AbstractInst {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
+    protected void spotUsedVar() {
         // do nothing
     }
+    
+    @Override
+    protected Tree removeUnusedVar() {
+        return null;
+    }
+
+    @Override
+    public CollapseResult<ListInst> collapseInst() {
+        // collapse no op into... no op.
+        return new CollapseResult<ListInst>(new ListInst(), true); // true because we removed ourself
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        return this;
+    }
+
 }

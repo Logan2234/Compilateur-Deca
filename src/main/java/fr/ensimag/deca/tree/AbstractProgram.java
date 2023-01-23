@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.optim.CollapseResult;
 
 /**
  * Entry point for contextual verifications and code generation from outside the
@@ -16,18 +17,9 @@ public abstract class AbstractProgram extends Tree {
 
     public abstract void codeGenProgram(DecacCompiler compiler);
 
-    /**
-     * Optimize the decorated tree until there is no simplification found
-     */
-    public void optimizeTree() {
-        while (removeUnusedVar())
-            ;
-    }
+    public abstract CollapseResult<Null> collapseProgram();
 
-    /**
-     * Remove all unused variables from the tree
-     * 
-     * @return true if tree has been simplified
-     */
-    public abstract boolean removeUnusedVar();
+    public abstract void optimUnusedVar();
+
+    public abstract void substituteInlineMethods();
 }

@@ -1,7 +1,12 @@
 package fr.ensimag.deca.tree;
 
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.OpOverflowErr;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
@@ -34,4 +39,26 @@ public class Multiply extends AbstractOpArith {
         }
     }
 
+    @Override
+    public CollapseResult<CollapseValue> collapseBinExpr() {
+        CollapseResult<CollapseValue> leftResult = getLeftOperand().collapseExpr();
+        CollapseResult<CollapseValue> rightResult = getRightOperand().collapseExpr();
+        if(getType().isFloat() && leftResult.getResult().isFloat() && rightResult.getResult().isFloat()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asFloat() * rightResult.getResult().asFloat()), true);
+        }
+        else if(getType().isInt() && leftResult.getResult().isInt() && rightResult.getResult().isInt()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asInt() * rightResult.getResult().asInt()), true);
+        }
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), leftResult.couldCollapse() || rightResult.couldCollapse());
+        }
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new Multiply(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
+        res.setType(this.getType());
+        res.setLocation(this.getLocation());
+        return res;
+    }
 }

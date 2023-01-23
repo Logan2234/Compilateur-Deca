@@ -26,7 +26,7 @@ public class TypeDefinition extends Definition {
     }
 
     @Override
-    public void spotRelatedDefs(AbstractProgram prog) {
-        // do nothing
+    public boolean spotRelatedDefs() {
+        return super.spotRelatedDefs();
     }
 }

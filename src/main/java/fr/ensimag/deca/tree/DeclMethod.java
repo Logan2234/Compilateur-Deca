@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.ReturnCheckFunc;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
@@ -12,7 +13,9 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -27,6 +30,12 @@ import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -40,7 +49,7 @@ public class DeclMethod extends AbstractDeclMethod {
     final private AbstractIdentifier type;
     final private AbstractIdentifier methodName;
     final private ListDeclParam params;
-    final private AbstractMethod body;
+    private AbstractMethod body;
 
     public DeclMethod(AbstractIdentifier type, AbstractIdentifier methodName, ListDeclParam params,
             AbstractMethod body) {
@@ -87,10 +96,10 @@ public class DeclMethod extends AbstractDeclMethod {
                             "The return type is not the same as defined in the superclass (or not a subtype) (rule 2.7)",
                             getLocation());
             }
-            methodeDef = new MethodDefinition(type, getLocation(), signature, motherMethod.getIndex());
+            methodeDef = new MethodDefinition(type, this.getLocation(), signature, motherMethod.getIndex(), currentClass);
         } else {
             currentClass.incNumberOfMethods();
-            methodeDef = new MethodDefinition(type, getLocation(), signature, currentClass.getNumberOfMethods());
+            methodeDef = new MethodDefinition(type, this.getLocation(), signature, currentClass.getNumberOfMethods(), currentClass);
         }
         try {
             localEnv.declare(methodName.getName(), methodeDef);
@@ -183,12 +192,24 @@ public class DeclMethod extends AbstractDeclMethod {
         compiler.addInstruction(new RTS());
     }
     
-    public void spotUsedVar(AbstractProgram prog) {
-        this.type.spotUsedVar(prog);
-        this.body.spotUsedVar(prog);
-        this.methodName.spotUsedVar(prog);
+
+    @Override
+    public void spotUsedVar() {
+        this.type.spotUsedVar();
+        this.body.spotUsedVar();
+        this.methodName.spotUsedVar();
         // we spot the param when they are used in the body
     }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        if (!this.methodName.getDefinition().isUsed()) {
+            return null;
+        }
+        this.body = (AbstractMethod)this.body.removeUnusedVar();
+        return this;
+    }
+
 
     public AbstractIdentifier getName() {
         return this.methodName;
@@ -197,4 +218,40 @@ public class DeclMethod extends AbstractDeclMethod {
     public AbstractMethod getBody() {
         return this.body;
     }
+
+    @Override
+    public CollapseResult<Null> collapseDeclMethod() {
+        return new CollapseResult<Null>(null, body.collapseMethodBody().couldCollapse());
+    }
+
+    @Override
+    protected void spotInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        if (this.body.isInline()) {
+            inlineMethods.put(this.methodName.getMethodDefinition(),this);
+        }
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.body = (AbstractMethod)this.body.doSubstituteInlineMethods(inlineMethods);
+        return this;
+    }
+
+    /**
+     * Method used to substitute inline methods.
+     * It returns the expression of the body's Return (its only instruction) with the parameters subsituted
+     * @param list of input parameters
+     * @return expression with parameters of the method susbituted with input parameters
+     */
+    public AbstractExpr getSubsitution(ListExpr inputParams) {
+        Map<ParamDefinition,AbstractExpr> substitutionTable = new HashMap<ParamDefinition,AbstractExpr>();
+        Iterator<AbstractDeclParam> iterParam = this.params.getList().iterator();
+        Iterator<AbstractExpr> iterInputParam = inputParams.getList().iterator();
+        while (iterParam.hasNext() && iterInputParam.hasNext()) {
+            substitutionTable.put(((DeclParam)iterParam.next()).getName().getParamDefinition(), iterInputParam.next());
+        }
+        AbstractInst inst = ((MethodBody)this.body).getInsts().getList().get(0);
+        return ((Return)inst).getExpression().substitute(substitutionTable);
+    }
+
 }

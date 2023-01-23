@@ -18,7 +18,7 @@ cd "$(dirname "$0")"/../../../ || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
-echo -e "${BWHITE} \n============================= Context valid tests =============================\n"
+echo -e "${BWHITE} \n============================= Optim test and decompilation =============================\n"
 
 files=$(find ./src/test/deca/optim -maxdepth 2 -name "*.deca")
 

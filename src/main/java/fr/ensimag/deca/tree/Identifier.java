@@ -3,25 +3,23 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
-import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.BEQ;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
@@ -30,6 +28,7 @@ import fr.ensimag.ima.pseudocode.instructions.WINT;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -127,7 +126,7 @@ public class Identifier extends AbstractIdentifier {
      * when the cast fails.
      * 
      * @throws DecacInternalError
-     *                            if the definition is not a field definition.
+     *                            if the definition is not a variable definition.
      */
     @Override
     public VariableDefinition getVariableDefinition() {
@@ -143,13 +142,35 @@ public class Identifier extends AbstractIdentifier {
 
     /**
      * Like {@link #getDefinition()}, but works only if the definition is a
+     * ParamDefinition.
+     * 
+     * This method essentially performs a cast, but throws an explicit exception
+     * when the cast fails.
+     * 
+     * @throws DecacInternalError
+     *                            if the definition is not a parameter definition.
+     */
+    @Override
+    public ParamDefinition getParamDefinition() {
+        try {
+            return (ParamDefinition) definition;
+        } catch (ClassCastException e) {
+            throw new DecacInternalError(
+                    "Identifier "
+                            + getName()
+                            + " is not a parameter identifier, you can't call getParamDefinition on it");
+        }
+    }
+
+    /**
+     * Like {@link #getDefinition()}, but works only if the definition is a
      * ExpDefinition.
      * 
      * This method essentially performs a cast, but throws an explicit exception
      * when the cast fails.
      * 
      * @throws DecacInternalError
-     *                            if the definition is not a field definition.
+     *                            if the definition is not an expression definition.
      */
     @Override
     public ExpDefinition getExpDefinition() {
@@ -250,24 +271,45 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     public void codeGenPrint(DecacCompiler compiler, boolean hex) {
-        if (definition.getType().isInt()) {
-            // print identifier as an int :
-            // load addr in R1
-            compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
-            // print it
-
-            compiler.addInstruction(new WINT());
-        } else if (definition.getType().isFloat()) {
-            // print identifier as an float :
-            // load addr in R1
-            compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
-            // print it
-            if (hex) {
-                compiler.addInstruction(new WFLOATX());
-            } else {
-                compiler.addInstruction(new WFLOAT());
+        // if it is a field, we need to first load the value on from the heap !
+        if(getDefinition().isField()) {
+            GPRegister classPointerRegister = compiler.allocateRegister();
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
+            compiler.addInstruction(new LOAD(new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister), Register.R1));
+            compiler.freeRegister(classPointerRegister);
+            if (definition.getType().isInt()) {
+                // print it
+                compiler.addInstruction(new WINT());
+            } else if (definition.getType().isFloat()) {
+                // print it
+                if (hex) {
+                    compiler.addInstruction(new WFLOATX());
+                } else {
+                    compiler.addInstruction(new WFLOAT());
+                }
             }
         }
+        else {
+            if (definition.getType().isInt()) {
+                // print identifier as an int :
+                // load addr in R1
+                compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
+                // print it
+    
+                compiler.addInstruction(new WINT());
+            } else if (definition.getType().isFloat()) {
+                // print identifier as an float :
+                // load addr in R1
+                compiler.addInstruction(new LOAD(definition.getDAddr(), Register.R1));
+                // print it
+                if (hex) {
+                    compiler.addInstruction(new WFLOATX());
+                } else {
+                    compiler.addInstruction(new WFLOAT());
+                }
+            }
+        }
+
     }
 
     /**
@@ -308,13 +350,44 @@ public class Identifier extends AbstractIdentifier {
 
     }
 
+
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        this.definition.spotUsedVar(prog);
+    public CollapseResult<CollapseValue> collapseExpr() {
+        // nothing to collapse on identifier !
+        return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected void spotUsedVar() {
+        this.definition.spotUsedVar();
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        return this;
+    }
+
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
+
+    @Override
+    protected Boolean isIdentifier() {
+        return true;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        if (!substitutionTable.containsKey(this.definition)) {
+            return this;
+        }
+        return substitutionTable.get(this.definition);
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.getDefinition().isField();
+    }
+    
 }

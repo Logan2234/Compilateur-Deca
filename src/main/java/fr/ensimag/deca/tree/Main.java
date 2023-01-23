@@ -4,8 +4,12 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
@@ -68,9 +72,16 @@ public class Main extends AbstractMain {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        declVariables.spotUsedVar(prog);
-        insts.spotUsedVar(prog);
+    protected void spotUsedVar() {
+        this.declVariables.spotUsedVar();
+        this.insts.spotUsedVar();
+    }
+    
+    @Override
+    protected Tree removeUnusedVar() {
+        this.declVariables = (ListDeclVar)this.declVariables.removeUnusedVar();
+        this.insts = (ListInst)this.insts.removeUnusedVar();
+        return this;
     }
 
     public ListDeclVar getListDeclVar() {
@@ -79,5 +90,17 @@ public class Main extends AbstractMain {
 
     public ListInst getListInst() {
         return insts;
+    }
+
+    @Override
+    public CollapseResult<Null> collapseMain() {
+        return new CollapseResult<Null>(null, declVariables.collapseDeclVars().couldCollapse() || insts.collapseInsts().couldCollapse());
+    }
+
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.declVariables = (ListDeclVar)this.declVariables.doSubstituteInlineMethods(inlineMethods);
+        this.insts = (ListInst)this.insts.doSubstituteInlineMethods(inlineMethods);
+        return this;
     }
 }

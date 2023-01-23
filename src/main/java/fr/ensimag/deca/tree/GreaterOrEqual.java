@@ -1,6 +1,11 @@
 package fr.ensimag.deca.tree;
 
+import java.util.Map;
+
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -29,6 +34,29 @@ public class GreaterOrEqual extends AbstractOpIneq {
         // sub the two values, put the greater or equal flag in register
         compiler.addInstruction(new CMP(dVal, register));
         compiler.addInstruction(new SGE(register));
+    }
+
+    @Override
+    public CollapseResult<CollapseValue> collapseBinExpr() {
+        CollapseResult<CollapseValue> leftResult = getLeftOperand().collapseExpr();
+        CollapseResult<CollapseValue> rightResult = getRightOperand().collapseExpr();
+        if(leftResult.getResult().isFloat() && rightResult.getResult().isFloat()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asFloat() >= rightResult.getResult().asFloat()), true);
+        }
+        else if(leftResult.getResult().isInt() && rightResult.getResult().isInt()) {
+            return new CollapseResult<CollapseValue>(new CollapseValue(leftResult.getResult().asInt() >= rightResult.getResult().asInt()), true);
+        }
+        else {
+            return new CollapseResult<CollapseValue>(new CollapseValue(), leftResult.couldCollapse() || rightResult.couldCollapse());
+        }
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        AbstractExpr res = new GreaterOrEqual(this.leftOperand.substitute(substitutionTable), this.rightOperand.substitute(substitutionTable));
+        res.setType(this.getType());
+        res.setLocation(this.getLocation());
+        return res;
     }
 
 }

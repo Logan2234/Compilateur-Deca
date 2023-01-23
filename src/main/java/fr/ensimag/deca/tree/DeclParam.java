@@ -6,11 +6,14 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 import java.io.PrintStream;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -29,6 +32,10 @@ public class DeclParam extends AbstractDeclParam {
         Validate.notNull(paramName);
         this.type = type;
         this.paramName = paramName;
+    }
+
+    public AbstractIdentifier getName() {
+        return this.paramName;
     }
 
     @Override
@@ -72,12 +79,24 @@ public class DeclParam extends AbstractDeclParam {
         paramName.prettyPrint(s, prefix, true);
     }
 
+
     @Override
+    protected void spotUsedVar() {
+        // do nothing
+    }
+
+    @Override
+    protected Tree removeUnusedVar() {
+        return this;
+    }
+
+	@Override
     public void SetDAddr(RegisterOffset dAddr) {
         paramName.getDefinition().setDAddr(dAddr);
     }
 
-    protected void spotUsedVar(AbstractProgram prog) {
-        // do nothing
+    @Override
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        return this;
     }
 }

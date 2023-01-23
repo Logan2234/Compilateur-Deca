@@ -1,0 +1,26 @@
+// Description:
+//    remove fields
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 20/01/2023
+//
+class A {
+    int x=1;
+    // w et z useless
+    int w,y,z;
+    void useY(){}
+}
+
+class B extends A {
+    protected int x=2;
+    void useY(){this.z=3; print(y);}
+}
+
+{
+    A b = new B();
+    print(b.x);
+    b.useY();
+}

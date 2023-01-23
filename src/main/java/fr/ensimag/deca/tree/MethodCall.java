@@ -1,12 +1,17 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
 import fr.ensimag.deca.codegen.runtimeErrors.NullReferenceErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -21,7 +26,10 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -33,9 +41,9 @@ import org.apache.commons.lang.Validate;
  */
 public class MethodCall extends AbstractExpr {
 
-    private final AbstractExpr obj;
+    private AbstractExpr obj;
     private final AbstractIdentifier meth;
-    private final ListExpr params;
+    private ListExpr params;
 
     public MethodCall(AbstractExpr obj, AbstractIdentifier meth, ListExpr params) {
         Validate.notNull(meth);
@@ -140,14 +148,57 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    protected void spotUsedVar(AbstractProgram prog) {
-        obj.spotUsedVar(prog);
-        meth.spotUsedVar(prog);
-        params.spotUsedVar(prog);
+    protected void spotUsedVar() {
+        this.obj.spotUsedVar();
+        this.meth.spotUsedVar();
+        this.params.spotUsedVar();
     }
 
     @Override
-    protected void addMethodCalls(List<AbstractExpr> foundMethodCalls) {
+    protected Tree removeUnusedVar() {
+        this.obj = (AbstractExpr)this.obj.removeUnusedVar();
+        this.params = (ListExpr)this.params.removeUnusedVar();
+        return this;
+    }
+
+    @Override
+    protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         foundMethodCalls.add(this);
+    }
+
+    @Override
+    public CollapseResult<CollapseValue> collapseExpr() {
+        // return nothing ? expect if we find a way to compute methods at compile time...
+        return new CollapseResult<CollapseValue>(new CollapseValue(), false);
+    }
+    
+    protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
+        this.params = (ListExpr)this.params.doSubstituteInlineMethods(inlineMethods);
+        if (!inlineMethods.containsKey(this.meth.getMethodDefinition())) {
+            return this;
+        }
+        // An inline methode should not be susbtituted if it takes as a parameter a method call,
+        // an assign or a read because it may be duplicated.
+        if(this.params.getUnremovableExpr().isEmpty()) {
+            return inlineMethods.get(this.meth.getMethodDefinition()).getSubsitution(this.params);
+        }
+        return this;
+    }
+
+    @Override
+    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+        ListExpr listExpr = new ListExpr();
+        for(AbstractExpr expr : this.params.getList()) {
+            listExpr.add(expr.substitute(substitutionTable));
+        }
+        AbstractExpr res = new MethodCall(this.obj.substitute(substitutionTable),(AbstractIdentifier) this.meth.substitute(substitutionTable),listExpr);
+        res.setType(this.getType());
+        res.setLocation(this.getLocation());
+        return res;
+    }
+
+    @Override
+    protected boolean containsField() {
+        return this.obj.containsField() || this.meth.containsField() || this.params.containsField();
     }
 }

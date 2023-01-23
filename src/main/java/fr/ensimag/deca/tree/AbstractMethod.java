@@ -5,6 +5,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.optim.CollapseResult;
 
 /**
  * Entry point for contextual verifications and code generation from outside the
@@ -29,4 +30,12 @@ public abstract class AbstractMethod extends Tree {
      * Set the name of the class + method for the returns to know the labels.
      */
     public abstract void setReturnsNames(String name);
+
+    public abstract CollapseResult<Null> collapseMethodBody();
+    
+    /**
+     * Used to spot "inline" methods to substitute their body
+     * @return true if the function is inline
+     */
+    public abstract boolean isInline();
 }

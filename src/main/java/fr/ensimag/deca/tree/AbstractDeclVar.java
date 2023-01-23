@@ -4,7 +4,8 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 /**
@@ -37,4 +38,6 @@ public abstract class AbstractDeclVar extends Tree {
      * @param offset The register offset, so a DAddr, where the variable will be registered.
      */
     public abstract void codeGenDeclVar(DecacCompiler compiler, RegisterOffset register);
+
+    public abstract CollapseResult<Null> collapseDeclVar();
 }
