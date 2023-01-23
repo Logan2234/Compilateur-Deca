@@ -103,7 +103,7 @@ public class Cast extends AbstractExpr {
     @Override
     public AbstractInst factorise(DecacCompiler compiler) {
         expression.factorise(compiler);
-        return null;
+        return this;
     }
 
     @Override

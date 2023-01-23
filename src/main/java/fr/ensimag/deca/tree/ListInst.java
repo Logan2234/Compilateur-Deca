@@ -64,8 +64,6 @@ public class ListInst extends TreeList<AbstractInst> {
             AbstractInst inst = getList().get(i).factorise(compiler);
             if (inst != null)
                 set(i, inst);
-            // else
-            //     removeAt(i);
         }
         return null;
     }

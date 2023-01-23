@@ -141,7 +141,7 @@ public class MethodCall extends AbstractExpr {
     @Override
     public AbstractInst factorise(DecacCompiler compiler) {
         params.factorise(compiler);
-        return null;
+        return this;
     }
 
     @Override
