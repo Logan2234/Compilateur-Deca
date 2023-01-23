@@ -65,4 +65,8 @@ public class NoOperation extends AbstractInst {
         return this;
     }
 
+    @Override
+    public boolean irrelevant() {
+        return false;
+    }
 }

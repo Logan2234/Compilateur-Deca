@@ -4,15 +4,15 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.context.MethodDefinition;
-import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,8 +99,88 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     protected void spotUsedVar() {
         this.operand.spotUsedVar();
     }
+    
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        operand = (AbstractExpr)operand.factorise(compiler);
+        return this;
+    }
 
     @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return getOperand().isSplitable(compiler);
+    }
+    
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        if (operand.isSplitable(compiler))
+            setOperand((AbstractExpr)operand.splitCalculus(compiler));
+        return this;
+    }
+
+    @Override
+    public boolean irrelevant() {
+        if (inWhile) return false;
+        if (inField){
+            HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
+            boolean irrelevant = false;
+            if (operand.isSelection()){
+                AbstractExpr out = ((Selection) operand).returnIrrelevantFromSelection();
+                if (out != null) {
+                    operand = out;
+                }
+                if (operand.isSelection()) irrelevant = ((Selection) operand).isKnown();
+            }
+            else if (operand.irrelevant() && actualDico.containsKey(((Identifier) operand).getName())) {
+                operand = actualDico.get(((Identifier) operand).getName());
+            }
+    
+            return irrelevant || (!operand.isSelection() && 
+            (operand.irrelevant() && actualDico.containsKey(((Identifier) operand).getName())));
+        } else {
+
+            boolean irrelevant = false;
+            if (operand.isSelection()){
+                AbstractExpr out = ((Selection) operand).returnIrrelevantFromSelection();
+                if (out != null) {
+                    operand = out;
+                }
+                if (operand.isSelection()) irrelevant = ((Selection) operand).isKnown();
+            }
+            else if (operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName())) {
+                operand = currentValues.get(((Identifier) operand).getName());
+            }
+            
+            return irrelevant || (!operand.isSelection() && 
+            (operand.irrelevant() && currentValues.containsKey(((Identifier) operand).getName())));
+        }
+    
+    }
+
+    @Override
+    public boolean irrelevant(int i) {
+        boolean irrelevant = false;
+        if (operand.isSelection()){
+            AbstractExpr out = ((Selection) operand).returnIrrelevantFromSelection(i);
+            if (out != null) {
+                operand = out;
+            }
+            if (operand.isSelection()) irrelevant = ((Selection) operand).isKnown(i);
+        }
+        else if (operand.irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) operand).getName())) {
+            operand = irrelevantValuesForIf.get(i).get(((Identifier) operand).getName());
+        }
+
+        return irrelevant || (!operand.isSelection() && 
+        (operand.irrelevant(i) && irrelevantValuesForIf.get(i).containsKey(((Identifier) operand).getName())));
+    
+    }
+
+    @Override
+    public boolean isReadExpr() {
+        return operand.isReadExpr();
+    }
+
     protected Tree removeUnusedVar() {
         this.operand = (AbstractExpr)this.operand.removeUnusedVar();
         return this;

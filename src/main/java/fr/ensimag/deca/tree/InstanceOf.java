@@ -24,7 +24,6 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.SEQ;
 import fr.ensimag.ima.pseudocode.instructions.SNE;
 
-import static org.mockito.ArgumentMatchers.nullable;
 
 import java.io.PrintStream;
 import java.util.List;

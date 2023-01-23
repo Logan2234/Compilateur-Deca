@@ -87,6 +87,10 @@ public class BooleanLiteral extends AbstractExpr {
         // do nothing
     }
 
+    protected Boolean isLiteral() {
+        return false;
+    }
+
     @Override
     public CollapseResult<CollapseValue> collapseExpr() {
         // can't collapse, but is a boolean value to collapse !
@@ -94,7 +98,7 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+    protected AbstractExpr substitute(Map<ParamDefinition, AbstractExpr> substitutionTable) {
         AbstractExpr res = new BooleanLiteral(this.value);
         res.setType(this.getType());
         res.setLocation(this.getLocation());
@@ -105,4 +109,9 @@ public class BooleanLiteral extends AbstractExpr {
     protected boolean containsField() {
         return false;
     }
+
+    public Boolean collapseBool() {
+        return value;
+    }
+
 }

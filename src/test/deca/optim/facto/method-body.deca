@@ -1,0 +1,15 @@
+// Description:
+//    Factorisation et décomposotion en shift dans une méthode
+//
+// Resultats:
+//
+//
+// Historique
+//    cree le 22/01/2023
+
+class A{
+    void method(){
+        int a;
+        int b = 2*a + a*13 - (5*a) / (9*a);
+    }
+}

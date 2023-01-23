@@ -4,8 +4,13 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -35,6 +40,7 @@ public abstract class Tree {
     public void setLocation(int line, int column, String filename) {
         this.location = new Location(line, column, filename);
     }
+
     private Location location;
 
     /**
@@ -87,7 +93,7 @@ public abstract class Tree {
      * @param inlist
      * @param nodeName
      * @return The prefix to use for the next recursive calls to
-     * {@link #prettyPrint()}.
+     *         {@link #prettyPrint()}.
      */
     String printNodeLine(PrintStream s, String prefix, boolean last,
             boolean inlist, String nodeName) {
@@ -169,10 +175,10 @@ public abstract class Tree {
      * Pretty-print tree (see {@link #prettyPrint()}). This is an internal
      * function that should usually not be called directly.
      *
-     * @param s Stream to send the output to
+     * @param s      Stream to send the output to
      * @param prefix Prefix (ASCII-art showing hierarchy) to print for this
-     * node.
-     * @param last Whether the node being displayed is the last child of a tree.
+     *               node.
+     * @param last   Whether the node being displayed is the last child of a tree.
      * @param inlist Whether the node is being displayed as part of a list.
      */
     protected final void prettyPrint(PrintStream s, String prefix,
@@ -201,7 +207,8 @@ public abstract class Tree {
     }
 
     /**
-     * Function used internally by {@link #iter(TreeFunction)}. Must call iter() on each
+     * Function used internally by {@link #iter(TreeFunction)}. Must call iter() on
+     * each
      * child of the tree.
      *
      * @param f
@@ -227,8 +234,9 @@ public abstract class Tree {
      * Useful for debugging/defensive programming.
      *
      * @return true. Raises an exception in case of error. The return value is
-     * meant to allow assert(tree.checkAllLocations()), to enable the defensive
-     * check only if assertions are enabled.
+     *         meant to allow assert(tree.checkAllLocations()), to enable the
+     *         defensive
+     *         check only if assertions are enabled.
      */
     public boolean checkAllDecorations() {
         iter(new TreeFunction() {
@@ -262,8 +270,9 @@ public abstract class Tree {
      * Useful for debugging/defensive programming.
      *
      * @return true. Raises an exception in case of error. The return value is
-     * meant to allow assert(tree.checkAllLocations()), to enable the defensive
-     * check only if assertions are enabled.
+     *         meant to allow assert(tree.checkAllLocations()), to enable the
+     *         defensive
+     *         check only if assertions are enabled.
      */
     public boolean checkAllLocations() {
         iter(new TreeFunction() {
@@ -291,6 +300,122 @@ public abstract class Tree {
         }
     }
 
+    /**
+     * Tells if we are actually defining classes
+     */
+    public static boolean defClass = true;
+
+    /**
+     * Tells if we are actually defining methods
+     */
+    public static boolean defMethod = false;
+
+    /**
+     * Tells which class we are actually defining
+     */
+    public static Symbol actualClass;
+
+
+    /**
+     * Tells if we are in a while loop
+     */
+    public static boolean inWhile = false;
+
+    /**
+     * Dictionary of the current values of the variables in the Main program
+     */
+    public static HashMap<Symbol, AbstractExpr> currentValues = new HashMap<Symbol, AbstractExpr>();
+
+    /**
+     * Dictionary of the values defined by the class definition, before entering the Main program
+     */
+    public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> varModels = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
+
+    /*
+     * Dictionary of the values of a class, after have entered the Main program
+     */
+    public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> declaredClasses = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
+
+    /**
+     * Parameters of the method we are currently defining
+     */
+    public static Set<Symbol> paramMethod = new HashSet<Symbol>();
+
+    /**
+     * Dictionary of the values of a class in the method we are currently defining
+     */
+    public static HashMap<Symbol, HashMap<Symbol, AbstractExpr>> declaredClassesInMethod = new HashMap<Symbol, HashMap<Symbol, AbstractExpr>>();
+
+
+    /**
+     * Check if the class is a read expression.
+     * @return if the class is a read expression.
+     */
+    public boolean isReadExpr() {
+        return false;
+    }
+
+    public boolean isSplitable(DecacCompiler compiler){
+        return false;
+    }
+
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        return null;
+    }
+
+    public AbstractInst factorise(DecacCompiler compiler){
+        try {
+            return (AbstractInst)this;
+        } catch (ClassCastException e){
+            return null;
+        }
+    }
+
+    /**
+     * Check if the class is a "New" expression.
+     * @return if the class is a "New" expression.
+     */
+    public boolean isNew() {
+        return false;
+    }
+    
+    /**
+     * Check if the tree have irrelevant assignments.
+     * Example : int a = 1; int b = a; b = 2; a = 3; --> int a = 1, int b=1, ... 
+     * This calls the irrelevant triggers on each nodes.
+     * @return if this node could find more irrelevant assignments.
+     */
+    public abstract boolean irrelevant();
+
+    /**
+     * Dictionary of the virtual values of the variables, in each if/else statement.
+     */
+    public static HashMap<Integer, HashMap<Symbol, AbstractExpr>> irrelevantValuesForIf = new HashMap<Integer, HashMap<Symbol, AbstractExpr>>();
+
+    /**
+     * Number of the if/else statement.
+     */
+    public static Integer ifNumber = 0;
+
+    /**
+     * Tells if we are in an if/else statement.
+     */
+    public static boolean inIf = false;
+    
+    /**
+     * Tells if we are creating a field
+     */
+    public static boolean inField = false;
+
+    /**
+     * Do the same as irrelevant(), but in if/else statements with a subDefinition of values.
+     * @param i the number of the if/else statement.
+     * @return if this node could find more irrelevant assignments.
+     */
+    public boolean irrelevant(int i){
+        return false;
+    }
+
     protected Boolean isLiteral() {
         return false;
     }
@@ -312,7 +437,15 @@ public abstract class Tree {
     protected abstract Tree removeUnusedVar();
 
 
-    
+
+    /* * Collapse the float values known at compile time.
+     * if the expression cannot collapse, null is returned.
+     * 
+     * @return the value of the compile-time known float.
+     */
+    public Float collapseFloat() {
+        throw new UnsupportedOperationException("Not yet implemented !");
+    }
 
     public boolean isReturn() {
         return false;

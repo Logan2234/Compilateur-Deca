@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 import java.io.PrintStream;
@@ -33,6 +34,10 @@ public class DeclParam extends AbstractDeclParam {
         this.type = type;
         this.paramName = paramName;
     }
+
+    public Symbol getSymbolFromParamName(){
+        return this.paramName.getName();
+	}
 
     public AbstractIdentifier getName() {
         return this.paramName;
@@ -98,5 +103,10 @@ public class DeclParam extends AbstractDeclParam {
     @Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         return this;
+    }
+
+    @Override
+    public boolean irrelevant(){
+        return false;
     }
 }

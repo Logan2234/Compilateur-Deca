@@ -1,0 +1,39 @@
+// Description:
+//    On teste si la condition du while change bien de valeur si on l'a défini avant
+//
+// Resultats:
+//    ok et la décompilation doit être 
+//
+//class A extends Object {
+//	public boolean a = true;
+//	boolean get(){
+//		return true;
+//
+//	
+//}
+//
+//}
+//{
+//	A a = new A();
+//	while (false) {
+//	}
+//}
+//
+//
+// Historique:
+//    cree le 21/01/2023
+
+class A {
+    boolean a = false;
+    boolean get(){
+        return a;
+    }
+}
+
+{
+    A a = new A();
+    while (a.a){
+        
+    }
+
+}

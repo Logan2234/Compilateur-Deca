@@ -45,7 +45,7 @@ public class Cast extends AbstractExpr {
 
         if (typeExp.isVoid() || (!typeExp.assignCompatible(typeT) && !typeT.assignCompatible(typeExp)))
             throw new ContextualError("Unable to cast type \"" + typeExp.getName().getName() + "\" to \""
-                    + typeT.getName().getName() + "\"", getLocation());
+                    + typeT.getName().getName() + "\" (rule 3.39)", getLocation());
         
         if (typeT.isInt() && typeExp.isFloat()){
             ConvInt convint = new ConvInt(expression);
@@ -134,5 +134,23 @@ public class Cast extends AbstractExpr {
     public CollapseResult<CollapseValue> collapseExpr() {
         // this is for classes, so don't collapse at all
         return new CollapseResult<CollapseValue>(new CollapseValue(), false);
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        if (expression.isSplitable(compiler))
+            expression.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return expression.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        expression = (AbstractExpr)expression.splitCalculus(compiler);
+        return this;
     }
 }

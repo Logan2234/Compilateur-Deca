@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
 
@@ -19,4 +20,5 @@ public abstract class AbstractLValue extends AbstractExpr {
         // return nothing ? expect if we find a way to compute methods at compile time...
         return new CollapseResult<CollapseValue>(new CollapseValue(), false);
     }
+    public abstract Symbol getName();
 }

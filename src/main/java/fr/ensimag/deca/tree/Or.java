@@ -36,15 +36,6 @@ public class Or extends AbstractOpBool {
         compiler.addInstruction(new ADD(dval, register));
         compiler.addInstruction(new SNE(register));
     }
-
-    @Override
-    public void lazyEvaluation(DecacCompiler compiler, GPRegister resultRegister, Label toLabel) {
-        // and : if the result of register is false, branch to label
-        compiler.addInstruction(new CMP(1, resultRegister));
-        // if result register contains zero, return false in it 
-        compiler.addInstruction(new BEQ(toLabel));
-    }
-
     
     public CollapseResult<CollapseValue> collapseBinExpr() {
         CollapseResult<CollapseValue> leftResult = getLeftOperand().collapseExpr();
@@ -64,4 +55,12 @@ public class Or extends AbstractOpBool {
         res.setLocation(this.getLocation());
         return res;
     }
+
+    @Override
+    public void lazyEvaluation(DecacCompiler compiler, GPRegister resultRegister, Label toLabel) {
+        // and : if the result of register is false, branch to label
+        compiler.addInstruction(new CMP(1, resultRegister));
+        // if result register contains zero, return false in it 
+        compiler.addInstruction(new BEQ(toLabel));
+    } 
 }

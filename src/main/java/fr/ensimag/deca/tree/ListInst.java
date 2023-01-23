@@ -5,13 +5,11 @@ import fr.ensimag.deca.optim.CollapseResult;
 
 import java.util.List;
 import java.util.ListIterator;
-
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.Label;
 
 /**
  * 
@@ -62,32 +60,28 @@ public class ListInst extends TreeList<AbstractInst> {
     @Override
     protected Tree removeUnusedVar() {
         ListIterator<AbstractInst> iter = this.iterator();
-        while(iter.hasNext()) {
-            AbstractInst tree = (AbstractInst)iter.next().removeUnusedVar();
+        while (iter.hasNext()) {
+            AbstractInst tree = (AbstractInst) iter.next().removeUnusedVar();
             // we have to remove first because it may be a new tree
             iter.remove();
             if (tree == null) {
                 // keep it removed
-            }
-            else if (tree instanceof AbstractExpr) {
-                AbstractExpr expr = (AbstractExpr)tree;
+            } else if (tree instanceof AbstractExpr) {
+                AbstractExpr expr = (AbstractExpr) tree;
                 List<AbstractExpr> unremovableExpressions = expr.getUnremovableExpr();
                 if (unremovableExpressions.isEmpty()) {
                     // don't add the expression
-                }
-                else if (expr.getType().isBoolean()) {
+                } else if (expr.getType().isBoolean()) {
                     // replace the expression as it is
                     iter.add(tree);
                     // we cannot break the expression because for instance, the left operand
                     // of an AND shouldn't be evaluated if the right operand is false
-                }
-                else {
+                } else {
                     for (AbstractExpr expression : unremovableExpressions) {
                         iter.add(expression); // add after the current instruction
                     }
                 }
-            }
-            else {
+            } else {
                 iter.add(tree);
             }
         }
@@ -103,11 +97,61 @@ public class ListInst extends TreeList<AbstractInst> {
             // remove this inst, replace it with it's collapsed form
             removeAt(i);
             int offset = 0;
-            for(AbstractInst newInst : result.getResult().getList()) {
+            for (AbstractInst newInst : result.getResult().getList()) {
                 insert(newInst, i + offset);
-                offset ++;
+                offset++;
             }
         }
         return new CollapseResult<ListInst>(this, somethingCollapsed);
+    }
+
+    @Override
+    public boolean irrelevant() {
+        boolean result = false;
+        AbstractInst expr;
+
+        for (int i = 0; i < getList().size(); i++) {
+            expr = getList().get(i);
+            if (expr.irrelevant()) {
+                result |= true;
+                set(i, expr);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean irrelevant(int j) {
+        boolean result = false;
+        AbstractInst expr;
+
+        for (int i = 0; i < getList().size(); i++) {
+            expr = getList().get(i);
+            if (expr.irrelevant(j)) {
+                result |= true;
+                set(i, expr);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        for (int i = 0; i < getList().size(); i++) {
+            AbstractInst inst = getList().get(i).factorise(compiler);
+            if (inst != null)
+                set(i, inst);
+        }
+        return null;
+    }
+
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (int i = 0; i < getList().size(); i++) {
+            AbstractInst inst = getList().get(i).splitCalculus(compiler);
+            if (inst != null)
+                set(i, inst);
+        }
+        return null;
     }
 }

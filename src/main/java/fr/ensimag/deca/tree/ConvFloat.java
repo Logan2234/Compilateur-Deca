@@ -58,5 +58,4 @@ public class ConvFloat extends AbstractUnaryExpr {
         res.setLocation(this.getLocation());
         return res;
     }
-
 }

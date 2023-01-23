@@ -68,4 +68,9 @@ public class EmptyMain extends AbstractMain {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         return this;
     }
+
+    @Override
+    public boolean irrelevant() {
+        return false;
+    }
 }

@@ -404,7 +404,7 @@ public class DecacCompiler {
         if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
             if (compilerOptions.getOptimize()) {
                 prog.verifyProgram(this);
-                TreeOptimizer.Optimize(prog);
+                TreeOptimizer.Optimize(prog, this);
             }
             LOG.info("Writing deca file ...");
             prog.decompile(out);
@@ -417,7 +417,7 @@ public class DecacCompiler {
             if (compilerOptions.getCompileMode() == CompileMode.Compile) {
                 if (compilerOptions.getOptimize()) {
                     LOG.info("Optimizing the tree...");
-                    TreeOptimizer.Optimize(prog);
+                    TreeOptimizer.Optimize(prog, this);
                     LOG.info("Tree optimized...");
                 }
                 prog.codeGenProgram(this);

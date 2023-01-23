@@ -27,6 +27,10 @@ public class StringLiteral extends AbstractStringLiteral {
     public String getValue() {
         return value;
     }
+    
+    protected Boolean isLiteral() {
+        return false;
+    }
 
     private String value;
 
@@ -88,5 +92,4 @@ public class StringLiteral extends AbstractStringLiteral {
     protected boolean containsField() {
         return false;
     }
-
 }

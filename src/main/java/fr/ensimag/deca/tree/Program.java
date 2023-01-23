@@ -1,22 +1,5 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
-import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
-import fr.ensimag.deca.context.*;
-import fr.ensimag.deca.optim.CollapseResult;
-import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.deca.tools.SymbolTable.Symbol;
-import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.LabelOperand;
-import fr.ensimag.ima.pseudocode.NullOperand;
-import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.*;
-import net.bytebuddy.asm.AsmVisitorWrapper;
-
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +9,32 @@ import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
+
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
+import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.LabelOperand;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.HALT;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.ima.pseudocode.instructions.SEQ;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
 /**
  * Deca complete program (class definition plus main block)
@@ -375,4 +384,24 @@ public class Program extends AbstractProgram {
             }
         }
     }
+
+    @Override
+    public boolean irrelevant() {
+        return classes.irrelevant() || main.irrelevant();
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        main.factorise(compiler);
+        classes.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        main.splitCalculus(compiler);
+        classes.splitCalculus(compiler);
+        return null;
+    }
+
 }
