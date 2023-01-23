@@ -120,6 +120,7 @@ public class Return extends AbstractInst {
 
     @Override
     public boolean irrelevant(){
+        if (inWhile) return false;
         if (expression.irrelevant() || expression.isSelection()){
             if (expression.isSelection()){
                 AbstractExpr out = ((Selection) expression).returnIrrelevantFromSelection();

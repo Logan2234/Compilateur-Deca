@@ -176,6 +176,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
     @Override
     public boolean irrelevant() {
+        if (inWhile) return false;
         if (inField){
             HashMap<Symbol, AbstractExpr> actualDico = varModels.get(actualClass);
             boolean irrelevantRight = false;

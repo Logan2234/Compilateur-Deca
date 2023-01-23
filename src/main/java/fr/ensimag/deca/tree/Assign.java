@@ -107,12 +107,14 @@ public class Assign extends AbstractBinaryExpr {
     @Override
     public boolean irrelevant() {
         if (inWhile) {
+            System.out.println("in while");
             if (getLeftOperand().isSelection()) {
                 ((Selection) getLeftOperand()).erraseIrrelevant();
             } else {
                 if (currentValues.containsKey(getLeftOperand().getName()))
                     currentValues.remove(getLeftOperand().getName());
             }
+            return false;
 
         }
         if (getRightOperand().isSelection()) {
