@@ -1,6 +1,7 @@
 package fr.ensimag.deca;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +9,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
 
@@ -57,14 +60,31 @@ public class DecacMain {
         else if (options.getParallel()) {
             int nbProcesseurs = java.lang.Runtime.getRuntime().availableProcessors();
             ExecutorService filsExec = Executors.newFixedThreadPool(nbProcesseurs);
+            List<Future<Boolean>> compilerThreads = new ArrayList<Future<Boolean>>();
             for (int i = 0; i < fichiers.size(); i++) {
                 DecacCompiler compiler = new DecacCompiler(options, fichiers.get(i));
-                Future<Boolean> future = filsExec.submit(() -> {
+                compilerThreads.add(filsExec.submit(() -> {
                     return compiler.compile();
-                }); // TODO: Vérifier que le parallele se fait bien
+                }));
+            }
+            for(int i = compilerThreads.size() - 1; i >= 0; i--) {
+                Future<Boolean> future = compilerThreads.get(i);
                 try {
-                    future.get();
-                } catch (InterruptedException | ExecutionException e) {
+                    if(future.get(1, TimeUnit.SECONDS)) {
+                        // this thread completed !
+                        compilerThreads.remove(i);
+                    }
+                    else {
+                        // error ?
+                        // TODO : print something ?
+                    }
+                }
+                catch(TimeoutException t) {
+                    // thread not complete
+                    // keep going !
+                    continue;
+                }
+                catch(InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
             }
