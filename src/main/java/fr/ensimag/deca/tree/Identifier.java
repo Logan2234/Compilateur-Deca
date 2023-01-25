@@ -22,6 +22,7 @@ import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
@@ -350,6 +351,36 @@ public class Identifier extends AbstractIdentifier {
         }
 
     }
+
+    @Override
+    public void codeGenAssignLVal(DecacCompiler compiler, GPRegister register) {
+        // if it is a field, we need to first load the value on from the heap !
+        if(getDefinition().isField()) {
+            GPRegister classPointerRegister = compiler.allocateRegister();
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
+            if (register == null) {
+                // get value to assign from the stack
+                compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
+                compiler.freeRegister(classPointerRegister);
+                compiler.addInstruction(new STORE(Register.R1, new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister)));
+            } else {
+                // get value to assign from registe
+                compiler.addInstruction(new STORE(register, new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister)));
+                compiler.freeRegister(classPointerRegister);
+            }
+        }
+        else {
+            if (register == null) {
+                // get value to assign from the stack
+                compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
+                compiler.addInstruction(new STORE(Register.R1, definition.getDAddr()));
+            } else {
+                // get value to assign from registe
+                compiler.addInstruction(new STORE(register, definition.getDAddr()));
+            }
+        }
+    }
+
 
 
     @Override

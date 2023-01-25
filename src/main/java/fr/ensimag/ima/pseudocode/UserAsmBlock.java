@@ -12,6 +12,7 @@ public class UserAsmBlock extends Line {
         for(int i = 0; i < tempCode.length; i++) {
             tempCode[i].replace("\t", "");
             tempCode[i].replaceFirst("^\\s*", "");
+            tempCode[i].replace("\\\"", "\"");
         }
         this.code = tempCode;
     }

@@ -14,12 +14,12 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
 import java.util.HashMap;
-import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
@@ -222,11 +222,13 @@ public class DeclClass extends AbstractDeclClass {
             compiler.addInstruction(new POP(Register.R1));
         }
         // let's load the daddr on R1 !
-        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+        GPRegister fieldGenRegister = compiler.allocateRegister(); 
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), fieldGenRegister));
         // for each field, compute it and store it at its offset
         for(int i = 0; i < fields.size(); i++) {
-            fields.getList().get(i).codeGenField(compiler, new RegisterOffset(i + 1 + superIdentifier.getClassDefinition().getNumberOfFields(), Register.R1));
+            fields.getList().get(i).codeGenField(compiler, new RegisterOffset(i + 1 + superIdentifier.getClassDefinition().getNumberOfFields(), fieldGenRegister));
         }
+        compiler.freeRegister(fieldGenRegister);
         // save and restore all register used by context
         // save and restore context used registers 
         for(GPRegister usedRegister : compiler.getAllContextUsedRegister()) {
@@ -246,7 +248,22 @@ public class DeclClass extends AbstractDeclClass {
         // for each method, generate the code for it.
         for(AbstractDeclMethod method : methods.getList()) {
             compiler.newCodeContext();
+            // generate method code
             method.codeGenMethod(compiler, name.getName().getName());
+            // save and restore all register used by context
+            // save and restore context used registers 
+            for(GPRegister usedRegister : compiler.getAllContextUsedRegister()) {
+                compiler.incrementContextUsedStack();
+                compiler.addInstruction(new POP(usedRegister));
+                compiler.addInstructionFirst(new PUSH(usedRegister));
+            }
+            // add max stack use at the beginning
+            if(compiler.getCompilerOptions().getRunTestChecks()) {
+                AbstractRuntimeErr error = new StackOverflowErr();
+                compiler.useRuntimeError(error);
+                compiler.addInstructionFirst(new BOV(error.getErrorLabel()));
+                compiler.addInstructionFirst(new TSTO(compiler.getMaxStackUse()));
+            }
             compiler.endCodeContext();
         }
     }

@@ -84,10 +84,9 @@ public class DecacCompiler {
      *      fr.ensimag.ima.pseudocode.IMAProgram#add(fr.ensimag.ima.pseudocode.AbstractLine)
      */
     public void add(AbstractLine line) {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             contextBlocks.get(contextBlocks.size() - 1).getProgram().add(line);
         }
     }
@@ -96,10 +95,9 @@ public class DecacCompiler {
      * @see fr.ensimag.ima.pseudocode.IMAProgram#addComment(java.lang.String)
      */
     public void addComment(String comment) {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             contextBlocks.get(contextBlocks.size() - 1).getProgram().addComment(comment);
         }
     }
@@ -109,10 +107,9 @@ public class DecacCompiler {
      *      fr.ensimag.ima.pseudocode.IMAProgram#addLabel(fr.ensimag.ima.pseudocode.Label)
      */
     public void addLabel(Label label) {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             contextBlocks.get(contextBlocks.size() - 1).getProgram().addLabel(label);
         }
     }
@@ -122,11 +119,11 @@ public class DecacCompiler {
      *      fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction)
      */
     public void addInstruction(Instruction instruction) {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
-            contextBlocks.get(contextBlocks.size() - 1).getProgram().addInstruction(instruction);;
+        } else {
+            contextBlocks.get(contextBlocks.size() - 1).getProgram().addInstruction(instruction);
+            ;
         }
     }
 
@@ -136,11 +133,11 @@ public class DecacCompiler {
      *      java.lang.String)
      */
     public void addInstruction(Instruction instruction, String comment) {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
-            contextBlocks.get(contextBlocks.size() - 1).getProgram().addInstruction(instruction, comment);;
+        } else {
+            contextBlocks.get(contextBlocks.size() - 1).getProgram().addInstruction(instruction, comment);
+            ;
         }
     }
 
@@ -149,11 +146,11 @@ public class DecacCompiler {
      *      fr.ensimag.ima.pseudocode.IMAProgram#addFirst(fr.ensimag.ima.pseudocode.Line)
      */
     public void addInstructionFirst(Instruction instruction) {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
-            contextBlocks.get(contextBlocks.size() - 1).getProgram().addFirst(new Line(instruction));;
+        } else {
+            contextBlocks.get(contextBlocks.size() - 1).getProgram().addFirst(new Line(instruction));
+            ;
         }
     }
 
@@ -176,16 +173,16 @@ public class DecacCompiler {
      * The contextes of the compiler.
      */
     private List<CompilerContextBlock> contextBlocks;
+
     /**
      * Get a available register.
      * 
      * @return the register we can use. Can be null if none are.
      */
     public GPRegister allocateRegister() {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             return contextBlocks.get(contextBlocks.size() - 1).allocateRegister(this);
         }
     }
@@ -196,19 +193,17 @@ public class DecacCompiler {
      * @param register
      */
     public void freeRegister(GPRegister register) {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             contextBlocks.get(contextBlocks.size() - 1).freeRegister(this, register);
         }
     }
 
     public GPRegister[] getAllContextUsedRegister() {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             return contextBlocks.get(contextBlocks.size() - 1).getAllContextUsedRegister();
         }
     }
@@ -220,7 +215,7 @@ public class DecacCompiler {
         contextBlocks.add(new CompilerContextBlock(compilerOptions.getUsedRegisterNumber(), false));
     }
 
-        /**
+    /**
      * Creates a new code context block, with the global base at true
      */
     public void newGlobalCodeContext() {
@@ -233,10 +228,9 @@ public class DecacCompiler {
      * @param increment how much we want to increment the stack
      */
     public void increaseContextUsedStack(int increment) {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             contextBlocks.get(contextBlocks.size() - 1).increaseUsedStack(increment);
         }
     }
@@ -249,13 +243,12 @@ public class DecacCompiler {
     }
 
     public int getMaxStackUse() {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             return contextBlocks.get(contextBlocks.size() - 1).getMaxStackUse();
         }
-        
+
     }
 
     /**
@@ -264,39 +257,37 @@ public class DecacCompiler {
      * @return the value of the max stack size of that context.
      */
     public void endCodeContext() {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             // quick check everything is nice and good
-            if(!contextBlocks.get(contextBlocks.size() - 1).checkAllRegisterAreFree()) {
-                throw new UnsupportedOperationException("All registers have not been freed when ending a code context.");
+            if (!contextBlocks.get(contextBlocks.size() - 1).checkAllRegisterAreFree()) {
+                throw new UnsupportedOperationException(
+                        "All registers have not been freed when ending a code context.");
             }
             // append the program !
-            if(contextBlocks.size() == 1) {
+            if (contextBlocks.size() == 1) {
                 program.append(contextBlocks.get(contextBlocks.size() - 1).getProgram());
-            }
-            else {
-                contextBlocks.get(contextBlocks.size() - 2).getProgram().append(contextBlocks.get(contextBlocks.size() - 1).getProgram());
+            } else {
+                contextBlocks.get(contextBlocks.size() - 2).getProgram()
+                        .append(contextBlocks.get(contextBlocks.size() - 1).getProgram());
             }
             contextBlocks.remove(contextBlocks.size() - 1);
         }
     }
 
     public RegisterOffset getNextStackSpace() {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             return contextBlocks.get(contextBlocks.size() - 1).getNextStackSpace();
         }
     }
 
     public RegisterOffset readNextStackSpace() {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             return contextBlocks.get(contextBlocks.size() - 1).readNextStackSpace();
         }
     }
@@ -304,13 +295,13 @@ public class DecacCompiler {
     /**
      * Increase the taken space on the lb local base stack.
      * Use primarly when generating method tables.
+     * 
      * @param amount
      */
     public void occupyLBSPace(int amount) {
-        if(contextBlocks.size() == 0) {
+        if (contextBlocks.size() == 0) {
             throw new UnsupportedOperationException("No context for code generation.");
-        }
-        else {
+        } else {
             contextBlocks.get(contextBlocks.size() - 1).occupyLBSPace(amount);
         }
     }
@@ -424,25 +415,19 @@ public class DecacCompiler {
                 LOG.debug("Generated assembly code:" + nl + program.display());
                 LOG.info("Output file assembly file is: " + destName);
             }
-            if(compilerOptions.getOptimize()) {
+            if (compilerOptions.getOptimize()) {
                 AssemblyOptimizer.Optimize(program);
             }
 
-            if (compilerOptions.getCompileMode() == CompileMode.ParseOnly) {
-                LOG.info("Writing deca file ...");
-                prog.decompile(out);
-                LOG.info("Decompilation of " + sourceName + " successful.");
-            } else {
-                FileOutputStream fstream = null;
-                try {
-                    fstream = new FileOutputStream(destName);
-                } catch (FileNotFoundException e) {
-                    throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
-                }
-                LOG.info("Writing assembler file ...");
-                program.display(new PrintStream(fstream));
-                LOG.info("Compilation of " + sourceName + " successful.");
+            FileOutputStream fstream = null;
+            try {
+                fstream = new FileOutputStream(destName);
+            } catch (FileNotFoundException e) {
+                throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
             }
+            LOG.info("Writing assembler file ...");
+            program.display(new PrintStream(fstream));
+            LOG.info("Compilation of " + sourceName + " successful.");
         }
         return false;
     }

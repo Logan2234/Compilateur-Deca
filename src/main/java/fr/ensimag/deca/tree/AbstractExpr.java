@@ -190,7 +190,10 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void codeGenInst(DecacCompiler compiler) {
         // by default, put the result on the scratch register R1 to avoid pushing
         // nonsense on the stack.
-        codeGenExpr(compiler, Register.R1);
+        // ! can't use R1 : because assign will then use it by default and then PROBLEMS.
+        GPRegister randomRegister = compiler.allocateRegister();
+        codeGenExpr(compiler, randomRegister);
+        compiler.freeRegister(randomRegister);
     }
 
     /**
@@ -301,6 +304,14 @@ public abstract class AbstractExpr extends AbstractInst {
      * @return true if it contains a field
      */
     protected abstract boolean containsField();
+
+    public boolean isField() {
+        return false;
+    }
+
+    public DeclField asField() {
+        return null;
+    }
     
 
     protected void shift(DecacCompiler compiler, AbstractExpr left, AbstractExpr right, ListInst listPlus) {

@@ -1,0 +1,125 @@
+// lib for in out console management in deca
+
+class IO {
+    int readCharAsInt() asm(
+        "RUTF8
+        LOAD R1, R0
+        RTS"
+    );
+
+    LinkedChars readChar() {
+        LinkedChars result = new LinkedChars();
+        result.setChar(readCharAsInt());
+        return result;
+    }
+
+    void printChar(int x) asm(
+        "LOAD #97, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printA
+        LOAD #98, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printB
+        LOAD #99, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printC
+        LOAD #100, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printD
+        LOAD #101, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printE
+        LOAD #102, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printF
+        LOAD #103, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printG
+        LOAD #104, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printH
+        LOAD #105, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printI
+        LOAD #106, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printJ
+        LOAD #107, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printK
+        LOAD #108, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printL
+        LOAD #109, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printM
+        LOAD #110, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printN
+        LOAD #111, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printO
+        LOAD #112, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printP
+        LOAD #113, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printQ
+        LOAD #114, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printR
+        LOAD #115, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printS
+        LOAD #116, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printT
+        LOAD #117, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printU
+        LOAD #118, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printV
+        LOAD #119, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printW
+        LOAD #120, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printX
+        LOAD #121, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printY
+        LOAD #122, R1
+        CMP -3(LB), R1
+        BEQ code.IO.printZ
+        user.printchar.end:
+        "
+    );
+
+    void printA(){print("A");}
+    void printB(){print("B");}
+    void printC(){print("C");}
+    void printD(){print("D");}
+    void printE(){print("E");}
+    void printF(){print("F");}
+    void printG(){print("G");}
+    void printH(){print("H");}
+    void printI(){print("I");}
+    void printJ(){print("J");}
+    void printK(){print("K");}
+    void printL(){print("L");}
+    void printM(){print("M");}
+    void printN(){print("N");}
+    void printO(){print("O");}
+    void printP(){print("P");}
+    void printQ(){print("Q");}
+    void printR(){print("R");}
+    void printS(){print("S");}
+    void printT(){print("T");}
+    void printU(){print("U");}
+    void printV(){print("V");}
+    void printW(){print("W");}
+    void printX(){print("X");}
+    void printY(){print("Y");}
+    void printZ(){print("Z");}
+}

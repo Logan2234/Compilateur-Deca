@@ -73,6 +73,11 @@ public class MethodCall extends AbstractExpr {
                 throw new ContextualError(
                         "The parameter number " + (i + 1) + " does not have the correct type (rule 3.28)",
                         getLocation());
+            if (sig.paramNumber(i).isFloat() && type.isInt()){
+                ConvFloat convfloat = new ConvFloat(params.getList().get(i));
+                convfloat.setType(compiler.environmentType.FLOAT);
+                params.getModifiableList().set(i, convfloat);
+            }
         }
 
         setType(typeReturn);
@@ -117,7 +122,7 @@ public class MethodCall extends AbstractExpr {
         // push the object on the stack
         obj.codeGenExpr(compiler, null);
         // call the bsr with the correct method adress
-        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1), "0(SP) is the object on which the method is called");
         // null reference exception
         if (compiler.getCompilerOptions().getRunTestChecks()) {
             compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
@@ -132,7 +137,7 @@ public class MethodCall extends AbstractExpr {
         compiler.addInstruction(new BSR(new RegisterOffset(meth.getMethodDefinition().getIndex(), Register.R1)));
         // pop everything in R1
         for (int i = params.size(); i >= 0; i--) { // +1 for the object !
-            compiler.addInstruction(new POP(Register.R1));
+            compiler.addInstruction(new POP(Register.R1), "here R1 is garbage register");
         }
         // if the method returned something, it is now in R0 ! put it as a result
         if (resultRegister == null) {

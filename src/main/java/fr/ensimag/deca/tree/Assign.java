@@ -58,34 +58,10 @@ public class Assign extends AbstractBinaryExpr {
     @Override
     public void codeGenExpr(DecacCompiler compiler, GPRegister resulRegister) {
         // put the right value in the left value !
-        // put the result of the right value in a register
-        GPRegister register = compiler.allocateRegister();
-        this.getRightOperand().codeGenExpr(compiler, register);
-        if (getLeftOperand().getDefinition().isField()) {
-            // if we have a field, we are in a method. load object from -2(SP) and then get
-            // the field from offset.
-            GPRegister classPointerRegister = compiler.allocateRegister();
-            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
-            compiler.addInstruction(new STORE(register,
-                    new RegisterOffset(getLeftOperand().getDefinition().getDAddrOffsetOnly(), classPointerRegister)));
-            compiler.freeRegister(classPointerRegister);
-            if (resulRegister == null) {
-                compiler.incrementContextUsedStack();
-                compiler.addInstruction(new PUSH(register));
-            } else {
-                compiler.addInstruction(new LOAD(register, resulRegister));
-            }
-        } else {
-            compiler.addInstruction(new STORE(register, getLeftOperand().getDefinition().getDAddr()));
-            if (resulRegister == null) {
-                compiler.incrementContextUsedStack();
-                compiler.addInstruction(new PUSH(register));
-            } else {
-                compiler.addInstruction(new LOAD(register, resulRegister));
-            }
-        }
-        // free the alocated register
-        compiler.freeRegister(register);
+        // put the result of the right value in the result register, this way it is already were we ask
+        this.getRightOperand().codeGenExpr(compiler, resulRegister);
+        // then call the code gen assign on the left value, if result register is null it will get it from the stack
+        this.getLeftOperand().codeGenAssignLVal(compiler, resulRegister);
     }
 
     @Override

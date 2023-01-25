@@ -24,6 +24,7 @@ import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 import java.util.List;
 import java.util.Map;
@@ -109,6 +110,42 @@ public class Selection extends AbstractLValue {
             }
             // load the value of the field in it, and we're good to go
             compiler.addInstruction(new LOAD(new RegisterOffset(field.getDefinition().getDAddrOffsetOnly(), resultRegister), resultRegister));
+        }
+    }
+
+
+
+    @Override
+    public void codeGenAssignLVal(DecacCompiler compiler, GPRegister register) {
+        if(register == null) {
+            // we need a register
+            GPRegister exprRegister = compiler.allocateRegister();
+            obj.codeGenExpr(compiler, exprRegister);
+            // null reference test
+            if(compiler.getCompilerOptions().getRunTestChecks()) {
+                AbstractRuntimeErr error = new NullReferenceErr();
+                compiler.useRuntimeError(error);
+                compiler.addInstruction(new CMP(new NullOperand(), exprRegister));
+                compiler.addInstruction(new BEQ(error.getErrorLabel()));
+            }
+            // load what we need to store from the stack
+            compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
+            compiler.addInstruction(new STORE(Register.R1, new RegisterOffset(field.getDefinition().getDAddrOffsetOnly(), exprRegister)));
+            compiler.freeRegister(exprRegister);
+        }
+        else {
+            GPRegister exprRegister = compiler.allocateRegister();
+            obj.codeGenExpr(compiler, exprRegister);
+            // null reference test
+            if(compiler.getCompilerOptions().getRunTestChecks()) {
+                AbstractRuntimeErr error = new NullReferenceErr();
+                compiler.useRuntimeError(error);
+                compiler.addInstruction(new CMP(new NullOperand(), exprRegister));
+                compiler.addInstruction(new BEQ(error.getErrorLabel()));
+            }
+            // save in R1 because freeing the register may pop the stack
+            compiler.addInstruction(new STORE(register, new RegisterOffset(field.getDefinition().getDAddrOffsetOnly(), exprRegister)));
+            compiler.freeRegister(exprRegister);
         }
     }
 

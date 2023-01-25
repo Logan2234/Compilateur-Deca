@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.runtimeErrors.AbstractRuntimeErr;
+import fr.ensimag.deca.codegen.runtimeErrors.StackOverflowErr;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -13,6 +15,8 @@ import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 
 /**
  * Method Body Statement
@@ -87,6 +91,10 @@ public class MethodBody extends AbstractMethod {
         // generate code for delcare variables
         vars.codeGenDeclVar(compiler);
         insts.codeGenListInst(compiler);
+        compiler.addInstructionFirst(new ADDSP(vars.size()));
+        AbstractRuntimeErr error = new StackOverflowErr();
+        compiler.useRuntimeError(error);
+        compiler.addInstruction(new BOV(error.getErrorLabel()));
     }
 
     @Override

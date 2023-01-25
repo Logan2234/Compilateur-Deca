@@ -69,8 +69,7 @@ public class IfThenElse extends AbstractInst {
         Label elseLabel = new Label(label + ".else");
         Label endLabel = new Label(label + ".end");
         // the if expression returns a bool. write it down in R1,
-        // then compare 1 to R1 to trigger flags : if EQ, then the expression was false
-        // : branch to else block
+        // then compare 1 to R1 to trigger flags : if LT, then the expression was false : branch to else block
         GPRegister register = compiler.allocateRegister();
         condition.codeGenExpr(compiler, register);
         compiler.addInstruction(new CMP(new ImmediateInteger(1), register));

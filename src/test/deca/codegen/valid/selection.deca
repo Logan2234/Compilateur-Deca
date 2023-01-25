@@ -1,0 +1,21 @@
+// Description:
+//    Test une double selection.
+//
+// Resultats:
+//    3
+//
+// Historique:
+//    cree le 25/01/2023
+
+class A {
+    int x = 0;
+}
+
+{
+    A a = new A();
+    a.x = 3;
+    println(a.x);
+}
+
+
+
