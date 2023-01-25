@@ -9,10 +9,12 @@
 //    cree le 20/01/2023
 
 class A {
-    void x(){}
+    int x(){
+        return 0;
+    }
 }
 
 {
     A a;
-    a.x();
+    println(a.x());
 }

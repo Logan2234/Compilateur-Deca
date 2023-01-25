@@ -24,4 +24,14 @@ public class RegisterOffset extends DAddr {
     public String toString() {
         return offset + "(" + register + ")";
     }
+
+    @Override
+    public boolean isRegOffset() {
+        return true;
+    }
+
+    @Override
+    public RegisterOffset asRegOffset() {
+        return this;
+    }
 }

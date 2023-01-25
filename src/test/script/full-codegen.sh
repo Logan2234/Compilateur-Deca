@@ -22,7 +22,7 @@ PATH=./src/test/script/launchers:"$PATH"
 
 echo -e "${BWHITE} \n============================= Valid tests =============================\n"
 
-files=$(find ./src/test/deca/codegen/valid -maxdepth 1 -name "*.deca")
+files=$(find ./src/test/deca/codegen/valid -maxdepth 1 -name "*.deca" | sort)
 
 for test in $files
 do
@@ -51,7 +51,7 @@ do
     fi
 done
 
-files=$(find ./src/test/deca/codegen/interactive -maxdepth 1 -name "*.deca")
+files=$(find ./src/test/deca/codegen/interactive -maxdepth 1 -name "*.deca" | sort)
 
 for test in $files
 do

@@ -27,13 +27,13 @@ public class AssemblyOptimizer {
         while(keepOptimizing) {
             keepOptimizing = false;
             // replace known values
-            while(OptReplaceImm(program)) { keepOptimizing = true; }
+            // while(OptReplaceImm(program)) { keepOptimizing = true; }
             // write read simplifications
-            while(OptRemoveUselessWrites(program)) { keepOptimizing = true; }
+            // while(OptRemoveUselessWrites(program)) { keepOptimizing = true; }
             // optimize conditions with immediates
             while(OptCond(program)) { keepOptimizing = true; }
             // finally, replace loads by subs
-            while(OptLoadSub(program)) { keepOptimizing = true; }
+            // while(OptLoadSub(program)) { keepOptimizing = true; }
         }
     }
 

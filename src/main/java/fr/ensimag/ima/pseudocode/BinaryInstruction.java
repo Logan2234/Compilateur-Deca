@@ -63,6 +63,16 @@ public class BinaryInstruction extends Instruction {
                 return true;
             }
         }
+        if(operand1.isRegOffset()) {
+            if(operand1.asRegOffset().getRegister() == Register.getR(regNum)) {
+                return true;
+            }
+        }
+        if(operand2.isRegOffset()) {
+            if(operand1.asRegOffset().getRegister() == Register.getR(regNum)) {
+                return true;
+            }
+        }
         return false;
     }
 }

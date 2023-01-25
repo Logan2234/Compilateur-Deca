@@ -279,5 +279,13 @@ public abstract class AbstractExpr extends AbstractInst {
      * @return true if it contains a field
      */
     protected abstract boolean containsField();
+
+    public boolean isField() {
+        return false;
+    }
+
+    public DeclField asField() {
+        return null;
+    }
     
 }

@@ -33,4 +33,12 @@ public abstract class Operand {
     public GPRegister asGpRegister() {
         return null;
     }
+
+    public boolean isRegOffset() {
+        return false;
+    }
+
+    public RegisterOffset asRegOffset() {
+        return null;
+    }
 }

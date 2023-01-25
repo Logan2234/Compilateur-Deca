@@ -16,7 +16,7 @@ PATH=./src/test/script/launchers:"$PATH"
 
 echo -e "${BWHITE} \n============================= Optim tests =============================\n"
 
-files=$(find ./src/test/deca/optim/ -name "*.deca")
+files=$(find ./src/test/deca/optim/ -name "*.deca" | sort)
 
 for test in $files
 do
@@ -37,22 +37,35 @@ do
                 exit 1
             fi
         else
+            CAN_RUN=1
             ima "${test%.deca}"-without-opti.ass > /dev/null
             if [ $? -ne 0 ]
             then
+                $CAN_RUN=0
                 echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca\//}${RED} execution of the optimized file failed"
                 if [[ $1 == "--maven" ]];
                 then
                     exit 1
                 fi
-            else
-                i=$(wc --lines "${test%.deca}"-without-opti.ass | cut -c1-3)
-                j=$(wc --lines "${test%.deca}".ass | cut -c1-3)
+            fi
+            ima "${test%.deca}".ass > /dev/null
+            if [ $? -ne 0 ]
+            then
+                $CAN_RUN=0
+                echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca\//}${RED} execution of the optimized file failed"
+                if [[ $1 == "--maven" ]];
+                then
+                    exit 1
+                fi
+            fi
+            if $CAN_RUN == 1 then
+                i=$(ima -s "${test%.deca}"-without-opti.ass | column -t | awk '{print $8}')
+                j=$(ima -s "${test%.deca}".ass | column -t | awk '{print $8}')
                 if [ $((i)) > $((j)) ]
                 then
-                    echo -e "${GREENBOLD}Test passed: $NOCOLOR${test/.\/src\/test\/deca\//}$GREEN optimized file has less lines than original file"
+                    echo -e "${GREENBOLD}Test passed: $NOCOLOR${test/.\/src\/test\/deca\//}$GREEN $i cycles -> $j"
                 else
-                    echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca\//}${RED} optimized file does not have less lines than original file"
+                    echo -e "${REDBOLD}Test failed: $NOCOLOR${test/.\/src\/test\/deca\//}${RED} $i cycles -> $j cycles"
                     if [[ $1 == "--maven" ]];
                     then
                         exit 1

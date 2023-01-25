@@ -115,4 +115,6 @@ public abstract class AbstractIdentifier extends AbstractLValue {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         return this;
     }
+
+    
 }

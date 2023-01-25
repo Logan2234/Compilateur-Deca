@@ -13,7 +13,6 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
-import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Signature;
@@ -32,7 +31,6 @@ import fr.ensimag.ima.pseudocode.instructions.TSTO;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 
