@@ -70,19 +70,13 @@ public class DecacMain {
             for(int i = compilerThreads.size() - 1; i >= 0; i--) {
                 Future<Boolean> future = compilerThreads.get(i);
                 try {
-                    if(future.get(1, TimeUnit.SECONDS)) {
+                    if(future.get()) {
                         // this thread completed !
-                        compilerThreads.remove(i);
                     }
                     else {
-                        // error ?
-                        // TODO : print something ?
+                        error = true;
                     }
-                }
-                catch(TimeoutException t) {
-                    // thread not complete
-                    // keep going !
-                    continue;
+                    compilerThreads.remove(i);
                 }
                 catch(InterruptedException | ExecutionException e) {
                     e.printStackTrace();
