@@ -31,65 +31,65 @@ launch(){
     clear;
 }
 
-# launch "Test de l'option -b" "decac -b";
+launch "Test de l'option -b" "decac -b";
 
-# launch "Test de l'option -b" "decac -b -v"
+launch "Test de l'option -b" "decac -b -v"
 
-# code src/test/deca/codegen/valid/empty-main.deca
-# launch "Test de l'option -b" "decac -b src/test/deca/codegen/valid/empty-main.deca"
+code src/test/deca/codegen/valid/empty-main.deca
+launch "Test de l'option -b" "decac -b src/test/deca/codegen/valid/empty-main.deca"
 
-# code src/test/deca/codegen/valid/objet.deca
-# launch "Test de l'option -p (parse et decompile)" "decac -p src/test/deca/codegen/valid/objet.deca"
+code src/test/deca/codegen/valid/objet.deca
+launch "Test de l'option -p (parse et decompile)" "decac -p src/test/deca/codegen/valid/objet.deca"
 
-# launch "Test de l'option -p (parse, decompile, stock, compile, execute)" "decac -p src/test/deca/codegen/valid/objet.deca > temp.deca ; decac temp.deca ; ima temp.ass ; rm temp.ass temp.deca"
+launch "Test de l'option -p (parse, decompile, stock, compile, execute)" "decac -p src/test/deca/codegen/valid/objet.deca > temp.deca ; decac temp.deca ; ima temp.ass ; rm temp.ass temp.deca"
 
-# code src/test/deca/codegen/valid/16-reg.deca
-# launch "Test de l'option -r" "decac -r 16 src/test/deca/codegen/valid/16-reg.deca ; cat src/test/deca/codegen/valid/16-reg.ass | grep R15"
+code src/test/deca/codegen/valid/16-reg.deca
+launch "Test de l'option -r" "decac -r 16 src/test/deca/codegen/valid/16-reg.deca ; cat src/test/deca/codegen/valid/16-reg.ass | grep R15"
 
-# launch "Test de l'option -r" "decac -r 8 src/test/deca/codegen/valid/16-reg.deca ; cat src/test/deca/codegen/valid/16-reg.ass"
+launch "Test de l'option -r" "decac -r 8 src/test/deca/codegen/valid/16-reg.deca ; cat src/test/deca/codegen/valid/16-reg.ass"
 
-# launch "Test de l'option -r" "decac -r 4 src/test/deca/codegen/valid/16-reg.deca ; cat src/test/deca/codegen/valid/16-reg.ass"
+launch "Test de l'option -r" "decac -r 4 src/test/deca/codegen/valid/16-reg.deca ; cat src/test/deca/codegen/valid/16-reg.ass"
 
-# launch "Test de l'option -r" "decac -r 2 src/test/deca/codegen/valid/16-reg.deca"
+launch "Test de l'option -r" "decac -r 2 src/test/deca/codegen/valid/16-reg.deca"
 
-# launch "Test de l'option -r" "decac -r 20 src/test/deca/codegen/valid/16-reg.deca"
+launch "Test de l'option -r" "decac -r 20 src/test/deca/codegen/valid/16-reg.deca"
 
-# code src/test/deca/syntax/invalid/lexer/include_tests/include_slash.deca
-# launch "Exemple d'erreur lexicale" "test_lex src/test/deca/syntax/invalid/lexer/include_tests/include_slash.deca"
+code src/test/deca/syntax/invalid/lexer/include_tests/include_slash.deca
+launch "Exemple d'erreur lexicale" "test_lex src/test/deca/syntax/invalid/lexer/include_tests/include_slash.deca"
 
-# code src/test/deca/syntax/invalid/provided/simple_lex.deca
-# launch "Exemple d'erreur syntaxique" "test_synt src/test/deca/syntax/invalid/provided/simple_lex.deca"
+code src/test/deca/syntax/invalid/provided/simple_lex.deca
+launch "Exemple d'erreur syntaxique" "test_synt src/test/deca/syntax/invalid/provided/simple_lex.deca"
 
-# code src/test/deca/syntax/invalid/lexer/include_tests/include_not_found.deca
-# launch "Exemple d'erreur syntaxique" "test_synt src/test/deca/syntax/invalid/lexer/include_tests/include_not_found.deca"
+code src/test/deca/syntax/invalid/lexer/include_tests/include_not_found.deca
+launch "Exemple d'erreur syntaxique" "test_synt src/test/deca/syntax/invalid/lexer/include_tests/include_not_found.deca"
 
-# code src/test/deca/syntax/invalid/synt/int_too_big.deca
-# launch "Exemple d'erreur syntaxique" "test_synt src/test/deca/syntax/invalid/synt/int_too_big.deca"
+code src/test/deca/syntax/invalid/synt/int_too_big.deca
+launch "Exemple d'erreur syntaxique" "test_synt src/test/deca/syntax/invalid/synt/int_too_big.deca"
 
-# code src/test/deca/syntax/invalid/synt/float_too_small.deca
-# launch "Exemple d'erreur syntaxique" "test_synt src/test/deca/syntax/invalid/synt/float_too_small.deca"
+code src/test/deca/syntax/invalid/synt/float_too_small.deca
+launch "Exemple d'erreur syntaxique" "test_synt src/test/deca/syntax/invalid/synt/float_too_small.deca"
 
-# code src/test/deca/context/valid/assign-subtype.deca
-# launch "Test de l'option -v" "decac -v src/test/deca/context/valid/assign-subtype.deca"
+code src/test/deca/context/valid/assign-subtype.deca
+launch "Test de l'option -v" "decac -v src/test/deca/context/valid/assign-subtype.deca"
 
-# code src/test/deca/context/invalid/declare-method-twice.deca
-# launch "Test de l'option -v" "decac -v src/test/deca/context/invalid/declare-method-twice.deca"
+code src/test/deca/context/invalid/declare-method-twice.deca
+launch "Test de l'option -v" "decac -v src/test/deca/context/invalid/declare-method-twice.deca"
 
-# code src/test/deca/context/invalid/unknown-identifier.deca
-# launch "Test de l'option -v" "decac -v src/test/deca/context/invalid/unknown-identifier.deca"
+code src/test/deca/context/invalid/unknown-identifier.deca
+launch "Test de l'option -v" "decac -v src/test/deca/context/invalid/unknown-identifier.deca"
 
-# code src/test/deca/context/invalid/unknown-type.deca
-# launch "Test de l'option -v" "decac -v src/test/deca/context/invalid/unknown-type.deca"
+code src/test/deca/context/invalid/unknown-type.deca
+launch "Test de l'option -v" "decac -v src/test/deca/context/invalid/unknown-type.deca"
 
-# code src/test/deca/codegen/invalid/divide-by-zero.deca
-# launch "Test de l'option -n: sans -n" "decac src/test/deca/codegen/invalid/divide-by-zero.deca ; ima src/test/deca/codegen/invalid/divide-by-zero.ass"
+code src/test/deca/codegen/invalid/divide-by-zero.deca
+launch "Test de l'option -n: sans -n" "decac src/test/deca/codegen/invalid/divide-by-zero.deca ; ima src/test/deca/codegen/invalid/divide-by-zero.ass"
 
-# launch "Test de l'option -n: avec -n" "decac -n -d -d src/test/deca/codegen/invalid/divide-by-zero.deca ; ima src/test/deca/codegen/invalid/divide-by-zero.ass"
+launch "Test de l'option -n: avec -n" "decac -n -d -d src/test/deca/codegen/invalid/divide-by-zero.deca ; ima src/test/deca/codegen/invalid/divide-by-zero.ass"
 
-# code src/test/deca/codegen/invalid/heap-overflow.deca
-# launch "Test de l'option -n: sans -n" "decac src/test/deca/codegen/invalid/heap-overflow.deca ; ima src/test/deca/codegen/invalid/heap-overflow.ass"
+code src/test/deca/codegen/invalid/heap-overflow.deca
+launch "Test de l'option -n: sans -n" "decac src/test/deca/codegen/invalid/heap-overflow.deca ; ima src/test/deca/codegen/invalid/heap-overflow.ass"
 
-# launch "Test de l'option -n: avec -n" "decac -n src/test/deca/codegen/invalid/heap-overflow.deca ; ima src/test/deca/codegen/invalid/heap-overflow.ass"
+launch "Test de l'option -n: avec -n" "decac -n src/test/deca/codegen/invalid/heap-overflow.deca ; ima src/test/deca/codegen/invalid/heap-overflow.ass"
 
 code src/test/deca/codegen/interactive/demo/Game.deca
 launch "Compilation de la démo" "decac src/test/deca/codegen/interactive/demo/Game.deca"
