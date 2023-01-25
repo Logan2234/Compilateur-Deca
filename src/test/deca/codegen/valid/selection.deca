@@ -11,12 +11,11 @@ class A {
     int x = 0;
 }
 
-class B {
+{
     A a = new A();
+    a.x = 3;
+    println(a.x);
 }
 
-{
-    B b = new B();
-    b.a.x = 3;
-    println(b.a.x);
-}
+
+

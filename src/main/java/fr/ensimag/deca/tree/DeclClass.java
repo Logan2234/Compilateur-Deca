@@ -217,11 +217,13 @@ public class DeclClass extends AbstractDeclClass {
             compiler.addInstruction(new POP(Register.R1));
         }
         // let's load the daddr on R1 !
-        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+        GPRegister fieldGenRegister = compiler.allocateRegister(); 
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), fieldGenRegister));
         // for each field, compute it and store it at its offset
         for(int i = 0; i < fields.size(); i++) {
-            fields.getList().get(i).codeGenField(compiler, new RegisterOffset(i + 1 + superIdentifier.getClassDefinition().getNumberOfFields(), Register.R1));
+            fields.getList().get(i).codeGenField(compiler, new RegisterOffset(i + 1 + superIdentifier.getClassDefinition().getNumberOfFields(), fieldGenRegister));
         }
+        compiler.freeRegister(fieldGenRegister);
         // save and restore all register used by context
         // save and restore context used registers 
         for(GPRegister usedRegister : compiler.getAllContextUsedRegister()) {
