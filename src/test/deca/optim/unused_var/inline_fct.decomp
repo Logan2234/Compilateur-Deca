@@ -2,17 +2,40 @@ class A extends Object {
 	int y = 3;
 
 	int cos(int x){
-		return (((2 * x) + 5) - x);
-	}
+		return (((x * 2) + 5) - x);
 
+	}
 
 	int sin(int x){
-		return (x + y);
+		return ((x + y) - (((x * y) / x) % y));
+
 	}
 
+	boolean bool(int x){
+		return ((x == ((x * 1) + 1)) || ((((((x <= 2) && (x >= 3)) && (this.y < 4)) && (x > 4)) && false) && this.equals(new A())));
+
+	}
+
+	boolean bool1(int x){
+		return ((x == ((x * 1) + 1)) || (((x <= 2) && (x >= 3)) && (x > 4)));
+
+	}
 }
 
 {
 	A a = new A();
-	print((((2 * 3) + 5) - 3));
-	print(a.sin(3));}
+	print((((3 * 2) + 5) - 3));
+	print(a.sin(3));
+	if (a.bool(3)){
+		print("error1");
+	} else {
+		if (((3 == ((3 * 1) + 1)) || (((3 <= 2) && (3 >= 3)) && (3 > 4)))){
+			print("error2");
+		} else {
+			if (((4 == ((4 * 1) + 1)) || (((4 <= 2) && (4 >= 3)) && (4 > 4)))){
+				print("error3");
+			} else {
+			}
+		}
+	}
+}

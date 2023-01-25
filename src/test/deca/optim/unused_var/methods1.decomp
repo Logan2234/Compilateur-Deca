@@ -1,25 +1,19 @@
 class A extends Object {
-	int x;
+	int x = 0;
 
 	void used(){
 	}
-
-
-	B createB(){
-		return new B();
-	}
-
 }
 
 class B extends A {
 
 	void used(){
 	}
-
 }
 
 {
 	A a = new B();
 	A aa = new B();
 	a.used();
-	print(aa.x);}
+	print(aa.x);
+}
