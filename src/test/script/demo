@@ -44,7 +44,7 @@ launch "Test de l'option -p (parse et decompile)" "decac -p src/test/deca/codege
 launch "Test de l'option -p (parse, decompile, stock, compile, execute)" "decac -p src/test/deca/codegen/valid/objet.deca > temp.deca ; decac temp.deca ; ima temp.ass ; rm temp.ass temp.deca"
 
 code src/test/deca/codegen/valid/16-reg.deca
-launch "Test de l'option -r" "decac -r 16 src/test/deca/codegen/valid/16-reg.deca ; cat src/test/deca/codegen/valid/16-reg.ass | grep R15"
+launch "Test de l'option -r" "decac -r 16 src/test/deca/codegen/valid/16-reg.deca ; cat src/test/deca/codegen/valid/16-reg.ass"
 
 launch "Test de l'option -r" "decac -r 8 src/test/deca/codegen/valid/16-reg.deca ; cat src/test/deca/codegen/valid/16-reg.ass"
 
@@ -92,7 +92,7 @@ launch "Test de l'option -n: sans -n" "decac src/test/deca/codegen/invalid/heap-
 launch "Test de l'option -n: avec -n" "decac -n src/test/deca/codegen/invalid/heap-overflow.deca ; ima src/test/deca/codegen/invalid/heap-overflow.ass"
 
 code src/test/deca/codegen/interactive/demo/Game.deca
-launch "Compilation de la démo" "decac src/test/deca/codegen/interactive/demo/Game.deca"
+launch "Compilation de la démo" "decac src/test/deca/codegen/interactive/game/word-typer.deca"
 
-launch "Exécution de la démo" "ima src/test/deca/codegen/interactive/demo/Game.ass"
+launch "Exécution de la démo" "ima src/test/deca/codegen/interactive/game/word-typer.ass"
 
