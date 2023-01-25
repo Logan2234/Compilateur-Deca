@@ -16,5 +16,5 @@ class A {
 
 {
     A a = new A();
-    a.recurse(); // TODO virgile: Erreur lancée par ima et pas toi
+    a.recurse();
 }

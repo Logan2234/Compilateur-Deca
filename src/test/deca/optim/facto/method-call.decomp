@@ -1,0 +1,11 @@
+class A extends Object {
+
+	void method(int a){
+	}
+}
+
+{
+	int a = 1;
+	A objet = new A();
+	objet.method(((a * -11) - ((((-a) * 4) + ((-a) * 1)) / ((a * 8) + (a * 1)))));
+}

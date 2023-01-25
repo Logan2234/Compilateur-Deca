@@ -2,8 +2,8 @@ class A extends Object {
 
 	A createChild(){
 		return new A();
-	}
 
+	}
 }
 
 class C extends A {
@@ -12,8 +12,11 @@ class C extends A {
 {
 	A a = new A();
 	if (false){
-		print("Error");} else {
+		print("Error");
+	} else {
 	}
 	if ((new A() instanceof C)){
-		print("Error");} else {
-	}}
+		print("Error");
+	} else {
+	}
+}
