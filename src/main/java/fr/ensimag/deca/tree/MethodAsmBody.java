@@ -65,7 +65,7 @@ public class MethodAsmBody extends AbstractMethod {
     }
     
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         return this;
     }
     
@@ -89,7 +89,7 @@ public class MethodAsmBody extends AbstractMethod {
         return false;
     }
 
-    @Override
+	@Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         return this;
     }

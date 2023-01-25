@@ -24,7 +24,6 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.SEQ;
 import fr.ensimag.ima.pseudocode.instructions.SNE;
 
-import static org.mockito.ArgumentMatchers.nullable;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -136,13 +135,13 @@ public class InstanceOf extends AbstractExpr {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         if (!this.type.getClassDefinition().isUsed()) {
             BooleanLiteral bool = new BooleanLiteral(false);
             bool.setLocation(this.getLocation());
             return bool; 
         }
-        this.expression = (AbstractExpr)this.expression.removeUnusedVar();
+        this.expression = (AbstractExpr)this.expression.removeUnusedVar(prog);
         return this;
     }
 

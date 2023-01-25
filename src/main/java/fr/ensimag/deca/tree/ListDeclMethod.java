@@ -66,10 +66,18 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
 
     public CollapseResult<Null> collapseMethods() {
         boolean somethingCollapsed = false;
-        for(AbstractDeclMethod m : getList()) {
+        for (AbstractDeclMethod m : getList()) {
             somethingCollapsed |= m.collapseDeclMethod().couldCollapse();
         }
         return new CollapseResult<Null>(null, somethingCollapsed);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (AbstractDeclMethod method : getList())
+            if (method.isSplitable(compiler))
+                method.splitCalculus(compiler);
+        return null;
     }
 
 }

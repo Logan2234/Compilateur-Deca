@@ -4,15 +4,15 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.context.MethodDefinition;
-import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,10 +99,32 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     protected void spotUsedVar() {
         this.operand.spotUsedVar();
     }
+    
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        operand = (AbstractExpr)operand.factorise(compiler);
+        return this;
+    }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.operand = (AbstractExpr)this.operand.removeUnusedVar();
+    public boolean isSplitable(DecacCompiler compiler) {
+        return getOperand().isSplitable(compiler);
+    }
+    
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        if (operand.isSplitable(compiler))
+            setOperand((AbstractExpr)operand.splitCalculus(compiler));
+        return this;
+    }
+
+    @Override
+    public boolean isReadExpr() {
+        return operand.isReadExpr();
+    }
+
+    protected Tree removeUnusedVar(Program prog) {
+        this.operand = (AbstractExpr)this.operand.removeUnusedVar(prog);
         return this;
     }
 

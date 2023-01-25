@@ -12,7 +12,10 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +51,7 @@ public class DeclVar extends AbstractDeclVar {
         Type type = this.type.verifyType(compiler);
 
         if (type.isVoid())
-            throw new ContextualError("A variable can't be void (rule 3.17)", getLocation());
+            throw new ContextualError("The variable's type can't be void (rule 3.17)", getLocation());
 
         try {
             ExpDefinition def = new VariableDefinition(type, getLocation());
@@ -103,16 +106,18 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.initialization = (AbstractInitialization)this.initialization.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.initialization = (AbstractInitialization)this.initialization.removeUnusedVar(prog);
         if (this.varName.getDefinition().isUsed()) {
             return this;
         }
         if (this.initialization.getExpression() == null){
+            prog.setVarRemoved();
             return null;
         }
         List<AbstractExpr> listExpr = this.initialization.getExpression().getUnremovableExpr();
         if (listExpr.isEmpty()) {
+            prog.setVarRemoved();
             return null;
         }
         if (this.type.getDefinition().getType().isInt() || this.type.getDefinition().getType().isFloat()) {
@@ -158,5 +163,23 @@ public class DeclVar extends AbstractDeclVar {
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         this.initialization = (AbstractInitialization)this.initialization.doSubstituteInlineMethods(inlineMethods);
         return this;
+    }
+
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        initialization.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return initialization.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        initialization.splitCalculus(compiler);
+        return null;
     }
 }

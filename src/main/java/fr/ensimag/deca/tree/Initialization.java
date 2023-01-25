@@ -95,8 +95,8 @@ public class Initialization extends AbstractInitialization {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.expression = (AbstractExpr)this.expression.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.expression = (AbstractExpr)this.expression.removeUnusedVar(prog);
         return this;
     }
     
@@ -110,5 +110,25 @@ public class Initialization extends AbstractInitialization {
         this.expression = (AbstractExpr)this.expression.doSubstituteInlineMethods(inlineMethods);
         return this;
     }
+
+    @Override
+    public boolean hasInitialization() {
+        return true;
+    }
     
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        expression = (AbstractExpr)expression.factorise(compiler);
+        return null;
+    }
+
+    public boolean isSplitable(DecacCompiler compiler) {
+        return expression.isSplitable(compiler);
+    }
+    
+    public AbstractInst splitCalculus(DecacCompiler compiler){
+        expression = (AbstractExpr)expression.splitCalculus(compiler);
+        return null;
+    }
+
 }

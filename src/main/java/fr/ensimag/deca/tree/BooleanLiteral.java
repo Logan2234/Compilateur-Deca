@@ -94,7 +94,7 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+    protected AbstractExpr substitute(Map<ParamDefinition, AbstractExpr> substitutionTable) {
         AbstractExpr res = new BooleanLiteral(this.value);
         res.setType(this.getType());
         res.setLocation(this.getLocation());
@@ -104,5 +104,10 @@ public class BooleanLiteral extends AbstractExpr {
     @Override
     protected boolean containsField() {
         return false;
+    }
+
+    @Override
+    protected boolean isAtomic() {
+        return true;
     }
 }

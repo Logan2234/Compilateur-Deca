@@ -1,0 +1,19 @@
+// Lib for time management in deca.
+
+class Timer {
+
+    // initialize the timer class
+    void initTimer() {
+        // todo
+    }
+
+    // reset the timer to zero
+    void reset() {
+        // todo
+    }
+
+    // measure the time from last init or reset
+    void time() {
+        // todo
+    }
+}

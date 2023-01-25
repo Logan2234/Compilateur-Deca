@@ -12,7 +12,6 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -21,7 +20,6 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
 
 import org.apache.commons.lang.Validate;
 
@@ -109,15 +107,32 @@ public class While extends AbstractInst {
     }
 
     @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        condition = (AbstractExpr)condition.factorise(compiler);
+        body.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        condition.splitCalculus(compiler);
+        
+        if (body.isSplitable(compiler))
+            body.splitCalculus(compiler);
+
+        return this;
+    }
+
+    @Override
     protected void spotUsedVar() {
         this.condition.spotUsedVar();
         this.body.spotUsedVar();
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.condition = (AbstractExpr) this.condition.removeUnusedVar();
-        this.body = (ListInst) this.body.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.condition = (AbstractExpr) this.condition.removeUnusedVar(prog);
+        this.body = (ListInst) this.body.removeUnusedVar(prog);
         if (!this.body.isEmpty()) {
             return this;
         }
@@ -165,4 +180,5 @@ public class While extends AbstractInst {
         this. body = (ListInst)this.body.doSubstituteInlineMethods(inlineMethods);
         return this;
     }
+
 }

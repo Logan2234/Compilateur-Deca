@@ -6,9 +6,6 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.IMAInternalError;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.instructions.ADDSP;
 
 /**
  * List of declarations (e.g. int x; float y,z).
@@ -27,12 +24,14 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
     }
 
     /**
-     * Code generatio to declare all variables. 
-     * This also keep track of the number of variables, and assign to each of them a DAddr to keep track of where they are.
+     * Code generatio to declare all variables.
+     * This also keep track of the number of variables, and assign to each of them a
+     * DAddr to keep track of where they are.
+     * 
      * @param compiler Where we write our instructions to.
      */
     public void codeGenDeclVar(DecacCompiler compiler) {
-        for(AbstractDeclVar i : getList()) {
+        for (AbstractDeclVar i : getList()) {
             // create the DAddr that references the variable
             i.codeGenDeclVar(compiler, compiler.getNextStackSpace());
         }
@@ -64,6 +63,13 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
             somethingCollapsed |= v.collapseDeclVar().couldCollapse();
         }
         return new CollapseResult<Null>(null, somethingCollapsed);
+        }
+
+        public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (AbstractDeclVar var : getList())
+            if (var.isSplitable(compiler))
+                var.splitCalculus(compiler);
+        return null;
     }
 
 }

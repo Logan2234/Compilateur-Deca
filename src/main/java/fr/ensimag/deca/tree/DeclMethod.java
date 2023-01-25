@@ -17,6 +17,10 @@ import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
+import java.io.PrintStream;
+import java.util.HashMap;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
@@ -28,8 +32,6 @@ import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
-import java.io.PrintStream;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -148,8 +150,7 @@ public class DeclMethod extends AbstractDeclMethod {
     public String getMethodName() {
         return methodName.getName().getName();
     }
-
-    @Override
+    
     public void codeGenMethod(DecacCompiler compiler, String className) {
         // set the labels for the returns
         body.iter(new ReturnCheckFunc(className + "." + methodName.getName().getName()));
@@ -200,11 +201,12 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         if (!this.methodName.getDefinition().isUsed()) {
+            prog.setVarRemoved();
             return null;
         }
-        this.body = (AbstractMethod)this.body.removeUnusedVar();
+        this.body = (AbstractMethod)this.body.removeUnusedVar(prog);
         return this;
     }
 
@@ -215,6 +217,22 @@ public class DeclMethod extends AbstractDeclMethod {
 
     public AbstractMethod getBody() {
         return this.body;
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        body.factorise(compiler);
+        return null;
+    }
+
+    public boolean isSplitable(DecacCompiler compiler) {
+        return body.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        body.splitCalculus(compiler);
+        return null;
     }
 
     @Override

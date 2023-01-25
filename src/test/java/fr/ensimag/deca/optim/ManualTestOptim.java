@@ -34,7 +34,7 @@ public class ManualTestOptim {
         try {
             prog.verifyProgram(compiler);
             assert (prog.checkAllLocations());
-            TreeOptimizer.Optimize(prog);
+            TreeOptimizer.Optimize(prog, compiler);
         } catch (LocationException e) {
             e.display(System.err);
             System.exit(1);

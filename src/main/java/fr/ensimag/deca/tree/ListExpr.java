@@ -1,15 +1,10 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
@@ -59,4 +54,28 @@ public class ListExpr extends TreeList<AbstractExpr> {
         }
         return false;
     }
+
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (int i = 0; i < getList().size(); i++) {
+            if (getList().get(i).isSplitable(compiler))
+                set(i, (AbstractExpr)getList().get(i).splitCalculus(compiler));
+        }
+        return null;
+    }
+
+    /**
+     * Method used to know if all the expressions in the list are "atomic", meaning that it is not expensive for
+     * ima to compute. This way, we know if an inline substitution will introduce more complexity
+     * if a parameter appears multiple times in the method.
+     * @return true if the expression is "atomic"
+     */
+    protected boolean isAtomic() {
+        for (AbstractExpr expr : this.getList()) {
+            if (!expr.isAtomic()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

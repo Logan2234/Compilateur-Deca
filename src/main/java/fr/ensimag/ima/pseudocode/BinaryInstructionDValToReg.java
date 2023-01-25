@@ -1,5 +1,7 @@
 package fr.ensimag.ima.pseudocode;
 
+import fr.ensimag.ima.pseudocode.instructions.MUL;
+
 /**
  * Base class for instructions with 2 operands, the first being a
  * DVal, and the second a Register.
@@ -36,6 +38,14 @@ public class BinaryInstructionDValToReg extends BinaryInstruction {
      */
     public DVal tryComputeSelf() {
         // by default, we can't predict what our result will be !
+        return null;
+    }
+
+    public boolean isMul() {
+        return false;
+    }
+
+    public MUL asMul() {
         return null;
     }
 

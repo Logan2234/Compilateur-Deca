@@ -12,4 +12,33 @@ public class MUL extends BinaryInstructionDValToReg {
     public MUL(DVal op1, GPRegister op2) {
         super(op1, op2);
     }
+
+    @Override
+    public boolean isMul() {
+        return true;
+    }
+
+    @Override
+    public MUL asMul() {
+        return this;
+    }
+
+    public Integer isImmediateMul() {
+        if(getOperand1().isIntImmediate()) {
+            return getOperand1().asIntImmediate().getValue();
+        }
+        else {
+            return null;
+        }
+    }
+
+    private boolean shiftReplacable = false;
+
+    public boolean isShiftReplacable() {
+        return shiftReplacable;
+    }
+
+    public void setShiftReplacable() {
+        shiftReplacable = true;
+    }
 }

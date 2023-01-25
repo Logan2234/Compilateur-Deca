@@ -10,6 +10,11 @@ import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
+import java.io.PrintStream;
+import java.util.HashMap;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.LabelOperand;
@@ -25,8 +30,8 @@ import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.ima.pseudocode.instructions.TSTO;
 
-import java.io.PrintStream;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 
@@ -147,12 +152,12 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         if (!this.name.getDefinition().isUsed()) {
             return null;
         }
-        this.fields = (ListDeclField)this.fields.removeUnusedVar();
-        this.methods = (ListDeclMethod)this.methods.removeUnusedVar();
+        this.fields = (ListDeclField)this.fields.removeUnusedVar(prog);
+        this.methods = (ListDeclMethod)this.methods.removeUnusedVar(prog);
         return this;
     }
 
@@ -249,6 +254,20 @@ public class DeclClass extends AbstractDeclClass {
     }
 
     @Override
+    protected void getSpottedFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        if (this.getName().getClassDefinition().isUsed()) {
+            this.fields.getSpottedFields(usedFields);
+        }
+    }
+
+    @Override
+    protected void spotOverridingFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        if (this.getName().getClassDefinition().isUsed()) {
+            this.fields.spotOverridingFields(usedFields);
+        }
+    }
+
+    @Override
     protected void spotInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         for (AbstractDeclMethod method : this.methods.getList()) {
             method.spotInlineMethods(inlineMethods);
@@ -262,4 +281,21 @@ public class DeclClass extends AbstractDeclClass {
         return this;
     }
 
+    public AbstractInst factorise(DecacCompiler compiler) {
+        fields.factorise(compiler);
+        methods.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler) {
+        return methods.isSplitable(compiler) || fields.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        fields.splitCalculus(compiler);
+        methods.splitCalculus(compiler);
+        return null;
+    }
 }

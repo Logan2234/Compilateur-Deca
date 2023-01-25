@@ -1,0 +1,13 @@
+// Description:
+//    Factorisation et décomposotion du not
+//
+// Resultats:
+//
+//
+// Historique:
+//    cree le 23/01/2023
+
+{
+    int m=1;
+    !(m*15+ 25*m - (20*m) / (64*m) * (32*m) % (1*m) == 0);
+}   

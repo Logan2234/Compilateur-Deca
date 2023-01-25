@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -28,4 +29,7 @@ public abstract class AbstractLValue extends AbstractExpr {
      * @param register
      */
     public abstract void codeGenAssignLVal(DecacCompiler compiler, GPRegister register);
+
+    
+    public abstract Symbol getName();
 }

@@ -78,9 +78,9 @@ public class Main extends AbstractMain {
     }
     
     @Override
-    protected Tree removeUnusedVar() {
-        this.declVariables = (ListDeclVar)this.declVariables.removeUnusedVar();
-        this.insts = (ListInst)this.insts.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.declVariables = (ListDeclVar)this.declVariables.removeUnusedVar(prog);
+        this.insts = (ListInst)this.insts.removeUnusedVar(prog);
         return this;
     }
 
@@ -103,4 +103,18 @@ public class Main extends AbstractMain {
         this.insts = (ListInst)this.insts.doSubstituteInlineMethods(inlineMethods);
         return this;
     }
+    
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        declVariables.factorise(compiler);
+        insts.factorise(compiler);
+        return null;
+    }
+
+	@Override
+	public AbstractInst splitCalculus(DecacCompiler compiler) {
+        declVariables.splitCalculus(compiler);
+        insts.splitCalculus(compiler);
+        return null;
+	}
 }

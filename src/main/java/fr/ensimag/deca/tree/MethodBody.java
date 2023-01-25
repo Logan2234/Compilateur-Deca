@@ -76,9 +76,9 @@ public class MethodBody extends AbstractMethod {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.vars = (ListDeclVar)this.vars.removeUnusedVar();
-        this.insts = (ListInst)this.insts.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.vars = (ListDeclVar)this.vars.removeUnusedVar(prog);
+        this.insts = (ListInst)this.insts.removeUnusedVar(prog);
         return this;
     }
 
@@ -91,8 +91,6 @@ public class MethodBody extends AbstractMethod {
 
     @Override
     public void setReturnsNames(String name) {
-        System.out.print("setting method name : ");
-        System.out.println(name);
         for(AbstractInst inst : insts.getList()) {
             if(inst.isReturn()) {
                 inst.asReturn().setMethodClassName(name);
@@ -123,10 +121,30 @@ public class MethodBody extends AbstractMethod {
         return false;
     }
 
-    @Override
+	@Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
         this.vars = (ListDeclVar)this.vars.doSubstituteInlineMethods(inlineMethods);
         this.insts = (ListInst)this.insts.doSubstituteInlineMethods(inlineMethods);
         return this;
     }
+    
+    public AbstractInst factorise(DecacCompiler compiler) {
+        vars.factorise(compiler);
+        insts.factorise(compiler);
+        return null;
+    }
+
+    @Override
+    public boolean isSplitable(DecacCompiler compiler){
+        return vars.isSplitable(compiler) || insts.isSplitable(compiler);
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        vars.splitCalculus(compiler);
+        insts.splitCalculus(compiler);
+        return null;
+    }
+    
 }
+

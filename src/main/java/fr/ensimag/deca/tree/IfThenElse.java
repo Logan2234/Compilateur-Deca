@@ -9,14 +9,17 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BLT;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
@@ -72,7 +75,8 @@ public class IfThenElse extends AbstractInst {
         compiler.addInstruction(new CMP(new ImmediateInteger(1), register));
         compiler.freeRegister(register);
         // branch to else flag if EQ, then if block
-        compiler.addInstruction(new BLT(elseLabel)); // use bge as an bool is true if 1 or greater (should not be greater, but no so sure of me)
+        compiler.addInstruction(new BLT(elseLabel)); // use bge as an bool is true if 1 or greater (should not be
+                                                     // greater, but no so sure of me)
         thenBranch.codeGenListInst(compiler);
         compiler.addInstruction(new BRA(endLabel));
         // else flag to branch to, and else block
@@ -119,13 +123,30 @@ public class IfThenElse extends AbstractInst {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.condition = (AbstractExpr) this.condition.removeUnusedVar();
-        this.thenBranch = (ListInst) this.thenBranch.removeUnusedVar();
-        this.elseBranch = (ListInst) this.elseBranch.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.condition = (AbstractExpr) this.condition.removeUnusedVar(prog);
+        this.thenBranch = (ListInst) this.thenBranch.removeUnusedVar(prog);
+        this.elseBranch = (ListInst) this.elseBranch.removeUnusedVar(prog);
         if (this.thenBranch.isEmpty() && this.elseBranch.isEmpty()) {
             return this.condition;
         }
+        return this;
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        condition = (AbstractExpr) condition.factorise(compiler);
+        thenBranch.factorise(compiler);
+        elseBranch.factorise(compiler);
+        return this;
+    }
+
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        condition.splitCalculus(compiler);
+        thenBranch.splitCalculus(compiler);
+        elseBranch.splitCalculus(compiler);
+
         return this;
     }
 
@@ -144,16 +165,14 @@ public class IfThenElse extends AbstractInst {
     @Override
     public CollapseResult<ListInst> collapseInst() {
         CollapseResult<CollapseValue> condResult = condition.collapseExpr();
-        if(condResult.getResult().isBool()) {
+        if (condResult.getResult().isBool()) {
             // we can actually collapse the if !
-            if(condResult.getResult().asBool()) {
+            if (condResult.getResult().asBool()) {
                 return new CollapseResult<ListInst>(thenBranch.collapseInsts().getResult(), true);
-            }
-            else {
+            } else {
                 return new CollapseResult<ListInst>(elseBranch.collapseInsts().getResult(), true);
             }
-        }
-        else {
+        } else {
             // try to collapse our own branches
             CollapseResult<ListInst> thenResult = thenBranch.collapseInsts();
             CollapseResult<ListInst> elseResult = elseBranch.collapseInsts();
@@ -167,9 +186,9 @@ public class IfThenElse extends AbstractInst {
 
     @Override
     protected Tree doSubstituteInlineMethods(Map<MethodDefinition, DeclMethod> inlineMethods) {
-        this.condition = (AbstractExpr)this.condition.doSubstituteInlineMethods(inlineMethods);
-        this.thenBranch = (ListInst)this.thenBranch.doSubstituteInlineMethods(inlineMethods);
-        this.elseBranch = (ListInst)this.elseBranch.doSubstituteInlineMethods(inlineMethods);
+        this.condition = (AbstractExpr) this.condition.doSubstituteInlineMethods(inlineMethods);
+        this.thenBranch = (ListInst) this.thenBranch.doSubstituteInlineMethods(inlineMethods);
+        this.elseBranch = (ListInst) this.elseBranch.doSubstituteInlineMethods(inlineMethods);
         return this;
     }
 

@@ -76,8 +76,18 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.rightOperand = (AbstractExpr)this.rightOperand.removeUnusedVar();
+    public AbstractInst factorise(DecacCompiler compiler) {
+        setRightOperand((AbstractExpr)rightOperand.factorise(compiler));
+        return this;
+    }
+
+    @Override
+    public boolean isReadExpr() {
+        return false;
+    }
+
+    protected Tree removeUnusedVar(Program prog) {
+        this.rightOperand = (AbstractExpr) this.rightOperand.removeUnusedVar(prog);
         if (!this.getLeftOperand().getDefinition().isUsed()) {
             return this.rightOperand;
         }
@@ -88,31 +98,23 @@ public class Assign extends AbstractBinaryExpr {
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         foundMethodCalls.add(this);
     }
-
-    @Override
-    boolean isAssign() {
-        return true;
-    }
     
     @Override 
     public CollapseResult<CollapseValue> collapseBinExpr() {
         CollapseResult<CollapseValue> result = getRightOperand().collapseExpr();
-        if(getLeftOperand().getType().isBoolean() && result.getResult().isBool()) {
+        if (getLeftOperand().getType().isBoolean() && result.getResult().isBool()) {
             setRightOperand(new BooleanLiteral(result.getResult().asBool()));
             // tell we collapsed but no result, too dangerous to remove assignments
             return new CollapseResult<CollapseValue>(new CollapseValue(), true);
-        }
-        else if(getLeftOperand().getType().isFloat() && result.getResult().isFloat()) {
+        } else if (getLeftOperand().getType().isFloat() && result.getResult().isFloat()) {
             setRightOperand(new FloatLiteral(result.getResult().asFloat()));
             // tell we collapsed but no result, too dangerous to remove assignments
             return new CollapseResult<CollapseValue>(new CollapseValue(), true);
-        }
-        else if(getLeftOperand().getType().isInt() && result.getResult().isInt()) {
+        } else if (getLeftOperand().getType().isInt() && result.getResult().isInt()) {
             setRightOperand(new IntLiteral(result.getResult().asInt()));
             // tell we collapsed but no result, too dangerous to remove assignments
             return new CollapseResult<CollapseValue>(new CollapseValue(), true);
-        }
-        else {
+        } else {
             // tell if at some point the expression collapsed
             return new CollapseResult<CollapseValue>(new CollapseValue(), result.couldCollapse());
         }

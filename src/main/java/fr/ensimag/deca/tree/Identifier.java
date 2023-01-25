@@ -30,6 +30,7 @@ import fr.ensimag.ima.pseudocode.instructions.WINT;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 
@@ -319,10 +320,11 @@ public class Identifier extends AbstractIdentifier {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister resultRegister) {
         // if it is a field, we need to first load the value on from the heap !
-        if(getDefinition().isField()) {
+        if (getDefinition().isField()) {
             GPRegister classPointerRegister = compiler.allocateRegister();
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), classPointerRegister));
-            compiler.addInstruction(new LOAD(new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister), classPointerRegister));
+            compiler.addInstruction(new LOAD(new RegisterOffset(definition.getDAddrOffsetOnly(), classPointerRegister),
+                    classPointerRegister));
             if (resultRegister == null) {
                 // put self value on the stack
                 // load self on R1, then push R1
@@ -335,8 +337,7 @@ public class Identifier extends AbstractIdentifier {
                 compiler.addInstruction(new LOAD(classPointerRegister, resultRegister));
                 compiler.freeRegister(classPointerRegister);
             }
-        }
-        else {
+        } else {
             if (resultRegister == null) {
                 // put self value on the stack
                 // load self on R1, then push R1
@@ -394,7 +395,14 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
+    protected void spotOverridingFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        assert(this.containsField());
+        this.getFieldDefinition().spotOverridingFields(this.name,usedFields);
+
+    }
+
+    @Override
+    protected Tree removeUnusedVar(Program prog) {
         return this;
     }
 
@@ -419,6 +427,11 @@ public class Identifier extends AbstractIdentifier {
     @Override
     protected boolean containsField() {
         return this.getDefinition().isField();
+    }
+
+    @Override
+    protected boolean isAtomic() {
+        return true;
     }
     
 }

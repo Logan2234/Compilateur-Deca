@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.DecacCompiler;
 
 /**
  *
@@ -103,10 +104,10 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
     }
 
     @Override
-    protected Tree removeUnusedVar() {
+    protected Tree removeUnusedVar(Program prog) {
         ListIterator<TreeType> iter = this.iterator();
         while(iter.hasNext()) {
-            TreeType tree = (TreeType)iter.next().removeUnusedVar();
+            TreeType tree = (TreeType)iter.next().removeUnusedVar(prog);
             iter.remove();
             if (tree != null) {
                 iter.add(tree);
@@ -141,6 +142,23 @@ public abstract class TreeList<TreeType extends Tree> extends Tree {
             iter.add((TreeType) currentTree.doSubstituteInlineMethods(inlineMethods));
         }
         return this;
+    }
+
+    public boolean isSplitable(DecacCompiler compiler) {
+        for (TreeType t : list)
+            if (t.isSplitable(compiler))
+                return true;
+        return false;
+    }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        for (int i = 0; i < getList().size(); i++) {
+            TreeType inst = (TreeType)getList().get(i).factorise(compiler);
+            if (inst != null)
+                set(i, inst);
+        }
+        return null;
     }
 
 }

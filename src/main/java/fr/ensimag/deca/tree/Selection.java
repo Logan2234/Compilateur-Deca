@@ -12,6 +12,10 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
+import java.io.PrintStream;
+import java.util.HashMap;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
@@ -19,11 +23,9 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
-import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 
@@ -175,14 +177,24 @@ public class Selection extends AbstractLValue {
     }
 
     @Override
+    public Symbol getName() {
+        return field.getName();
+    }
+
+    @Override
+    public boolean isSelection(){
+        return true;
+    }
+
+	@Override
     protected void spotUsedVar() {
         this.obj.spotUsedVar();
         this.field.spotUsedVar();
     }
 
     @Override
-    protected Tree removeUnusedVar() {
-        this.obj = (AbstractExpr)this.obj.removeUnusedVar();
+    protected Tree removeUnusedVar(Program prog) {
+        this.obj = (AbstractExpr)this.obj.removeUnusedVar(prog);
         return this;
     }
 

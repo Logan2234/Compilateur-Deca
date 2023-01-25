@@ -93,10 +93,6 @@ public class IntLiteral extends AbstractExpr {
     protected void addUnremovableExpr(List<AbstractExpr> foundMethodCalls) {
         // do nothing
     }
-    
-    public Integer collapseInt() {
-        return value;
-    }
 
     @Override
     public CollapseResult<CollapseValue> collapseExpr() {
@@ -104,7 +100,7 @@ public class IntLiteral extends AbstractExpr {
     }
 
     @Override
-    protected AbstractExpr substitute(Map<ParamDefinition,AbstractExpr> substitutionTable) {
+    protected AbstractExpr substitute(Map<ParamDefinition, AbstractExpr> substitutionTable) {
         AbstractExpr res = new IntLiteral(this.value);
         res.setType(this.getType());
         res.setLocation(this.getLocation());
@@ -114,5 +110,16 @@ public class IntLiteral extends AbstractExpr {
     @Override
     protected boolean containsField() {
         return false;
+    }
+
+    @Override
+    protected Boolean isLiteral() {
+        return true;
+    }
+
+
+    @Override
+    protected boolean isAtomic() {
+        return true;
     }
 }

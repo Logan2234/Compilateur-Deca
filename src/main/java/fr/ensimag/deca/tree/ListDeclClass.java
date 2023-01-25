@@ -1,12 +1,15 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.optim.CollapseResult;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -63,6 +66,14 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
+    @Override
+    public AbstractInst splitCalculus(DecacCompiler compiler) {
+        for (AbstractDeclClass _class : getList())
+            if (_class.isSplitable(compiler))
+                _class.splitCalculus(compiler);
+        return null;
+    }
+
     /**
      * Generate the vTables for all the classes.
      * @param compiler where we write the instructions to.
@@ -90,6 +101,20 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
             somethingCollapsed |= c.collapseClass().couldCollapse();
         }
         return new CollapseResult<Null>(null, somethingCollapsed);
+    }
+
+    @Override
+    protected void getSpottedFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        for (AbstractDeclClass class_ : this.getList()) {
+            ((DeclClass)class_).getSpottedFields(usedFields);
+        }
+    }
+
+    @Override
+    protected void spotOverridingFields(Map<Symbol,Set<ClassDefinition>> usedFields) {
+        for (AbstractDeclClass class_ : this.getList()) {
+            ((DeclClass)class_).spotOverridingFields(usedFields);
+        }
     }
 
     @Override

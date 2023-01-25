@@ -61,4 +61,10 @@ public class Plus extends AbstractOpArith {
         res.setLocation(this.getLocation());
         return res;
     }
+
+    @Override
+    public AbstractInst factorise(DecacCompiler compiler) {
+        return this.facto(compiler, true);
+    }
+
 }
