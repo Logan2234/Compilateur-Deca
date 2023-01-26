@@ -103,15 +103,21 @@ public class Assign extends AbstractBinaryExpr {
     public CollapseResult<CollapseValue> collapseBinExpr() {
         CollapseResult<CollapseValue> result = getRightOperand().collapseExpr();
         if (getLeftOperand().getType().isBoolean() && result.getResult().isBool()) {
+            Type oldType = getRightOperand().getType();
             setRightOperand(new BooleanLiteral(result.getResult().asBool()));
+            getRightOperand().setType(oldType);
             // tell we collapsed but no result, too dangerous to remove assignments
             return new CollapseResult<CollapseValue>(new CollapseValue(), true);
         } else if (getLeftOperand().getType().isFloat() && result.getResult().isFloat()) {
+            Type oldType = getRightOperand().getType();
             setRightOperand(new FloatLiteral(result.getResult().asFloat()));
+            getRightOperand().setType(oldType);
             // tell we collapsed but no result, too dangerous to remove assignments
             return new CollapseResult<CollapseValue>(new CollapseValue(), true);
         } else if (getLeftOperand().getType().isInt() && result.getResult().isInt()) {
+            Type oldType = getRightOperand().getType();
             setRightOperand(new IntLiteral(result.getResult().asInt()));
+            getRightOperand().setType(oldType);
             // tell we collapsed but no result, too dangerous to remove assignments
             return new CollapseResult<CollapseValue>(new CollapseValue(), true);
         } else {

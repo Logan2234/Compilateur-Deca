@@ -104,10 +104,14 @@ public abstract class AbstractPrint extends AbstractInst {
             CollapseResult<CollapseValue> result = e.collapseExpr();
             somethingCollapsed |= result.couldCollapse();
             if(e.getType().isFloat() && result.getResult().isFloat()) {
+                Type oldType = arguments.getList().get(i).getType();
                 arguments.set(i, new FloatLiteral(result.getResult().asFloat()));
+                arguments.getList().get(i).setType(oldType);
             }
             if(e.getType().isInt() && result.getResult().isInt()) {
+                Type oldType = arguments.getList().get(i).getType();
                 arguments.set(i, new IntLiteral(result.getResult().asInt()));
+                arguments.getList().get(i).setType(oldType);
             }
         }
         ListInst result = new ListInst();

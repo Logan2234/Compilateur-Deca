@@ -171,12 +171,15 @@ public class DeclField extends AbstractDeclField {
         // look in the collapse value if we can change the init node
         if(type.getType().isBoolean() && result.getResult().isBool()) {
             initialization = new Initialization(new BooleanLiteral(result.getResult().asBool()));
+            initialization.getExpression().setType(type.getType());
         }
         else if(type.getType().isFloat() && result.getResult().isFloat()) {
             initialization = new Initialization(new FloatLiteral(result.getResult().asFloat()));
+            initialization.getExpression().setType(type.getType());
         }
         if(type.getType().isInt() && result.getResult().isInt()) {
             initialization = new Initialization(new IntLiteral(result.getResult().asInt()));
+            initialization.getExpression().setType(type.getType());
         }
         return new CollapseResult<Null>(null, result.couldCollapse());
     }
