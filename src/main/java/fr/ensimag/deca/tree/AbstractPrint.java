@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.optim.CollapseResult;
+import fr.ensimag.deca.optim.CollapseValue;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -97,9 +98,21 @@ public abstract class AbstractPrint extends AbstractInst {
 
     @Override
     public CollapseResult<ListInst> collapseInst() {
+        boolean somethingCollapsed = false;
+        for(int i = 0; i < arguments.size(); i++) {
+            AbstractExpr e = arguments.getList().get(i);
+            CollapseResult<CollapseValue> result = e.collapseExpr();
+            somethingCollapsed |= result.couldCollapse();
+            if(e.getType().isFloat() && result.getResult().isFloat()) {
+                arguments.set(i, new FloatLiteral(result.getResult().asFloat()));
+            }
+            if(e.getType().isInt() && result.getResult().isInt()) {
+                arguments.set(i, new IntLiteral(result.getResult().asInt()));
+            }
+        }
         ListInst result = new ListInst();
         result.add(this);
-        return new CollapseResult<ListInst>(result, false);
+        return new CollapseResult<ListInst>(result, somethingCollapsed);
     }
 
     @Override
