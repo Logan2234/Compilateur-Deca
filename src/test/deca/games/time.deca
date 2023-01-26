@@ -2,18 +2,33 @@
 
 class Timer {
 
-    // initialize the timer class
-    void initTimer() {
-        // todo
-    }
+    float lastComputedTime = getCurrentSec();
 
     // reset the timer to zero
     void reset() {
-        // todo
+        lastComputedTime = getCurrentSec();
     }
 
-    // measure the time from last init or reset
-    void time() {
-        // todo
+    // wait function
+    void wait(float delay){
+        float start = getCurrentSec();
+        while (getCurrentSec() < start + delay){
+        }
     }
+    
+    void waitASemiSemiSec(){
+        wait(0.1);
+    }
+    
+    // get seconds from start or reset
+    float timeSec() {
+        return getCurrentSec() - lastComputedTime;
+    }
+
+    float getCurrentSec() asm(
+        "CLK
+        LOAD R1, R0
+        RTS"
+    );
+
 }

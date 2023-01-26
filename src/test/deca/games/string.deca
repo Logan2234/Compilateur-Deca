@@ -1,0 +1,72 @@
+class String {
+    protected LinkedChars string = null;
+    protected int size = 0;
+
+    void display(IO io){
+        LinkedChars current = string;
+        while(current != null) {
+            io.printChar(current.getValue());
+            print(" ");
+            current = current.getNext();
+        }
+        println("");
+    }
+
+    int getSize(){
+        return size;
+    }
+
+    void setSize(int size){
+        this.size = size;
+    }
+
+    void setString(LinkedChars chars){
+        this.string = chars;
+    }
+
+    LinkedChars getFirst(){
+        return string;
+    }
+
+    void pop() {
+        size = size - 1;
+        string = string.getNext();
+    }
+}
+
+class LinkedChars {
+    protected int charValue;
+    protected LinkedChars next;
+
+    void setChar(int value) {
+        if(value < 0) {
+            value = 0;
+        }
+        if(value > 255) {
+            value = 255;
+        }
+        charValue = value;
+    }
+
+    int getValue(){
+        return charValue;
+    }
+
+    void setNext(LinkedChars next) {
+        this.next = next;
+    }
+
+    LinkedChars getNext() {
+        return next;
+    }
+
+    boolean equals(Object o){
+        LinkedChars char;
+        if (o instanceof LinkedChars) {
+            char = (LinkedChars)(o);
+            return char.getValue() == charValue;
+        }
+        return false;
+    }
+
+}

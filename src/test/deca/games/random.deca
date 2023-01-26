@@ -1,0 +1,64 @@
+#include "string.deca"
+
+class Random {
+    int seq = seqStart();
+
+    int seqStart() asm(
+        "SCLK
+        LOAD R1, R0
+        RTS"
+    );
+
+    int randInt(int min, int max) {
+        int result = hasher(seq);
+        
+        if(min < 0) {
+            min = 0;
+        }
+        if(max > 255) {
+            max = 255;
+        }
+        
+        // Modulo à la main
+        result = result % (max - min);
+        if (result < 0){
+            result = result + (max - min);
+        
+        }
+        seq = seq + 1;
+        result = min + result;
+        return result;
+    }
+
+    int randAlphabeticalChar() {
+        return randInt(97, 122);
+    }
+
+    int hasher(int in) asm(
+        "LOAD -3(SP), R0
+        CLK
+        MUL #1.20000e+6, R1
+        INT R1, R1
+        MUL R1, R0
+        RTS"
+    );
+
+    String generateRandomString(Random rdm, int minSize, int maxSize) {
+        int size = rdm.randInt(minSize, maxSize);
+        int counter = 0;
+        LinkedChars current = new LinkedChars();
+        LinkedChars nextChar;
+        String result = new String();
+        current.setChar(rdm.randAlphabeticalChar());
+        while(counter < size - 1) {
+            nextChar = new LinkedChars();
+            nextChar.setChar(rdm.randAlphabeticalChar());
+            nextChar.setNext(current);
+            current = nextChar;
+            counter = counter + 1;
+        }
+        result.setString(current);
+        result.setSize(size);
+        return result;
+    }
+}
