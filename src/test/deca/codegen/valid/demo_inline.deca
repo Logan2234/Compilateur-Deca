@@ -1,6 +1,6 @@
 class A {
     int myFct(int x, int y) {
-        return x*y + (y%2) -3;
+        return  y*2 - x*y -4;
     }
 }
 
@@ -10,5 +10,6 @@ class A {
     int y = readInt();
     x = a.myFct(x,y);
     y = a.myFct(y,x);
+    y= a.myFct(1,8);
     print(x,y);
 }
