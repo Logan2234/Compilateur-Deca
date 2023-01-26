@@ -1,0 +1,25 @@
+// Description:
+//      Test for collapsing expressions
+
+{
+    println(2 + 3 * 6 % 3);
+    println(1.2 - 0.2 + 3.1415 * 2, 3 * 4 - 2);
+
+    if(2 * 4 <= 3 / 1 + 12 * 3) {
+        println("ok");
+    }
+    else {
+        println("ko");
+    }
+
+    if(!(true && false) || false) {
+        println("ok");
+    }
+    else {
+        println("ko");
+    }
+
+    while(23 != 2 * 11 + 1) {
+        println("ko");
+    }
+}
