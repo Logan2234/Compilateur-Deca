@@ -91,8 +91,15 @@ launch "Test de l'option -n: sans -n" "decac src/test/deca/codegen/invalid/heap-
 
 launch "Test de l'option -n: avec -n" "decac -n src/test/deca/codegen/invalid/heap-overflow.deca ; ima src/test/deca/codegen/invalid/heap-overflow.ass"
 
-code src/test/deca/codegen/interactive/demo/Game.deca
+code src/test/deca/codegen/interactive/game/word-typer.deca
 launch "Compilation de la démo" "decac src/test/deca/codegen/interactive/game/word-typer.deca"
 
 launch "Exécution de la démo" "ima src/test/deca/codegen/interactive/game/word-typer.ass"
 
+launch "Démonstration de l'optimisation" ""
+
+code src/test/deca/codegen/valid/demo_unused_var.deca
+launch "Test de l'optimisation unused_vars" "decac -o -p ./src/test/deca/codegen/valid/demo_unused_var.deca"
+
+code src/test/deca/codegen/valid/demo_inline.deca
+launch "Test de l'optimisation inline" "decac -o -p ./src/test/deca/codegen/valid/demo_inline.deca"
