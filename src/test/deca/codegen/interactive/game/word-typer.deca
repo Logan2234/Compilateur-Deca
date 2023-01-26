@@ -91,6 +91,7 @@ class Game {
                 userInput = io.readChar();
                 if (userInput.equals(ESCAPECHAR)) {
                     play = false;
+                    wonWord = false;
                     str = new String();
                 } else {
                     if (!currentChar.equals(userInput)) {
