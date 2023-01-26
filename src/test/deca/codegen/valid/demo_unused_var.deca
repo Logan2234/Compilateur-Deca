@@ -1,0 +1,23 @@
+class A {
+    int square(int x) {return x*x;}
+}
+
+class B extends A {
+    int x;
+    int getX(){return x;}                 
+}
+
+class C {}
+
+{
+    int x;
+    int z = (x=2);
+
+    A a = new A();
+    B b = new B();
+    C c = new C();
+
+    x = readInt();
+    42;;;
+    print(b.getX());
+}
