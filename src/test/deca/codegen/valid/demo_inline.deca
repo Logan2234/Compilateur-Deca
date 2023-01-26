@@ -1,0 +1,14 @@
+class A {
+    int myFct(int x, int y) {
+        return x*y + (y%2) -3;
+    }
+}
+
+{
+    A a = new A();
+    int x = readInt();
+    int y = readInt();
+    x = a.myFct(x,y);
+    y = a.myFct(y,x);
+    print(x,y);
+}

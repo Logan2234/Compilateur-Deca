@@ -24,7 +24,7 @@ class Game {
 
     void clearScreen(){
         int i = 0;
-        while (i < 20) {
+        while (i < 60) {
             println("");
             i = i + 1;
         }
@@ -39,6 +39,16 @@ class Game {
         timer.wait(0.25);
         print(". ");
         timer.wait(0.25);
+    }
+
+    // Normalize score gained and time left print
+    void normalize(int size){
+        int i;
+        i = 2 * size - 1 + 3;
+        while (i < 35){
+            print(" ");
+            i = i + 1;
+        }
     }
 
     void gameLoop(){
@@ -62,11 +72,12 @@ class Game {
         printDelayedNum(1);
         print("GOOOO!");
         println("");
-        println("");
 
         // Setup the timer
         timer.reset();
-        while (play && timer.timeSec() < gameDuration){ // loop over words
+
+        // Loop over words
+        while (play && timer.timeSec() < gameDuration){ 
             str = random.generateRandomString(random, 5 + offset, 8 + offset);
             taille = str.getSize();
             wonWord = true;
@@ -74,11 +85,13 @@ class Game {
             println("");
             str.display(io);
             
-            while (str.getSize() > 0) { // loop over letters
+            // Loop over letters
+            while (str.getSize() > 0) {
                 currentChar = str.getFirst();
                 userInput = io.readChar();
                 if (userInput.equals(ESCAPECHAR)) {
                     play = false;
+                    wonWord = false;
                     str = new String();
                 } else {
                     if (!currentChar.equals(userInput)) {
@@ -98,13 +111,19 @@ class Game {
                 }
             }
 
+            // Ending phase
             if (wonWord && timer.timeSec() < gameDuration){
-                print("  => + ", taille, " time left : ", gameDuration - timer.timeSec());
+                normalize(taille);
+                print("=> + ", taille, " time left : ", gameDuration - timer.timeSec(), "s.");
                 score = score + taille;
                 offset = offset + 1;
+            } else {
+                normalize(taille);
+                print("=> + 0 time left : ", gameDuration - timer.timeSec(), "s.");
             }
             println("");
         }
+        // End of the round
         println("");
         println("Finished ! Score: ", score);
         home();
@@ -112,7 +131,6 @@ class Game {
 
     void home(){
         int choice;
-        println("");
         println("");
         println(" ===== Menu =====");
         println("");
@@ -122,7 +140,6 @@ class Game {
         println("");
         print("Choice: ");
         choice = readInt();
-        println("");
         println("");
 
         if (choice == 2) {
@@ -143,9 +160,9 @@ class Game {
         println("Sequence of letters will appear.");
         println("You will have 30 seconds to type as much sequences as possible.");
         println("Each completed sequence will give you points accordingly to the sequence size.");
-        println("But if you enter one wrong character, you will gain no points and have to go to the next sequence.");
-        println("Have fun !");
+        println("However, if you miss a single character, you won't get a single point..");
         println("");
+        println("Have fun!");
     }
 
     void start(){
@@ -153,8 +170,26 @@ class Game {
         ESCAPECHAR.setChar(27);
 
         // cool display °3°
-        print("Welcome to");
-        print(" W");
+        clearScreen();
+        print("W");
+        timer.waitASemiSemiSec();
+        print("e");
+        timer.waitASemiSemiSec();
+        print("l");
+        timer.waitASemiSemiSec();
+        print("c");
+        timer.waitASemiSemiSec();
+        print("o");
+        timer.waitASemiSemiSec();
+        print("m");
+        timer.waitASemiSemiSec();
+        print("e ");
+        timer.waitASemiSemiSec();
+        print("t");
+        timer.waitASemiSemiSec();
+        print("o ");
+        timer.waitASemiSemiSec();
+        print("W");
         timer.waitASemiSemiSec();
         print("o");
         timer.waitASemiSemiSec();
@@ -175,10 +210,7 @@ class Game {
     }
 }
 
-
-
 {
     Game game = new Game();
     game.start();
 }
-
